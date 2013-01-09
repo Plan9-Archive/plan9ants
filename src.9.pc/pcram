@@ -128,7 +128,7 @@ bootdir
 	/386/bin/ip/ipconfig
 	/386/bin/auth/factotum
 	/386/bin/auth/newns
-	/386/bin/fossil/fossil
+#	/386/bin/fossil/fossil
 	/386/bin/dossrv
 	/386/bin/read
 	/386/bin/cat
@@ -149,7 +149,6 @@ bootdir
 	/386/bin/hubshell
 	/386/bin/mntgen
 	/386/bin/sleep
-	/386/bin/aux/timesync
 	/386/bin/touch
 	/386/bin/test
 	/386/bin/grio

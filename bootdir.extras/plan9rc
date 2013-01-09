@@ -58,14 +58,14 @@ fn dofactotum{
 		echo no factotum
 	case cpu
 		echo cpu factotum
-		factotum -S -s factotum
+		factotum -d -S -s factotum
 	case terminal
 		echo terminal factotum
-		factotum -u -s factotum
+		factotum -d -u -s factotum
 	case user
 		hostcheck
 		echo user factotum
-		factotum -s factotum
+		factotum -d -s factotum
 	}
 }
 

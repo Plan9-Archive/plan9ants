@@ -47,6 +47,6 @@ if(! ~ $hubcpu no){
 #	timesync -n pool.ntp.org
 }
 
-font=/lib/font/bit/lucm/unicode.9.font
+font=/lib/font/bit/lucm/latin1.9.font
 
 exit ''
