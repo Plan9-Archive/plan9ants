@@ -154,8 +154,8 @@ bootdir
 	/386/bin/touch
 	/386/bin/test
 	/386/bin/grio
+	/386/bin/srvfs
 	/rc/bin/hub
-	/rc/bin/srvfs
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/plan9rc
