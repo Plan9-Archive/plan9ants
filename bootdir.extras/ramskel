@@ -1,0 +1,21 @@
+#!/boot/rc
+
+#set up ramfs as a rootlike fs
+
+hostdir=`{cat '#c/hostowner'}
+if (! ~ $hostdir ?*){
+	echo please set hostowner
+	exit ''
+}
+
+cd /
+ramfs -S ramboot
+mount -c /srv/ramboot /root
+bind -ac /root /
+tar xf /boot/skel.tar
+bind -ac /root/bin /bin
+dossrv
+mount /srv/dos /net.alt /dev/sdC0/9fat
+tar xzf /net.alt/rootfs.tgz
+
+exit ''

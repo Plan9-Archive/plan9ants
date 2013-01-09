@@ -1,0 +1,327 @@
+#!/boot/rc
+# rootless cpu server start up
+
+fn findpart{
+	if(~ $bootparse(1) *sdC0/$1)
+		echo /dev/sdC0/$1
+	if(~ $bootparse(1) *sdC1/$1)
+		echo /dev/sdC1/$1
+	if(~ $bootparse(1) *sdD0/$1)
+		echo /dev/sdD0/$1
+	if(~ $bootparse(1) *sdD1/$1)
+		echo /dev/sdD1/$1
+}
+
+fn getans{
+	echo ' ** '$1 is':' $2 - press enter, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
+	answer=`{read}
+	switch($answer){
+	case rc
+		errorshell
+	case clear
+		echo ''
+	case ?*
+		echo $answer
+	case ''
+		echo $2
+	}
+}
+
+fn hostcheck{
+	hosttest=`{cat /dev/hostowner}
+	if(~ $hosttest ''){
+		if(~ $user ''){
+			user=bootes
+		}
+		echo 'no hostowner found: setting to '$user
+		echo -n $user >'/dev/hostowner'
+	}
+	if(~ $user ''){
+		user=`{cat /dev/hostowner}
+	}
+}
+
+fn doramsetup{
+	switch($ramsetup){
+	case ''
+		echo no ramsetup
+	case ?*
+		hostcheck
+		echo ramsetup $ramsetup
+		rc -c $ramsetup
+	}
+}
+
+fn dofactotum{
+	switch($factotum){
+	case ''
+		echo no factotum
+	case cpu
+		echo cpu factotum
+		factotum -S -s factotum
+	case terminal
+		echo terminal factotum
+		factotum -u -s factotum
+	case std
+		hostcheck
+		echo standard factotum
+		factotum -s factotum
+	}
+}
+
+fn ipsetup{
+	if(~ $gateway ?*){
+		ipparams=( -g $gateway ether /net/ether0 $ipaddress $ipmask )
+	}
+	echo ipconfig $ipparams
+	ipconfig $ipparams
+	ipconfig loopback /dev/null 127.1
+	ipdone=yes
+}
+
+fn doafterfact{
+	switch($afterfact){
+	case ?*
+		echo after factotum command $afterfact
+		rc -c $afterfact
+	case ''
+		echo -n ''
+	}
+}
+
+fn dostartventi{
+	switch($startventi){
+	case yes
+		echo starting venti
+		if(! ~ $ipdone yes){
+			ipsetup
+		}
+		venti -c $venticonf -a $ventilisten -h $vhttplisten
+		venti=tcp!127.1!17034
+	case ''
+		echo no venti started
+	}
+}
+
+fn dogetrootfs{
+	switch($getrootfs){
+	case tcp
+		if(! ~ $ipdone yes){
+			ipsetup
+		}
+		if(~ $cfs ''){
+			echo srv $fs to /srv/boot
+			srv tcp!$fs!564 boot
+			bootsrv=/srv/boot
+		}
+		if not{
+			echo prepping for cfs with srv $fs to /srv/root
+			srv tcp!$fs!564 root
+			echo starting cfs on $cfs and serving root to /srv/boot
+			cfs -F /srv/root -f $cfs -z /srv/boot
+			bootsrv=/srv/boot
+		}
+	case local
+		if(~ $kfs ''){
+			if(! ~ $venti ''){
+				if(! ~ $ipdone yes){
+					ipsetup
+				}
+			}
+			if(! ~ $fossil ?*){
+				fossil=/dev/sdC0/fossil
+			}
+			echo starting fossil from $fossil
+			fossil -f $fossil -c 'srv -p fscons'
+			echo 'srv -A boot' >>/srv/fscons
+			bootsrv=/srv/boot
+		}
+		if not{
+			echo starting kfs from $kfs
+			kfs -f $kfs -n boot
+			bootsrv=/srv/kfs.boot
+		}
+	case ''
+		echo no standard root fs attached
+	}
+}
+
+fn doafterroot{
+	switch($afterroot){
+	case ?*
+		echo afterroot command $afterroot
+		rc -c $afterroot
+	case ''
+		echo -n ''
+	}
+}
+
+fn doinitscript{
+	switch($initscript){
+	case ?*
+		echo starting initscript $initscript in ns $namespace
+		newns -n /boot/$namespace $initscript
+	case ''
+		echo no initscript
+	}
+}
+
+fn dochecksys{
+	systest=`{cat /dev/sysname}
+	switch($sysname){
+	case ?*
+		if(~ $systest ''){
+			echo setting /dev/sysname to $sysname
+			echo -n $sysname >/dev/sysname
+			systest=`{cat /dev/sysname}
+		}
+		if(! ~ $systest $sysname){
+			echo warning sysname mismatch between dev and env
+		}
+	case ''
+		if(~ $systest ''){
+			if(~ $service cpu){
+				sysname=helix
+			} 
+			if(~ $service terminal){
+				sysname=gnot
+			}
+			if(~ $sysname ''){
+				sysname=mutant
+			}
+			echo no sysname found in dev or env setting to $sysname
+			echo -n $sysname >/dev/sysname
+		}
+		if not{
+			echo setting sysname var to $systest from /dev/sysname
+			sysname = $systest
+		}
+	}
+}
+
+fn dorootstart{
+	switch($rootstart){
+	case cpu
+		echo mounting $bootsrv to /root and starting cpurc
+		mount $bootsrv /root
+		newns -n /root/lib/namespace /root/rc/bin/cpurc
+	case terminal
+		echo mounting $bootsrv to /root and starting termrc
+		mount $bootsrv /root
+		if(~ $user ''){
+			user=`{cat /dev/hostowner}
+		}
+		home=/usr/$user
+		newns -n /root/lib/namespace /root/rc/bin/termrc
+		newns -n /root/lib/namespace rc -c 'cd; . $home/lib/profile'
+	case ''
+		echo not starting externally rooted startup scripts
+	}
+}
+
+fn errorshell{
+	echo subshell output on stderr >>/fd/2
+	rc -i >>/fd/2
+	echo exiting rc >>/fd/2
+}
+
+# End of fn definitions
+
+echo ROOTLESS PLAN 9 /boot/plan9rc
+
+# Begin by parsing plan9.ini options and trying to set sane defaults
+
+bootparse=`{echo $bootargs}
+if(~ $bootparse(1) local*){
+	getrootfs=local
+	if(~ $bootparse *fossil)
+		fossil=`{findpart fossil}
+	if not
+		kfs=`{findpart kfs}
+}
+if(~ $bootparse(1) tcp*){
+	getrootfs=tcp
+}
+	
+if(~ $ramsetup '')
+	ramsetup=ramskel
+if(~ $namespace '')
+	namespace=namespace
+if(~ $factotum '')
+	factotum=`{cat '/env/service'}
+if(~ $rootstart '')
+	rootstart=`{cat '/env/service'}
+ventiparse=`{echo $venti}
+venticonf=$ventiparse(1)
+ventilisten=$ventiparse(2)
+vhttplisten=$ventiparse(3)
+if(~ $venticonf '#S'*)
+	startventi=yes
+if(~ $venticonf '')
+	venticonf=/dev/sdC0/arenas
+if(~ $ventilisten '')
+	ventilisten=tcp!127.1!17034
+if(~ $vhttplisten '')
+	vhttplisten=tcp!127.1!8000
+
+if(~ $interactive yes){
+	echo Interactive Startup - press enter to continue to options or type rc for a shell
+	answer=`{read}
+	if(~ $answer rc){
+		echo dropping to rc shell with limited commands
+		rc -i
+	}
+	echo if ipconfig is needed for tcp boot or venti enter parameters or leave blank for dhcp
+	ipparams = `{getans ipparams $ipparams}
+	factotum = `{getans factotum $factotum}
+	dofactotum
+	sysname = `{getans sysname $sysname}
+	ramsetup = `{getans ramsetup $ramsetup}
+	doramsetup
+	hostcheck
+	startventi = `{getans startventi $startventi}
+	if(~ $startventi yes){
+		ventilisten = `{getans ventilisten $ventilisten}
+		vhttplisten = `{getans vhttplisten $vhttplisten}
+	}
+	dostartventi
+	getrootfs = `{getans getrootfs $getrootfs}
+	if(~ $getrootfs tcp){
+		fs = `{getans fs $fs}
+		cfs = `{getans cfs $cfs}
+	}
+	dogetrootfs
+	initscript = `{getans initscript $initscript}
+	doinitscript
+	dochecksys
+	rootstart = `{getans rootstart $rootstart}
+	dorootstart
+	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	staylocal = `{getans staylocal $staylocal}
+	if(~ $staylocal yes){
+		echo starting shell in current namespace
+		rc -i
+	}
+	echo 'plan9rc complete !note console namespace is isolated!'
+}
+
+if not {
+	dofactotum
+	doramsetup
+	hostcheck
+	doafterfact
+	dostartventi
+	dogetrootfs
+	doafterroot
+	doinitscript
+	dochecksys
+	dorootstart
+	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	if(~ $staylocal yes){
+		echo starting shell in current namespace
+		rc -i
+	}
+	echo 'plan9rc complete !note console namespace is isolated!'
+}
+	
+exit ''

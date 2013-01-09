@@ -1,0 +1,52 @@
+# kernel devices
+bind #c /dev
+bind #d /fd
+bind -c #e /env
+bind #p /proc
+bind -c #s /srv
+bind -a #¤ /dev
+bind -a #S /dev
+bind -a #l /net
+bind -a #I /net
+
+# mount points
+mount -a /srv/slashn /net.alt
+
+#devices from previous ns
+mount -c /srv/$oldterm /net.alt/$oldterm
+mount -c /srv/$oldwsys /net.alt/$oldwsys
+bind /net.alt/$oldterm/dev/cons /dev/cons
+bind /net.alt/$oldterm/dev/consctl /dev/consctl
+bind -a /net.alt/$oldterm/dev /dev
+bind -b /net.alt/$oldwsys /dev
+
+# authentication
+mount -a #s/$authagent /mnt
+
+# root
+mount -ac #s/$nsroot /root $rootspec
+bind -a $rootdir /
+bind -b $rootdir/mnt /mnt
+
+# standard bin
+bind -b /boot /bin
+bind -a /root/bin /bin
+bind -a /$cputype/bin /bin
+bind -a /rc/bin /bin
+
+# internal networks
+
+mount -a /srv/slashn /n
+
+mount -a /srv/cs /net
+mount -a /srv/dns /net
+mount -a /srv/net /net
+
+mount -c /srv/hubfs /n/hubfs
+
+bind -c /usr/$user/tmp /tmp
+cd /usr/$user
+
+. /lib/namespace.local
+. /lib/namespace.$sysname
+. /cfg/$sysname/namespace

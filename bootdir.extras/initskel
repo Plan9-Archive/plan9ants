@@ -1,0 +1,52 @@
+#!/boot/rc
+# ramroot startup after newns
+
+keyowner=`{cat /dev/hostowner}
+if (! ~ $keyowner ?*){
+	echo please set hostowner
+	exit ''
+}
+usercheck=`{cat /dev/user}
+if (! ~ $usercheck $keyowner){
+	echo current user is not hostowner
+	exit ''
+}
+
+if(! ~ $binddevs no){
+	echo -n 'binddevs...'
+	for(i in f t m v L P u U '$' Σ κ)
+		bind -a '#'^$i /dev >/dev/null >[2=1]
+}
+
+mntgen -s slashn && chmod 666 /srv/slashn
+
+if(! ~ $usercheck bootes){
+	mkdir /root/usr/$usercheck
+	mkdir /root/usr/$usercheck/lib
+	mkdir /root/usr/$usercheck/tmp
+	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
+}
+
+if(! ~ $setfactotum no){
+	echo setting factotum key to rootless
+	echo 'key proto=p9sk1 dom=noroot user='$keyowner' !password=rootless' >/mnt/factotum/ctl
+}
+
+if(! ~ $netsvc no){
+	echo -n 'cs ipconfig dns -r...'
+	cs
+	ipconfig
+	dns -r
+	ipconfig loopback /dev/null 127.1
+}
+
+if(! ~ $hubcpu no){
+	echo -n 'hubfs and cpu...'
+	hub -b hubfs
+	listen1 -t tcp!*!17010 /bin/cpu -R &
+	timesync -n pool.ntp.org
+}
+
+font=/lib/font/bit/lucm/unicode.9.font
+
+exit ''
