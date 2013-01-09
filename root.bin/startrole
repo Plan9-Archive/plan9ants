@@ -1,0 +1,24 @@
+#!/boot/rc
+# start system role based on env var
+
+if (~ $startventi yes){
+	cd /
+	bind -c /root/bin /n/ventitools
+	tar xzf /n/9fat/ventitools.tgz
+	echo starting venti
+	rfork efns
+	venti -c /boot/vt.conf &
+	sleep 5
+}
+if (~ $startfossil yes){
+	cd /
+	bind -c /root/bin /n/fossiltools
+	tar xzf /n/9fat/fossiltools.tgz
+	echo starting fossil
+	if (! ~ $venti ?*){
+		venti=tcp!10.10.10.6!17034
+	}
+	rfork efns
+	fossilstart &
+	sleep 2
+}

@@ -1,0 +1,17 @@
+#!/bin/rc
+
+if (! ~ $1 ?*){
+	echo usage: addroroot TARGETSYSTEM
+	exit
+}
+
+import $1 / /n/$1
+bind -a /n/$1/ /
+bind -a /386/bin /bin
+bind -a /rc/bin /bin
+bind -b /n/$1/lib/font /lib/font
+bind -a /n/$1/sys /sys
+bind -a /n/$1/$home $home
+bind -a /n/$1/$home/tmp /tmp
+bind -a /n/$1/$home/bin/$objtype /bin
+bind -a /n/$1/$home/bin/rc /bin

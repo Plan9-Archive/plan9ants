@@ -1,0 +1,28 @@
+
+#
+#  files comprising the database, use as many as you like, see ndb(6)
+#
+database=
+	file=/lib/ndb/local
+	file=/lib/ndb/common
+
+auth=sources.cs.bell-labs.com authdom=outside.plan9.bell-labs.com
+
+#
+#  because the public demands the name localsource
+#
+ip=127.0.0.1 sys=localhost dom=localhost
+
+ip=10.10.10.6 sys=venti1 authdom=9gridchan.org auth=fossil1
+
+ip=10.10.10.6 sys=fossil1 authdom=9gridchan.org auth=fossil1
+
+ip=10.10.10.6 sys=cpu1 authdom=9gridchan.org auth=fossil1
+
+ip=10.10.10.6 sys=term1 authdom=9gridchan.org auth=fossil1
+
+ip=10.10.10.6 sys=cpu2 authdom=9gridchan.org auth=fossil1
+
+ip=10.10.10.3 sys=cpu3 authdom=9gridchan.org auth=fossil1
+
+ip=10.10.10.4 sys=omni authdom=omni auth=omni
