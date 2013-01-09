@@ -42,4 +42,5 @@ ip=10.0.2.15 sys=gridone ether=525400123456
 	authdom=9gridchan.org
 	dom=9gridchan.org
 
+authdom=noroot.com auth=gridtwo
 
