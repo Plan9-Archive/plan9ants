@@ -135,6 +135,7 @@ bootdir
 	/386/bin/echo
 	/386/bin/tar
 	/386/bin/ls
+	/386/bin/chmod
 	/386/bin/gunzip
 	/386/bin/bind
 	/386/bin/mount

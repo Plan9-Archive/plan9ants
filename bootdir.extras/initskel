@@ -29,7 +29,7 @@ if(! ~ $usercheck bootes){
 
 if(! ~ $setfactotum no){
 	echo setting factotum key to rootless
-	echo 'key proto=p9sk1 dom=noroot user='$keyowner' !password=rootless' >/mnt/factotum/ctl
+	echo 'key proto=p9sk1 dom=9gridchan.org user='$keyowner' !password=rootless' >/mnt/factotum/ctl
 }
 
 if(! ~ $netsvc no){
