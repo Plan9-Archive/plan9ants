@@ -128,10 +128,10 @@ bootdir
 	/386/bin/ip/ipconfig
 	/386/bin/auth/factotum
 	/386/bin/auth/newns
-	/386/bin/fossil/fossil
+#	/386/bin/fossil/fossil
 	/386/bin/dossrv
-	/386/bin/venti
-	/386/bin/cfs
+#	/386/bin/venti
+#	/386/bin/cfs
 	/386/bin/read
 	/386/bin/cat
 	/386/bin/echo
@@ -157,9 +157,6 @@ bootdir
 	/386/bin/srvfs
 	/386/bin/exportfs
 	/rc/bin/hub
-	/rc/bin/window
-	/rc/bin/9fs
-	/rc/bin/9fat:
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/plan9rc

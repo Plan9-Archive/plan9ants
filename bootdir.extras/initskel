@@ -44,7 +44,7 @@ if(! ~ $hubcpu no){
 	echo -n 'hubfs and cpu...'
 	hub -b hubfs
 	listen1 -t tcp!*!17010 /boot/cpu -R &
-	listen1 -t tcp!*!17007 /boot/exportfs -a -A &
+	listen1 -t tcp!*!17007 /boot/exportfs &
 #	timesync -n pool.ntp.org
 }
 
