@@ -143,12 +143,12 @@ bootdir
 	/386/bin/mount
 	/386/bin/srv
 	/386/bin/ramfs
-	/usr/bootes/bootmod/rc
-	/usr/bootes/bootmod/rcmain
-	/usr/bootes/bootmod/plan9rc
-	/usr/bootes/bootmod/namespace
-	/usr/bootes/bootmod/namespace.standard
-	/usr/bootes/bootmod/namespace.saveterm
-	/usr/bootes/bootmod/ramskel
-	/usr/bootes/bootmod/initskel
-	/usr/bootes/bootmod/skel.tar
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/plan9rc
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/namespace
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/namespace.standard
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/namespace.saveterm
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/ramskel
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/initskel
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/skel.tar

@@ -14,8 +14,10 @@ mount -c /srv/ramboot /root
 bind -ac /root /
 tar xf /boot/skel.tar
 bind -ac /root/bin /bin
-dossrv
-mount /srv/dos /net.alt /dev/sdC0/9fat
-tar xzf /net.alt/rootfs.tgz
+if(~ $getrootfs rootfs.tgz){
+	dossrv
+	mount /srv/dos /net.alt /dev/sdC0/9fat
+	tar xzf /net.alt/rootfs.tgz
+}
 
 exit ''
