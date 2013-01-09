@@ -44,7 +44,7 @@ if(! ~ $hubcpu no){
 	echo -n 'hubfs and cpu...'
 	hub -b hubfs
 	listen1 -t tcp!*!17010 /bin/cpu -R &
-	timesync -n pool.ntp.org
+#	timesync -n pool.ntp.org
 }
 
 font=/lib/font/bit/lucm/unicode.9.font

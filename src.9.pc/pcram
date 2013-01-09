@@ -140,12 +140,15 @@ bootdir
 	/386/bin/srv
 	/386/bin/ramfs
 	/386/bin/aux/listen1
+	/386/bin/cpu
 	/386/bin/ndb/cs
 	/386/bin/ndb/dns
 	/386/bin/hubfs
 	/386/bin/hubshell
 	/386/bin/mntgen
 	/386/bin/aux/timesync
+	/386/bin/touch
+	/386/bin/test
 	/rc/bin/hub
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
