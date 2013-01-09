@@ -28,16 +28,16 @@ if(! ~ $usercheck bootes){
 }
 
 if(! ~ $setfactotum no){
-	echo setting factotum key to rootless
-	echo 'key proto=p9sk1 dom=9gridchan.org user='$keyowner' !password=rootless' >/mnt/factotum/ctl
+	echo setting bootes factotum key to rootless
+	echo 'key proto=p9sk1 dom=noroot user=bootes !password=rootless' >/mnt/factotum/ctl
 }
 
 if(! ~ $netsvc no){
-	echo -n 'cs ipconfig dns -r...'
+	echo -n 'cs dns -r...'
 	cs
-	ipconfig
+#	ipconfig
 	dns -r
-	ipconfig loopback /dev/null 127.1
+#	ipconfig loopback /dev/null 127.1
 }
 
 if(! ~ $hubcpu no){

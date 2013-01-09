@@ -152,6 +152,7 @@ bootdir
 	/386/bin/aux/timesync
 	/386/bin/touch
 	/386/bin/test
+	/386/bin/grio
 	/rc/bin/hub
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
