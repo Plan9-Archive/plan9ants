@@ -3,9 +3,10 @@
 rfork n
 cd /sys/src/9/pc
 bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.boot /sys/src/9/boot
+bind -b /usr/mycroftiv/sourcesdir/writeprocns /sys/src/9/pc
 bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.port /sys/src/9/port
 bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.pc /sys/src/9/pc
 bind -bc /usr/mycroftiv/sourcesdir/rootlessnext/compiletemp /sys/src/9/pc
-mk clean
+#mk clean
 mk 'CONF=pcram'
 gzip 9pcram
