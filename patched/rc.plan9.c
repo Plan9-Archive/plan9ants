@@ -35,8 +35,6 @@ void execfinit(void);
 void execbind(void);
 void execmount(void);
 void execnewpgrp(void);
-void exec9cat(void);
-
 builtin Builtin[] = {
 	"cd",		execcd,
 	"whatis",	execwhatis,
@@ -49,42 +47,8 @@ builtin Builtin[] = {
 	"finit",	execfinit,
 	"flag",		execflag,
 	"rfork",	execnewpgrp,
-	"9cat",	exec9cat,
 	0
 };
-
-void
-cat(int f, char *s)
-{
-	char buf[8192];
-	long n;
-
-	while((n=read(f, buf, (long)sizeof buf))>0)
-		if(write(1, buf, n)!=n){
-			print("write error copying %s: %r\n", s);
-			break;
-		}
-	if(n < 0)
-		print("error reading %s: %r\n", s);
-}
-
-void
-exec9cat(void)
-{
-	int f;
-
-	if(runq->argv->words->next == nil){
-		print("filename needed for 9cat\n");
-		return;
-	}
-	f = open(runq->argv->words->next->word, OREAD);
-	if(f < 0)
-		print("can't open %s: %r\n", runq->argv->words->next->word);
-	else{
-		cat(f, runq->argv->words->next->word);
-		close(f);
-	}
-}
 
 void
 execnewpgrp(void)
@@ -339,6 +303,7 @@ Updenv(void)
 		updenvlocal(runq->local);
 }
 
+/* not used on plan 9 */
 int
 ForkExecute(char *file, char **argv, int sin, int sout, int serr)
 {
@@ -372,9 +337,11 @@ void
 Execute(word *args, word *path)
 {
 	char **argv = mkargv(args);
-	char file[1024];
+	char file[1024], errstr[1024];
 	int nc;
+
 	Updenv();
+	errstr[0] = '\0';
 	for(;path;path = path->next){
 		nc = strlen(path->word);
 		if(nc < sizeof file - 1){	/* 1 for / */
@@ -386,12 +353,24 @@ Execute(word *args, word *path)
 			if(nc + strlen(argv[1]) < sizeof file){
 				strcat(file, argv[1]);
 				exec(file, argv+1);
+				rerrstr(errstr, sizeof errstr);
+				/*
+				 * if file exists and is executable, exec should
+				 * have worked, unless it's a directory or an
+				 * executable for another architecture.  in
+				 * particular, if it failed due to lack of
+				 * swap/vm (e.g., arg. list too long) or other
+				 * allocation failure, stop searching and print
+				 * the reason for failure.
+				 */
+				if (strstr(errstr, " allocat") != nil ||
+				    strstr(errstr, " full") != nil)
+					break;
 			}
 			else werrstr("command name too long");
 		}
 	}
-	rerrstr(file, sizeof file);
-	pfmt(err, "%s: %s\n", argv[1], file);
+	pfmt(err, "%s: %s\n", argv[1], errstr);
 	efree((char *)argv);
 }
 #define	NDIR	256		/* shoud be a better way */
