@@ -1,0 +1,38 @@
+bind -a $home/bin/rc /bin
+bind -a $home/bin/$cputype /bin
+bind -c $home/tmp /tmp
+font = /lib/font/bit/lucm/unicode.9.font
+switch($service){
+case terminal
+#	plumber
+#	upas/fs
+	echo -n accelerated > '#m/mousectl'
+	echo -n 'res 3' > '#m/mousectl'
+	prompt=('term% ' '	')
+	fn term%{ $* }
+	exec grio -s
+case cpu
+	if (test -e /mnt/term/mnt/wsys) {
+		# rio already running
+		wsys = /mnt/term^`{cat /mnt/term/env/wsys}
+		bind -a /mnt/term/mnt/wsys /dev
+		echo -n $sysname > /dev/label
+	}
+	bind /mnt/term/dev/cons /dev/cons
+	bind /mnt/term/dev/consctl /dev/consctl
+	bind -a /mnt/term/dev /dev
+	prompt=('cpu% ' '	')
+	fn cpu%{ $* }
+#	upas/fs
+#	news
+	if (! test -e /mnt/term/mnt/wsys) {
+		# cpu call from drawterm
+#		font=/lib/font/bit/pelm/latin1.8.font
+#		plumber
+#		auth/factotum
+		exec grio -b 2 -c 0xbbccddff -s -x /boot/grio -a -s
+	}
+case con
+	prompt=('cpu% ' '	')
+#	news
+}

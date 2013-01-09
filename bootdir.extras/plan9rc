@@ -62,9 +62,9 @@ fn dofactotum{
 	case terminal
 		echo terminal factotum
 		factotum -u -s factotum
-	case std
+	case user
 		hostcheck
-		echo standard factotum
+		echo user factotum
 		factotum -s factotum
 	}
 }

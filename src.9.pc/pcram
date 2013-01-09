@@ -134,6 +134,7 @@ bootdir
 	/386/bin/cat
 	/386/bin/echo
 	/386/bin/tar
+	/386/bin/ls
 	/386/bin/gunzip
 	/386/bin/bind
 	/386/bin/mount
@@ -146,6 +147,7 @@ bootdir
 	/386/bin/hubfs
 	/386/bin/hubshell
 	/386/bin/mntgen
+	/386/bin/sleep
 	/386/bin/aux/timesync
 	/386/bin/touch
 	/386/bin/test

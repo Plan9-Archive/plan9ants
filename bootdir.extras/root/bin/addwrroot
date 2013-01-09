@@ -1,0 +1,19 @@
+#!/bin/rc
+
+if (! ~ $1 ?*){
+	echo usage: addroroot TARGETSYSTEM
+	exit
+}
+if(! test -e /srv/$1){
+	srv tcp!$1!564 $1
+}
+mount -c /srv/$1 /n/$1
+bind -a /n/$1/ /
+bind -a /386/bin /bin
+bind -a /rc/bin /bin
+bind -a /n/$1/sys /sys
+bind -b /n/$1/lib/ /lib/
+bind -bc /n/$1/$home $home
+bind -bc /n/$1/$home/tmp /tmp
+bind -bc /n/$1/$home/bin/$objtype /bin
+bind -bc /n/$1/$home/bin/rc /bin
