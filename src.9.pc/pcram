@@ -130,7 +130,7 @@ bootdir
 	/386/bin/auth/newns
 	/386/bin/fossil/fossil
 	/386/bin/dossrv
-	/386/bin/venti
+	/386/bin/venti/venti
 	/386/bin/cfs
 	/386/bin/read
 	/386/bin/cat
