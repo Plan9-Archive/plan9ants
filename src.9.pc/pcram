@@ -42,26 +42,26 @@ link
 	ether2000	ether8390
 	ether2114x	pci
 	ether589	etherelnk3
-	ether79c970	pci
+#	ether79c970	pci
 	ether8003	ether8390
 	ether8139	pci
 	ether8169	pci ethermii
-	ether82543gc	pci
-	ether82563	pci
-	ether82557	pci
-	ether83815	pci
-	etherdp83820	pci
+#	ether82543gc	pci
+#	ether82563	pci
+#	ether82557	pci
+#	ether83815	pci
+#	etherdp83820	pci
 	etherec2t	ether8390
-	etherelnk3	pci
-	etherga620	pci
+#	etherelnk3	pci
+#	etherga620	pci
 	etherigbe	pci ethermii
 	ethervgbe	pci ethermii
 	ethervt6102	pci ethermii
 	ethervt6105m	pci ethermii
 #	etherm10g	pci
 	ethersink
-	ethersmc	devi82365 cis
-	etherwavelan	wavelan devi82365 cis pci
+#	ethersmc	devi82365 cis
+#	etherwavelan	wavelan devi82365 cis pci
 	ethermedium
 	netdevmedium
 	loopbackmedium
@@ -80,7 +80,7 @@ misc
 	sd53c8xx	pci sdscsi
 	sdmylex		pci sdscsi
 	sdiahci		pci sdscsi
-	sdaoe
+#	sdaoe
 
 	vga3dfx		+cur
 	vgaark2000pv	+cur
@@ -129,14 +129,16 @@ bootdir
 	/386/bin/auth/factotum
 	/386/bin/auth/newns
 #	/386/bin/fossil/fossil
-	/386/bin/dossrv
+#	/386/bin/dossrv
+#	/386/bin/venti
+#	/386/bin/cfs
 	/386/bin/read
 	/386/bin/cat
 	/386/bin/echo
 	/386/bin/tar
 	/386/bin/ls
 	/386/bin/chmod
-	/386/bin/gunzip
+#	/386/bin/gunzip
 	/386/bin/bind
 	/386/bin/mount
 	/386/bin/srv
@@ -153,6 +155,7 @@ bootdir
 	/386/bin/test
 	/386/bin/grio
 	/rc/bin/hub
+	/rc/bin/srvfs
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/plan9rc

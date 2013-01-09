@@ -28,8 +28,8 @@ if(! ~ $usercheck bootes){
 }
 
 if(! ~ $setfactotum no){
-	echo setting bootes factotum key to rootless
-	echo 'key proto=p9sk1 dom=noroot.com user=bootes !password=rootless' >/mnt/factotum/ctl
+	echo setting $keyowner factotum key to rootless
+	echo 'key proto=p9sk1 dom=noroot.com user='$keyowner' !password=rootless' >/mnt/factotum/ctl
 }
 
 if(! ~ $netsvc no){
