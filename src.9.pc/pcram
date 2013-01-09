@@ -60,7 +60,7 @@ link
 	ethervt6105m	pci ethermii
 #	etherm10g	pci
 	ethersink
-#	ethersmc	devi82365 cis
+	ethersmc	devi82365 cis
 #	etherwavelan	wavelan devi82365 cis pci
 	ethermedium
 	netdevmedium
@@ -155,6 +155,7 @@ bootdir
 	/386/bin/test
 	/386/bin/grio
 	/386/bin/srvfs
+	/386/bin/exportfs
 	/rc/bin/hub
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
