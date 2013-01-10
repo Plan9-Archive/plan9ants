@@ -22,4 +22,4 @@ echo 'afterroot=' $afterroot >>/tmp/p9rcconfig
 
 # for ramskel 
 
-echo 'tgzfs=' $tgzfs >>/tmp/p9initcfg
+echo 'tgzfs=' $tgzfs >>/tmp/p9rcconfig

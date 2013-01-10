@@ -19,5 +19,5 @@ if(~ $tgzfs rootfs.tgz){
 	mount /srv/dos /net.alt /dev/sdC0/9fat
 	tar xzf /net.alt/rootfs.tgz
 }
-
+bind -c /usr/bootes/tmp /tmp
 exit ''
