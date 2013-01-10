@@ -42,7 +42,7 @@ if(~ $interactive yes){
 	echo 'port for cpu listen?'
 	cpuport=`{getans cpuport $cpuport}
 	echo 'start persistent rc hub?'
-	hubsvc=`getans hubsvc $hubsvc}
+	hubsvc=`{getans hubsvc $hubsvc}
 }
 
 if(! ~ $binddevs no){

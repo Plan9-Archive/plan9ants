@@ -234,10 +234,20 @@ echo ROOTLESS PLAN 9 /boot/plan9rc
 
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
+echo -n TIME...
+cp '#r/rtc' '#c/time'
+
 if(~ $bootargs ''){
 	bootargs=local!#S/sdC0/fossil
 	interactive=yes
 	echo 'no bootargs found using '$bootargs' and setting interactive=yes'
+}
+
+if(! ~ $tryusb no){
+	if (test -e /dev/usb/ctl) {
+		echo -n usb...
+		usbd
+	}
 }
 
 bootparse=`{echo $bootargs}
