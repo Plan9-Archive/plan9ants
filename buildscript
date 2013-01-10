@@ -1,12 +1,12 @@
 #!/bin/rc
 
-rfork n
 bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.boot /sys/src/9/boot
 bind -b /usr/mycroftiv/sourcesdir/writeprocns /sys/src/9/port
 bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.port /sys/src/9/port
 bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.pc /sys/src/9/pc
 bind -bc /usr/mycroftiv/sourcesdir/rootlessnext/compiletemp /sys/src/9/pc
 if(~ $1 clean){
+	cd /sys/src/9/pc
 	mk clean
 	exit
 }
@@ -16,6 +16,8 @@ if(~ $1 rootfs){
 }
 cd bootdir.extras
 tar cf skel.tar
+ramfs
+bind -bc /tmp /sys/src/9/pc
 cd /sys/src/9/pc
 mk 'CONF=pcram'
-gzip 9pcram
+gzip -c 9pcram > /usr/mycroftiv/sourcesdir/rootlessnext/compiletemp/9pcram.gz
