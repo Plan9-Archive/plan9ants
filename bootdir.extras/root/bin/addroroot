@@ -7,7 +7,7 @@ if (! ~ $1 ?*){
 if(! test -e /srv/$1){
 	srv tcp!$1!564 $1
 }
-mount /srv/$1 /n/$1
+mount -n /srv/$1 /n/$1
 bind -a /n/$1/ /
 bind -a /386/bin /bin
 bind -a /rc/bin /bin

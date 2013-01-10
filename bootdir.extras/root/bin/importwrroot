@@ -7,7 +7,7 @@ if (! ~ $1 ?*){
 
 import -c $1 / /n/$1
 bind -a /n/$1/ /
-bind -a /386/bin /bin
+bind -a /$objtype/bin /bin
 bind -a /rc/bin /bin
 bind -a /n/$1/srv /srv
 bind -b /n/$1/lib/font /lib/font
@@ -16,3 +16,4 @@ bind -bc /n/$1/$home $home
 bind -bc /n/$1/$home/tmp /tmp
 bind -bc /n/$1/$home/bin/$objtype /bin
 bind -bc /n/$1/$home/bin/rc /bin
+mount -a /srv/factotum /mnt

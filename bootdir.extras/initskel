@@ -72,7 +72,7 @@ if(! ~ $netsvc no){
 	ipconfig loopback /dev/null 127.1
 }
 
-if(! ~ $justipconfig no){
+if(~ $justipconfig no){
 	echo -n 'cs and dns -r...'
 	cs
 	dns -r
@@ -90,7 +90,7 @@ if(! ~ $hubsvc no){
 	hub -b hubfs
 }
 
-if(! ~ $staysane no){
+if(~ $staysane no){
 	echo 'exporting writable root to the whole internet on port 17007!!!'
 	listen1 -t tcp!*!17007 /boot/exportfs &
 }

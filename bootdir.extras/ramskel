@@ -15,6 +15,9 @@ mount -c /srv/ramboot /root
 bind -ac /root /
 echo -n 'tar xf /boot/skel.tar...'
 tar xf /boot/skel.tar
+if (test -d /root/mnt)
+	bind -ac /root/mnt /mnt
+mount -b /srv/factotum /mnt
 bind -ac /root/bin /bin
 if(~ $tgzfs *.tgz){
 	dossrv
@@ -23,4 +26,5 @@ if(~ $tgzfs *.tgz){
 	tar xzf /x/$tgzfs
 }
 bind -c /usr/bootes/tmp /tmp
+echo 'partial root built on ramfs'
 exit ''
