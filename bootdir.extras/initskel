@@ -28,7 +28,7 @@ if (! ~ $usercheck $keyowner){
 }
 
 if(~ $interactive yes){
-	echo 'Answer no for any services you don't want to start. cpuport is for the cpu listener.'
+	echo 'Answer no for any services you dont want to start. cpuport is for the cpu listener.'
 	getans binddevs $binddevs
 	getans setfactotum $setfactotum
 	getans netsvc $netsvc
