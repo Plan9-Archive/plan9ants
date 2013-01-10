@@ -2,10 +2,16 @@
 
 # store copies of all the variables used to control initskel. use sedcfg to convert to usable form
 
-echo 'binddevs=' $binddevs >>/tmp/p9initcfg
+echo 'binddevs=' $binddevs >/tmp/p9initcfg
 echo 'setfactotum=' $setfactotum >>/tmp/p9initcfg
 echo 'netsvc=' $netsvc >>/tmp/p9initcfg
-echo 'hubcpu=' $hubcpu >>/tmp/p9initcfg
+echo 'cpusvc=' $cpusvc >>/tmp/p9initcfg
+echo 'hubsvc=' $hubsvc >>/tmp/p9initcfg
 echo 'cpuport=' $cpuport >>/tmp/p9initcfg
 
-echo initskel options saved to /tmp/p9initcfg
+#these are non-prompted variables
+
+echo 'justipconfig=' $justipconfig >>/tmp/p9initcfg
+echo 'staysane=' $staysane >>/tmp/p9initcfg
+
+echo 'initskel options saved to /tmp/p9initcfg'

@@ -11,15 +11,18 @@ if(~ $1 clean){
 	exit
 }
 if(~ $1 rootfs){
+	ramfs -m /tmp -S ramtmp
+	tar cf /tmp/rootfs.tar root
+	gzip -9 -c /tmp/rootfs.tar >rootfs.tgz
 	tar czf rootfs.tgz root
 	exit
 }
 cd bootdir.extras
 tar cf skel.tar root
 if(~ $2 ramfs){
-	ramfs
+	ramfs -m /tmp -S ramtmp
 	bind -bc /tmp /sys/src/9/pc
 }
 cd /sys/src/9/pc
 mk 'CONF=pcram'
-gzip -c 9pcram > /usr/mycroftiv/sourcesdir/rootlessnext/compiletemp/9pcram.gz
+gzip -9 -c 9pcram > /usr/mycroftiv/sourcesdir/rootlessnext/compiletemp/9pcram.gz

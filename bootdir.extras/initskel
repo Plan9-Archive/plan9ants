@@ -37,10 +37,12 @@ if(~ $interactive yes){
 	setfactotum =`{getans setfactotum $setfactotum}
 	echo 'start internet?'
 	netsvc=`{getans netsvc $netsvc}
-	echo 'start cpu listener and hubfs?'
-	hubcpu=`{getans hubcpu $hubcpu}
+	echo 'start cpu listener ?'
+	cpusvc=`{getans cpusvc $cpusvc}
 	echo 'port for cpu listen?'
 	cpuport=`{getans cpuport $cpuport}
+	echo 'start persistent rc hub?'
+	hubsvc=`getans hubsvc $hubsvc}
 }
 
 if(! ~ $binddevs no){
@@ -68,20 +70,34 @@ if(! ~ $netsvc no){
 	echo -n 'ipconfig...'
 	ipconfig
 	ipconfig loopback /dev/null 127.1
-#	cs
-#	dns -r
 }
 
-if(! ~ $hubcpu no){
+if(! ~ $justipconfig no){
+	echo -n 'cs and dns -r...'
+	cs
+	dns -r
+}
+
+if(! ~ $cpusvc no){
 	echo -n 'hubfs...'
 	hub -b hubfs
 	echo -n 'listen1 cpu -R...'
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
-#	listen1 -t tcp!*!17007 /boot/exportfs &
-#	timesync -n pool.ntp.org
 }
 
-font=/lib/font/bit/lucm/latin1.9.font
+if(! ~ $hubsvc no){
+	echo -n 'hubfs...'
+	hub -b hubfs
+}
+
+if(! ~ $staysane no){
+	echo 'exporting writable root to the whole internet on port 17007!!!'
+	listen1 -t tcp!*!17007 /boot/exportfs &
+}
+
+if(~ $font ''){
+	font=/lib/font/bit/lucm/latin1.9.font
+}
 
 saveinitcfg
 

@@ -107,7 +107,7 @@ fn dogetrootfs{
 	switch($getrootfs){
 	case tcp
 		if(! ~ $bootargs tcp){
-			bootargs='tcp!'$fs'.564'
+			bootargs='tcp!'$fs'!564'
 		}
 		if(! ~ $ipdone yes){
 			ipsetup
