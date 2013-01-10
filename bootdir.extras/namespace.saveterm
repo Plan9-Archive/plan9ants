@@ -44,6 +44,10 @@ mount -a /srv/net /net
 
 mount -c /srv/hubfs /n/hubfs
 
+# put /mnt/term and wsys back - experimental binds
+bind -bc /net.alt/$oldterm /mnt/term
+bind -bc /net.alt/$oldwsys /mnt/wsys
+
 bind -c /usr/$user/tmp /tmp
 cd /usr/$user
 
