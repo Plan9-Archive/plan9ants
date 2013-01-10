@@ -1,0 +1,25 @@
+#!/bin/rc
+
+# store copies of all the variables used to control boot. use sedcfg to convert to usable form
+
+# all of these are for plan9rc
+
+echo 'factotum=' $factotum >>/tmp/p9rcconfig
+echo 'sysname=' $sysname >>/tmp/p9rcconfig
+echo 'ramsetup=' $ramsetup >>/tmp/p9rcconfig
+echo 'startventi=' $startventi >>/tmp/p9rcconfig
+echo 'getrootfs=' $getrootfs >>/tmp/p9rcconfig
+echo 'fs=' $fs >>/tmp/p9rcconfig
+echo 'venti=' $venti >>/tmp/p9rcconfig
+echo 'fossil=' $fossil >>/tmp/p9rcconfig
+echo 'cfs=' $cfs >>/tmp/p9rcconfig
+echo 'initscript=' $initscript >>/tmp/p9rcconfig
+echo 'namespace=' $namespace >>/tmp/p9rcconfig
+echo 'rootstart=' $rootstart >>/tmp/p9rcconfig
+echo 'staylocal=' $staylocal >>/tmp/p9rcconfig
+echo 'afterfact=' $afterfact >>/tmp/p9rcconfig
+echo 'afterroot=' $afterroot >>/tmp/p9rcconfig
+
+# for ramskel 
+
+echo 'tgzfs=' $tgzfs >>/tmp/p9initcfg

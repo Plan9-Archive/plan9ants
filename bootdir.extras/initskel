@@ -1,6 +1,21 @@
 #!/boot/rc
 # ramroot startup after newns
 
+fn getans{
+	echo ' ** '$1 is':' $2 - press enter, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
+	answer=`{read}
+	switch($answer){
+	case rc
+		errorshell
+	case clear
+		echo ''
+	case ?*
+		echo $answer
+	case ''
+		echo $2
+	}
+}
+
 keyowner=`{cat /dev/hostowner}
 if (! ~ $keyowner ?*){
 	echo please set hostowner
@@ -10,6 +25,14 @@ usercheck=`{cat /dev/user}
 if (! ~ $usercheck $keyowner){
 	echo current user is not hostowner
 	exit ''
+}
+
+if(~ $interactive yes){
+	getans binddevs $binddevs
+	getans setfactotum $setfactotum
+	getans netsvc $netsvc
+	getans hubcpu $hubcpu
+	getans cpuport $cpuport
 }
 
 if(! ~ $binddevs no){
@@ -43,11 +66,15 @@ if(! ~ $netsvc no){
 if(! ~ $hubcpu no){
 	echo -n 'hubfs and port 17020 cpu...'
 	hub -b hubfs
-	listen1 -t tcp!*!17020 /boot/cpu -R &
+	if(~ $cpuport '')
+		cpuport=17020
+	listen1 -t tcp!*!$cpuport /boot/cpu -R &
 #	listen1 -t tcp!*!17007 /boot/exportfs &
 #	timesync -n pool.ntp.org
 }
 
 font=/lib/font/bit/lucm/latin1.9.font
+
+saveinitcfg
 
 exit ''

@@ -168,4 +168,6 @@ bootdir
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/namespace.saveterm
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/ramskel
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/initskel
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/save9cfg
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/saveinitcfg
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/skel.tar

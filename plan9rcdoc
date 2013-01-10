@@ -18,9 +18,11 @@ staylocal - whether to stay within the namespace of the plan9rc script on the co
 afterfact - command to execute after starting factotum (happens before everything else)
 afterroot - command to execute after mounting rootfs but before initscript or cpu or termrc
 
-options for initksel can be set in plan9.ini
+options for ramskel and initksel can also be set in plan9.ini
 
+tgzfs= specifies a compressed fs to retrive from 9fat for extra files. set to rootfs.tgz to use the provided example
 binddevs=no turns off binding off default kernel devices
 setfactotum=no turns off putting a default password into bootes factotum
 netsvc=no turns off ipconfig
 hubcpu=no turns off hubfs and cpu listener
+cpuport=number of port for cpu to listen on

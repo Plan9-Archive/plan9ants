@@ -1,0 +1,4 @@
+#!/bin/rc
+
+cat /tmp/p9rcconfig | sed '/.*=$/d' >/tmp/p9cfg
+cat /tmp/p9initcfg | sed '/.*=$/d' >>/tmp/p9cfg

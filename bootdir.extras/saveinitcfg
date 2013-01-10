@@ -1,0 +1,9 @@
+#!/bin/rc
+
+# store copies of all the variables used to control initskel. use sedcfg to convert to usable form
+
+echo 'binddevs=' $binddevs >>/tmp/p9initcfg
+echo 'setfactotum=' $setfactotum >>/tmp/p9initcfg
+echo 'netsvc=' $netsvc >>/tmp/p9initcfg
+echo 'hubcpu=' $hubcpu >>/tmp/p9initcfg
+echo 'cpuport=' $cpuport >>/tmp/p9initcfg
