@@ -62,7 +62,7 @@ fn dofactotum{
 	case terminal
 		echo terminal factotum
 		factotum -u -s factotum
-	case user
+	case debug
 		hostcheck
 		echo debug factotum
 		factotum -d -s factotum
@@ -271,32 +271,39 @@ if(~ $interactive yes){
 		echo dropping to rc shell with limited commands
 		rc -i
 	}
-	echo if ipconfig is needed for tcp boot or venti enter parameters or leave blank for dhcp
+	echo 'If ipconfig is needed for tcp boot or venti, enter parameters. Leave blank for dhcp.'
 	ipparams = `{getans ipparams $ipparams}
+	echo 'Choose factotum mode - cpu terminal or debug.'
 	factotum = `{getans factotum $factotum}
 	dofactotum
 	sysname = `{getans sysname $sysname}
+	echo 'A skeleton fs is needed. The default ramskel is recommended.'
 	ramsetup = `{getans ramsetup $ramsetup}
 	doramsetup
 	hostcheck
+	echo 'Should a local Venti server be started? yes if so, leave blank otherwise.'
 	startventi = `{getans startventi $startventi}
 	if(~ $startventi yes){
 		ventilisten = `{getans ventilisten $ventilisten}
 		vhttplisten = `{getans vhttplisten $vhttplisten}
 	}
 	dostartventi
+	echo 'Should we attach to file server? Choose local or tcp or leave blank for none.'
 	getrootfs = `{getans getrootfs $getrootfs}
 	if(~ $getrootfs tcp){
 		fs = `{getans fs $fs}
 		cfs = `{getans cfs $cfs}
 	}
 	dogetrootfs
+	echo 'To create a default cpu server environment serving on port 17020 use initskel here.'
 	initscript = `{getans initscript $initscript}
 	doinitscript
 	dochecksys
+	echo 'Should we start the cpurc or termrc from the file server? Enter cpu or terminal if so.'
 	rootstart = `{getans rootstart $rootstart}
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	echo 'Do you want to console to stay in the current namespace? enter yes if so.'
 	staylocal = `{getans staylocal $staylocal}
 	if(~ $staylocal yes){
 		echo starting shell in current namespace
@@ -317,6 +324,9 @@ if not {
 	dochecksys
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	echo 'storing startup configuration in startupvars'
+	startupvars=`{echo factotum is $factotum sysname is $sysname ramsetup is $ramsetup startventi is $startventi getrootfs is $getrootfs fs is $fs venti is $venti fossil is $fossil cfs is $cfs initscript is $initscript namespace is $namespace rootstart is $rootstart staylocal is $staylocal afterfact is $afterfact afterroot is $afterroot}
+
 	if(~ $staylocal yes){
 		echo starting shell in current namespace
 		rc -i

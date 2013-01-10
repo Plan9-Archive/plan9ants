@@ -1,1 +1,26 @@
 plan9rc is the script run after boot(8). It supports several new options in plan9.ini. "interactive=yes" changes the boot process to an interactive question-and-response format where all variables can be changed from their defaults and the possibility of dropping to a shell is available. "ramsetup=" provides the name of a command to set up an initial skeleton filesystem on a ramdisk. The default is the provided ramskel script compiled into the kernel /boot, which expands /boot/skel.tar. If "getrootfs=rootfs.tgz" then an additional root filesystem of this name will be expanded from the 9fat partition. "factotum=" specifies either cpu, terminal, or user parameters to start factotum. "rootstart=" specifies either cpu, terminal, other or none parameters as the final system startup script. These default to the setting in /env/service.
+
+full list of variables:
+bootparse is a copy of bootargs as described by boot(8) and plan9.ini(8), not set as separate var
+factotum - type of factotum [cpu terminal debug]
+sysname - standard sysname from plan9.ini
+ramsetup - program to set up ramfs for bootscripts, defaults to ramskel
+startventi - set to yes to start the venti server [yes]
+getrootfs - determined from bootparse or set by user during interactive [tcp local]
+fs - standard fs address from plan9.ini, needed for tcp booting
+venti - standard venti address variable from plan9.ini
+fossil - standard fossil address from plan9.ini not parsed fully correctly in general
+cfs - standard cfs address from plan9.ini
+initscript - script forked off into namespace provided initskel begins cpu server on 17020
+namespace - namespace for starting initscript
+rootstart - whether or not to start cpurc or termrc scripts from mounted root [cpu terminal]
+staylocal - whether to stay within the namespace of the plan9rc script on the console, only option is [yes]
+afterfact - command to execute after starting factotum (happens before everything else)
+afterroot - command to execute after mounting rootfs but before initscript or cpu or termrc
+
+options for initksel can be set in plan9.ini
+
+binddevs=no turns off binding off default kernel devices
+setfactotum=no turns off putting a default password into bootes factotum
+netsvc=no turns off ipconfig
+hubcpu=no turns off hubfs and cpu listener
