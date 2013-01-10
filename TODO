@@ -6,5 +6,5 @@ create spawnenv script for launching self-sufficient quasivirtual namespaces
 comprehensive set of plan9.ini examples
 check on other boot methods and formats to support in plan9rc
 !upload to sources - done with hg!
-improve documentation and write tutorials and possibly scripted demos? - in progress
+improve documentation and write tutorials and possibly scripted demos? - in progress - in progress 
 investigate compatibility with 9front

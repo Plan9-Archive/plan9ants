@@ -42,18 +42,18 @@ link
 	ether2000	ether8390
 	ether2114x	pci
 	ether589	etherelnk3
-	ether79c970	pci
+#	ether79c970	pci
 	ether8003	ether8390
 	ether8139	pci
 	ether8169	pci ethermii
-	ether82543gc	pci
-	ether82563	pci
-	ether82557	pci
-	ether83815	pci
-	etherdp83820	pci
+#	ether82543gc	pci
+#	ether82563	pci
+#	ether82557	pci
+#	ether83815	pci
+#	etherdp83820	pci
 	etherec2t	ether8390
-	etherelnk3	pci
-	etherga620	pci
+#	etherelnk3	pci
+#	etherga620	pci
 	etherigbe	pci ethermii
 	ethervgbe	pci ethermii
 	ethervt6102	pci ethermii
@@ -61,7 +61,7 @@ link
 #	etherm10g	pci
 	ethersink
 	ethersmc	devi82365 cis
-	etherwavelan	wavelan devi82365 cis pci
+#	etherwavelan	wavelan devi82365 cis pci
 	ethermedium
 	netdevmedium
 	loopbackmedium
@@ -80,7 +80,7 @@ misc
 	sd53c8xx	pci sdscsi
 	sdmylex		pci sdscsi
 	sdiahci		pci sdscsi
-	sdaoe
+#	sdaoe
 
 	vga3dfx		+cur
 	vgaark2000pv	+cur
@@ -127,13 +127,11 @@ bootdir
 	bootpcram.out boot
 	/386/bin/ip/ipconfig
 	/386/bin/auth/factotum
-	/386/bin/fossil/fossil
-	/386/bin/dossrv
-	/386/bin/venti/venti
-	/386/bin/usb/usbd
-	/386/bin/disk/partfs
-#	/386/bin/cfs
 	/386/bin/auth/newns
+#	/386/bin/fossil/fossil
+	/386/bin/dossrv
+#	/386/bin/venti/venti
+#	/386/bin/cfs
 	/386/bin/read
 	/386/bin/cat
 	/386/bin/echo
@@ -147,8 +145,8 @@ bootdir
 	/386/bin/ramfs
 	/386/bin/aux/listen1
 	/386/bin/cpu
-	/386/bin/ndb/cs
-	/386/bin/ndb/dns
+#	/386/bin/ndb/cs
+#	/386/bin/ndb/dns
 	/386/bin/hubfs
 	/386/bin/hubshell
 	/386/bin/mntgen
