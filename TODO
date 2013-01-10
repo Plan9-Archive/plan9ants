@@ -1,7 +1,7 @@
 make rerootwin robust and sane - slightly improved
 improve namespace acquisition tools like addwrroot
 test multiple factotums for different users with different keys
-create spawnenv script for launching self-sufficient quasivirtual namespaces
+create spawnenv script for launching self-sufficient quasivirtual namespaces - plan9rc and initskel are evolving in this direction
 !write configurator/installer for different system roles - replaced with saving interactive config
 comprehensive set of plan9.ini examples
 check on other boot methods and formats to support in plan9rc
