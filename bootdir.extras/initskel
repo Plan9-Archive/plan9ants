@@ -28,12 +28,16 @@ if (! ~ $usercheck $keyowner){
 }
 
 if(~ $interactive yes){
-	echo 'Answer no for any services you dont want to start. cpuport is for the cpu listener.'
-	getans binddevs $binddevs
-	getans setfactotum $setfactotum
-	getans netsvc $netsvc
-	getans hubcpu $hubcpu
-	getans cpuport $cpuport
+	echo 'bind hardware devices?'
+	binddevs=`{getans binddevs $binddevs}
+	echo 'use normal machine hostowner key?'
+	setfactotum =`{getans setfactotum $setfactotum}
+	echo 'start internet?'
+	netsvc=`{getans netsvc $netsvc}
+	echo 'start cpu listener and hubfs?'
+	hubcpu=`{getans hubcpu $hubcpu}
+	echo 'port for cpu listen?'
+	cpuport=`{getans cpuport $cpuport}
 }
 
 if(! ~ $binddevs no){
@@ -51,13 +55,13 @@ if(! ~ $usercheck bootes){
 	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
 }
 
-if(! ~ $setfactotum no){
+if(~ $setfactotum no){
 	echo setting $keyowner factotum key to rootless
 	echo 'key proto=p9sk1 dom=noroot.com user='$keyowner' !password=rootless' >/mnt/factotum/ctl
 }
 
 if(! ~ $netsvc no){
-	echo -n 'ipconfig cs dns -r...'
+	echo -n 'ipconfig...'
 	ipconfig
 	ipconfig loopback /dev/null 127.1
 #	cs

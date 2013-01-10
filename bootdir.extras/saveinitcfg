@@ -7,3 +7,5 @@ echo 'setfactotum=' $setfactotum >>/tmp/p9initcfg
 echo 'netsvc=' $netsvc >>/tmp/p9initcfg
 echo 'hubcpu=' $hubcpu >>/tmp/p9initcfg
 echo 'cpuport=' $cpuport >>/tmp/p9initcfg
+
+echo initskel options saved to /tmp/p9initcfg

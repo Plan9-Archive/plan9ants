@@ -271,37 +271,37 @@ if(~ $interactive yes){
 		echo dropping to rc shell with limited commands
 		rc -i
 	}
-	echo 'If ipconfig is needed for tcp boot or venti, enter parameters. Leave blank for dhcp.'
+	echo 'Ff ipconfig is needed for tcp boot or venti, enter parameters. Leave blank for dhcp.'
 	ipparams = `{getans ipparams $ipparams}
 	echo 'Choose factotum mode - cpu terminal or debug.'
 	factotum = `{getans factotum $factotum}
 	dofactotum
 	sysname = `{getans sysname $sysname}
-	echo 'A skeleton fs is needed. The default ramskel is recommended.'
+	echo 'A skeleton fs is needed. Default ramskel is recommended.'
 	ramsetup = `{getans ramsetup $ramsetup}
-	echo 'Retrieve additional tools from 9fat? type rootfs.tgz if so'
+	echo 'Retrieve additional tools from 9fat? Enter rootfs.tgz if so'
 	tgzfs = `{getans tgzfs $tgzfs}
 	doramsetup
 	hostcheck
-	echo 'Should a local Venti server be started? yes if so, leave blank otherwise.'
+	echo 'Start local Venti server be started? Yes or leave blank for no.'
 	startventi = `{getans startventi $startventi}
 	if(~ $startventi yes){
 		ventilisten = `{getans ventilisten $ventilisten}
 		vhttplisten = `{getans vhttplisten $vhttplisten}
 	}
 	dostartventi
-	echo 'Should we attach to a file server? Choose local or tcp or leave blank for none.'
+	echo 'Attach to a file server? Choose local or tcp or leave blank for none.'
 	getrootfs = `{getans getrootfs $getrootfs}
 	if(~ $getrootfs tcp){
 		fs = `{getans fs $fs}
 		cfs = `{getans cfs $cfs}
 	}
 	dogetrootfs
-	echo 'To create a default cpu server environment serving on port 17020 use initskel here.'
+	echo 'To create a default cpu server environment serving on a port of your choice use initskel here.'
 	initscript = `{getans initscript $initscript}
 	doinitscript
 	dochecksys
-	echo 'Should we start cpurc termrc from the file server? Enter cpu or terminal if so.'
+	echo 'Start cpurc termrc from the file server? Enter cpu or terminal if so.'
 	rootstart = `{getans rootstart $rootstart}
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
