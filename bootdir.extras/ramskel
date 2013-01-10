@@ -9,14 +9,17 @@ if (! ~ $hostdir ?*){
 }
 
 cd /
+echo -n 'ramfs -S ramboot...'
 ramfs -S ramboot
 mount -c /srv/ramboot /root
 bind -ac /root /
+echo -n 'tar xf /boot/skel.tar...'
 tar xf /boot/skel.tar
 bind -ac /root/bin /bin
 if(~ $tgzfs rootfs.tgz){
 	dossrv
 	mount /srv/dos /net.alt /dev/sdC0/9fat
+	echo tar xzf rootfs.tgz...
 	tar xzf /net.alt/rootfs.tgz
 }
 bind -c /usr/bootes/tmp /tmp
