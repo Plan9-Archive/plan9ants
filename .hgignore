@@ -3,3 +3,4 @@ syntax: glob
 *.gz
 compiletemp
 root/bin
+*.tgz
