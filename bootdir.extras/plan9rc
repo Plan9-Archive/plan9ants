@@ -305,6 +305,8 @@ if(~ $interactive yes){
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'Do you want to console to stay in the current namespace? enter yes if so.'
 	staylocal = `{getans staylocal $staylocal}
+	echo 'storing startup configuration in startupvars'
+	startupvars=`{echo factotum is $factotum sysname is $sysname ramsetup is $ramsetup startventi is $startventi getrootfs is $getrootfs fs is $fs venti is $venti fossil is $fossil cfs is $cfs initscript is $initscript namespace is $namespace rootstart is $rootstart staylocal is $staylocal afterfact is $afterfact afterroot is $afterroot}
 	if(~ $staylocal yes){
 		echo starting shell in current namespace
 		rc -i
@@ -326,7 +328,6 @@ if not {
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration in startupvars'
 	startupvars=`{echo factotum is $factotum sysname is $sysname ramsetup is $ramsetup startventi is $startventi getrootfs is $getrootfs fs is $fs venti is $venti fossil is $fossil cfs is $cfs initscript is $initscript namespace is $namespace rootstart is $rootstart staylocal is $staylocal afterfact is $afterfact afterroot is $afterroot}
-
 	if(~ $staylocal yes){
 		echo starting shell in current namespace
 		rc -i
