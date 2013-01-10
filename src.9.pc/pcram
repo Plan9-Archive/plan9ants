@@ -132,6 +132,7 @@ bootdir
 #	/386/bin/venti/venti
 #	/386/bin/usb/usbd
 #	/386/bin/disk/partfs
+#	/386/bin/disk/kfs
 #	/386/bin/cfs
 	/386/bin/auth/newns
 	/386/bin/read
@@ -160,8 +161,6 @@ bootdir
 	/386/bin/exportfs
 	/rc/bin/hub
 	/rc/bin/window
-#	/rc/bin/9fs
-#	/rc/bin/9fat:
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/plan9rc
