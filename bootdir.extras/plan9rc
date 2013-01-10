@@ -234,7 +234,7 @@ echo ROOTLESS PLAN 9 /boot/plan9rc
 if(~ $bootargs ''){
 	bootargs=local!#S/sdC0/fossil
 	interactive=yes
-	echo 'no bootargs found using $bootargs and setting interactive=yes'
+	echo 'no bootargs found using '$bootargs' and setting interactive=yes'
 }
 
 bootparse=`{echo $bootargs}
@@ -251,6 +251,8 @@ if(~ $bootparse(1) tcp*){
 	
 if(~ $ramsetup '')
 	ramsetup=ramskel
+if(~ $tgzfs '')
+	tgzfs=rootfs.tgz
 if(~ $namespace '')
 	namespace=namespace
 if(~ $factotum '')
@@ -277,7 +279,7 @@ if(~ $interactive yes){
 		echo dropping to rc shell with limited commands
 		rc -i
 	}
-	echo 'Ff ipconfig is needed for tcp boot or venti, enter parameters. Leave blank for dhcp.'
+	echo 'If ipconfig is needed for tcp boot or venti, enter parameters. Leave blank for dhcp.'
 	ipparams = `{getans ipparams $ipparams}
 	echo 'Choose factotum mode - cpu terminal or debug.'
 	factotum = `{getans factotum $factotum}
@@ -289,7 +291,7 @@ if(~ $interactive yes){
 	tgzfs = `{getans tgzfs $tgzfs}
 	doramsetup
 	hostcheck
-	echo 'Start local Venti server be started? Yes or leave blank for no.'
+	echo 'Start local Venti server? yes or leave blank for no.'
 	startventi = `{getans startventi $startventi}
 	if(~ $startventi yes){
 		ventilisten = `{getans ventilisten $ventilisten}

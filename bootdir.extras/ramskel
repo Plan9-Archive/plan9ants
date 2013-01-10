@@ -16,11 +16,11 @@ bind -ac /root /
 echo -n 'tar xf /boot/skel.tar...'
 tar xf /boot/skel.tar
 bind -ac /root/bin /bin
-if(~ $tgzfs rootfs.tgz){
+if(! ~ $tgzfs no){
 	dossrv
-	mount /srv/dos /net.alt /dev/sdC0/9fat
-	echo tar xzf rootfs.tgz...
-	tar xzf /net.alt/rootfs.tgz
+	mount /srv/dos /x /dev/sdC0/9fat
+	echo tar xzf $tgzfs ...
+	tar xzf /x/$tgzfs
 }
 bind -c /usr/bootes/tmp /tmp
 exit ''
