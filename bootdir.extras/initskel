@@ -65,7 +65,7 @@ if(! ~ $netsvc no){
 }
 
 if(! ~ $hubcpu no){
-	echo -n 'hubfs and port 17020 cpu...'
+	echo -n 'hubfs and cpu...'
 	hub -b hubfs
 	if(~ $cpuport '')
 		cpuport=17020

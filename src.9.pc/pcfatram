@@ -169,3 +169,7 @@ bootdir
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/ramskel
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/initskel
 	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/skel.tar
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/rerootwin
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/addroroot
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/addwrroot
+	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/addsources

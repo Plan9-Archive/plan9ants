@@ -279,6 +279,8 @@ if(~ $interactive yes){
 	sysname = `{getans sysname $sysname}
 	echo 'A skeleton fs is needed. The default ramskel is recommended.'
 	ramsetup = `{getans ramsetup $ramsetup}
+	echo 'Retrieve additional tools from 9fat? type rootfs.tgz if so'
+	tgzfs = `{getans tgzfs $tgzfs}
 	doramsetup
 	hostcheck
 	echo 'Should a local Venti server be started? yes if so, leave blank otherwise.'
@@ -288,7 +290,7 @@ if(~ $interactive yes){
 		vhttplisten = `{getans vhttplisten $vhttplisten}
 	}
 	dostartventi
-	echo 'Should we attach to file server? Choose local or tcp or leave blank for none.'
+	echo 'Should we attach to a file server? Choose local or tcp or leave blank for none.'
 	getrootfs = `{getans getrootfs $getrootfs}
 	if(~ $getrootfs tcp){
 		fs = `{getans fs $fs}
@@ -299,7 +301,7 @@ if(~ $interactive yes){
 	initscript = `{getans initscript $initscript}
 	doinitscript
 	dochecksys
-	echo 'Should we start the cpurc or termrc from the file server? Enter cpu or terminal if so.'
+	echo 'Should we start cpurc termrc from the file server? Enter cpu or terminal if so.'
 	rootstart = `{getans rootstart $rootstart}
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
