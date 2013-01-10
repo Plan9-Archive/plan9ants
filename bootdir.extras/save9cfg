@@ -4,6 +4,10 @@
 
 # all of these are for plan9rc
 
+#set in plan9.ini and not interactively
+echo 'bootfile=' $bootfile >>/tmp/p9rcconfig
+echo 'bootargs=' $bootargs >>/tmp/p9rcconfig
+echo 'service=' $service >>/tmp/p9rcconfig
 echo 'factotum=' $factotum >>/tmp/p9rcconfig
 echo 'sysname=' $sysname >>/tmp/p9rcconfig
 echo 'ramsetup=' $ramsetup >>/tmp/p9rcconfig

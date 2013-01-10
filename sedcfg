@@ -1,4 +1,7 @@
 #!/bin/rc
 
-cat /tmp/p9rcconfig | sed '/.*=$/d' >/tmp/p9cfg
-cat /tmp/p9initcfg | sed '/.*=$/d' >>/tmp/p9cfg
+rfork n
+
+mount /srv/ramboot /net.alt
+cat /net.alt/usr/bootes/tmp/p9rcconfig | sed '/.*=$/d' | sed 's/ //g' >/tmp/p9cfg
+cat /net.alt/usr/bootes/tmp/p9initcfg | sed '/.*=$/d' | sed 's/ //g' >>/tmp/p9cfg
