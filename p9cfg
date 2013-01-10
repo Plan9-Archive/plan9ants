@@ -1,0 +1,12 @@
+bootfile=sdC0!9fat!9pcram.gz
+bootargs=tcp!192.168.1.123!564
+service=cpu
+factotum=cpu
+sysname=gridtwo
+ramsetup=ramskel
+getrootfs=tcp
+fs=192.168.1.123
+initscript=initskel
+namespace=namespace
+rootstart=cpu
+cpuport=17020

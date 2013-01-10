@@ -1,7 +1,12 @@
 #!/bin/rc
 
+# used after an interactive=yes startup to save the options used
+# they may be pasted into plan9.ini to reproduce the bootup sequence
+
 rfork n
 
 mount /srv/ramboot /net.alt
 cat /net.alt/usr/bootes/tmp/p9rcconfig | sed '/.*=$/d' | sed 's/ //g' >/tmp/p9cfg
 cat /net.alt/usr/bootes/tmp/p9initcfg | sed '/.*=$/d' | sed 's/ //g' >>/tmp/p9cfg
+
+echo boot config saved to /tmp/p9cfg

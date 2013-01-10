@@ -1,10 +1,10 @@
-make rerootwin robust and sane
+make rerootwin robust and sane - slightly improved
 improve namespace acquisition tools like addwrroot
 test multiple factotums for different users with different keys
 create spawnenv script for launching self-sufficient quasivirtual namespaces
-write configurator/installer for different system roles
+!write configurator/installer for different system roles - replaced with saving interactive config
 comprehensive set of plan9.ini examples
 check on other boot methods and formats to support in plan9rc
-upload to sources
-improve documentation and write tutorials and possibly scripted demos?
+!upload to sources - done with hg!
+improve documentation and write tutorials and possibly scripted demos? - in progress
 investigate compatibility with 9front
