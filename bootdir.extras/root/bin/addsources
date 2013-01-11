@@ -5,7 +5,8 @@ if(! test -e /srv/sources){
 }
 mount -n /srv/sources /n/sources
 bind -a /n/sources/plan9 /
-bind -a /386/bin /bin
+bind -a /$objtype/bin /bin
 bind -a /rc/bin /bin
 bind -b /n/sources/plan9/lib/font /lib/font
 bind -a /n/sources/plan9/sys /sys
+mount -a /srv/factotum /mnt

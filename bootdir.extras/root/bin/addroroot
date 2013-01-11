@@ -9,6 +9,8 @@ if(! test -e /srv/$1){
 }
 mount -n /srv/$1 /n/$1
 bind -a /n/$1/ /
-bind -a /386/bin /bin
+bind -a /$objtype/bin /bin
 bind -a /rc/bin /bin
 bind -b /n/$1/lib/font /lib/font
+bind -a /n/$1/sys /sys
+mount -a /srv/factotum /mnt

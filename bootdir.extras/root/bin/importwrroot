@@ -9,9 +9,10 @@ import -c $1 / /n/$1
 bind -a /n/$1/ /
 bind -a /$objtype/bin /bin
 bind -a /rc/bin /bin
+bind -a /n/$1/sys /sys
 bind -a /n/$1/srv /srv
 bind -b /n/$1/lib/font /lib/font
-bind -a /n/$1/sys /sys
+bind -bc /n/$1/usr /usr
 bind -bc /n/$1/$home $home
 bind -bc /n/$1/$home/tmp /tmp
 bind -bc /n/$1/$home/bin/$objtype /bin
