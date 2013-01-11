@@ -71,13 +71,15 @@ fn dofactotum{
 }
 
 fn ipsetup{
-	if(~ $gateway ?*){
-		ipparams=( -g $gateway ether /net/ether0 $ipaddress $ipmask )
+	if(! test -e /net/ipifc/0/ctl){
+		if(~ $gateway ?*){
+			ipparams=( -g $gateway ether /net/ether0 $ipaddress $ipmask )
+		}
+		echo ipconfig $ipparams
+		ipconfig $ipparams
+		ipconfig loopback /dev/null 127.1
+		ipdone=yes
 	}
-	echo ipconfig $ipparams
-	ipconfig $ipparams
-	ipconfig loopback /dev/null 127.1
-	ipdone=yes
 }
 
 fn doafterfact{
@@ -119,10 +121,8 @@ fn dogetrootfs{
 			bootsrv=/srv/boot
 		}
 		if not{
-			echo prepping for cfs with srv $fs to /srv/root
-			srv tcp!$fs!564 root
-			echo starting cfs on $cfs and serving root to /srv/boot
-			cfs -F /srv/root -f $cfs -z /srv/boot
+			echo starting cfs $cfs dialing $fs and serving root to /srv/boot
+			cfs -a tcp!$fs!564 -f $cfs -z boot
 			bootsrv=/srv/boot
 		}
 	case local
@@ -320,7 +320,10 @@ if(~ $interactive yes){
 	}
 	if(~ $getrootfs local){
 		echo 'Dial a venti server? Enter its ip if so.'
-		venti = `{getans venti $venti)
+		venti = `{getans venti $venti}
+		if(~ ! venti ''){
+			ipsetup
+		}
 	}
 	dogetrootfs
 	echo 'To create a default cpu server environment serving on a port of your choice use initskel here.'

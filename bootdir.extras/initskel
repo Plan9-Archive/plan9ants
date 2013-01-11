@@ -30,11 +30,13 @@ if (! ~ $usercheck $keyowner){
 if(~ $cpuport '')
 	cpuport=17020
 
+echo 'INITSKEL minimal setup for rootless plan 9 environment'
 if(~ $interactive yes){
+	echo 'For configuration questions, answer no to disable default behaviors'
 	echo 'bind hardware devices?'
 	binddevs=`{getans binddevs $binddevs}
 	echo 'use normal machine hostowner key?'
-	setfactotum =`{getans setfactotum $setfactotum}
+	hostfactotum =`{getans hostfactotum $hostfactotum}
 	echo 'start internet?'
 	netsvc=`{getans netsvc $netsvc}
 	echo 'start cpu listener ?'
@@ -61,15 +63,17 @@ if(! ~ $usercheck bootes){
 	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
 }
 
-if(~ $setfactotum no){
+if(~ $hostfactotum no){
 	echo 'setting '$keyowner' factotum key to rootless'
 	echo 'key proto=p9sk1 dom=noroot.com user='$keyowner' !password=rootless' >/mnt/factotum/ctl
 }
 
 if(! ~ $netsvc no){
-	echo -n 'ipconfig...'
-	ipconfig
-	ipconfig loopback /dev/null 127.1
+	if(! test -e /net/ipifc/0/ctl){
+		echo -n 'ipconfig ' $ipparams '...'
+		ipconfig $ipparams
+		ipconfig loopback /dev/null 127.1
+	}
 }
 
 if(~ $justipconfig no){
@@ -79,8 +83,6 @@ if(~ $justipconfig no){
 }
 
 if(! ~ $cpusvc no){
-	echo -n 'hubfs...'
-	hub -b hubfs
 	echo -n 'listen1 cpu -R...'
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
 }

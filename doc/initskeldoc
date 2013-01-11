@@ -1,0 +1,20 @@
+The initskel script is the equivalent of a small cpurc file for the rootless environment. By default it binds additional devices, starts mtgen, issues ipconfig if hasn't been done earlier, and begins a cpu listener on a non-standard port and puts a persistent rc in a hubfs. The persistent rc can be used to 'tunnel down' to the rootless environment from a different namespace. 
+
+Most of the variables are configured to have a default behavior which is deactivated by setting =no in plan9.ini or answering no during interactive startup. Some of the defaults are passive, some are active - in other words, =no turns on some behaviors as described as follows:
+
+binddevs=no prevents the binding of the standard kernel devices ( f t m v L P u U '$' Σ κ )
+hostfactotum=no adds a new key to factotum set to "rootless" for dom "noroot.com"
+
+netsvc=no turns off ipconfig although it may have been activated earlier by plan9rc
+
+cpusvc=no turns off the cpu listener
+
+hubsvc=no turns off the hubfs. 
+
+cpuport= sets the listening port. the default is 17020 so it is necessary to use a full dialstring to connect ( cpu -h tcp!address!17020)
+
+Two more variables are not prompted for and must be set in the environment (usually in plan9.ini)
+
+justipconfig=no activates cs and dns in addition to ipconfig
+
+staysane=no activates un-authenticated export of the root fs to the whole world

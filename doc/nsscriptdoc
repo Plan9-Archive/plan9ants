@@ -1,0 +1,10 @@
+namespace scripts
+
+addwrroot TARGET attaches to a writable server from /srv/TARGET or via srv TARGET and then binds the namespace to make use of the bin and /usr/$user directories and the font library.
+
+importwrroot TARGET uses import to attach and also binds in the target's /srv.
+
+These commands also have variants addroroot and importroroot to bring in read-only servers.
+
+addsources dials sources and binds to its binaries and lib
+
