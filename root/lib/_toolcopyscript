@@ -1,3 +1,4 @@
+cp /bin/9660srv .
 cp /bin/9fat: .
 cp /bin/9fs .
 cp /bin/acme .
@@ -53,13 +54,13 @@ cp /bin/p .
 cp /bin/disk/partfs .
 cp /bin/disk/prep .
 cp /bin/ps .
+cp /bin/pwd .
 cp /bin/rerootwin .
 cp /bin/rm .
 cp /bin/sed .
 cp /bin/sleep .
 cp /bin/srv .
 cp /bin/srvfs .
-cp /bin/startrole .
 cp /bin/test .
 cp /bin/aux/timesync .
 cp /bin/touch .

@@ -18,6 +18,7 @@ fn getans{
 	switch($answer){
 	case rc
 		errorshell
+		getans $1 $2
 	case clear
 		echo ''
 	case ?*
@@ -316,6 +317,10 @@ if(~ $interactive yes){
 	if(~ $getrootfs tcp){
 		fs = `{getans fs $fs}
 		cfs = `{getans cfs $cfs}
+	}
+	if(~ $getrootfs local){
+		echo 'Dial a venti server? Enter its ip if so.'
+		venti = `{getans venti $venti)
 	}
 	dogetrootfs
 	echo 'To create a default cpu server environment serving on a port of your choice use initskel here.'

@@ -12,6 +12,11 @@ echo 'factotum=' $factotum >>/tmp/p9rcconfig
 echo 'sysname=' $sysname >>/tmp/p9rcconfig
 echo 'ramsetup=' $ramsetup >>/tmp/p9rcconfig
 echo 'startventi=' $startventi >>/tmp/p9rcconfig
+if(~ startventi yes){
+	echo 'venticonf= '$venticonf >>/tmp/p9rcconfig
+	echo 'ventilisten= '$ventilisten >>/tmp/p9rcconfig
+	echo 'vhttplisten= '$vhttplisten >>/tmp/p9rcconfig
+}
 echo 'getrootfs=' $getrootfs >>/tmp/p9rcconfig
 echo 'fs=' $fs >>/tmp/p9rcconfig
 echo 'venti=' $venti >>/tmp/p9rcconfig

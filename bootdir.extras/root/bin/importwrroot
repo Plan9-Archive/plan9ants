@@ -7,7 +7,7 @@ if (! ~ $1 ?*){
 
 import -c $1 / /n/$1
 bind -a /n/$1/ /
-bind -a /$objtype/bin /bin
+bind -b /$objtype/bin /bin
 bind -a /rc/bin /bin
 bind -a /n/$1/sys /sys
 bind -a /n/$1/srv /srv
