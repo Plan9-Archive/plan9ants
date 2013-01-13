@@ -227,7 +227,7 @@ echo ROOTLESS PLAN 9 /boot/plan9rc
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
 echo -n 'TIME...'
-cat '#r/rtc' > '#c/time'
+#cat '#r/rtc' > '#c/time'
 
 if(~ $bootargs ''){
 	bootargs=local!#S/sdC0/fossil
@@ -245,7 +245,7 @@ if(~ $tryusb yes){
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*){
 	getrootfs=local
-	partition=`{echo $bootparse(1) | awk -F! '{print $2}' | sed 's/#./\/dev/}
+	partition=`{echo $bootparse(1) | awk -F! '{print $2}' | sed 's/#./\/dev/'}
 }
 if(~ $bootparse(1) tcp*){
 	getrootfs=tcp
