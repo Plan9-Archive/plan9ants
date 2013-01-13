@@ -1,0 +1,9 @@
+#!/bin/rc
+
+#winpush TARGETPID
+
+local = `{ns |grep wsys |sed 's/#s/\/srv/g' |tr -d ''''}
+remote = `{ns $1 |grep wsys |sed 's/#s/\/srv/g' |tr -d ''''}
+wsys = $remote(2)
+echo $local >/tmp/startwin
+window -m

@@ -1,0 +1,12 @@
+#!/bin/rc
+
+if(! test -e /srv/sources){
+	srv tcp!204.178.31.11!564 sources
+}
+mount -n /srv/sources /n/sources
+bind -a /n/sources/plan9 /
+bind -a /$objtype/bin /bin
+bind -a /rc/bin /bin
+bind -b /n/sources/plan9/lib/font /lib/font
+bind -a /n/sources/plan9/sys /sys
+mount -a /srv/factotum /mnt

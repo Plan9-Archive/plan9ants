@@ -1,0 +1,20 @@
+#!/bin/rc
+
+#showremote
+
+riocontrolwin = `{cat /tmp/riocontrolwin}
+startwin = `{cat /tmp/startwin}
+bind /mnt/wsys /n/mywsys
+$startwin
+bind /mnt/wsys /n/remwin
+$riocontrolwin
+bind -b /mnt/wsys /dev
+bind /n/mywsys/mouse /dev/mouse
+bind /n/mywsys/cons /dev/cons
+bind /n/mywsys/consctl /dev/consctl
+togif </n/remwin/window >/tmp/curscreen.gif
+while(~ a a){
+	gif /tmp/curscreen.gif
+	togif </n/remwin/window >/tmp/curscreen.gif
+}
+

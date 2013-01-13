@@ -1,0 +1,12 @@
+#!/boot/rc
+
+cd /
+cp /boot/vgadb /lib/vgadb
+tar xf /boot/lucm.tar
+if(! test -e /dev/mouse){
+	bind -a '#m' /dev
+}
+mouse $mouseport
+vga -m xga -l 1024x768x8
+font=/lib/font/bit/lucm/unicode.9.font
+grio -b 2 -c 0xbbccddff -s -x /boot/grio -a -s

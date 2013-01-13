@@ -1,0 +1,19 @@
+#!/bin/rc
+
+#riopush TARGETPID
+
+local = `{ns |grep wsys |sed 's/#s/\/srv/g' |tr -d ''''}
+winid = `{cat /dev/winid |tr -d ' 
+ 
+	'}
+localmount = `{echo $local(1) $local(2) $local(3) $winid}
+remote = `{ns $1 |grep wsys |sed 's/#s/\/srv/g' |tr -d ''''}
+bind /mnt/wsys /n/oldwin
+$remote
+bind -b /mnt/wsys /dev
+bind /n/oldwin/cons /dev/cons
+bind /n/oldwin/consctl /dev/consctl
+bind /n/oldwin/mouse /dev/mouse
+
+echo $localmount >/tmp/riocontrolwin
+grio
