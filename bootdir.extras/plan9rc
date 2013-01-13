@@ -1,17 +1,6 @@
 #!/boot/rc
 # rootless cpu server start up
 
-fn findpart{
-	if(~ $bootparse(1) *sdC0/$1)
-		echo /dev/sdC0/$1
-	if(~ $bootparse(1) *sdC1/$1)
-		echo /dev/sdC1/$1
-	if(~ $bootparse(1) *sdD0/$1)
-		echo /dev/sdD0/$1
-	if(~ $bootparse(1) *sdD1/$1)
-		echo /dev/sdD1/$1
-}
-
 fn getans{
 	echo ' ** '$1 is':' $2 - press enter, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
 	answer=`{read}
@@ -135,12 +124,14 @@ fn dogetrootfs{
 			if(! ~ $fossil ?*){
 				fossil=/dev/sdC0/fossil
 			}
+			fossil=$partition
 			echo starting fossil from $fossil
 			fossil -f $fossil -c 'srv -p fscons'
 			echo 'srv -A boot' >>/srv/fscons
 			bootsrv=/srv/boot
 		}
 		if not{
+			kfs=$partition
 			echo starting kfs from $kfs
 			kfs -f $kfs -n boot
 			bootsrv=/srv/kfs.boot
@@ -254,10 +245,7 @@ if(~ $tryusb yes){
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*){
 	getrootfs=local
-	if(~ $bootparse *fossil)
-		fossil=`{findpart fossil}
-	if not
-		kfs=`{findpart kfs}
+	partition=`{echo $bootparse(1) | awk -F! '{print $2}' | sed 's/#./\/dev/}
 }
 if(~ $bootparse(1) tcp*){
 	getrootfs=tcp
@@ -265,8 +253,8 @@ if(~ $bootparse(1) tcp*){
 	
 if(~ $ramsetup '')
 	ramsetup=ramskel
-if(~ $tgzfs '')
-	tgzfs=rootfs.tgz
+#if(~ $tgzfs '')
+#	tgzfs=rootfs.tgz
 if(~ $namespace '')
 	namespace=namespace
 if(~ $factotum '')
@@ -277,7 +265,7 @@ ventiparse=`{echo $venti}
 venticonf=$ventiparse(1)
 ventilisten=$ventiparse(2)
 vhttplisten=$ventiparse(3)
-if(~ $venticonf '#S'*)
+if(~ $venticonf '#'*)
 	startventi=yes
 if(~ $venticonf '')
 	venticonf=/dev/sdC0/arenas
@@ -336,8 +324,7 @@ if(~ $interactive yes){
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'Do you want to console to stay in the current namespace? enter yes if so.'
 	staylocal = `{getans staylocal $staylocal}
-	echo 'storing startup configuration in startupvars and saving to /tmp/p9rcconfig'
-	startupvars=`{echo factotum is $factotum sysname is $sysname ramsetup is $ramsetup startventi is $startventi getrootfs is $getrootfs fs is $fs venti is $venti fossil is $fossil cfs is $cfs initscript is $initscript namespace is $namespace rootstart is $rootstart staylocal is $staylocal afterfact is $afterfact afterroot is $afterroot}
+	echo 'storing startup configuration to ramdisk in /tmp/p9rcconfig'
 	save9cfg
 	if(~ $staylocal yes){
 		echo starting shell in current namespace
@@ -358,8 +345,7 @@ if not {
 	dochecksys
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
-	echo 'storing startup configuration in startupvars and saving to /tmp/p9rcconfig'
-	startupvars=`{echo factotum is $factotum sysname is $sysname ramsetup is $ramsetup startventi is $startventi getrootfs is $getrootfs fs is $fs venti is $venti fossil is $fossil cfs is $cfs initscript is $initscript namespace is $namespace rootstart is $rootstart staylocal is $staylocal afterfact is $afterfact afterroot is $afterroot}
+	echo 'storing startup configuration to ramdisk in /tmp/p9rcconfig'
 	save9cfg
 	if(~ $staylocal yes){
 		echo starting shell in current namespace

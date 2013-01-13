@@ -1,4 +1,5 @@
 fully automate build process and make it portable, including choosing boot and rootfs.tgz contents
+deal with lib/ndb head on. probably write configurator script? or just document
 make rerootwin robust and sane - slightly improved
 improve namespace acquisition tools like addwrroot - more consistent and tested now
 test multiple factotums for different users with different keys
