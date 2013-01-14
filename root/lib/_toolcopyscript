@@ -6,7 +6,8 @@ cp /bin/addroroot .
 cp /bin/addsources .
 cp /bin/addwrroot .
 cp /bin/auth/authsrv .
-cp /bin/auth/as
+cp /bin/auth/as .
+cp /bin/awk .
 cp /bin/bind .
 cp /bin/cfs .
 cp /bin/auth/changeuser .
@@ -32,6 +33,7 @@ cp /bin/grep .
 cp /bin/grio .
 cp /bin/gzip .
 cp /bin/hget .
+cp /bin/hoc .
 cp /bin/hub .
 cp /bin/hubfs .
 cp /bin/hubshell .
@@ -41,7 +43,6 @@ cp /bin/importwrroot .
 cp /bin/ip/ipconfig .
 cp /bin/disk/kfs .
 cp /bin/auth/keyfs .
-cp /bin/ls .
 cp /bin/aux/listen1 .
 cp /bin/ls .
 cp /bin/mkdir .
@@ -66,6 +67,8 @@ cp /bin/aux/timesync .
 cp /bin/touch .
 cp /bin/unmount .
 cp /bin/usb/usbd .
+cp /bin/usb/disk usbdisk
+cp /bin/vac .
 cp /bin/vacfs .
 cp /bin/venti/venti .
 cp /bin/window .

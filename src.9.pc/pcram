@@ -131,18 +131,18 @@ bootdir
 	/386/bin/dossrv
 	/386/bin/venti/venti
 	/386/bin/usb/usbd
-	/386/bin/disk/partfs
-	/386/bin/disk/kfs
+#	/386/bin/disk/partfs
+#	/386/bin/disk/kfs
 	/386/bin/cfs
 	/386/bin/auth/newns
 	/386/bin/read
 	/386/bin/cat
 	/386/bin/echo
 	/386/bin/tar
+	/386/bin/test
 	/386/bin/ls
 	/386/bin/chmod
 	/386/bin/gunzip
-	/386/bin/awk
 	/386/bin/sed
 	/386/bin/bind
 	/386/bin/mount
@@ -155,10 +155,9 @@ bootdir
 	/386/bin/mntgen
 	/386/bin/sleep
 	/386/bin/touch
-	/386/bin/test
 	/386/bin/grio
 	/386/bin/srvfs
-	/386/bin/exportfs
+#	/386/bin/exportfs
 	/386/bin/ed
 	/386/bin/hubfs
 	/386/bin/hubshell

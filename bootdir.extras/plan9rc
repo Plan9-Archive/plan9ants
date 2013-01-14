@@ -17,6 +17,22 @@ fn getans{
 	}
 }
 
+fn findpart{
+	if((test -e /boot/sed) || (test -e /bin/sed)){
+		echo $bootparse(1) |sed 's/.*#./\/dev/
+	}
+	if not {
+		if(~ $bootparse(1) *sdC0/$1)
+			echo /dev/sdC0/$1
+		if(~ $bootparse(1) *sdC1/$1)
+			echo /dev/sdC1/$1
+		if(~ $bootparse(1) *sdD0/$1)
+			echo /dev/sdD0/$1
+		if(~ $bootparse(1) *sdD1/$1)
+			echo /dev/sdD1/$1
+	}
+}
+
 fn hostcheck{
 	hosttest=`{cat /dev/hostowner}
 	if(~ $hosttest ''){
@@ -116,6 +132,7 @@ fn dogetrootfs{
 		}
 	case local
 		if(~ $kfs ''){
+			partition=`{findpart fossil}
 			if(! ~ $venti ''){
 				if(! ~ $ipdone yes){
 					ipsetup
@@ -131,6 +148,7 @@ fn dogetrootfs{
 			bootsrv=/srv/boot
 		}
 		if not{
+			partition=`{findpart kfs}
 			kfs=$partition
 			echo starting kfs from $kfs
 			kfs -f $kfs -n boot
@@ -220,14 +238,14 @@ fn errorshell{
 	echo exiting rc >>/fd/2
 }
 
-# End of fn definitions
+############# End of fn definitions #################
 
-echo ROOTLESS PLAN 9 /boot/plan9rc
+echo 'ROOTLESS PLAN 9 /boot/plan9rc'
 
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
 echo -n 'TIME...'
-#cat '#r/rtc' > '#c/time'
+cat '#r/rtc' > '#c/time'
 
 if(~ $bootargs ''){
 	bootargs=local!#S/sdC0/fossil
@@ -245,7 +263,7 @@ if(~ $tryusb yes){
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*){
 	getrootfs=local
-	partition=`{echo $bootparse(1) | awk -F! '{print $2}' | sed 's/#./\/dev/'}
+#	partition=`{echo $bootparse(1) | awk -F! '{print $2}' | sed 's/#./\/dev/'}
 }
 if(~ $bootparse(1) tcp*){
 	getrootfs=tcp
