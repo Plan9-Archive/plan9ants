@@ -1,6 +1,20 @@
 #!/bin/rc
 #binds the namespace of one process on top of another
 
+while (~ $1 -*){
+	switch($1){
+	case -t
+		testonly=yes
+		shift
+	case -r
+		riosafe=yes
+		shift
+	case *
+		echo bad flag $1
+		shift
+	}
+}
+
 if(~ $2 ''){
 	echo usage: cutns newpid oldpid
 	exit
@@ -10,7 +24,7 @@ if(! test -e /proc/$1){
 	echo process $1 does not exist!
 	exit
 }
-if(! test -e /proc/$2{
+if(! test -e /proc/$2){
 	echo process $2 does not exist!
 	exit
 }
@@ -23,5 +37,9 @@ cat /tmp/bindnsdiff |sed 's/< /echo ⊞/g' |sed 's/$/⊛ >\/proc\/'$2'\/ns/g'| t
 grep echo /tmp/bindnssub1 >/tmp/bindnssub2
 cat /tmp/bindnssub2 |sed 's/mount/unmount/g' |sed 's/bind/unmount/g' >/tmp/bindnssub3
 cat /tmp/bindnssub3 |sed 's/ -. //g' |sed 's/ -.. //g' |sed '$d' |sed 's/  / /g' >/tmp/bindnssub4
-. /tmp/bindnssub4
+cp /tmp/bindnssub4 /tmp/bindnscom
+if(~ riosafe yes)
+	cat /tmp/bindnssub4 |sed '/mnt/wsys/d' /tmp/bindnscom
+if(! ~ testonly yes)
+	. /tmp/bindnscom
 #rm /tmp/bindns*

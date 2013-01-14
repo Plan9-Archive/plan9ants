@@ -1,6 +1,20 @@
 #!/bin/rc
 #binds the namespace of one process on top of another
 
+while (~ $1 -*){
+	switch($1){
+	case -t
+		testonly=yes
+		shift
+	case -r
+		riosafe=yes
+		shift
+	case *
+		echo bad flag $1
+		shift
+	}
+}
+
 if(~ $2 ''){
 	echo usage: bindns newpid oldpid
 	exit
@@ -10,7 +24,7 @@ if(! test -e /proc/$1){
 	echo process $1 does not exist!
 	exit
 }
-if(! test -e /proc/$2{
+if(! test -e /proc/$2){
 	echo process $2 does not exist!
 	exit
 }
@@ -20,8 +34,11 @@ cat /proc/$2/ns >/tmp/bindns^$2
 grep -f /tmp/bindns^$1 /tmp/bindns^$2 >/tmp/bindnsmatch
 diff /tmp/bindns^$1 /tmp/bindnsmatch >/tmp/bindnsdiff
 cat /tmp/bindnsdiff |sed 's/< /echo ⊞/g' |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' >/tmp/bindnssub1
-cat /tmp/bindnssub1 |sed '1d' |sed '$d' >/tmp/bindnssub2
-grep echo /tmp/bindnssub2 >/tmp/bindnssub3
+grep echo /tmp/bindnssub1 |sed '$d' >/tmp/bindnssub2
+cp /tmp/bindnssub2 /tmp/bindnscom
 #sed '/[0-9][0-9].[0-9][0-9]/'d | sed '/^</d'>/tmp/bindnsdiff
-. /tmp/bindnssub3
+if(~ riosafe yes)
+	cat /tmp/bindnssub2 |sed '/mnt/wsys/d' >/tmp/bindnscom
+if(! ~ testonly yes)
+	. /tmp/bindnscom
 #rm /tmp/bindns*
