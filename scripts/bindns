@@ -1,6 +1,9 @@
 #!/bin/rc
 #binds the namespace of one process on top of another
 
+riosafe=()
+testonly=()
+
 while (~ $1 -*){
 	switch($1){
 	case -t
@@ -34,11 +37,14 @@ cat /proc/$2/ns >/tmp/bindns^$2
 grep -f /tmp/bindns^$1 /tmp/bindns^$2 >/tmp/bindnsmatch
 diff /tmp/bindns^$1 /tmp/bindnsmatch >/tmp/bindnsdiff
 cat /tmp/bindnsdiff |sed 's/< /echo ⊞/g' |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' >/tmp/bindnssub1
-grep echo /tmp/bindnssub1 |sed '$d' >/tmp/bindnssub2
+cat /tmp/bindnssub1 | sed '1d' |grep echo |sed '$d' >/tmp/bindnssub2
 cp /tmp/bindnssub2 /tmp/bindnscom
 #sed '/[0-9][0-9].[0-9][0-9]/'d | sed '/^</d'>/tmp/bindnsdiff
-if(~ riosafe yes)
+if(~ $riosafe yes)
 	cat /tmp/bindnssub2 |sed '/mnt/wsys/d' >/tmp/bindnscom
-if(! ~ testonly yes)
-	. /tmp/bindnscom
+if(~ $testonly yes){
+	cat /tmp/bindnscom
+	exit
+}
+. /tmp/bindnscom
 #rm /tmp/bindns*

@@ -2,13 +2,17 @@
 
 #cpns copies namespace from process 1 to process 2
 
+
+riosafe=()
+testonly=()
+
 while (~ $1 -*){
 	switch($1){
 	case -t
-		testonly=yes
+		testonly=-t
 		shift
 	case -r
-		riosafe=yes
+		riosafe=-r
 		shift
 	case *
 		echo bad flag $1
@@ -30,5 +34,5 @@ if(! test -e /proc/$2){
 	exit
 }
 
-bindns $1 $2
-cutns $1 $2
+bindns $testonly $riosafe $1 $2
+cutns $testonly $riosafe $1 $2
