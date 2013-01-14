@@ -1,10 +1,12 @@
 #!/bin/rc
 
-bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.boot /sys/src/9/boot
+builddir=`{pwd}
+bind -b $builddir/src.9.boot /sys/src/9/boot
+bind -b $builddir/src.9.port /sys/src/9/port
+bind -b $builddir/src.9.pc /sys/src/9/pc
+bind $builddir /n/rootless
 bind -b /usr/mycroftiv/sourcesdir/writeprocns /sys/src/9/port
-bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.port /sys/src/9/port
-bind -b /usr/mycroftiv/sourcesdir/rootlessnext/src.9.pc /sys/src/9/pc
-bind -bc /usr/mycroftiv/sourcesdir/rootlessnext/compiletemp /sys/src/9/pc
+bind -bc $builddir/compiletemp /sys/src/9/pc
 if(~ $1 clean){
 	cd /sys/src/9/pc
 	mk clean
@@ -14,7 +16,7 @@ if(~ $1 rootfs){
 	ramfs -m /tmp -S ramtmp
 	tar cf /tmp/rootfs.tar root
 	gzip -9 -c /tmp/rootfs.tar >rootfs.tgz
-	tar czf rootfs.tgz root
+#	tar czf rootfs.tgz root
 	exit
 }
 cd bootdir.extras
@@ -25,4 +27,4 @@ if(~ $2 ramfs){
 }
 cd /sys/src/9/pc
 mk 'CONF=pcram'
-gzip -9 -c 9pcram > /usr/mycroftiv/sourcesdir/rootlessnext/compiletemp/9pcram.gz
+gzip -9 -c 9pcram > $builddir/compiletemp/9pcram.gz

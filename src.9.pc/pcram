@@ -163,18 +163,19 @@ bootdir
 	/386/bin/hubshell
 	/rc/bin/hub
 	/rc/bin/window
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rc
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/rcmain
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/plan9rc
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/namespace
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/namespace.standard
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/namespace.saveterm
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/ramskel
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/initskel
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/save9cfg
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/saveinitcfg
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/skel.tar
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/rerootwin
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/addroroot
-	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/addwrroot
-#	/usr/mycroftiv/sourcesdir/rootlessnext/bootdir.extras/root/bin/addsources
+	/n/rootless/bootdir.extras/rc
+	/n/rootless/bootdir.extras/rcmain
+	/n/rootless/bootdir.extras/plan9rc
+	/n/rootless/bootdir.extras/namespace
+	/n/rootless/bootdir.extras/namespace.standard
+	/n/rootless/bootdir.extras/namespace.saveterm
+	/n/rootless/bootdir.extras/ramskel
+	/n/rootless/bootdir.extras/initskel
+	/n/rootless/bootdir.extras/save9cfg
+	/n/rootless/bootdir.extras/saveinitcfg
+	/n/rootless/bootdir.extras/skel.tar
+	/n/rootless/bootdir.extras/root/bin/rerootwin
+	/n/rootless/bootdir.extras/root/bin/addroroot
+	/n/rootless/bootdir.extras/root/bin/addwrroot
+#	/n/rootless/bootdir.extras/root/bin/addsources
+

@@ -1,5 +1,5 @@
 #!/boot/rc
-# rootless cpu server start up
+# rootless cpu server start up script by mycroftiv
 
 fn getans{
 	echo ' ** '$1 is':' $2 - press enter, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
@@ -288,6 +288,8 @@ if(~ $bootparse(1) tcp*)
 	
 if(~ $ramsetup '')
 	ramsetup=ramskel
+if(~ $initscript '')
+	initscript=initskel
 #if(~ $tgzfs '')
 #	tgzfs=rootfs.tgz
 if(~ $namespace '')
