@@ -1,0 +1,16 @@
+#!/bin/rc
+#binds the namespace of one process on top of another
+
+if(~ $2 ''){
+	echo usage: bindns newpid oldpid
+	exit
+	}
+
+cat /proc/$1/ns >/tmp/bindns^$1
+cat /proc/$2/ns >/tmp/bindns^$2
+grep -f /tmp/bindns^$1 /tmp/bindns^$2 >/tmp/bindnsmatch
+diff /tmp/bindns^$1 /tmp/bindnsmatch >/tmp/bindnsdiff
+cat /tmp/bindnsdiff |sed 's/< /echo ⊞/g' |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' >/tmp/bindnsmatch
+cat /tmp/bindnsmatch |sed '1d' |sed '$d' |sed '/[0-9][0-9].[0-9][0-9]/d'>/tmp/bindnsdiff
+. /tmp/bindnsdiff
+#rm /tmp/bindns*
