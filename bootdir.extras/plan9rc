@@ -19,7 +19,7 @@ fn getans{
 
 fn findpart{
 	if((test -e /boot/sed) || (test -e /bin/sed)){
-		echo $bootparse(1) |sed 's/.*#./\/dev/
+		echo $bootparse(1) |sed 's/.*#./\/dev/'
 	}
 	if not {
 		if(~ $bootparse(1) *sdC0/$1)
@@ -132,23 +132,42 @@ fn dogetrootfs{
 		}
 	case local
 		if(~ $kfs ''){
-			partition=`{findpart fossil}
+			if(! ~ $fossil ?*){
+				partition=`{findpart fossil}
+				if(~ $interactive yes){
+					echo 'parsed fossil partition as ' $partition ' enter new value if this is incorrect'
+					partition=`{getans partition $partition}
+				}
+#				else if(! ~ $partition *fossil){
+#					echo $partition ' doesnt look like a fossil, trying /dev/sdC0/fossil as default'
+#					partition=/dev/sdC0/fossil
+#				}
+				fossil=$partition
+			}
 			if(! ~ $venti ''){
 				if(! ~ $ipdone yes){
 					ipsetup
 				}
 			}
-			if(! ~ $fossil ?*){
-				fossil=/dev/sdC0/fossil
-			}
-			fossil=$partition
 			echo starting fossil from $fossil
 			fossil -f $fossil -c 'srv -p fscons'
 			echo 'srv -A boot' >>/srv/fscons
 			bootsrv=/srv/boot
 		}
 		if not{
+			if(! ~ $kfs ?*){
+				partition=`{findpart kfs}
+				if(~ $interactive yes){
+					echo 'parsed kfs partition as ' $partition ' enter new value if this is incorrect'
+					partition=`{getans partition $partition}
+				}
+				kfs=$partition
+			}
 			partition=`{findpart kfs}
+			if(! ~ $partition *kfs){
+				echo $partition ' doesnt look like a fossil, please enter partition'
+				partition=`{getans partition $partition}
+			}
 			kfs=$partition
 			echo starting kfs from $kfs
 			kfs -f $kfs -n boot
@@ -261,13 +280,11 @@ if(~ $tryusb yes){
 }
 
 bootparse=`{echo $bootargs}
-if(~ $bootparse(1) local*){
+if(~ $bootparse(1) local*)
 	getrootfs=local
-#	partition=`{echo $bootparse(1) | awk -F! '{print $2}' | sed 's/#./\/dev/'}
-}
-if(~ $bootparse(1) tcp*){
+if(~ $bootparse(1) tcp*)
 	getrootfs=tcp
-}
+
 	
 if(~ $ramsetup '')
 	ramsetup=ramskel
@@ -279,6 +296,7 @@ if(~ $factotum '')
 	factotum=`{cat '/env/service'}
 if(~ $rootstart '')
 	rootstart=`{cat '/env/service'}
+
 ventiparse=`{echo $venti}
 venticonf=$ventiparse(1)
 ventilisten=$ventiparse(2)
