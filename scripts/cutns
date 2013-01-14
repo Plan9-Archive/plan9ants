@@ -1,0 +1,27 @@
+#!/bin/rc
+#binds the namespace of one process on top of another
+
+if(~ $2 ''){
+	echo usage: cutns newpid oldpid
+	exit
+	}
+
+if(! test -e /proc/$1){
+	echo process $1 does not exist!
+	exit
+}
+if(! test -e /proc/$2{
+	echo process $2 does not exist!
+	exit
+}
+
+cat /proc/$1/ns >/tmp/bindns^$1
+cat /proc/$2/ns >/tmp/bindns^$2
+grep -f /tmp/bindns^$2 /tmp/bindns^$1 >/tmp/bindnsmatch
+diff /tmp/bindns^$2 /tmp/bindnsmatch >/tmp/bindnsdiff
+cat /tmp/bindnsdiff |sed 's/< /echo ⊞/g' |sed 's/$/⊛ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' | tr ⊛ ''''>/tmp/bindnssub1
+grep echo /tmp/bindnssub1 >/tmp/bindnssub2
+cat /tmp/bindnssub2 |sed 's/mount/unmount/g' |sed 's/bind/unmount/g' >/tmp/bindnssub3
+cat /tmp/bindnssub3 |sed 's/ -. //g' |sed 's/ -.. //g' |sed '$d' |sed 's/  / /g' >/tmp/bindnssub4
+. /tmp/bindnssub4
+#rm /tmp/bindns*

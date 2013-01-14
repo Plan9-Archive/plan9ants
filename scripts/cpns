@@ -1,0 +1,20 @@
+#!/bin/rc
+
+#cpns copies namespace from process 1 to process 2
+
+if(~ $2 ""){
+	echo usage: cpns PID PID
+	exit
+}
+
+if(! test -e /proc/$1){
+	echo process $1 does not exist!
+	exit
+}
+if(! test -e /proc/$2{
+	echo process $2 does not exist!
+	exit
+}
+
+bindns $1 $2
+cutns $1 $2
