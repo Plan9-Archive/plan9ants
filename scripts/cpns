@@ -36,3 +36,6 @@ if(! test -e /proc/$2){
 
 bindns $testonly $riosafe $1 $2
 cutns $testonly $riosafe $1 $2
+
+riosafe=()
+testonly=()

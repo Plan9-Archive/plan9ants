@@ -1,9 +1,6 @@
 #!/bin/rc
 #binds the namespace of one process on top of another
 
-riosafe=()
-testonly=()
-
 while (~ $1 -*){
 	switch($1){
 	case -t
@@ -39,13 +36,16 @@ diff /tmp/cutns^$2 /tmp/cutnsmatch >/tmp/cutnsdiff
 cat /tmp/cutnsdiff |sed 's/< /echo ⊞/g' |sed 's/$/⊛ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' | tr ⊛ ''''>/tmp/cutnssub1
 cat /tmp/cutnssub1 |sed '1d' |grep echo |sed '$d' >/tmp/cutnssub2
 cat /tmp/cutnssub2 |sed 's/mount/unmount/g' |sed 's/bind/unmount/g' >/tmp/cutnssub3
-cat /tmp/cutnssub3 |sed 's/ -. //g' |sed 's/ -.. //g' |sed 's/  / /g' >/tmp/cutnssub4
+cat /tmp/cutnssub3 |sed 's/ -. / /g' |sed 's/ -.. / /g' |sed 's/  / /g' >/tmp/cutnssub4
 cp /tmp/cutnssub4 /tmp/cutnscom
 if(~ $riosafe yes)
-	cat /tmp/cutnssub4 |sed '/mnt/wsys/d' >/tmp/cutnscom
-if(~ testonly yes){
+	cat /tmp/cutnssub4 |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/rio/d' >/tmp/cutnscom
+if(~ $testonly yes){
 	cat /tmp/cutnscom
 	exit
 }
 . /tmp/cutnscom
 #rm /tmp/cutns*
+
+riosafe=()
+testonly=()
