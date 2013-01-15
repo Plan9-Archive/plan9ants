@@ -5,6 +5,14 @@
 
 /* This is a simplified and conjoined version of boot and init designed for 'rootless' bootup*/
 
+
+#define PARTSRV "partfs.sdXX"
+
+enum {
+	Dontpost,
+	Post,
+};
+
 /* vars and functions from standard boot.c */
 char	cputype[64];
 char	sys[2*64];
@@ -19,7 +27,7 @@ int	bargc;
 
 void boot(int argc, char *argv[]);
 static void	swapproc(void);
-static void	usbinit(void);
+//static func(void)void	usbinit(void);
 static void	kbmap(void);
 
 /* vars and functions from standard init.c */
@@ -77,7 +85,7 @@ boot(int argc, char *argv[])
 	 *  set up usb keyboard, mouse and disk, if any.
 	 */
 	print("usbinit...");
-	usbinit();
+	usbinit(Dontpost);
 
 	/*
 	 *  load keymap if it's there.
@@ -114,6 +122,7 @@ swapproc(void)
 	close(fd);
 }
 
+/*
 static void
 usbinit(void)
 {
@@ -123,6 +132,7 @@ usbinit(void)
 	    access(usbd, AEXIST) >= 0)
 		run(usbd, nil);
 }
+*/
 
 static void
 kbmap(void)

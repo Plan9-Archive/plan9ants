@@ -13,14 +13,15 @@ enum
 };
 
 extern void	authentication(int);
-extern char*	bootdisk;
+extern char*	bootdisk;		/* defined in ../$arch/boot$CONF.c */
 extern char*	rootdir;
 extern int	(*cfs)(int);
 extern int	cpuflag;
 extern char	cputype[];
+extern int	debugboot;
 extern int	fflag;
 extern int	kflag;
-extern Method	method[];
+extern Method	method[];		/* defined in ../$arch/boot$CONF.c */
 extern void	(*pword)(int, Method*);
 extern char	sys[];
 extern uchar	hostkey[];
@@ -50,6 +51,11 @@ extern void	boot(int, char **);
 extern void	doauthenticate(int, Method*);
 extern int		old9p(int);
 extern int	parsefields(char*, char**, int, char*);
+extern int	chmod(char *file, int mode);
+extern int	mountusbparts(void);
+extern int	readparts(void);
+extern void	runv(char **argv);
+extern void	usbinit(int post);
 
 /* methods */
 extern void	configtcp(Method*);
@@ -57,9 +63,6 @@ extern int	connecttcp(void);
 
 extern void	configlocal(Method*);
 extern int	connectlocal(void);
-
-extern void	configsac(Method*);
-extern int	connectsac(void);
 
 extern void	configpaq(Method*);
 extern int	connectpaq(void);
