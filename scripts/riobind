@@ -1,5 +1,5 @@
 #!/bin/rc
 #modiifies namespace of running rio
 
-topgrio =`{ps |grep rio|sed 1q}
+topgrio =`{ps |grep rio |sed 1q}
 echo ''$*'' >/proc/$topgrio(2)^/ns

@@ -2,7 +2,6 @@
 #binds the namespace of one process on top of another
 
 rfork e
-ramfs
 ifs='
 '
 while (~ $1 -*){
@@ -37,29 +36,21 @@ if(test -e /tmp/chnsuniq)
 cat /proc/$1/ns >/tmp/chns$1
 cat /proc/$2/ns >/tmp/chns$2
 
-orig=`{cat /tmp/chns$2}
+orig=`{cat /proc/$2/ns}
 for (i in $orig){
-#	echo orig is $i
 	search=''^$i^''
-#	echo search is $search
-	match=`{cat /tmp/chns$1 |grep -e $search}
+	match=`{cat /proc/$1/ns |grep -e $search}
 	if(~ $match ''){
 		echo $i >> /tmp/chnsuniq
 	}
 }
 
-sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d'>/tmp/chnscom
-sed 's/mount/unmount/g' /tmp/chnscom | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' >/tmp/chnsuncom
-mv /tmp/chnsuncom /tmp/chnscom
+sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/mount/unmount/g' | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' |sed 's/  / /g' >/tmp/chnscom
 
 if(~ $riosafe yes){
 	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/rio/d' >/tmp/chnssafe
 	mv /tmp/chnssafe /tmp/chnscom
 }
-sed 's/  / /g' /tmp/chnscom >/tmp/chnsswap
-mv /tmp/chnsswap /tmp/chnscom
-#sed 's/#s/\/srv/g' /tmp/chnscom >/tmp/chnsswap
-#mv /tmp/chnsswap /tmp/chnscom
 if(~ $testonly yes){
 	cat /tmp/chnscom
 	exit
