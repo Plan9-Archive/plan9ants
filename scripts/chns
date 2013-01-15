@@ -1,10 +1,10 @@
 #!/bin/rc
 #binds the namespace of one process on top of another
 
-un=()
-riosafe=()
-testonly=()
-
+rfork e
+ramfs
+ifs='
+'
 while (~ $1 -*){
 	switch($1){
 	case -t
@@ -35,8 +35,8 @@ if(! test -e /proc/$2){
 	echo process $2 does not exist!
 	exit
 }
-
-rm /tmp/chnsuniq
+if(test -e /tmp/chnsuniq)
+	rm /tmp/chnsuniq
 cat /proc/$1/ns >/tmp/chns$1
 cat /proc/$2/ns >/tmp/chns$2
 if(~ $un yes){
@@ -50,7 +50,7 @@ for (i in $orig){
 #	echo orig is $i
 	search=''^$i^''
 #	echo search is $search
-	match=`{grep -e $search /tmp/chns$2}
+	match=`{cat /tmp/chns$2 |grep -e $search}
 	if(~ $match ''){
 		echo $i >> /tmp/chnsuniq
 	}
@@ -67,6 +67,10 @@ if(~ $riosafe yes){
 	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/rio/d' >/tmp/chnssafe
 	mv /tmp/chnssafe /tmp/chnscom
 }
+sed 's/  / /g' /tmp/chnscom >/tmp/chnsswap
+mv /tmp/chnsswap /tmp/chnscom
+sed 's/#s/\/srv/g' /tmp/chnscom >/tmp/chnsswap
+mv /tmp/chnsswap /tmp/chnscom
 if(~ $testonly yes){
 	cat /tmp/chnscom
 	exit

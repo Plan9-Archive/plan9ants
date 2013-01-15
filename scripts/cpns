@@ -34,7 +34,7 @@ if(! test -e /proc/$2){
 	exit
 }
 
-chns $testonly $riosafe -u $1 $2
+chns $testonly $riosafe -u $2 $1
 chns $testonly $riosafe $1 $2
 
 riosafe=()
