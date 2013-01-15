@@ -1,5 +1,5 @@
 #!/bin/rc
-#binds the namespace of one process on top of another
+#uses MODELpid's namespace to remove all binds and mounts from TARGETpid that are not present in MODELpid's namespace
 
 rfork e
 ifs='
@@ -19,10 +19,9 @@ while (~ $1 -*){
 }
 
 if(~ $2 ''){
-	echo usage: bindns newpid oldpid
+	echo usage: subns MODELpid TARGETpid
 	exit
 	}
-
 if(! test -e /proc/$1){
 	echo process $1 does not exist!
 	exit
@@ -33,8 +32,6 @@ if(! test -e /proc/$2){
 }
 if(test -e /tmp/chnsuniq)
 	rm /tmp/chnsuniq
-cat /proc/$1/ns >/tmp/chns$1
-cat /proc/$2/ns >/tmp/chns$2
 
 orig=`{cat /proc/$2/ns}
 for (i in $orig){
@@ -45,10 +42,10 @@ for (i in $orig){
 	}
 }
 
-sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/mount/unmount/g' | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' |sed 's/  / /g' >/tmp/chnscom
+sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/mount/unmount/g' | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' |sed 's/  / /g' |sed '/\#\|\/data/d' >/tmp/chnscom
 
 if(~ $riosafe yes){
-	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/rio/d' >/tmp/chnssafe
+	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/\/dev\/cons/d' |sed '/rio/d' >/tmp/chnssafe
 	mv /tmp/chnssafe /tmp/chnscom
 }
 if(~ $testonly yes){

@@ -131,7 +131,7 @@ bootdir
 	/386/bin/dossrv
 	/386/bin/venti/venti
 	/386/bin/usb/usbd
-#	/386/bin/disk/partfs
+	/386/bin/disk/partfs
 #	/386/bin/disk/kfs
 	/386/bin/cfs
 	/386/bin/auth/newns
@@ -157,7 +157,7 @@ bootdir
 	/386/bin/touch
 	/386/bin/grio
 	/386/bin/srvfs
-#	/386/bin/exportfs
+	/386/bin/exportfs
 	/386/bin/ed
 	/386/bin/hubfs
 	/386/bin/hubshell

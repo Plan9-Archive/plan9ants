@@ -17,7 +17,7 @@ cp /bin/cpu .
 cp /bin/auth/cron .
 cp /bin/ndb/cs .
 cp /bin/date .
-co /bin/db .
+cp /bin/db .
 cp /bin/ndb/dns .
 cp /bin/ed .
 cp /bin/exportfs .
@@ -28,7 +28,7 @@ cp /bin/disk/format .
 cp /bin/fossil/fossil .
 cp /bin/fossilstart .
 cp /bin/fshalt .
-cp /bin/gooey .
+cp /bin/ftpfs .
 cp /bin/grep .
 cp /bin/grio .
 cp /bin/gzip .
@@ -62,6 +62,7 @@ cp /bin/sed .
 cp /bin/sleep .
 cp /bin/srv .
 cp /bin/srvfs .
+cp /bin/telnet .
 cp /bin/test .
 cp /bin/aux/timesync .
 cp /bin/touch .
