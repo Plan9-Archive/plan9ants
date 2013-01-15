@@ -1,0 +1,56 @@
+#!/bin/rc
+#binds the namespace of one process on top of another
+
+while (~ $1 -*){
+	switch($1){
+	case -t
+		testonly=yes
+		shift
+	case -r
+		riosafe=yes
+		shift
+	case *
+		echo bad flag $1
+		shift
+	}
+}
+
+if(~ $2 ''){
+	echo usage: bindns newpid oldpid
+	exit
+	}
+
+if(! test -e /proc/$1){
+	echo process $1 does not exist!
+	exit
+}
+if(! test -e /proc/$2){
+	echo process $2 does not exist!
+	exit
+}
+
+cat /proc/$1/ns |grep -n -e '^' |awk -F: '{print $2 $1 }' >/tmp/rewrns$1
+cat /proc/$2/ns |grep -n -e '^'|awk -F: '{print $2 $1}' >/tmp/rewrns$2
+
+sort -t: /tmp/rewrns$1 >/tmp/rens1.1
+sort -t: /tmp/rewrns$2 >/tmp/rens2.1
+
+comm -23 /tmp/rens1.1 /tmp/rens2.1 >/tmp/renscmp
+
+sed 's/: /: echo ⊞/g' /tmp/renscmp |sed 's/$/⊛ >\/proc\/'$2'\/ns/g' | tr ⊞ '''' | tr ⊛ ''''>/tmp/rensed
+cp /tmp/rensed /tmp/rewrnscom
+
+if(~ $riosafe yes)
+	cat /tmp/rensed |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/rio/d' >/tmp/rewrnscom
+
+if(~ $testonly yes){
+	cat /tmp/rewrnscom
+	exit
+}
+. /tmp/rewrnscom
+#rm /tmp/bindns*
+
+riosafe=()
+testonly=()
+
+exit

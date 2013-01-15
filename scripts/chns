@@ -1,0 +1,75 @@
+#!/bin/rc
+#binds the namespace of one process on top of another
+
+un=()
+riosafe=()
+testonly=()
+
+while (~ $1 -*){
+	switch($1){
+	case -t
+		testonly=yes
+		shift
+	case -r
+		riosafe=yes
+		shift
+	case -u
+		un=yes
+		shift
+	case *
+		echo bad flag $1
+		shift
+	}
+}
+
+if(~ $2 ''){
+	echo usage: bindns newpid oldpid
+	exit
+	}
+
+if(! test -e /proc/$1){
+	echo process $1 does not exist!
+	exit
+}
+if(! test -e /proc/$2){
+	echo process $2 does not exist!
+	exit
+}
+
+rm /tmp/chnsuniq
+cat /proc/$1/ns >/tmp/chns$1
+cat /proc/$2/ns >/tmp/chns$2
+if(~ $un yes){
+	mv /tmp/chns$1 /tmp/chnsswap
+	mv /tmp/chns$2 /tmp/chns$1
+	mv /tmp/chnsswap /tmp/chns$2
+}
+
+orig=`{cat /tmp/chns$1}
+for (i in $orig){
+#	echo orig is $i
+	search=''^$i^''
+#	echo search is $search
+	match=`{grep -e $search /tmp/chns$2}
+	if(~ $match ''){
+		echo $i >> /tmp/chnsuniq
+	}
+}
+targ=$2
+if(~ $un yes)
+	targ=$1
+sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$targ'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d'>/tmp/chnscom
+if(~ $un yes){
+	sed 's/mount/unmount/g' /tmp/chnscom | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' >/tmp/chnsuncom
+	mv /tmp/chnsuncom /tmp/chnscom
+}
+if(~ $riosafe yes){
+	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/rio/d' >/tmp/chnssafe
+	mv /tmp/chnssafe /tmp/chnscom
+}
+if(~ $testonly yes){
+	cat /tmp/chnscom
+	exit
+}
+. /tmp/chnscom
+
