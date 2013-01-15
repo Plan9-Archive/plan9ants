@@ -13,9 +13,6 @@ while (~ $1 -*){
 	case -r
 		riosafe=yes
 		shift
-	case -u
-		un=yes
-		shift
 	case *
 		echo bad flag $1
 		shift
@@ -37,13 +34,9 @@ if(! test -e /proc/$2){
 }
 if(test -e /tmp/chnsuniq)
 	rm /tmp/chnsuniq
+
 cat /proc/$1/ns >/tmp/chns$1
 cat /proc/$2/ns >/tmp/chns$2
-if(~ $un yes){
-	mv /tmp/chns$1 /tmp/chnsswap
-	mv /tmp/chns$2 /tmp/chns$1
-	mv /tmp/chnsswap /tmp/chns$2
-}
 
 orig=`{cat /tmp/chns$1}
 for (i in $orig){
@@ -55,22 +48,17 @@ for (i in $orig){
 		echo $i >> /tmp/chnsuniq
 	}
 }
-targ=$2
-if(~ $un yes)
-	targ=$1
-sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$targ'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d'>/tmp/chnscom
-if(~ $un yes){
-	sed 's/mount/unmount/g' /tmp/chnscom | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' >/tmp/chnsuncom
-	mv /tmp/chnsuncom /tmp/chnscom
-}
+
+sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d'>/tmp/chnscom
+
 if(~ $riosafe yes){
 	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/rio/d' >/tmp/chnssafe
 	mv /tmp/chnssafe /tmp/chnscom
 }
 sed 's/  / /g' /tmp/chnscom >/tmp/chnsswap
 mv /tmp/chnsswap /tmp/chnscom
-sed 's/#s/\/srv/g' /tmp/chnscom >/tmp/chnsswap
-mv /tmp/chnsswap /tmp/chnscom
+#sed 's/#s/\/srv/g' /tmp/chnscom >/tmp/chnsswap
+#mv /tmp/chnsswap /tmp/chnscom
 if(~ $testonly yes){
 	cat /tmp/chnscom
 	exit
