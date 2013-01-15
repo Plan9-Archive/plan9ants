@@ -271,11 +271,16 @@ if(~ $bootargs ''){
 	interactive=yes
 	echo 'no bootargs found using '$bootargs' and setting interactive=yes'
 }
-
+# usb COMPLETELY UNTESTED just trying to imitate the new code in usb.c
 if(~ $tryusb yes){
 	if (test -e /dev/usb/ctl) {
 		echo -n usb...
-		usbd
+		usbd /srv/usb
+		sleep 3
+		if(! ~ $sdB0part '')
+			partfscmd=`{echo '-p '$sdB0part}
+		partfs $partfscmd -s /srv/partfs.sdXX /dev/sdU0.0
+		chmod 666 /srv/partfs.sdXX
 	}
 }
 

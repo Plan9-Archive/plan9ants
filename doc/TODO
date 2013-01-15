@@ -1,12 +1,13 @@
-fully automate build process and make it portable, including choosing boot and rootfs.tgz contents
+test cpns under load and stress of weird stuff thrown at it
 deal with lib/ndb head on. probably write configurator script? or just document
-make rerootwin robust and sane - slightly improved
+make rerootwin robust and sane - improved now, net.alt is still probably wrong
 improve namespace acquisition tools like addwrroot - more consistent and tested now
 test multiple factotums for different users with different keys
-comprehensive set of plan9.ini examples
+fully automate build process and make it portable, including choosing boot and rootfs.tgz contents - made portable
 check on other boot methods and formats to support in plan9rc - look at /sys/src/9/9pcfs
 improve documentation and write tutorials and possibly scripted demos? - in progress - in progress 
 investigate compatibility with 9front
 !create spawnenv script for launching self-sufficient quasivirtual namespaces - plan9rc and initskel are evolving in this direction
 !write configurator/installer for different system roles - replaced with saving interactive config
 !upload to sources - done with hg!
+!comprehensive set of plan9.ini examples  - done

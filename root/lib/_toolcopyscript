@@ -18,6 +18,7 @@ cp /bin/auth/cron .
 cp /bin/ndb/cs .
 cp /bin/date .
 cp /bin/db .
+cp /bin/dd .
 cp /bin/ndb/dns .
 cp /bin/ed .
 cp /bin/exportfs .

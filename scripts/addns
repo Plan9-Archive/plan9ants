@@ -6,6 +6,14 @@ ifs='
 '
 while (~ $1 -*){
 	switch($1){
+	case -o
+		only=$2
+		shift
+		shift
+	case -x
+		xclude=$2
+		shift
+		shift
 	case -t
 		testonly=yes
 		shift
@@ -31,8 +39,7 @@ if(! test -e /proc/$2){
 	echo process $2 does not exist!
 	exit
 }
-if(test -e /tmp/chnsuniq)
-	rm /tmp/chnsuniq
+
 
 orig=`{cat /proc/$1/ns}
 for (i in $orig){
@@ -42,13 +49,27 @@ for (i in $orig){
 		echo $i >> /tmp/chnsuniq
 	}
 }
+if(! test -e /tmp/chnsuniq){
+	echo no binds in $1 not in $2 to add
+	exit
+}
 
-sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/  / /g' |sed '/\#\|\/data/d' >/tmp/chnscom
+sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/  / /g' |sed '/\#\|\/data/d' |sed '/\#D\/ssl/d' >/tmp/chnscom
 
 if(~ $riosafe yes){
-	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/\/dev\/cons/d' |sed '/\/rio/d' >/tmp/chnssafe
+	sed '/\/mnt\/wsys/d' /tmp/chnscom | sed '/\/mnt\/term/d' |sed '/\/dev\/cons/d' |sed '/\/rio/d' >/tmp/chnssafe
 	mv /tmp/chnssafe /tmp/chnscom
 }
+if (! ~ $xclude ''){
+	grep -v $xclude /tmp/chnscom >/tmp/chnssafe
+	mv /tmp/chnssafe /tmp/chnscom
+}
+if (! ~ $only ''){
+	grep $only /tmp/chnscom >/tmp/chnssafe
+	mv /tmp/chnssafe /tmp/chnscom
+}
+if (test -e /tmp/chnssafe)
+	rm /tmp/chnssafe
 if(~ $testonly yes){
 	cat /tmp/chnscom
 	exit

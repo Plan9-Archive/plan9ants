@@ -3,11 +3,22 @@
 #cpns copies namespace from process 1 to process 2
 #this script requires the writable /proc/ns mod found in contrib/mycroftiv/writeprocns
 
+rfork e
+only=()
+xclude=()
 riosafe=()
 testonly=()
-
+saveargs=$*
 while (~ $1 -*){
 	switch($1){
+	case -o
+		only=$2
+		shift
+		shift
+	case -x
+		xclude=$2
+		shift
+		shift
 	case -t
 		testonly=-t
 		shift
@@ -33,9 +44,6 @@ if(! test -e /proc/$2){
 	echo process $2 does not exist!
 	exit
 }
+subns $saveargs
+addns $saveargs
 
-subns $testonly $riosafe $1 $2
-addns $testonly $riosafe $1 $2
-
-riosafe=()
-testonly=()
