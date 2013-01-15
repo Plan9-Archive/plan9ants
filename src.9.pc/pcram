@@ -132,7 +132,7 @@ bootdir
 	/386/bin/venti/venti
 	/386/bin/usb/usbd
 	/386/bin/disk/partfs
-#	/386/bin/disk/kfs
+	/386/bin/disk/kfs
 	/386/bin/cfs
 	/386/bin/auth/newns
 	/386/bin/read
@@ -177,5 +177,5 @@ bootdir
 	/n/rootless/bootdir.extras/root/bin/rerootwin
 	/n/rootless/bootdir.extras/root/bin/addroroot
 	/n/rootless/bootdir.extras/root/bin/addwrroot
-#	/n/rootless/bootdir.extras/root/bin/addsources
+	/n/rootless/bootdir.extras/root/bin/addsources
 
