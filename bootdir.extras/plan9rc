@@ -350,7 +350,7 @@ if(~ $interactive yes){
 		cfs = `{getans cfs $cfs}
 	}
 	if(~ $getrootfs local){
-		echo 'Dial a venti server? Enter its ip if so.'
+		echo 'Dial a venti server? Enter a dialstring for it if so.'
 		venti = `{getans venti $venti}
 		if(~ ! venti ''){
 			ipsetup
