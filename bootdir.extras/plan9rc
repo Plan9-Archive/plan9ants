@@ -290,7 +290,6 @@ if(~ $bootparse(1) local*)
 if(~ $bootparse(1) tcp*)
 	getrootfs=tcp
 
-	
 if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')

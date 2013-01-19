@@ -5,7 +5,6 @@ bind -b $builddir/src.9.boot /sys/src/9/boot
 bind -b $builddir/src.9.port /sys/src/9/port
 bind -b $builddir/src.9.pc /sys/src/9/pc
 bind $builddir /n/rootless
-bind -b /usr/mycroftiv/sourcesdir/writeprocns /sys/src/9/port
 bind -bc $builddir/compiletemp /sys/src/9/pc
 if(~ $1 clean){
 	cd /sys/src/9/pc
