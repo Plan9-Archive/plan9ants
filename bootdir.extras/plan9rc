@@ -122,12 +122,18 @@ fn dogetrootfs{
 		}
 		if(~ $cfs ''){
 			echo srv $fs to /srv/boot
-			srv tcp!$fs!564 boot
+			if(~ $fs tcp*)
+				srv $fs boot
+			if not
+				srv tcp!$fs!564 boot
 			bootsrv=/srv/boot
 		}
 		if not{
 			echo starting cfs $cfs dialing $fs and serving root to /srv/boot
-			cfs -a tcp!$fs!564 -f $cfs -z boot
+			if(~ $fs tcp*)
+				cfs -a $fs -f $cfs -z boot
+			if not
+				cfs -a tcp!$fs!564 -f $cfs -z boot
 			bootsrv=/srv/boot
 		}
 	case local
@@ -263,6 +269,9 @@ echo 'ROOTLESS PLAN 9 /boot/plan9rc'
 
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
+if(! ~ $1 '')
+	. $1
+
 echo -n 'TIME...'
 cat '#r/rtc' > '#c/time'
 
@@ -349,8 +358,12 @@ if(~ $interactive yes){
 		cfs = `{getans cfs $cfs}
 	}
 	if(~ $getrootfs local){
-		echo 'Dial a venti server? Enter a dialstring for it if so.'
+		echo 'Dial a venti server? Enter a dialstring or ip for it if so.'
 		venti = `{getans venti $venti}
+		if(! ~ $venti ''){
+			if(! ~ $venti tcp*)
+				venti=tcp!^$venti^!17034
+		}
 		if(~ ! venti ''){
 			ipsetup
 		}

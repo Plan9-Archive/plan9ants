@@ -10,15 +10,15 @@ bind -a #l /net
 bind -a #I /net
 
 # mount points
-mount -a /srv/slashn /net.alt
+mount -a /srv/slashn $pivot
 
 #devices from previous ns
-mount -c /srv/$oldterm /net.alt/$oldterm
-mount -c /srv/$oldwsys /net.alt/$oldwsys
-bind /net.alt/$oldterm/dev/cons /dev/cons
-bind /net.alt/$oldterm/dev/consctl /dev/consctl
-bind -a /net.alt/$oldterm/dev /dev
-bind -b /net.alt/$oldwsys /dev
+mount -c /srv/$oldterm $pivot/$oldterm
+mount -c /srv/$oldwsys $pivot/$oldwsys
+bind $pivot/$oldterm/dev/cons /dev/cons
+bind $pivot/$oldterm/dev/consctl /dev/consctl
+bind -a $pivot/$oldterm/dev /dev
+bind -b $pivot/$oldwsys /dev
 
 # authentication
 mount -a #s/$authagent /mnt
@@ -44,9 +44,9 @@ mount -a /srv/net /net
 
 mount -c /srv/hubfs /n/hubfs
 
-# put /mnt/term and wsys back - experimental binds
-bind -bc /net.alt/$oldterm /mnt/term
-bind -bc /net.alt/$oldwsys /mnt/wsys
+# put /mnt/term and wsys back 
+bind -bc $pivot/$oldterm /mnt/term
+bind -bc $pivot/$oldwsys /mnt/wsys
 
 bind -c /usr/$user/tmp /tmp
 cd /usr/$user

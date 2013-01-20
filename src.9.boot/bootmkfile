@@ -6,7 +6,6 @@ BOOTFILES=\
 	boot.$O\
 	embed.$O\
 	settime.$O\
-	sac.$O\
 	paq.$O\
 	parts.$O\
 	printstub.$O\
