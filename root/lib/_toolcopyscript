@@ -55,6 +55,7 @@ cp /bin/hubshell .
 cp /bin/import .
 cp /bin/importroroot .
 cp /bin/importwrroot .
+cp /bin/ip/ftpd .
 cp /bin/ip/ipconfig .
 cp /bin/ip/ping .
 cp /bin/ip/traceroute .

@@ -17,7 +17,7 @@ if(~ $1 rootfs){
 	cd root/bin
 	. _toolcopyscript
 	cd $builddir
-	ramfs -m /tmp -S ramtmp
+	ramfs -m /tmp
 	tar cf /tmp/rootfs.tar root
 	gzip -9 -c /tmp/rootfs.tar >rootfs.tgz
 #	tar czf rootfs.tgz root
@@ -27,7 +27,7 @@ cp scripts/* bootdir.extras/root/bin
 cd bootdir.extras
 tar cf skel.tar root
 if(~ $1 ramfs){
-	ramfs -m /tmp -S ramtmp
+	ramfs -m /tmp
 	bind -bc /tmp /sys/src/9/pc
 }
 cd /sys/src/9/pc
