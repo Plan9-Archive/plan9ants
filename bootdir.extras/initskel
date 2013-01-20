@@ -103,7 +103,8 @@ if(! ~ $hubsvc no){
 if(~ $ordinary no){
 	if(! test -e /x/adm/keys){
 		echo -n das doskeys...
-		dossrv
+		if(! test -e /srv/dos)
+			dossrv
 		mount /srv/dos /x /dev/sdC0/9fat	
 	}
 	cat /x/adm/keys >/adm/keys

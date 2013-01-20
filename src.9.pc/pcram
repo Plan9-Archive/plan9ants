@@ -157,15 +157,15 @@ bootdir
 	/386/bin/cpu
 #	/386/bin/ndb/cs
 #	/386/bin/ndb/dns
-#	/386/bin/sleep
-#	/386/bin/touch
+	/386/bin/sleep
+	/386/bin/touch
 	/386/bin/grio
-#	/386/bin/srvfs
-#	/386/bin/exportfs
+	/386/bin/srvfs
+	/386/bin/exportfs
 	/386/bin/ed
-#	/386/bin/hubfs
-#	/386/bin/hubshell
-#	/rc/bin/hub
+	/386/bin/hubfs
+	/386/bin/hubshell
+	/rc/bin/hub
 	/rc/bin/window
 	/n/rootless/bootdir.extras/rc
 	/n/rootless/bootdir.extras/rcmain

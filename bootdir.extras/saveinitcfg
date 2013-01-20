@@ -11,6 +11,7 @@ echo 'cpuport=' $cpuport >>/tmp/p9initcfg
 
 #these are non-prompted variables
 
+echo 'ordinary=' $ordinary >>/tmp/p9initcfg
 echo 'justipconfig=' $justipconfig >>/tmp/p9initcfg
 echo 'staysane=' $staysane >>/tmp/p9initcfg
 
