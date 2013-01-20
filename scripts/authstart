@@ -1,0 +1,18 @@
+#!/bin/rc
+
+# start on auth server
+
+cp /x/adm/keys /adm/keys
+
+echo keyfs...
+
+keyfs -wp -m /mnt/keys /adm/keys
+
+echo cron...
+
+cron >>/sys/log/cron >[2=1] &
+
+echo authsrv...
+
+listen1 -tv tcp!*!567 authsrv -d
+
