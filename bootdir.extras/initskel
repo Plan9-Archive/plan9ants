@@ -7,6 +7,7 @@ fn getans{
 	switch($answer){
 	case rc
 		errorshell
+		getans $1 $2
 	case clear
 		echo ''
 	case ?*
@@ -37,6 +38,8 @@ if(~ $interactive yes){
 	binddevs=`{getans binddevs $binddevs}
 	echo 'use normal machine hostowner key?'
 	hostfactotum =`{getans hostfactotum $hostfactotum}
+	if(~ $hostfactotum no)
+		privpassword=`{getans privpassword $privpassword}
 	echo 'start internet?'
 	netsvc=`{getans netsvc $netsvc}
 	echo 'start cpu listener ?'
@@ -64,8 +67,13 @@ if(! ~ $usercheck bootes){
 }
 
 if(~ $hostfactotum no){
-	echo 'setting '$keyowner' factotum key to rootless'
-	echo 'key proto=p9sk1 dom=noroot.com user='$keyowner' !password=rootless' >/mnt/factotum/ctl
+	factotum -S -s hostfactotum
+	echo private cpu factotum started
+	if(! ~ $privpassword ''){
+		echo 'setting '$keyowner' factotum key'
+		echo 'key proto=p9sk1 dom=noroot.com user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
+		rm /env/privpassword
+	}
 }
 
 if(! ~ $netsvc no){
@@ -90,6 +98,16 @@ if(! ~ $cpusvc no){
 if(! ~ $hubsvc no){
 	echo -n 'hubfs...'
 	hub -b hubfs
+}
+
+if(! ~ $ordinary no){
+	cp /x/adm/keys /adm/keys
+	echo keyfs...
+	keyfs -wp -m /mnt/keys /adm/keys
+#	echo cron...
+#	cron >>/sys/log/cron >[2=1] &
+	echo authsrv...
+	listen1 -tv tcp!*!567 authsrv -d
 }
 
 if(~ $staysane no){
