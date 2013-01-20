@@ -100,13 +100,13 @@ if(! ~ $hubsvc no){
 	hub -b hubfs
 }
 
-if(! ~ $ordinary no){
-	if(! test -e /x/keys){
+if(~ $ordinary no){
+	if(! test -e /x/adm/keys){
 		echo -n das doskeys...
 		dossrv
 		mount /srv/dos /x /dev/sdC0/9fat	
 	}
-	cp /x/adm/keys /adm/keys
+	cat /x/adm/keys >/adm/keys
 	echo -n keyfs...
 	keyfs -wp -m /mnt/keys /adm/keys
 #	echo cron...

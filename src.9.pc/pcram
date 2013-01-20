@@ -159,7 +159,7 @@ bootdir
 #	/386/bin/ndb/dns
 #	/386/bin/sleep
 #	/386/bin/touch
-#	/386/bin/grio
+	/386/bin/grio
 #	/386/bin/srvfs
 #	/386/bin/exportfs
 	/386/bin/ed
