@@ -1,0 +1,40 @@
+#!/bin/rc
+# DANGER! This script obliterates fossils and resets them to a different score
+
+if(! ~ $1 ????????????????*)
+	echo $1 is not a fossil root score
+fossil=$2
+if(! ~ $fossil '')
+	fossil=/dev/sdC0/fossil
+if(! ~ $3 '')
+	venti=$3
+if(~ $venti ''){
+	echo please set a target for your fossil!
+	exit ''
+}
+resetting $fossil on $sysname backed by venti $venti foshalt in 3 seconds
+sleep 3
+foshalt $fossil
+echo -n killing fossil processes...
+sleep 2
+kill fossil |rc
+sleep 1
+Kill fossil |rc
+sleep 1
+slay fossil |rc
+sleep 1
+
+stillhere=`{ps |grep fossil}
+if(! ~ $stillhere ''){
+	echo fossil processes still running! exiting
+	exit ''
+}
+echo last chance to keep old fossil
+sleep 3
+scoresback=`{flfmt -v $1 $2}
+if(! ~ $scoresback(3) ????????????????*){
+	echo 'warning! flfmt -v did not return scores, operation FAILED'
+	exit ''
+}
+echo 'operation completed successfully! scores of 3 fossil subtrees are'
+echo $scoresback

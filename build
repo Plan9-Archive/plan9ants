@@ -12,6 +12,11 @@ if(~ $1 clean){
 	exit
 }
 if(~ $1 rootfs){
+	rm root/bin/*
+	cp root/lib/_toolcopyscript root/bin
+	cd root/bin
+	. _toolcopyscript
+	cd $builddir
 	ramfs -m /tmp -S ramtmp
 	tar cf /tmp/rootfs.tar root
 	gzip -9 -c /tmp/rootfs.tar >rootfs.tgz

@@ -1,0 +1,31 @@
+#!/bin/rc
+
+f=`{ls /srv/fscons*>[2]/dev/null}
+
+sync -h localhost >[2]/dev/null &
+sync  >[2]/dev/null &
+
+echo -n syncing...
+for(i in $f) @ {
+	echo -n $i...
+	{
+		echo
+		sleep 2
+		echo fsys all sync
+		sleep 2
+	} < $i >> $i
+}
+
+sync -h localhost >[2]/dev/null &
+sync  >[2]/dev/null &
+sleep 5
+
+echo -n halting...
+for(i in $f) @ {
+	echo -n $i...
+	{
+		echo fsys all halt
+	} < $i >> $i
+}
+
+sleep 2
