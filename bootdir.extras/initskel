@@ -67,8 +67,8 @@ if(! ~ $usercheck bootes){
 }
 
 if(~ $hostfactotum no){
-	factotum -S -s hostfactotum
-	echo private cpu factotum started
+	factotum -s hostfactotum.$pid
+	echo private hostfactotum started
 	if(! ~ $privpassword ''){
 		echo 'setting '$keyowner' factotum key'
 		echo 'key proto=p9sk1 dom=noroot.com user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
@@ -101,13 +101,18 @@ if(! ~ $hubsvc no){
 }
 
 if(! ~ $ordinary no){
+	if(! test -e /x/keys){
+		echo -n das doskeys...
+		dossrv
+		mount /srv/dos /x /dev/sdC0/9fat	
+	}
 	cp /x/adm/keys /adm/keys
-	echo keyfs...
+	echo -n keyfs...
 	keyfs -wp -m /mnt/keys /adm/keys
 #	echo cron...
 #	cron >>/sys/log/cron >[2=1] &
-	echo authsrv...
-	listen1 -tv tcp!*!567 authsrv -d
+	echo -n authsrv...
+	listen1 -tv tcp!*!567 authsrv -d &
 }
 
 if(~ $staysane no){
