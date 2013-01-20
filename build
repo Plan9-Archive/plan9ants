@@ -18,7 +18,7 @@ if(~ $1 rootfs){
 #	tar czf rootfs.tgz root
 	exit
 }
-cp scripts/* root/bin
+cp scripts/* bootdir.extras/root/bin
 cd bootdir.extras
 tar cf skel.tar root
 if(~ $2 ramfs){

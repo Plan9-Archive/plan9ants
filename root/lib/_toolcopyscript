@@ -12,6 +12,7 @@ cp /bin/bind .
 cp /bin/cfs .
 cp /bin/auth/changeuser .
 cp /bin/chmod .
+cp /bin/con .
 cp /bin/cp .
 cp /bin/cpu .
 cp /bin/auth/cron .
@@ -24,6 +25,7 @@ cp /bin/ed .
 cp /bin/exportfs .
 cp /bin/auth/factotum .
 cp /bin/disk/fdisk .
+cp /bin/fossil/conf fossilconf
 cp /bin/fossil/flfmt .
 cp /bin/disk/format .
 cp /bin/fossil/fossil .
@@ -46,6 +48,7 @@ cp /bin/disk/kfs .
 cp /bin/auth/keyfs .
 cp /bin/aux/listen1 .
 cp /bin/ls .
+cp /bin/aux/mouse .
 cp /bin/mkdir .
 cp /bin/mntgen .
 cp /bin/mv .
@@ -59,6 +62,7 @@ cp /bin/ps .
 cp /bin/pwd .
 cp /bin/rerootwin .
 cp /bin/rm .
+cp /bin/rx .
 cp /bin/sed .
 cp /bin/sleep .
 cp /bin/srv .
@@ -73,4 +77,10 @@ cp /bin/usb/disk usbdisk
 cp /bin/vac .
 cp /bin/vacfs .
 cp /bin/venti/venti .
+cp /bin/venti/conf venticonf
+cp /bin/aux/vga .
+cp /bin/vncs .
+cp /bin/vncv .
 cp /bin/window .
+cp /bin/xd .
+

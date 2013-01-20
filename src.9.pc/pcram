@@ -142,8 +142,10 @@ bootdir
 	/386/bin/test
 	/386/bin/ls
 	/386/bin/chmod
+	/386/bin/mkdir
 	/386/bin/gunzip
 	/386/bin/sed
+	/386/bin/rm
 	/386/bin/bind
 	/386/bin/mount
 	/386/bin/srv
