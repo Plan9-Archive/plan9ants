@@ -27,5 +27,5 @@ for(i in $f) @ {
 		echo fsys all halt
 	} < $i >> $i
 }
-
 sleep 2
+echo halted

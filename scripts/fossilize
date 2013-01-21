@@ -2,7 +2,6 @@
 
 #freeze a fossil for preservation
 
-
 fossil=$1
 if(! ~ $fossil '')
 	fossil=/dev/sdC0/fossil
@@ -10,7 +9,7 @@ if(! ~ $fossil '')
 rfork e
 part=`{ls /dev/fs/9fat /dev/sd*/9fat >[2]/dev/null}
 if(~ $#part 0) {
-	echo 'no 9fat partition found' >[1=2]
+	echo '9fat?' >[1=2]
 	exit no.9fat
 }
 
@@ -24,17 +23,17 @@ mount -c /srv/dos /n/9fat $part
 unmount /n/9 >/dev/null >[2]/dev/null
 mount -c /srv/dos /n/9 $part
 
-if(! ~ /n/9fat/plan9.ini){
-	echo '9fat missing, aborting!'
+if(! test -e /n/9fat/plan9.ini){
+	echo '9fat?'
 	exit ''
 }
 
 last=`{fossilast $fossil}
 if(! ~ $last vac*){
-	echo 'ALERT! No archive score received from $fossil!'
+	echo 'no score?!'
 	exit ''
 }
 
-echo $last >>/n/9fat/rootscor
-echo $last
+echo $last $fossil $venti >>/n/9fat/rootscor
+echo $last $fossil $venti
 
