@@ -75,6 +75,21 @@ fn dofactotum{
 	}
 }
 
+# usb COMPLETELY UNTESTED just trying to imitate the new code in usb.c
+fn dotryusb{
+	if(~ $tryusb yes){
+		if (test -e /dev/usb/ctl) {
+			echo -n usb...
+			usbd /srv/usb
+			sleep 3
+			if(! ~ $sdB0part '')
+				partfscmd=`{echo '-p '$sdB0part}
+			partfs $partfscmd -s /srv/partfs.sdXX /dev/sdU0.0
+			chmod 666 /srv/partfs.sdXX
+		}
+	}
+}
+
 fn ipsetup{
 	if(! test -e /net/ipifc/0/ctl){
 		if(~ $gateway ?*){
@@ -106,8 +121,8 @@ fn dostartventi{
 		}
 		venti -c $venticonf -a $ventilisten -h $vhttplisten
 		venti=tcp!127.1!17034
-	case ''
-		echo no venti started
+	case later
+		echo ok you can start venti later that is fine
 	}
 }
 
@@ -121,7 +136,7 @@ fn dogetrootfs{
 			ipsetup
 		}
 		if(~ $cfs ''){
-			echo srv $fs to /srv/boot
+			echo srv $fs to /srv/boot...
 			if(~ $fs tcp*)
 				srv $fs boot
 			if not
@@ -129,7 +144,7 @@ fn dogetrootfs{
 			bootsrv=/srv/boot
 		}
 		if not{
-			echo starting cfs $cfs dialing $fs and serving root to /srv/boot
+			echo starting cfs $cfs dialing $fs and serving root to /srv/boot...
 			if(~ $fs tcp*)
 				cfs -a $fs -f $cfs -z boot
 			if not
@@ -155,7 +170,7 @@ fn dogetrootfs{
 					ipsetup
 				}
 			}
-			echo starting fossil from $fossil
+			echo starting fossil from $fossil...
 			fossil -f $fossil -c 'srv -p fscons'
 			echo 'srv -A boot' >>/srv/fscons
 			bootsrv=/srv/boot
@@ -170,12 +185,12 @@ fn dogetrootfs{
 				kfs=$partition
 			}
 			partition=`{findpart kfs}
-			if(! ~ $partition *kfs){
-				echo $partition ' doesnt look like a fossil, please enter partition'
-				partition=`{getans partition $partition}
-			}
+#			if(! ~ $partition *kfs){
+#				echo $partition ' doesnt look like , please enter partition'
+#				partition=`{getans partition $partition}
+#			}
 			kfs=$partition
-			echo starting kfs from $kfs
+			echo starting kfs from $kfs...
 			kfs -f $kfs -n boot
 			bootsrv=/srv/kfs.boot
 		}
@@ -200,7 +215,7 @@ fn doinitscript{
 		echo starting initscript $initscript in ns $namespace
 		newns -n /boot/$namespace $initscript
 	case ''
-		echo no initscript
+		echo no initscript boot environment is console only
 	}
 }
 
@@ -264,41 +279,21 @@ fn errorshell{
 }
 
 ############# End of fn definitions #################
-
 echo 'ROOTLESS PLAN 9 /boot/plan9rc'
-
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
 if(! ~ $1 '')
 	. $1
-
-echo -n 'TIME...'
-cat '#r/rtc' > '#c/time'
-
 if(~ $bootargs ''){
 	bootargs=local!#S/sdC0/fossil
 	interactive=yes
 	echo 'no bootargs found using '$bootargs' and setting interactive=yes'
 }
-# usb COMPLETELY UNTESTED just trying to imitate the new code in usb.c
-if(~ $tryusb yes){
-	if (test -e /dev/usb/ctl) {
-		echo -n usb...
-		usbd /srv/usb
-		sleep 3
-		if(! ~ $sdB0part '')
-			partfscmd=`{echo '-p '$sdB0part}
-		partfs $partfscmd -s /srv/partfs.sdXX /dev/sdU0.0
-		chmod 666 /srv/partfs.sdXX
-	}
-}
-
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*)
 	getrootfs=local
 if(~ $bootparse(1) tcp*)
 	getrootfs=tcp
-
 if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')
@@ -311,7 +306,6 @@ if(~ $factotum '')
 	factotum=`{cat '/env/service'}
 if(~ $rootstart '')
 	rootstart=`{cat '/env/service'}
-
 ventiparse=`{echo $venti}
 venticonf=$ventiparse(1)
 ventilisten=$ventiparse(2)
@@ -321,9 +315,12 @@ if(~ $venticonf '#'*)
 if(~ $venticonf '')
 	venticonf=/dev/sdC0/arenas
 if(~ $ventilisten '')
-	ventilisten=tcp!127.1!17034
+	ventilisten=tcp!*!17034
 if(~ $vhttplisten '')
 	vhttplisten=tcp!127.1!8000
+
+echo -n 'TIME...'
+cat '#r/rtc' > '#c/time'
 
 if(~ $interactive yes){
 	echo Interactive Startup - press enter to continue to options or type rc for a shell
@@ -337,6 +334,7 @@ if(~ $interactive yes){
 	echo 'Choose factotum mode - cpu terminal or debug.'
 	factotum = `{getans factotum $factotum}
 	dofactotum
+	dotryusb
 	sysname = `{getans sysname $sysname}
 	echo 'A skeleton fs is needed. Default ramskel is recommended.'
 	ramsetup = `{getans ramsetup $ramsetup}
@@ -382,7 +380,8 @@ if(~ $interactive yes){
 	echo 'storing startup configuration to ramdisk in /tmp/p9cfg'
 	save9cfg
 	if(~ $staylocal yes){
-		echo starting shell in current namespace
+		echo starting mntgen and shell in current namespace
+		mntgen
 		rc -i
 	}
 	echo 'plan9rc complete !note console namespace is isolated!'
@@ -390,6 +389,7 @@ if(~ $interactive yes){
 
 if not {
 	dofactotum
+	dotryusb
 	doramsetup
 	hostcheck
 	doafterfact
@@ -403,10 +403,10 @@ if not {
 	echo 'storing startup configuration to ramdisk in /tmp/p9cfg'
 	save9cfg
 	if(~ $staylocal yes){
-		echo starting shell in current namespace
+		echo starting mtgen and shell in current namespace
+		mntgen
 		rc -i
 	}
 	echo 'plan9rc complete !note console namespace is isolated!'
 }
-	
 exit ''

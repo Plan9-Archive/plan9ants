@@ -223,7 +223,7 @@ init(void)
 	bind("/boot", "/bin", MAFTER);
 
 	if(manual == 0){
-		print("plan9start...\n");
+		print("plan9rc...\n");
 		fexec(plan9start);
 	}
 
@@ -305,7 +305,7 @@ plan9start(void)
 		execl("/boot/rc", "rc", "-c", "/boot/plan9rc", nil);
 	else
 		wait();
-		print("noroot plan9rc returned from fork\n");
+		print("plan9rc completed, console is kernel only namespace\n");
 		exits(nil);
 }
 

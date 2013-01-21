@@ -27,7 +27,6 @@ if (! ~ $usercheck $keyowner){
 	echo current user is not hostowner
 	exit ''
 }
-	
 if(~ $cpuport '')
 	cpuport=17020
 
@@ -57,7 +56,10 @@ if(! ~ $binddevs no){
 }
 
 echo -n 'mntgen...'
-mntgen -s slashn && chmod 666 /srv/slashn
+if(! test -e /srv/slashn)
+	mntgen -s slashn && chmod 666 /srv/slashn
+if not
+	mntgen
 
 if(! ~ $usercheck bootes){
 	mkdir /root/usr/$usercheck
@@ -65,7 +67,6 @@ if(! ~ $usercheck bootes){
 	mkdir /root/usr/$usercheck/tmp
 	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
 }
-
 if(~ $hostfactotum no){
 	factotum -s hostfactotum.$pid
 	echo private hostfactotum started
@@ -75,7 +76,6 @@ if(~ $hostfactotum no){
 		rm /env/privpassword
 	}
 }
-
 if(! ~ $netsvc no){
 	if(! test -e /net/ipifc/0/ctl){
 		echo -n 'ipconfig ' $ipparams '...'
@@ -83,22 +83,20 @@ if(! ~ $netsvc no){
 		ipconfig loopback /dev/null 127.1
 	}
 }
-
 if(~ $justipconfig no){
 	echo -n 'cs and dns -r...'
 	cs
 	dns -r
 }
-
+if(! ~ $hubsvc no){
+	echo -n 'hubfs...'
+	hub -b hubfs
+}
 if(! ~ $cpusvc no){
 	echo -n 'listen1 cpu -R...'
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
 }
 
-if(! ~ $hubsvc no){
-	echo -n 'hubfs...'
-	hub -b hubfs
-}
 
 if(~ $ordinary no){
 	if(! test -e /x/adm/keys){
@@ -120,11 +118,9 @@ if(~ $staysane no){
 	echo 'exporting writable root to the whole internet on port 17007!!!'
 	listen1 -t tcp!*!17007 /boot/exportfs &
 }
-
 if(~ $font ''){
 	font=/lib/font/bit/lucm/latin1.9.font
 }
 
-saveinitcfg
-
+save9cfg init
 exit ''
