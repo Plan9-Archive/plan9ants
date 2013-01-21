@@ -25,9 +25,11 @@ cp /bin/con .
 cp /bin/cp .
 cp /bin/cpu .
 cp /bin/ndb/cs .
+cp /bin/ndb/dns .
 cp /bin/date .
 cp /bin/db .
 cp /bin/dd .
+cp /bin/dircp .
 cp /bin/disk/fdisk .
 cp /bin/disk/format .
 cp /bin/disk/kfs .
@@ -66,7 +68,7 @@ cp /bin/ls .
 cp /bin/mkdir .
 cp /bin/mntgen .
 cp /bin/mv .
-cp /bin/ndb/dns .
+cp /bin/netssh .
 cp /bin/netstat .
 cp /bin/ns .
 cp /bin/p .
@@ -96,6 +98,7 @@ cp /bin/venti/venti .
 cp /bin/venti/wrarena .
 cp /bin/vncs .
 cp /bin/vncv .
+cp /bin/vt .
 cp /bin/window .
 cp /bin/xd .
 

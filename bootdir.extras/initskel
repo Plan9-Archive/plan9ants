@@ -2,7 +2,7 @@
 # ramroot startup after newns
 
 fn getans{
-	echo ' ** '$1 is':' $2 - press enter, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
+	echo '* '$1 is':' $2 - default yes, ''''no'''' to refuse, or start '"'rc'"' : >>/fd/2
 	answer=`{read}
 	switch($answer){
 	case rc
@@ -36,11 +36,11 @@ if(~ $interactive yes){
 	echo 'For configuration questions, answer no to disable default behaviors'
 	echo 'bind hardware devices?'
 	binddevs=`{getans binddevs $binddevs}
-	echo 'use normal machine hostowner key?'
+	echo 'use current factotum key for this environment?'
 	hostfactotum =`{getans hostfactotum $hostfactotum}
 	if(~ $hostfactotum no)
 		privpassword=`{getans privpassword $privpassword}
-	echo 'start internet?'
+	echo 'issue ipconfig command?'
 	netsvc=`{getans netsvc $netsvc}
 	echo 'start cpu listener ?'
 	cpusvc=`{getans cpusvc $cpusvc}

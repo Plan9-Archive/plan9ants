@@ -22,7 +22,7 @@ bind -ac /root/bin /bin
 if(~ $tgzfs *.tgz){
 	dossrv
 	mount /srv/dos /x /dev/sdC0/9fat
-	echo tar xzf $tgzfs ...
+	echo -n tar xzf $tgzfs^...
 	tar xzf /x/$tgzfs
 }
 bind -c /usr/bootes/tmp /tmp

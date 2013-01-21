@@ -8,7 +8,7 @@ if(! ~ $score ????????????????*){
 	exit ''
 }
 fossil=$2
-if(! ~ $fossil '')
+if(~ $fossil '')
 	fossil=/dev/sdC0/fossil
 if(! ~ $3 '')
 	venti=$3

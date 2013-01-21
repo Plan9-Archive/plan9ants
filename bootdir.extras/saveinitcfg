@@ -14,5 +14,3 @@ echo 'cpuport=' $cpuport >>/tmp/p9initcfg
 echo 'ordinary=' $ordinary >>/tmp/p9initcfg
 echo 'justipconfig=' $justipconfig >>/tmp/p9initcfg
 echo 'staysane=' $staysane >>/tmp/p9initcfg
-
-echo 'initskel options saved to /tmp/p9initcfg'
