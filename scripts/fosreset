@@ -21,7 +21,7 @@ if(~ $fossil tcp*){
 	exit ;;
 }
 
-echo '!!resetting $fossil on $sysname backed by venti $venti foshalt in 3 seconds!!'
+echo '!resetting '$fossil' on '$sysname' backed by venti '$venti' foshalt in 3 seconds!!'
 sleep 3
 if(! test -e /bin/foshalt)
 	fshalt
@@ -46,10 +46,6 @@ echo 'last change to save fossil '$fossil' reformat in 3 seconds!'
 sleep 3
 echo issuing flfmt -y -v $score $fossil
 if(test -e /bin/flfmt)
-	scoresback=`{flfmt -y -v $score $fossil}
+	flfmt -y -v $score $fossil
 if not
-	scoresback=`{fossil/flfmt -y -v $score $fossil}
-if(! ~ $scoresback(3) ????????????????*)
-	echo ALERT flfmt failed
-echo $scoresback
-
+	fossil/flfmt -y -v $score $fossil

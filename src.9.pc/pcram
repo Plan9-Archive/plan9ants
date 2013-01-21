@@ -177,5 +177,4 @@ bootdir
 	/n/rootless/bootdir.extras/ramskel
 	/n/rootless/bootdir.extras/initskel
 	/n/rootless/bootdir.extras/save9cfg
-	/n/rootless/bootdir.extras/saveinitcfg
 	/n/rootless/bootdir.extras/skel.tar

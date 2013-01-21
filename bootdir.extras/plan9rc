@@ -212,10 +212,9 @@ fn doafterroot{
 fn doinitscript{
 	switch($initscript){
 	case ?*
-		echo starting initscript $initscript in ns $namespace
 		newns -n /boot/$namespace $initscript
-	case ''
-		echo no initscript boot environment is console only
+	case easteregg
+		echo guess i should make an easter egg here
 	}
 }
 
@@ -282,6 +281,8 @@ fn errorshell{
 echo 'ROOTLESS PLAN 9 /boot/plan9rc'
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
+cat '#r/rtc' > '#c/time'
+
 if(! ~ $1 '')
 	. $1
 if(~ $bootargs ''){
@@ -319,30 +320,28 @@ if(~ $ventilisten '')
 if(~ $vhttplisten '')
 	vhttplisten=tcp!127.1!8000
 
-echo -n 'TIME...'
-cat '#r/rtc' > '#c/time'
 
 if(~ $interactive yes){
-	echo Interactive Startup - press enter to continue to options or type rc for a shell
+	echo Interactive Startup - enter to continue to options or type rc for a shell
 	answer=`{read}
 	if(~ $answer rc){
 		echo dropping to rc shell with limited commands
 		rc -i
 	}
-	echo 'If ipconfig is needed for tcp boot or venti, enter parameters. Leave blank for dhcp.'
+	echo 'Internet config DHCP by default. Enter ipconfig parameters if needed'
 	ipparams = `{getans ipparams $ipparams}
 	echo 'Choose factotum mode - cpu terminal or debug.'
 	factotum = `{getans factotum $factotum}
 	dofactotum
 	dotryusb
 	sysname = `{getans sysname $sysname}
-	echo 'A skeleton fs is needed. Default ramskel is recommended.'
+	echo 'Skeleton fs required for mountpoints. Default ramskel recommended.'
 	ramsetup = `{getans ramsetup $ramsetup}
-	echo 'Retrieve additional tools from 9fat? Enter rootfs.tgz other or no'
+	echo 'Load optional tools from 9fat? Enter rootfs.tgz small.tgz or no'
 	tgzfs = `{getans tgzfs $tgzfs}
 	doramsetup
 	hostcheck
-	echo 'Start local Venti server? yes or leave blank for no.'
+	echo 'Start local Venti? Enter yes if so.'
 	startventi = `{getans startventi $startventi}
 	if(~ $startventi yes){
 		ventilisten = `{getans ventilisten $ventilisten}
@@ -356,7 +355,7 @@ if(~ $interactive yes){
 		cfs = `{getans cfs $cfs}
 	}
 	if(~ $getrootfs local){
-		echo 'Dial a venti server? Enter a dialstring or ip for it if so.'
+		echo 'Dial a venti server? Enter a dialstring or ip if so.'
 		venti = `{getans venti $venti}
 		if(! ~ $venti ''){
 			if(! ~ $venti tcp*)
@@ -367,24 +366,27 @@ if(~ $interactive yes){
 		}
 	}
 	dogetrootfs
-	echo 'To create a default cpu server environment serving on a port of your choice use initskel here.'
+	echo 'Create cpu server namespace on a port of your choice? Initskel if so.'
 	initscript = `{getans initscript $initscript}
 	doinitscript
 	dochecksys
 	echo 'Start cpurc termrc from the file server? Enter cpu or terminal if so.'
 	rootstart = `{getans rootstart $rootstart}
+	if(~ $rootstart cpu)
+		service=cpu
+	if(~ $rootstart terminal)
+		service=terminal
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
-	echo 'Do you want to console to stay in the current namespace? enter yes if so.'
+	echo 'Keep console in ramboot namespace? yes if so.'
 	staylocal = `{getans staylocal $staylocal}
-	echo 'storing startup configuration to ramdisk in /tmp/p9cfg'
+	echo 'storing startup configuration to ramdisk in /usr/bootes/tmp/p9cfg'
 	save9cfg
 	if(~ $staylocal yes){
 		echo starting mntgen and shell in current namespace
 		mntgen
 		rc -i
 	}
-	echo 'plan9rc complete !note console namespace is isolated!'
 }
 
 if not {
@@ -400,13 +402,12 @@ if not {
 	dochecksys
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
-	echo 'storing startup configuration to ramdisk in /tmp/p9cfg'
+	echo 'storing startup configuration to ramdisk in /usr/bootes/tmp/p9cfg'
 	save9cfg
 	if(~ $staylocal yes){
 		echo starting mtgen and shell in current namespace
 		mntgen
 		rc -i
 	}
-	echo 'plan9rc complete !note console namespace is isolated!'
 }
 exit ''
