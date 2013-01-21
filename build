@@ -4,6 +4,7 @@ builddir=`{pwd}
 bind -b $builddir/src.9.boot /sys/src/9/boot
 bind -b $builddir/src.9.port /sys/src/9/port
 bind -b $builddir/src.9.pc /sys/src/9/pc
+bind -b $builddir/scripts /bin
 bind $builddir /n/rootless
 bind -bc $builddir/compiletemp /sys/src/9/pc
 if(~ $1 clean){
@@ -20,7 +21,6 @@ if(~ $1 rootfs){
 	ramfs -m /tmp
 	tar cf /tmp/rootfs.tar root
 	gzip -9 -c /tmp/rootfs.tar >rootfs.tgz
-#	tar czf rootfs.tgz root
 	exit
 }
 cp scripts/* bootdir.extras/root/bin

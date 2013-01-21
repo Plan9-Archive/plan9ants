@@ -2,7 +2,8 @@
 # DANGER! This script obliterates fossils and resets them to a different score
 
 # fosreset rootscore [fossil] [venti]
-if(! ~ $1 ????????????????*)
+score=$1
+if(! ~ $score ????????????????*)
 	echo $1 is not a fossil root score
 fossil=$2
 if(! ~ $fossil '')
@@ -17,7 +18,7 @@ if(~ $fossil tcp*){
 	echo not disk
 	exit ;;
 }
-resetting $fossil on $sysname backed by venti $venti foshalt in 3 seconds
+echo resetting $fossil on $sysname backed by venti $venti foshalt in 3 seconds
 sleep 3
 foshalt $fossil
 echo -n killing fossil processes...
@@ -35,17 +36,7 @@ if(! ~ $stillhere ''){
 	exit ''
 }
 
-score=$1
-fossil=$2
 if(~ $score vac*)
 	score=`{echo $score |sed 's/vac://g'}
 echo issuing flfmt -v $score $fossil
-echo last chance to keep old fossil next 3 seconds
-sleep 3
-scoresback=`{flfmt -v $score $fossil}
-if(! ~ $scoresback(3) ????????????????*){
-	echo 'warning! flfmt -v did not return scores, operation FAILED'
-	exit ''
-}
-echo 'operation completed successfully! scores of 3 fossil subtrees are'
-echo $scoresback
+flfmt -v $score $fossil

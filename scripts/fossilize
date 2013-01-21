@@ -3,7 +3,7 @@
 #freeze a fossil for preservation
 
 fossil=$1
-if(! ~ $fossil '')
+if(~ $fossil '')
 	fossil=/dev/sdC0/fossil
 
 rfork e
