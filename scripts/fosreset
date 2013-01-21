@@ -3,40 +3,53 @@
 
 # fosreset rootscore [fossil] [venti]
 score=$1
-if(! ~ $score ????????????????*)
+if(! ~ $score ????????????????*){
 	echo $1 is not a fossil root score
+	exit ''
+}
 fossil=$2
 if(! ~ $fossil '')
 	fossil=/dev/sdC0/fossil
 if(! ~ $3 '')
 	venti=$3
 if(~ $venti ''){
-	echo please set a target for your fossil!
+	echo 'please set a target for your fossil!'
 	exit ''
 }
 if(~ $fossil tcp*){
 	echo not disk
 	exit ;;
 }
-echo resetting $fossil on $sysname backed by venti $venti foshalt in 3 seconds
+
+echo '!!resetting $fossil on $sysname backed by venti $venti foshalt in 3 seconds!!'
 sleep 3
-foshalt $fossil
+if(! test -e /bin/foshalt)
+	fshalt
+if not
+	foshalt
 echo -n killing fossil processes...
-sleep 2
 kill fossil |rc
 sleep 1
 Kill fossil |rc
-sleep 1
+sleep 2
 slay fossil |rc
 sleep 1
-
 stillhere=`{ps |grep fossil}
 if(! ~ $stillhere ''){
-	echo fossil processes still running! exiting
+	echo 'fossil processes still running! exiting'
 	exit ''
 }
 
 if(~ $score vac*)
 	score=`{echo $score |sed 's/vac://g'}
-echo issuing flfmt -v $score $fossil
-flfmt -v $score $fossil
+echo 'last change to save fossil '$fossil' reformat in 3 seconds!'
+sleep 3
+echo issuing flfmt -y -v $score $fossil
+if(test -e /bin/flfmt)
+	scoresback=`{flfmt -y -v $score $fossil}
+if not
+	scoresback=`{fossil/flfmt -y -v $score $fossil}
+if(! ~ $scoresback(3) ????????????????*)
+	echo ALERT flfmt failed
+echo $scoresback
+
