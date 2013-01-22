@@ -38,9 +38,9 @@ cp /bin/acme .
 #cp /bin/addsources .
 #cp /bin/addwrroot .
 #cp /bin/awk .
-cp /bin/bind .
+#cp /bin/bind .
 #cp /bin/cfs .
-cp /bin/chmod .
+#cp /bin/chmod .
 cp /bin/con .
 #cp /bin/cp .
 #cp /bin/cpu .

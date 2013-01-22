@@ -42,7 +42,7 @@ if(! ~ $stillhere ''){
 
 if(~ $score vac*)
 	score=`{echo $score |sed 's/vac://g'}
-echo 'last change to save fossil '$fossil' reformat in 3 seconds!'
+echo 'last chance to save fossil '$fossil' reformat in 3 seconds!'
 sleep 3
 echo issuing flfmt -y -v $score $fossil
 if(test -e /bin/flfmt)
