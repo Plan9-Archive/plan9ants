@@ -1,5 +1,5 @@
-test cpns under load and stress of weird stuff thrown at it
 deal with lib/ndb head on. probably write configurator script? or just document
+test cpns under load and stress of weird stuff thrown at it - probably deferred, too much other stuff
 make rerootwin robust and sane - improved now, net.alt is still probably wrong! added sanity options for placement
 improve namespace acquisition tools like addwrroot - more consistent and tested now! seemingly robust
 test multiple factotums for different users with different keys! isolated factotums tested with different keys, note to control auth targeting and namespaces

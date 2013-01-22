@@ -127,6 +127,33 @@ bootdir
 	bootpcram.out boot
 	/386/bin/ip/ipconfig
 	/386/bin/auth/factotum
+	/386/bin/ramfs
+	/386/bin/auth/newns
+	/386/bin/bind
+	/386/bin/mount
+	/386/bin/mntgen
+	/386/bin/srv
+	/386/bin/read
+	/386/bin/cat
+	/386/bin/echo
+	/386/bin/tar
+	/386/bin/test
+	/386/bin/chmod
+	/386/bin/mkdir
+	/386/bin/gunzip
+	/386/bin/sed
+	/386/bin/rm
+	/n/rootless/bootdir.extras/rc
+	/n/rootless/bootdir.extras/rcmain
+	/n/rootless/bootdir.extras/plan9rc
+	/n/rootless/bootdir.extras/namespace
+	/n/rootless/bootdir.extras/namespace.standard
+	/n/rootless/bootdir.extras/namespace.saveterm
+	/n/rootless/bootdir.extras/ramskel
+	/n/rootless/bootdir.extras/initskel
+	/n/rootless/bootdir.extras/save9cfg
+	/n/rootless/bootdir.extras/skel.tar
+#	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE
 	/386/bin/dossrv
 	/386/bin/fossil/fossil
 	/386/bin/venti/venti
@@ -154,30 +181,3 @@ bootdir
 #	/386/bin/auth/keyfs
 #	/386/bin/ndb/cs
 #	/386/bin/ndb/dns
-#	MANDATORY FOR ROOTLESS BOOT SCRIPTS BELOW THIS LINE
-	/386/bin/ramfs
-	/386/bin/auth/newns
-	/386/bin/bind
-	/386/bin/mount
-	/386/bin/mntgen
-	/386/bin/srv
-	/386/bin/read
-	/386/bin/cat
-	/386/bin/echo
-	/386/bin/tar
-	/386/bin/test
-	/386/bin/chmod
-	/386/bin/mkdir
-	/386/bin/gunzip
-	/386/bin/sed
-	/386/bin/rm
-	/n/rootless/bootdir.extras/rc
-	/n/rootless/bootdir.extras/rcmain
-	/n/rootless/bootdir.extras/plan9rc
-	/n/rootless/bootdir.extras/namespace
-	/n/rootless/bootdir.extras/namespace.standard
-	/n/rootless/bootdir.extras/namespace.saveterm
-	/n/rootless/bootdir.extras/ramskel
-	/n/rootless/bootdir.extras/initskel
-	/n/rootless/bootdir.extras/save9cfg
-	/n/rootless/bootdir.extras/skel.tar

@@ -22,14 +22,14 @@ cp /bin/fossil/last fossilast
 #cp /bin/ip/ftpd .
 #cp /bin/ip/ipconfig .
 cp /bin/ip/ping .
-#cp /bin/ip/traceroute .
+cp /bin/ip/traceroute .
 #cp /bin/usb/usbd .
 cp /bin/usb/disk usbdisk
 cp /bin/venti/conf venticonf
-#cp /bin/venti/rdarena .
+cp /bin/venti/rdarena .
 cp /bin/venti/sync .
 #cp /bin/venti/venti .
-#cp /bin/venti/wrarena .
+cp /bin/venti/wrarena .
 cp /bin/9660srv .
 cp /bin/9fat: .
 cp /bin/9fs .
@@ -47,7 +47,7 @@ cp /bin/con .
 cp /bin/ndb/cs .
 cp /bin/ndb/dns .
 cp /bin/date .
-#cp /bin/db .
+cp /bin/db .
 cp /bin/dd .
 cp /bin/dircp .
 #cp /bin/dossrv .
@@ -69,7 +69,7 @@ cp /bin/hoc .
 cp /bin/import .
 #cp /bin/importroroot .
 #cp /bin/importwrroot .
-cp /bin/ip/rexexec .
+#cp /bin/ip/rexexec .
 cp /bin/kill .
 cp /bin/Kill .
 #cp /bin/ls .
@@ -85,7 +85,7 @@ cp /bin/pwd .
 #cp /bin/ramfs .
 #cp /bin/rerootwin .
 #cp /bin/rm .
-cp /bin/rx .
+#cp /bin/rx .
 #cp /bin/sed .
 cp /bin/ssh .
 cp /bin/slay .

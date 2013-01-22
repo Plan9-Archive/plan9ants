@@ -21,8 +21,9 @@ case cpu
 	bind /mnt/term/dev/cons /dev/cons
 	bind /mnt/term/dev/consctl /dev/consctl
 	bind -a /mnt/term/dev /dev
-	prompt=('cpu% ' '	')
-	fn cpu%{ $* }
+	prompt=$sysname^': '
+#	prompt=('cpu% ' '	')
+#	fn cpu%{ $* }
 #	upas/fs
 #	news
 	if (! test -e /mnt/term/mnt/wsys) {

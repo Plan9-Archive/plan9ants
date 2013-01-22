@@ -10,6 +10,7 @@ ramsetup - program to set up ramfs for bootscripts, defaults to ramskel
 startventi - set to yes to start the venti server [yes]
 getrootfs - determined from bootparse or set by user during interactive [tcp local]
 fs - standard fs address from plan9.ini, needed for tcp booting
+auth - standard auth address for tcp booting
 venti - standard venti address variable from plan9.ini
 fossil - standard fossil address from plan9.ini not parsed fully correctly in general
 cfs - standard cfs address from plan9.ini
