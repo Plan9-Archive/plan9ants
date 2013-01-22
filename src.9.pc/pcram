@@ -141,6 +141,8 @@ bootdir
 	/386/bin/exportfs
 	/386/bin/cpu
 	/386/bin/srvfs
+	/386/bin/ip/rexexec
+	/386/bin/rx
 	/386/bin/grio
 	/386/bin/hubfs
 	/386/bin/hubshell

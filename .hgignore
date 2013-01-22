@@ -1,6 +1,7 @@
 syntax: glob
 *.8
 *.gz
+*.tgz
 compiletemp
 root/bin
-*.tgz
+root/acme

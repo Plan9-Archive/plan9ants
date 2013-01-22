@@ -1,0 +1,16 @@
+#!/bin/rc
+
+#copy one system to another
+#cpsys SOURCE DEST
+
+source=$1
+dest=$2
+
+if(~ $2 ''){
+	echo usage: cpsys SOURCE DEST
+	exit ''
+}
+
+resetargs=`{rx $source fossilize}
+rx $dest fosreset $resetargs
+

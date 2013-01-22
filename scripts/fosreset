@@ -3,7 +3,7 @@
 
 # fosreset rootscore [fossil] [venti]
 score=$1
-if(! ~ $score ????????????????*){
+if(! ~ $score ???????????????????????????*){
 	echo $1 is not a fossil root score
 	exit ''
 }
@@ -13,7 +13,7 @@ if(~ $fossil '')
 if(! ~ $3 '')
 	venti=$3
 if(~ $venti ''){
-	echo 'please set a target for your fossil!'
+	echo 'please set a venti target for your fossil!'
 	exit ''
 }
 if(~ $fossil tcp*){
@@ -21,13 +21,10 @@ if(~ $fossil tcp*){
 	exit ;;
 }
 
-echo '!resetting '$fossil' on '$sysname' backed by venti '$venti' foshalt in 3 seconds!!'
-sleep 3
 if(! test -e /bin/foshalt)
 	fshalt
 if not
 	foshalt
-echo -n killing fossil processes...
 kill fossil |rc
 sleep 1
 Kill fossil |rc
@@ -42,9 +39,6 @@ if(! ~ $stillhere ''){
 
 if(~ $score vac*)
 	score=`{echo $score |sed 's/vac://g'}
-echo 'last chance to save fossil '$fossil' reformat in 3 seconds!'
-sleep 3
-echo issuing flfmt -y -v $score $fossil
 if(test -e /bin/flfmt)
 	flfmt -y -v $score $fossil
 if not

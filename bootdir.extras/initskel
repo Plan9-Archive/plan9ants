@@ -41,7 +41,7 @@ if(~ $interactive yes){
 		privpassword=`{getans privpassword $privpassword}
 	echo 'issue ipconfig command?'
 	netsvc=`{getans netsvc $netsvc}
-	echo 'start cpu listener ?'
+	echo 'start cpu and rx listener ?'
 	cpusvc=`{getans cpusvc $cpusvc}
 	echo 'port for cpu listen?'
 	cpuport=`{getans cpuport $cpuport}
@@ -95,6 +95,7 @@ if(! ~ $hubsvc no){
 if(! ~ $cpusvc no){
 	echo -n 'listen1 cpu -R...'
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
+	listen1 -t tcp!*!17009 /boot/rexexec &
 }
 
 
