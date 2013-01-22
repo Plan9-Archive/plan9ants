@@ -1,9 +1,9 @@
-#cp /bin/auth/authsrv .
+cp /bin/auth/authsrv .
 #cp /bin/auth/as .
-#cp /bin/auth/changeuser .
+cp /bin/auth/changeuser .
 #cp /bin/auth/cron .
 #cp /bin/auth/factotum .
-#cp /bin/auth/keyfs .
+cp /bin/auth/keyfs .
 #cp /bin/auth/newns .
 #cp /bin/aux/listen1 .
 cp /bin/aux/mouse .
@@ -20,7 +20,7 @@ cp /bin/fossil/flfmt .
 #cp /bin/fossil/fossil .
 cp /bin/fossil/last fossilast
 #cp /bin/ip/ftpd .
-cp /bin/ip/ipconfig .
+#cp /bin/ip/ipconfig .
 cp /bin/ip/ping .
 #cp /bin/ip/traceroute .
 #cp /bin/usb/usbd .

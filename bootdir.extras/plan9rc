@@ -352,6 +352,7 @@ if(~ $interactive yes){
 	getrootfs = `{getans getrootfs $getrootfs}
 	if(~ $getrootfs tcp){
 		fs = `{getans fs $fs}
+		auth = `{getans auth $auth}
 		cfs = `{getans cfs $cfs}
 	}
 	if(~ $getrootfs local){
@@ -380,10 +381,11 @@ if(~ $interactive yes){
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'Keep console in ramboot namespace? yes if so.'
 	staylocal = `{getans staylocal $staylocal}
-	echo 'storing startup configuration to ramdisk in /usr/bootes/tmp/p9cfg'
+	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(~ $staylocal yes){
 		echo starting mntgen and shell in current namespace
+		home=/usr/$user
 		mntgen
 		rc -i
 	}
@@ -402,10 +404,11 @@ if not {
 	dochecksys
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
-	echo 'storing startup configuration to ramdisk in /usr/bootes/tmp/p9cfg'
+	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(~ $staylocal yes){
-		echo starting mtgen and shell in current namespace
+		echo starting mntgen and shell in current namespace
+		home=/usr/$user
 		mntgen
 		rc -i
 	}
