@@ -13,4 +13,4 @@ if(~ $2 ''){
 
 resetargs=`{rx $source fossilize}
 rx $dest fosreset $resetargs
-
+rx $dest fossilize

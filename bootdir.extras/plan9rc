@@ -1,5 +1,5 @@
 #!/boot/rc
-# rootless environment startup script by mycroftiv
+# rootless environment startup and launcher script by mycroftiv
 
 fn getans{
 	echo '* '$1 is':' $2 - accept, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
@@ -156,10 +156,10 @@ fn dogetrootfs{
 					echo 'parsed fossil partition as ' $partition ' enter new value if this is incorrect'
 					partition=`{getans partition $partition}
 				}
-#				else if(! ~ $partition *fossil){
-#					echo $partition ' doesnt look like a fossil, trying /dev/sdC0/fossil as default'
-#					partition=/dev/sdC0/fossil
-#				}
+				else if(~ $partition ''){
+					echo 'no partition found, trying /dev/sdC0/fossil as default'
+					partition=/dev/sdC0/fossil
+				}
 				fossil=$partition
 			}
 			if(! ~ $venti ''){
@@ -182,10 +182,6 @@ fn dogetrootfs{
 				kfs=$partition
 			}
 			partition=`{findpart kfs}
-#			if(! ~ $partition *kfs){
-#				echo $partition ' doesnt look like , please enter partition'
-#				partition=`{getans partition $partition}
-#			}
 			kfs=$partition
 			echo starting kfs from $kfs...
 			kfs -f $kfs -n boot
@@ -304,7 +300,7 @@ if(~ $ramsetup '')
 if(~ $initscript '')
 	initscript=initskel
 #if(~ $tgzfs '')
-#	tgzfs=rootfs.tgz
+#	tgzfs=tools.tgz
 if(~ $namespace '')
 	namespace=namespace
 if(~ $factotum '')

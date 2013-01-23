@@ -39,11 +39,11 @@ if(~ $interactive yes){
 	hostfactotum =`{getans hostfactotum $hostfactotum}
 	if(~ $hostfactotum no)
 		privpassword=`{getans privpassword $privpassword}
-	echo 'issue ipconfig command?'
+	echo 'ipconfig if no internet is found?'
 	netsvc=`{getans netsvc $netsvc}
 	echo 'start cpu and rx listener ?'
 	cpusvc=`{getans cpusvc $cpusvc}
-	echo 'port for cpu listen?'
+	echo 'port for cpu listener if started?'
 	cpuport=`{getans cpuport $cpuport}
 	echo 'start persistent rc hub?'
 	hubsvc=`{getans hubsvc $hubsvc}
