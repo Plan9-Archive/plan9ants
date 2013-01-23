@@ -33,7 +33,7 @@ if(~ startventi yes){
 	echo 'vhttplisten= '$vhttplisten >>/tmp/p9rcconfig
 }
 echo 'fs=' $fs >>/tmp/p9rcconfig
-echo 'auth= ' $auth >>/tmp/p9rcconfig
+echo 'auth=' $auth >>/tmp/p9rcconfig
 echo 'venti=' $venti >>/tmp/p9rcconfig
 echo 'fossil=' $fossil >>/tmp/p9rcconfig
 echo 'cfs=' $cfs >>/tmp/p9rcconfig
@@ -49,9 +49,9 @@ echo 'tryusb=' $tryusb >>/tmp/p9rcconfig
 # for ramskel 
 echo 'tgzfs=' $tgzfs >>/tmp/p9rcconfig
 
-cat /tmp/p9rcconfig | sed '/.*=$/d' | sed 's/ //g' >/tmp/p9cfg
+cat /tmp/p9rcconfig | sed '/.*=$/d' | sed 's/= /=/g' >/tmp/p9cfg
 rm /tmp/p9rcconfig
 if(~ $initscript initskel){
-	cat /tmp/p9initcfg | sed '/.*=$/d' | sed 's/ //g' >>/tmp/p9cfg
+	cat /tmp/p9initcfg | sed '/.*=$/d' | sed 's/= /=/g' >>/tmp/p9cfg
 	rm /tmp/p9initcfg
 }

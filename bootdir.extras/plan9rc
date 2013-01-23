@@ -156,7 +156,7 @@ fn dogetrootfs{
 					echo 'parsed fossil partition as ' $partition ' enter new value if this is incorrect'
 					partition=`{getans partition $partition}
 				}
-				else if(~ $partition ''){
+				if not if(~ $partition ''){
 					echo 'no partition found, trying /dev/sdC0/fossil as default'
 					partition=/dev/sdC0/fossil
 				}
