@@ -383,7 +383,7 @@ if(~ $interactive yes){
 	staylocal = `{getans staylocal $staylocal}
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
-	if(~ $staylocal yes){
+	if(! ~ $staylocal no){
 		echo starting mntgen and shell in current namespace
 		home=/usr/$user
 		mntgen
@@ -406,7 +406,7 @@ if not {
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
-	if(~ $staylocal yes){
+	if(! ~ $staylocal no){
 		echo starting mntgen and shell in current namespace
 		home=/usr/$user
 		mntgen
