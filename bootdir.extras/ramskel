@@ -7,6 +7,9 @@ if (! ~ $hostdir ?*){
 	echo please set hostowner
 	exit ''
 }
+usercheck=`{cat /dev/user}
+if(~ $usercheck '')
+	echo danger no user set
 
 cd /
 echo -n 'ramfs -S ramboot...'
@@ -25,6 +28,16 @@ if(~ $tgzfs *.tgz){
 	echo -n tar xzf $tgzfs^...
 	tar xzf /x/$tgzfs
 }
-bind -c /usr/bootes/tmp /tmp
+if(! ~ $usercheck bootes){
+	echo 'copying bootes skeleton to '$usercheck
+	mkdir /root/usr/$usercheck
+	mkdir /root/usr/$usercheck/lib
+	mkdir /root/usr/$usercheck/tmp
+	mkdir /root/usr/$usercheck/bin
+	mkdir /root/usr/$usercheck/bin/rc
+	mkdir /root/usr/$usercheck/bin/386
+	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
+}
+bind -c /usr/$usercheck/tmp /tmp
 echo 'partial root built on ramfs'
 exit ''

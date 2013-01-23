@@ -336,7 +336,7 @@ if(~ $interactive yes){
 	sysname = `{getans sysname $sysname}
 	echo 'Skeleton fs required for mountpoints. Default ramskel recommended.'
 	ramsetup = `{getans ramsetup $ramsetup}
-	echo 'Load optional tools from 9fat? Enter rootfs.tgz small.tgz or no'
+	echo 'Load optional tools from 9fat? Enter tools.tgz or other if desired'
 	tgzfs = `{getans tgzfs $tgzfs}
 	doramsetup
 	hostcheck

@@ -61,15 +61,6 @@ if(! test -e /srv/slashn)
 if not
 	mntgen
 
-if(! ~ $usercheck bootes){
-	mkdir /root/usr/$usercheck
-	mkdir /root/usr/$usercheck/lib
-	mkdir /root/usr/$usercheck/tmp
-	mkdir /root/usr/$usercheck/bin
-	mkdir /root/usr/$usercheck/bin/rc
-	mkdir /root/usr/$usercheck/bin/386
-	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
-}
 if(~ $hostfactotum no){
 	factotum -s hostfactotum.$pid
 	echo private hostfactotum started

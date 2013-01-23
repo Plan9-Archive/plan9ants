@@ -23,15 +23,15 @@ if(~ $1 rootfs){
 	gzip -9 -c /tmp/rootfs.tar >rootfs.tgz
 	exit
 }
-if(~ $1 small){
+if(~ $1 tools){
 	rm root/bin/*
-	cp root/lib/_toolcopysmall root/bin
+	cp root/lib/_toolcopy root/bin
 	cd root/bin
-	. _toolcopysmall
+	. _toolcopy
 	cd $builddir
 	ramfs -m /tmp
-	tar cf /tmp/small.tar root
-	gzip -9 -c /tmp/small.tar >small.tgz
+	tar cf /tmp/tools.tar root
+	gzip -9 -c /tmp/tools.tar >tools.tgz
 	exit
 }
 cp scripts/* bootdir.extras/root/bin
