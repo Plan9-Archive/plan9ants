@@ -51,6 +51,8 @@ echo 'tryusb=' $tryusb >>/tmp/p9rcconfig
 echo 'tgzfs=' $tgzfs >>/tmp/p9rcconfig
 
 cat /tmp/p9rcconfig | sed '/.*=$/d' | sed 's/ //g' >/tmp/p9cfg
-cat /tmp/p9initcfg | sed '/.*=$/d' | sed 's/ //g' >>/tmp/p9cfg
 rm /tmp/p9rcconfig
-rm /tmp/p9initcfg
+if(~ $initscript initskel){
+	cat /tmp/p9initcfg | sed '/.*=$/d' | sed 's/ //g' >>/tmp/p9cfg
+	rm /tmp/p9initcfg
+}

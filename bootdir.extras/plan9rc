@@ -274,6 +274,11 @@ fn errorshell{
 	echo exiting rc >>/fd/2
 }
 
+fn shifter{
+	shift
+	echo $*
+}
+
 ############# End of fn definitions #################
 echo 'ROOTLESS PLAN 9 /boot/plan9rc'
 # Begin by parsing plan9.ini options and trying to set sane defaults
@@ -293,7 +298,7 @@ if(~ $bootparse(1) local*)
 if(~ $bootparse(1) tcp*)
 	getrootfs=tcp
 if(! ~ $bootparse(2) '')
-	ipparams=`{echo $bootparse |sed 's/'^$bootparse(1)^'//' |sed 's/  / /g'}
+	ipparams=`{shifter $bootparse}
 if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')
