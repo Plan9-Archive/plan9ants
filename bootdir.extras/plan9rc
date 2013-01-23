@@ -98,8 +98,8 @@ fn ipsetup{
 		echo ipconfig $ipparams
 		ipconfig $ipparams
 		ipconfig loopback /dev/null 127.1
-		ipdone=yes
 	}
+	ipdone=yes
 }
 
 fn doafterfact{
@@ -132,6 +132,10 @@ fn dogetrootfs{
 		if(! ~ $ipdone yes){
 			ipsetup
 		}
+		if(~ $fs '')
+			fs=`{getans fs $fs}
+		if(~ $auth '')
+			auth=$fs
 		if(~ $cfs ''){
 			echo srv $fs to /srv/boot...
 			if(~ $fs tcp*)
@@ -182,6 +186,10 @@ fn dogetrootfs{
 				kfs=$partition
 			}
 			partition=`{findpart kfs}
+			if(~ $partition ''){
+				echo 'no partition found trying /dev/sdC0/kfs as default'
+				partition=/dev/sdC0/kfs
+			}
 			kfs=$partition
 			echo starting kfs from $kfs...
 			kfs -f $kfs -n boot
@@ -249,7 +257,10 @@ fn dorootstart{
 	case cpu
 		echo mounting $bootsrv to /root and starting cpurc
 		mount $bootsrv /root
-		newns -n /root/lib/namespace /root/rc/bin/cpurc
+		if(test -e /root/rc/bin/cpurc)
+			newns -n /root/lib/namespace /root/rc/bin/cpurc
+		if not
+			echo ERROR no cpurc found
 	case terminal
 		echo mounting $bootsrv to /root and starting termrc
 		mount $bootsrv /root
@@ -257,8 +268,12 @@ fn dorootstart{
 			user=`{cat /dev/hostowner}
 		}
 		home=/usr/$user
-		newns -n /root/lib/namespace /root/rc/bin/termrc
-		newns -n /root/lib/namespace rc -c 'cd; . $home/lib/profile'
+		if(test -e /root/rc/bin/termrc){
+			newns -n /root/lib/namespace /root/rc/bin/termrc
+			newns -n /root/lib/namespace rc -c 'cd; . $home/lib/profile'
+		}
+		if not
+			echo ERROR no termrc found
 	case ''
 		echo not starting externally rooted startup scripts
 	}
