@@ -129,9 +129,6 @@ fn dostartventi{
 fn dogetrootfs{
 	switch($getrootfs){
 	case tcp
-		if(! ~ $bootargs tcp){
-			bootargs='tcp!'$fs'!564'
-		}
 		if(! ~ $ipdone yes){
 			ipsetup
 		}
@@ -295,6 +292,8 @@ if(~ $bootparse(1) local*)
 	getrootfs=local
 if(~ $bootparse(1) tcp*)
 	getrootfs=tcp
+if(! ~ $bootparse(2) '')
+	ipparams=`{echo $bootparse |sed 's/'^$bootparse(1)^'//' |sed 's/  / /g'}
 if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')

@@ -83,6 +83,7 @@ cp /bin/p .
 cp /bin/ps .
 cp /bin/pwd .
 #cp /bin/ramfs .
+cp /bin/reboot .
 #cp /bin/rerootwin .
 #cp /bin/rm .
 #cp /bin/rx .
