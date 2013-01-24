@@ -47,7 +47,7 @@ mount -b /srv/$authagent /mnt
 oldterm=oldterm.$pid
 oldwsys=oldwsys.$pid
 
-srvfs oldterm.$pid /mnt/term
-srvfs oldwsys.$pid /mnt/wsys
+srvfs -p 0600 oldterm.$pid /mnt/term
+srvfs -p 0600 oldwsys.$pid /mnt/wsys
 
 newns -n /boot/namespace.saveterm

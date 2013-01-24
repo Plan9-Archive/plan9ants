@@ -18,3 +18,5 @@ Two more variables are not prompted for and must be set in the environment (usua
 justipconfig=no activates cs and dns in addition to ipconfig
 
 staysane=no activates un-authenticated export of the root fs to the whole world
+
+ordinary=no starts an auth server if you have provided a keyfs file in 9fat and compiled in the auth and keyfs programs.

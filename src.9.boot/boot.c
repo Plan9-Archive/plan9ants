@@ -209,10 +209,10 @@ init(void)
 	settheenv("#e/objtype", cpu);
 	settheenv("#e/service", service);
 //	cpenv("/adm/timezone/local", "#e/timezone");
-	print("timezone not set...");
-	print("service: %s\n", service);
+//	print("timezone not set...");
+	print("service: %s...", service);
 
-	print("/boot/namespace...");
+//	print("/boot/namespace...");
 //	newns(user, "/boot/namespace");
 	bind("#d", "/fd", MREPL);
 	bind("#p", "/proc", MREPL);

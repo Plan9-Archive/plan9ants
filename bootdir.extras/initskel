@@ -1,19 +1,32 @@
 #!/boot/rc
 # ramroot startup after newns
 
+fn shifter{
+	shift
+	echo $*
+}
+
+fn errorshell{
+	echo subshell output on stderr >>/fd/2
+	rc -i >>/fd/2
+	echo exiting rc >>/fd/2
+}
+
 fn getans{
-	echo '* '$1 is':' $2 - default yes, ''''no'''' to refuse, or start '"'rc'"' : >>/fd/2
+	query=$1
+	value=`{shifter $*}
+	echo '* '$query is':' $value - accept, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
 	answer=`{read}
 	switch($answer){
 	case rc
 		errorshell
-		getans $1 $2
+		getans $query $value
 	case clear
 		echo ''
 	case ?*
 		echo $answer
 	case ''
-		echo $2
+		echo $value
 	}
 }
 

@@ -1,19 +1,32 @@
 #!/boot/rc
 # rootless environment startup and launcher script by mycroftiv
 
+fn shifter{
+	shift
+	echo $*
+}
+
+fn errorshell{
+	echo subshell output on stderr >>/fd/2
+	rc -i >>/fd/2
+	echo exiting rc >>/fd/2
+}
+
 fn getans{
-	echo '* '$1 is':' $2 - accept, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
+	query=$1
+	value=`{shifter $*}
+	echo '* '$query is':' $value - accept, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
 	answer=`{read}
 	switch($answer){
 	case rc
 		errorshell
-		getans $1 $2
+		getans $query $value
 	case clear
 		echo ''
 	case ?*
 		echo $answer
 	case ''
-		echo $2
+		echo $value
 	}
 }
 
@@ -53,24 +66,26 @@ fn doramsetup{
 		echo no ramsetup
 	case ?*
 		hostcheck
-		echo ramsetup $ramsetup
+		echo 'ramsetup '^$ramsetup^'...'
 		rc -c $ramsetup
 	}
 }
 
 fn dofactotum{
+	if(~ $interactive yes)
+		spc=()
 	switch($factotum){
 	case ''
 		echo no factotum
 	case cpu
-		echo cpu factotum
+		echo $spc cpu factotum...
 		factotum -S -s factotum
 	case terminal
-		echo terminal factotum
+		echo $spc terminal factotum...
 		factotum -u -s factotum
 	case debug
 		hostcheck
-		echo debug factotum
+		echo $spc debug factotum...
 		factotum -d -s factotum
 	}
 }
@@ -279,22 +294,11 @@ fn dorootstart{
 	}
 }
 
-fn errorshell{
-	echo subshell output on stderr >>/fd/2
-	rc -i >>/fd/2
-	echo exiting rc >>/fd/2
-}
-
-fn shifter{
-	shift
-	echo $*
-}
-
 ############# End of fn definitions #################
-echo 'ROOTLESS PLAN 9 /boot/plan9rc'
+echo 'ROOTLESS PLAN 9 NAMESPACE SYNTHESIZER'
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
-cat '#r/rtc' > '#c/time'
+#cat '#r/rtc' > '#c/time'
 
 if(! ~ $1 '')
 	. $1
