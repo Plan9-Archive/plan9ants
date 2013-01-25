@@ -12,5 +12,6 @@ if(~ $2 ''){
 }
 
 resetargs=`{rx $source fossilize}
+echo rx $dest fosreset $resetargs
 rx $dest fosreset $resetargs
 rx $dest fossilize
