@@ -92,15 +92,16 @@ fn dofactotum{
 
 # usb COMPLETELY UNTESTED just trying to imitate the new code in usb.c
 fn dotryusb{
-	if(~ $tryusb yes){
+	if(! ~ $tryusb no){
 		if (test -e /dev/usb/ctl) {
-			echo -n usb...
-			usbd /srv/usb
-			sleep 3
-			if(! ~ $sdB0part '')
-				partfscmd=`{echo '-p '$sdB0part}
-			partfs $partfscmd -s /srv/partfs.sdXX /dev/sdU0.0
-			chmod 666 /srv/partfs.sdXX
+#			usbd /srv/usb
+#			sleep 3
+			if(test -e /dev/sdU0.0){
+				if(! ~ $sdB0part '')
+					partfscmd=`{echo '-p '$sdB0part}
+				partfs $partfscmd -s partfs.sdXX /dev/sdU0.0
+				chmod 666 /srv/partfs.sdXX
+			}
 		}
 	}
 }

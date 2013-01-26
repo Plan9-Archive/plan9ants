@@ -50,8 +50,10 @@ if(~ $interactive yes){
 	binddevs=`{getans binddevs $binddevs}
 	echo 'use current factotum key for this environment?'
 	hostfactotum =`{getans hostfactotum $hostfactotum}
-	if(~ $hostfactotum no)
+	if(~ $hostfactotum no){
 		privpassword=`{getans privpassword $privpassword}
+		passdom=`{getans passdom $passdom}
+	}
 	echo 'ipconfig if no internet is found?'
 	netsvc=`{getans netsvc $netsvc}
 	echo 'start cpu and rx listener ?'
@@ -75,11 +77,12 @@ if not
 	mntgen
 
 if(~ $hostfactotum no){
-	factotum -s hostfactotum.$pid
+	@{rfork nm && factotum -s hostfactotum}
 	echo private hostfactotum started
+	mount -b /srv/hostfactotum /mnt
 	if(! ~ $privpassword ''){
 		echo 'setting '$keyowner' factotum key'
-		echo 'key proto=p9sk1 dom=noroot.com user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
+		echo 'key proto=p9sk1 dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
 		rm /env/privpassword
 	}
 }

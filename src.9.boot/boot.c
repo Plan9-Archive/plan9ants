@@ -93,6 +93,17 @@ boot(int argc, char *argv[])
 	print("kbmap...");
 	kbmap();
 
+	/*
+	 * read disk partition tables here so that readnvram via factotum
+	 * can see them.  ideally we would have this information in
+	 * environment variables before attaching #S, which would then
+	 * parse them and create partitions.
+	 */
+	rdparts = getenv("readparts");
+	if(rdparts)
+		readparts();
+	free(rdparts);
+
 	print("noroot bind / /...");
 	if(bind("/", "/", MREPL) < 0)
 		fatal("bind /");
