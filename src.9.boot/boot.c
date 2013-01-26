@@ -22,6 +22,7 @@ int	mflag;
 int	fflag;
 int	kflag;
 
+char *rdparts;
 char	*bargv[Nbarg];
 int	bargc;
 

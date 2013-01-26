@@ -97,9 +97,9 @@ fn dotryusb{
 #			usbd /srv/usb
 #			sleep 3
 			if(test -e /dev/sdU0.0){
-				if(! ~ $sdB0part '')
+				if(! ~ $sdB0part ''){
 					partfscmd=`{echo '-p '$sdB0part}
-				partfs $partfscmd -s partfs.sdXX /dev/sdU0.0
+					partfs -p $sdB0part -s partfs.sdXX /dev/sdU0.0
 				chmod 666 /srv/partfs.sdXX
 			}
 		}

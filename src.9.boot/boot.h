@@ -29,6 +29,7 @@ extern uchar	statbuf[Statsz];
 extern int	bargc;
 extern char	*bargv[Nbarg];
 extern int	pcload;
+extern int	readparts(void);
 
 /* libc equivalent */
 extern int	cache(int);
