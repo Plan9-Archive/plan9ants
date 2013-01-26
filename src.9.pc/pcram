@@ -126,7 +126,6 @@ boot cpu boot #S/sdC0/
 bootdir
 	bootpcram.out boot
 	/386/bin/ip/ipconfig
-	/386/bin/auth/factotum
 	/386/bin/ramfs
 	/386/bin/auth/newns
 	/386/bin/bind
@@ -144,6 +143,7 @@ bootdir
 	/386/bin/sed
 	/386/bin/rm
 	/n/rootless/bootdir.extras/rc
+	/n/rootless/bootdir.extras/factotum
 	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/plan9rc
 	/n/rootless/bootdir.extras/namespace

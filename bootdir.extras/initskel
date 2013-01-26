@@ -78,7 +78,7 @@ if not
 	mntgen
 
 if(~ $hostfactotum no){
-	@{rfork nm && factotum -a $auth -s hostfactotum}
+	factotum -x -a $auth -s hostfactotum
 	echo private hostfactotum started
 	mount -b /srv/hostfactotum /mnt
 	if(! ~ $privpassword ''){
