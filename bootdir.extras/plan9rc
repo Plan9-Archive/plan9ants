@@ -90,7 +90,6 @@ fn dofactotum{
 	}
 }
 
-# usb COMPLETELY UNTESTED just trying to imitate the new code in usb.c
 fn dotryusb{
 	if(! ~ $tryusb no){
 		if (test -e /dev/usb/ctl) {
@@ -98,9 +97,12 @@ fn dotryusb{
 #			sleep 3
 			if(test -e /dev/sdU0.0){
 				if(! ~ $sdB0part ''){
-					partfscmd=`{echo '-p '$sdB0part}
+					echo usb disk partfs -p $sdB0part -s partfs.sdXX /dev/sdU0.0
 					partfs -p $sdB0part -s partfs.sdXX /dev/sdU0.0
-				chmod 666 /srv/partfs.sdXX
+					chmod 666 /srv/partfs.sdXX
+				}
+				if not
+					echo /dev/sdU0.0 exists but no partition information found
 			}
 		}
 	}

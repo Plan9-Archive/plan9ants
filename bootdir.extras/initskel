@@ -53,6 +53,7 @@ if(~ $interactive yes){
 	if(~ $hostfactotum no){
 		privpassword=`{getans privpassword $privpassword}
 		passdom=`{getans passdom $passdom}
+		auth=`{getans auth $auth}
 	}
 	echo 'ipconfig if no internet is found?'
 	netsvc=`{getans netsvc $netsvc}
@@ -77,7 +78,7 @@ if not
 	mntgen
 
 if(~ $hostfactotum no){
-	@{rfork nm && factotum -s hostfactotum}
+	@{rfork nm && factotum -a $auth -s hostfactotum}
 	echo private hostfactotum started
 	mount -b /srv/hostfactotum /mnt
 	if(! ~ $privpassword ''){
