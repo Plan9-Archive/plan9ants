@@ -1,11 +1,15 @@
 The initskel script is the equivalent of a small cpurc file for the rootless environment. By default it binds additional devices, starts mtgen, issues ipconfig if hasn't been done earlier, and begins a cpu listener on a non-standard port and puts a persistent rc in a hubfs. The persistent rc can be used to 'tunnel down' to the rootless environment from a different namespace. 
 
+One nonstand option available during the initskel is the choice to run a 'private' factotum in the service namespace. This has several benefits, the most important being avoiding getting 'locked out' if the root fs of the enviornment 'above' goes away. Factotum normally tries to mount the connection server /srv/cs and this service will usually not be hosted within the rootless environment. As a result factotum will time out and not respond to authentication calls if this cs goes dead. The new -x option forces factotum to not ever mount a /srv/cs and rely on the authentication server supplied to it with the -a command line parameter.
+
 Most of the variables are configured to have a default behavior which is deactivated by setting =no in plan9.ini or answering no during interactive startup. Some of the defaults are passive, some are active - in other words, =no turns on some behaviors as described as follows:
 
 binddevs=no prevents the binding of the standard kernel devices ( f t m v L P u U '$' Σ κ )
-hostfactotum=no adds a new key to factotum set to "rootless" for dom "noroot.com"
+hostfactotum=no runs a private factotum -x with a specific auth server holding the key of your choice
 
 netsvc=no turns off ipconfig although it may have been activated earlier by plan9rc
+
+justipconfig=no activates cs and dns in addition to ipconfig
 
 cpusvc=no turns off the cpu listener
 
@@ -13,10 +17,9 @@ hubsvc=no turns off the hubfs.
 
 cpuport= sets the listening port. the default is 17020 so it is necessary to use a full dialstring to connect ( cpu -h tcp!address!17020)
 
-Two more variables are not prompted for and must be set in the environment (usually in plan9.ini)
+ordinary=no starts an auth server if you have provided a keyfs file in 9fat and compiled in the auth and keyfs programs.
 
-justipconfig=no activates cs and dns in addition to ipconfig
+One more dangerous variable is not prompted for and must be set in the environment (usually in plan9.ini)
 
 staysane=no activates un-authenticated export of the root fs to the whole world
 
-ordinary=no starts an auth server if you have provided a keyfs file in 9fat and compiled in the auth and keyfs programs.
