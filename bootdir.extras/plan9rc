@@ -412,7 +412,42 @@ if(~ $interactive yes){
 		rc -i
 	}
 }
-
+if not if(~ $traditional yes){
+	dofactotum
+	dotryusb
+	doramsetup
+	hostcheck
+	doafterfact
+	bootargs = `{getans 'root is from:' $bootargs}
+	if(~ $bootargs(1) local*)
+		getrootfs=local
+	if(~ $bootargs(1) tcp*)
+		getrootfs=tcp
+	if(! ~ $bootargs(2) '')
+		ipparams=`{shifter $bootargs}
+	if(~ $getrootfs tc*){
+		fs = `{getans fs $fs}
+		auth = `{getans auth $auth}
+	}
+	bootparse=$bootargs
+	dostartventi
+	interactive=yes
+	dogetrootfs
+	interactive=()
+	doafterroot
+	doinitscript
+	dochecksys
+	dorootstart
+	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
+	save9cfg
+	if(! ~ $staylocal no){
+		echo starting mntgen and shell in current namespace
+		home=/usr/$user
+		mntgen
+		rc -i
+	}
+}
 if not {
 	dofactotum
 	dotryusb

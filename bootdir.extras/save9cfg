@@ -44,7 +44,8 @@ echo 'rootstart=' $rootstart >>/tmp/p9rcconfig
 echo 'staylocal=' $staylocal >>/tmp/p9rcconfig
 echo 'afterfact=' $afterfact >>/tmp/p9rcconfig
 echo 'afterroot=' $afterroot >>/tmp/p9rcconfig
-echo 'tryusb=' $tryusb >>/tmp/p9rcconfig 
+echo 'tryusb=' $tryusb >>/tmp/p9rcconfig
+echo 'traditional=' $traditional >>/tmp/p9rcconfig
 
 # for ramskel 
 echo 'tgzfs=' $tgzfs >>/tmp/p9rcconfig
