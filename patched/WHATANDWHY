@@ -1,0 +1,9 @@
+These are very slightly patched files to help the tools interoperate with the 'rootless' environment. 
+
+the rc simply sets the location of the rcmain initialization file to /boot/rcmain rather than /rc/lib/rcmain.
+
+the factotum adds the -x option, which refuses to mount cs on /net. This is to prevent the loss of the root filesystem from blocking the ability of factotum to auth by causing cs to time out while trying to read from a dead filedescriptor. The -x option should be used in combination with the -a option to speficy a chosen auth server for access to the service namespace.
+
+wranenadb.c modifies wrarena to fix the handling of clump offsets in plan9port. I haven't tested in default plan 9 to see if the bug is the same. In fixing the clump offset handling however I might have broken the arena-offsets, because the origin of the bug seemed to lie in a confusion between those variables in the code. Figuring out what is going on here in detail and checking the behavior of this tool in standard plan 9 is a to-do.
+
+retired mods were things that seemed necessary or a good idea previously, but I am no longer using.
