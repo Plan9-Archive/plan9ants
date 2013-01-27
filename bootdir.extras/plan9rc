@@ -195,22 +195,23 @@ fn dogetrootfs{
 			bootsrv=/srv/boot
 		}
 		if not{
+			partition=`{findpart fs}
 			if(! ~ $kfs ?*){
-				partition=`{findpart kfs}
 				if(~ $interactive yes){
 					echo 'parsed kfs partition as ' $partition ' enter new value if this is incorrect'
 					partition=`{getans partition $partition}
 				}
 				kfs=$partition
 			}
-			partition=`{findpart kfs}
 			if(~ $partition ''){
 				echo 'no partition found trying /dev/sdC0/kfs as default'
 				partition=/dev/sdC0/kfs
 			}
 			kfs=$partition
-			echo starting kfs from $kfs...
-			kfs -f $kfs -n boot
+			if(! ~ $bootparse(2) '')
+				kfsparams=`{shifter $bootparse}
+			echo kfs -f $kfs -n boot $kfsparams
+			kfs -f $kfs -n boot $kfsparams
 			bootsrv=/srv/kfs.boot
 		}
 	case ''
@@ -298,7 +299,7 @@ fn dorootstart{
 }
 
 ############# End of fn definitions #################
-echo 'ROOTLESS PLAN 9 NAMESPACE SYNTHESIZER'
+echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
 # Begin by parsing plan9.ini options and trying to set sane defaults
 
 #cat '#r/rtc' > '#c/time'
@@ -313,10 +314,11 @@ if(~ $bootargs ''){
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*)
 	getrootfs=local
-if(~ $bootparse(1) tcp*)
+if(~ $bootparse(1) tcp*){
 	getrootfs=tcp
-if(! ~ $bootparse(2) '')
-	ipparams=`{shifter $bootparse}
+	if(! ~ $bootparse(2) '')
+		ipparams=`{shifter $bootparse}
+}
 if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')
@@ -429,7 +431,6 @@ if not if(~ $traditional yes){
 		fs = `{getans fs $fs}
 		auth = `{getans auth $auth}
 	}
-	bootargs=$bootparse
 	dostartventi
 	interactive=yes
 	dogetrootfs

@@ -19,10 +19,24 @@ if(~ $1 init){
 
 # all of these are for plan9rc
 
-# next line is to fix a very peculiar bug where only the bootargs env variable is corrupted within subshells in traditional mode
-bootargs=`{cat /env/bootargs}
+# reconstruct a bootargs if the user has entered that data interactively
+if(~ $interactive yes){
+	if(~ $getrootfs tcp){
+		bootinfo=`{echo $getrootfs $ipparams}
+	}
+	if not{
+		bootinfo=`{echo local!^$partition}
+		if(~ $partition *fs){
+			bootinfo=`{echo $bootinfo $kfsparams}
+		}
+	}
+}
+if not{
+	bootinfo=$bootparse
+}
+
 echo 'bootfile=' $bootfile >/tmp/p9rcconfig
-echo 'bootargs=' $bootargs >>/tmp/p9rcconfig
+echo 'bootargs=' $bootinfo >>/tmp/p9rcconfig
 echo 'service=' $service >>/tmp/p9rcconfig
 echo 'factotum=' $factotum >>/tmp/p9rcconfig
 echo 'sysname=' $sysname >>/tmp/p9rcconfig
