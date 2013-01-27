@@ -418,18 +418,18 @@ if not if(~ $traditional yes){
 	doramsetup
 	hostcheck
 	doafterfact
-	bootargs = `{getans 'root is from:' $bootargs}
-	if(~ $bootargs(1) local*)
+	bootparse = `{getans 'root is from:' $bootargs}
+	if(~ $bootparse(1) local*)
 		getrootfs=local
-	if(~ $bootargs(1) tcp*)
+	if(~ $bootparse(1) tcp*)
 		getrootfs=tcp
-	if(! ~ $bootargs(2) '')
-		ipparams=`{shifter $bootargs}
-	if(~ $getrootfs tc*){
+	if(! ~ $bootparse(2) '')
+		ipparams=`{shifter $bootparse}
+	if(~ $getrootfs tcp){
 		fs = `{getans fs $fs}
 		auth = `{getans auth $auth}
 	}
-	bootparse=$bootargs
+	bootargs=$bootparse
 	dostartventi
 	interactive=yes
 	dogetrootfs

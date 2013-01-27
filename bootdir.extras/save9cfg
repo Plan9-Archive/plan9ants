@@ -19,7 +19,8 @@ if(~ $1 init){
 
 # all of these are for plan9rc
 
-#set in plan9.ini and not interactively
+# next line is to fix a very peculiar bug where only the bootargs env variable is corrupted within subshells in traditional mode
+bootargs=`{cat /env/bootargs}
 echo 'bootfile=' $bootfile >/tmp/p9rcconfig
 echo 'bootargs=' $bootargs >>/tmp/p9rcconfig
 echo 'service=' $service >>/tmp/p9rcconfig
