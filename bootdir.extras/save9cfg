@@ -64,6 +64,7 @@ echo 'traditional=' $traditional >>/tmp/p9rcconfig
 
 # for ramskel 
 echo 'tgzfs=' $tgzfs >>/tmp/p9rcconfig
+echo 'fatpath=' $fatpath >>/tmp/p9rcconfig
 
 cat /tmp/p9rcconfig | sed '/.*=$/d' | sed 's/= /=/g' >/tmp/p9cfg
 rm /tmp/p9rcconfig

@@ -32,7 +32,12 @@ fn getans{
 
 fn findpart{
 	if((test -e /boot/sed) || (test -e /bin/sed)){
-		echo $bootparse(1) |sed 's/.*#./\/dev/'
+		if(~ $bootparse(1) *dev){
+			echo $bootparase(1) |sed 's/^local!//'
+		}
+		if not{
+			echo $bootparse(1) |sed 's/^local!#./\/dev/'
+		}
 	}
 	if not {
 		if(~ $bootparse(1) *sdC0/$1)
@@ -43,6 +48,8 @@ fn findpart{
 			echo /dev/sdD0/$1
 		if(~ $bootparse(1) *sdD1/$1)
 			echo /dev/sdD1/$1
+		if(~ $bootparse(1) *sdXX/$1)
+			echo /dev/sdXX/$1
 	}
 }
 

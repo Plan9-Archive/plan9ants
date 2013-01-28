@@ -24,7 +24,9 @@ mount -b /srv/factotum /mnt
 bind -ac /root/bin /bin
 if(~ $tgzfs *.tgz){
 	dossrv
-	mount /srv/dos /x /dev/sdC0/9fat
+	if(~ $fatpath '')
+		fatpath=/dev/sdC0/9fat
+	mount /srv/dos /x $fatpath
 	if(test -e /x/$tgzfs){
 		echo -n tar xzf $tgzfs^...
 		tar xzf /x/$tgzfs
