@@ -1,4 +1,4 @@
-deal with lib/ndb head on. probably write configurator script? or just document - not sure even what i was thinking about ndb, but cs and dns is definitely an issue, they can lock the access to the service namespace because factotum will talk to them automatically and if they are on a fs that is dead, game over.
+continue debugging and testing wrarena backup data flow. -n option added to p9p version
 test cpns under load and stress of weird stuff thrown at it - probably deferred, too much other stuff
 make rerootwin robust and sane - improved now, net.alt is still probably wrong! added sanity options for placement
 improve namespace acquisition tools like addwrroot - more consistent and tested now! seemingly robust
@@ -11,3 +11,4 @@ investigate compatibility with 9front - in progress
 !write configurator/installer for different system roles - replaced with saving interactive config
 !upload to sources - done with hg!
 !comprehensive set of plan9.ini examples  - done
+deal with lib/ndb head on. probably write configurator script? or just document - not sure even what i was thinking about ndb, but cs and dns is definitely an issue, they can lock the access to the service namespace because factotum will talk to them automatically and if they are on a fs that is dead, game over.! SOLVED with factotum -x
