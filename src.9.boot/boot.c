@@ -28,7 +28,6 @@ int	bargc;
 
 void boot(int argc, char *argv[]);
 static void	swapproc(void);
-//static func(void)void	usbinit(void);
 static void	kbmap(void);
 
 /* vars and functions from standard init.c */
@@ -220,12 +219,15 @@ init(void)
 		manual = 1;
 	settheenv("#e/objtype", cpu);
 	settheenv("#e/service", service);
-//	cpenv("/adm/timezone/local", "#e/timezone");
-//	print("timezone not set...");
 	print("service: %s...", service);
 
-//	print("/boot/namespace...");
-//	newns(user, "/boot/namespace");
+/* should probably remove this unused chunk of stuff
+	cpenv("/adm/timezone/local", "#e/timezone");
+	print("timezone not set...");
+	print("/boot/namespace...");
+	newns(user, "/boot/namespace");
+*/
+
 	bind("#d", "/fd", MREPL);
 	bind("#p", "/proc", MREPL);
 	bind("#¤", "/dev", MAFTER);
@@ -238,7 +240,6 @@ init(void)
 		print("plan9rc...\n");
 		fexec(plan9start);
 	}
-
 	for(;;){
 		print("\ninit: starting rc\n");
 		fexec(rcexec);

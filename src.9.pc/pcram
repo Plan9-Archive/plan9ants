@@ -179,5 +179,5 @@ bootdir
 	/386/bin/auth/as
 #	/386/bin/auth/authsrv
 #	/386/bin/auth/keyfs
-	/386/bin/ndb/cs
-	/386/bin/ndb/dns
+#	/386/bin/ndb/cs
+#	/386/bin/ndb/dns
