@@ -193,26 +193,19 @@ fn dogetrootfs{
 			fossil -f $fossil -c 'srv -p fscons'
 			echo 'srv -A boot' >>/srv/fscons
 			bootsrv=/srv/boot
+			partition=$fossil
 		}
 		if not{
-			partition=`{findpart fs}
-			if(! ~ $kfs ?*){
-				if(~ $interactive yes){
-					echo 'parsed kfs partition as ' $partition ' enter new value if this is incorrect'
-					partition=`{getans partition $partition}
-				}
-				kfs=$partition
+			if(~ $interactive yes){
+				echo 'kfs parsed as ' $kfs ' enter new value if this is incorrect'
+				kfs=`{getans kfs $kfs}
 			}
-			if(~ $partition ''){
-				echo 'no partition found trying /dev/sdC0/kfs as default'
-				partition=/dev/sdC0/kfs
-			}
-			kfs=$partition
 			if(! ~ $bootparse(2) '')
 				kfsparams=`{shifter $bootparse}
 			echo kfs -f $kfs -n boot $kfsparams
 			kfs -f $kfs -n boot $kfsparams
 			bootsrv=/srv/kfs.boot
+			partition=$kfs
 		}
 	case ''
 		echo no standard root fs attached
@@ -318,6 +311,11 @@ if(~ $bootparse(1) tcp*){
 	getrootfs=tcp
 	if(! ~ $bootparse(2) '')
 		ipparams=`{shifter $bootparse}
+}
+if(~ $bootparse(1) *fs){
+	if(~ $kfs ''){
+		kfs=`{findpart fs}
+	}
 }
 if(~ $ramsetup '')
 	ramsetup=ramskel
