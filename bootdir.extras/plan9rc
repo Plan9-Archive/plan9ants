@@ -102,7 +102,7 @@ fn dotryusb{
 					chmod 666 /srv/partfs.sdXX
 				}
 				if not
-					echo /dev/sdU0.0 exists but no partition information found
+					echo /dev/sdU0.0 exists but no bootpartition information found
 			}
 		}
 	}
@@ -173,16 +173,16 @@ fn dogetrootfs{
 	case local
 		if(~ $kfs ''){
 			if(! ~ $fossil ?*){
-				partition=`{findpart fossil}
+				bootpartition=`{findpart fossil}
 				if(~ $interactive yes){
-					echo 'parsed fossil partition as ' $partition ' enter new value if this is incorrect'
-					partition=`{getans partition $partition}
+					echo 'parsed fossil bootpartition as ' $bootpartition ' enter new value if this is incorrect'
+					bootpartition=`{getans bootpartition $bootpartition}
 				}
-				if not if(~ $partition ''){
-					echo 'no partition found, trying /dev/sdC0/fossil as default'
-					partition=/dev/sdC0/fossil
+				if not if(~ $bootpartition ''){
+					echo 'no bootpartition found, trying /dev/sdC0/fossil as default'
+					bootpartition=/dev/sdC0/fossil
 				}
-				fossil=$partition
+				fossil=$bootpartition
 			}
 			if(! ~ $venti ''){
 				if(! ~ $ipdone yes){
@@ -193,7 +193,7 @@ fn dogetrootfs{
 			fossil -f $fossil -c 'srv -p fscons'
 			echo 'srv -A boot' >>/srv/fscons
 			bootsrv=/srv/boot
-			partition=$fossil
+			bootpartition=$fossil
 		}
 		if not{
 			if(~ $interactive yes){
@@ -205,7 +205,7 @@ fn dogetrootfs{
 			echo kfs -f $kfs -n boot $kfsparams
 			kfs -f $kfs -n boot $kfsparams
 			bootsrv=/srv/kfs.boot
-			partition=$kfs
+			bootpartition=$kfs
 		}
 	case ''
 		echo no standard root fs attached

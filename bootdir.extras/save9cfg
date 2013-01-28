@@ -25,8 +25,8 @@ if(~ $interactive yes){
 		bootinfo=`{echo $getrootfs $ipparams}
 	}
 	if not{
-		bootinfo=`{echo local!^$partition}
-		if(~ $partition *fs){
+		bootinfo=`{echo local!^$bootpartition}
+		if(~ $bootpartition *fs){
 			bootinfo=`{echo $bootinfo $kfsparams}
 		}
 	}

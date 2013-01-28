@@ -9,18 +9,21 @@ bind -b $builddir/scripts /bin
 bind $builddir /n/rootless
 bind -bc $builddir/compiletemp /sys/src/9/pc
 if(~ $1 everything){
+	echo building everything
 	build clean
 	build patched
 	build tools
 	build
 }
 if(~ $1 clean){
+	echo building mk clean
 	cd /sys/src/9/pc
 	mk clean
 	cd $builddir
 	exit
 }
 if(~ $1 patched){
+	echo building patched
 	ramfs
 	mkdir /tmp/rc
 	mkdir /tmp/factotum
@@ -42,6 +45,7 @@ if(~ $1 patched){
 	exit
 }	
 if(~ $1 rootfs){
+	echo building rootfs
 	rm root/bin/*
 	cp root/lib/_toolcopyscript root/bin
 	cd root/bin
@@ -54,6 +58,7 @@ if(~ $1 rootfs){
 	exit
 }
 if(~ $1 tools){
+	echo building tools
 	rm root/bin/*
 	cp root/lib/_toolcopy root/bin
 	cd root/bin
@@ -66,10 +71,12 @@ if(~ $1 tools){
 	cd $builddir
 	exit
 }
+echo building kernel
 cp scripts/* bootdir.extras/root/bin
 cd bootdir.extras
 tar cf skel.tar root
 if(~ $1 ramfs){
+	echo building kernel in tmp
 	ramfs -m /tmp
 	bind -bc /tmp /sys/src/9/pc
 }
