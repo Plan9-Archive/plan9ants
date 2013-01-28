@@ -76,3 +76,4 @@ if(~ $1 ramfs){
 cd /sys/src/9/pc
 mk 'CONF=pcram'
 gzip -9 -c 9pcram > $builddir/compiletemp/9pcram.gz
+exit ''

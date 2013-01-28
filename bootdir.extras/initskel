@@ -53,10 +53,10 @@ if(~ $interactive yes){
 	echo 'rely on main factotum for this environment?'
 	hostfactotum =`{getans hostfactotum $hostfactotum}
 	if(~ $hostfactotum no){
-		privauth=$auth
+		authip=$auth
 		privpassword=`{getans privpassword $privpassword}
 		passdom=`{getans passdom $passdom}
-		privauth=`{getans privauth $privauth}
+		authip=`{getans authip $authip}
 	}
 	if(! test -e /net/ipifc/0/ctl){
 		echo 'no internet found, issue ipconfig?'
@@ -98,7 +98,7 @@ if not
 	mntgen
 
 if(~ $hostfactotum no){
-	factotum -x -a $privauth -s hostfactotum
+	factotum -x -a $authip -s hostfactotum
 	echo private hostfactotum started
 	mount -b /srv/hostfactotum /mnt
 	if(! ~ $privpassword ''){
@@ -107,7 +107,7 @@ if(~ $hostfactotum no){
 		rm /env/privpassword
 		rm /env/passdom
 		rm /env/keyowner
-		rm /env/privauth
+		rm /env/authip
 	}
 }
 if(! ~ $netsvc no){

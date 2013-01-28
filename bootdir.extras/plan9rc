@@ -418,7 +418,14 @@ if not if(~ $traditional yes){
 	doramsetup
 	hostcheck
 	doafterfact
-	bootparse = `{getans 'root is from:' $bootargs}
+	echo -n 'root is from (tcp,local)['$bootargs']: '
+	bootanswer=`{read}
+	if(! ~ $bootanswer ''){
+		bootparse=`{echo $bootanswer}
+	}
+	if not
+		bootparse=`{echo $bootargs}
+#	bootparse = `{getans bootargs $bootargs}
 	if(~ $bootparse(1) local*)
 		getrootfs=local
 	if(~ $bootparse(1) tcp*)
