@@ -75,7 +75,7 @@ rdarena(Arena *arena, u64int offset)
 	e = arena->base + arena->size;
 	if(offset != ~(u64int)0) {
 //		if(offset >= e - a)
-		fprint(2, "warning offset %#llx compared to %#llx\n", offset, e - a);
+		fprint(2, "warning offset %#llx >= %#llx\n", offset, e - a);
 		aa = offset;
 	} else
 		aa = 0;
@@ -132,7 +132,6 @@ void
 threadmain(int argc, char *argv[])
 {
 	int i;
-	int arnum;
 	char *file;
 	Arena *arena;
 	ArenaPart *ap;
@@ -144,11 +143,7 @@ threadmain(int argc, char *argv[])
 
 	qlock(&godot);
 	aoffset = 0;
-	arnum = 0;
 	ARGBEGIN{
-	case 'n':
-		arnum = atoi(EARGF(usage()));
-		break;
 	case 'f':
 		fast = 1;
 		ventidoublechecksha1 = 0;
@@ -231,8 +226,8 @@ loaded:
 	initdcache(8 * MaxDiskBlock);
 
 	if(ap != nil) {
-//		for(i=0; i<ap->narenas; i++)
-		rdarena(ap->arenas[arnum], offset);
+		for(i=0; i<ap->narenas; i++)
+			rdarena(ap->arenas[i], offset);
 	} else
 		rdarena(arena, offset);
 
