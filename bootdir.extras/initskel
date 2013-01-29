@@ -93,6 +93,7 @@ if not
 
 if(~ $hostfactotum no){
 	authip=$auth
+	echo getting private factotum info
 	privpassword=`{getans privpassword $privpassword}
 	passdom=`{getans passdom $passdom}
 	authip=`{getans authip $authip}
@@ -129,8 +130,6 @@ if(! ~ $cpusvc no){
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
 	listen1 -t tcp!*!17009 /boot/rexexec &
 }
-
-
 if(~ $ordinary no){
 	if(! test -e /x/adm/keys){
 		echo -n das doskeys...
@@ -147,10 +146,6 @@ if(~ $ordinary no){
 	listen1 -tv tcp!*!567 authsrv -d &
 }
 
-if(~ $staysane no){
-	echo 'exporting writable root to the whole internet on port 17007!!!'
-	listen1 -t tcp!*!17007 /boot/exportfs &
-}
 if(~ $font ''){
 	font=/lib/font/bit/lucm/latin1.9.font
 }

@@ -20,6 +20,3 @@ cpuport= sets the listening port. the default is 17020 so it is necessary to use
 ordinary=no starts an auth server if you have provided a keyfs file in 9fat and compiled in the auth and keyfs programs.
 
 One more dangerous variable is not prompted for and must be set in the environment (usually in plan9.ini)
-
-staysane=no activates un-authenticated export of the root fs to the whole world
-

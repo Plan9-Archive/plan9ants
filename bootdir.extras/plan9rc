@@ -86,14 +86,14 @@ fn dofactotum{
 		echo no factotum
 	case cpu
 		echo $spc cpu factotum...
-		factotum -S -s factotum
+		factotum $factotumopts -S -s factotum
 	case terminal
 		echo $spc terminal factotum...
-		factotum -u -s factotum
+		factotum $factotumopts -u -s factotum
 	case debug
 		hostcheck
 		echo $spc debug factotum...
-		factotum -d -s factotum
+		factotum $factotumopts -d -s factotum
 	}
 }
 
@@ -348,7 +348,8 @@ if(~ $ventilisten '')
 	ventilisten=tcp!*!17034
 if(~ $vhttplisten '')
 	vhttplisten=tcp!127.1!8000
-
+if(~ $interactive '')
+	interactive=traditional
 
 if(~ $interactive yes){
 	echo Interactive Startup - enter to continue to options or type rc for a shell
@@ -419,7 +420,7 @@ if(~ $interactive yes){
 		rc -i
 	}
 }
-if not if(~ $traditional yes){
+if not if(~ $interactive traditional){
 	dofactotum
 	dotryusb
 	doramsetup
@@ -427,12 +428,15 @@ if not if(~ $traditional yes){
 	doafterfact
 	echo -n 'root is from (tcp,local)['$bootargs']: '
 	bootanswer=`{read}
-	if(! ~ $bootanswer ''){
+	if(~ $bootanswer rc){
+		errorshell
+	}
+	if not if(! ~ $bootanswer ''){
 		bootparse=`{echo $bootanswer}
 	}
-	if not
+	if not{
 		bootparse=`{echo $bootargs}
-#	bootparse = `{getans bootargs $bootargs}
+	}
 	if(~ $bootparse(1) local*)
 		getrootfs=local
 	if(~ $bootparse(1) tcp*)
@@ -446,7 +450,7 @@ if not if(~ $traditional yes){
 	dostartventi
 	interactive=yes
 	dogetrootfs
-	interactive=()
+	interactive=traditional
 	doafterroot
 	doinitscript
 	dochecksys
