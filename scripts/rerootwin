@@ -17,13 +17,23 @@ if(! ~ $1 ?*){
 	echo need a target srv
 	exit
 }
-if(! test -e /mnt/term/dev/cons){
-	echo no cons at mnt term
-	exit
-}
 if(! test -e /mnt/wsys/wctl){
-	echo no wctl at mnt wsys
-	exit
+	if(! test -e /mnt/term/mnt/wsys/wctl){
+		echo no wctl at mnt wsys
+		exit
+	}
+	echo binding /mnt/term/mnt/wsys to /mnt/wsys
+	bind /mnt/term/mnt/wsys /mnt/wsys
+}
+if(! test -e /mnt/term/dev/cons){
+	if(! test -e /mnt/wsys/cons){
+		echo no cons at mnt term
+		exit
+	}
+	if(! test -e /mnt/term/dev)
+		mkdir /mnt/term/dev
+	echo binding /mnt/wsys /mnt/term/dev
+	bind /mnt/wsys /mnt/term/dev
 }
 if(! test -e /srv/$1){
 	srv tcp!$1!564 $1
