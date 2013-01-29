@@ -1948,7 +1948,7 @@ procnsreq(Proc *p, char *va, int n)
 		}
 		new = nil;
 		old = cbf->f[1];
-		if(strcmp(old, "#|/data")==0){
+		if(strncmp(old, "#|", 2)==0){
 //			print("undefined namespace operation\n");
 			error(Ebadsharp);
 			poperror();
@@ -1984,14 +1984,14 @@ procnsreq(Proc *p, char *va, int n)
 			spec=cbf->f[countnf];
 		}
 	}
-	if(strcmp(new, "#|/data")==0){
+	if(strncmp(new, "#|", 2)==0){
 //		print("undefined namespace operation\n");
 		error(Ebadsharp);
 		poperror();
 		free(cbf);
 		return;
 	}
-	if(strcmp(old, "#|/data")==0){
+	if(strncmp(old, "#|", 2)==0){
 //		print("undefined namespace operation\n");
 		error(Ebadsharp);
 		poperror();

@@ -9,7 +9,7 @@ if(~ $1 init){
 	echo 'hubsvc=' $hubsvc >>/tmp/p9initcfg
 	if(! ~ $cpuport 17020)
 		echo 'cpuport=' $cpuport >>/tmp/p9initcfg
-	echo 'unprivileged' $unprivileged >>/tmp/p9initcfg
+	echo 'unprivileged=' $unprivileged >>/tmp/p9initcfg
 	echo 'hostcsdns=' $hostcsdns >>/tmp/p9initcfg
 	exit ''
 }
