@@ -7,9 +7,10 @@ if(~ $1 init){
 	echo 'netsvc=' $netsvc >>/tmp/p9initcfg
 	echo 'cpusvc=' $cpusvc >>/tmp/p9initcfg
 	echo 'hubsvc=' $hubsvc >>/tmp/p9initcfg
-	echo 'cpuport=' $cpuport >>/tmp/p9initcfg
-	echo 'ordinary=' $ordinary >>/tmp/p9initcfg
-	echo 'justipconfig=' $justipconfig >>/tmp/p9initcfg
+	if(! ~ $cpuport 17020)
+		echo 'cpuport=' $cpuport >>/tmp/p9initcfg
+	echo 'unprivileged' $unprivileged >>/tmp/p9initcfg
+	echo 'hostcsdns=' $hostcsdns >>/tmp/p9initcfg
 	exit ''
 }
 
@@ -60,7 +61,8 @@ echo 'afterroot=' $afterroot >>/tmp/p9rcconfig
 echo 'tryusb=' $tryusb >>/tmp/p9rcconfig
 # for ramskel 
 echo 'tgzfs=' $tgzfs >>/tmp/p9rcconfig
-echo 'fatpath=' $fatpath >>/tmp/p9rcconfig
+if(! ~ $fatpath /dev/sdC0/9fat)
+	echo 'fatpath=' $fatpath >>/tmp/p9rcconfig
 # put last so user will notice it and think about what they want
 echo 'interactive=' $interactive >>/tmp/p9rcconfig
 

@@ -9,7 +9,7 @@ hostfactotum=no runs a private factotum -x with a specific auth server holding t
 
 netsvc=no turns off ipconfig although it may have been activated earlier by plan9rc
 
-justipconfig=no activates cs and dns in addition to ipconfig
+hostcsdns=no activates cs and dns in addition to ipconfig
 
 cpusvc=no turns off the cpu listener
 
@@ -17,6 +17,6 @@ hubsvc=no turns off the hubfs.
 
 cpuport= sets the listening port. the default is 17020 so it is necessary to use a full dialstring to connect ( cpu -h tcp!address!17020)
 
-ordinary=no starts an auth server if you have provided a keyfs file in 9fat and compiled in the auth and keyfs programs.
+unprivileged=no starts an auth server if you have provided a keyfs file in 9fat and compiled in the auth and keyfs programs.
 
 One more dangerous variable is not prompted for and must be set in the environment (usually in plan9.ini)

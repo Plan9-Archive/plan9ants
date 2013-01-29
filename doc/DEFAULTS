@@ -44,12 +44,12 @@ hostfactotum defaults to relying on the main system factotum
 netsvc defaults to starting ipconfig if it has not been previously done
 =no turns off
 
-justipconfig defaults to relying on the cs and dns started elsewhere
+hostcsdns defaults to relying on the cs and dns started elsewhere
 =no starts cs and dns locally
 
 hubsvc defaults to starting a /srv/hubfs to provide persistent rc in the independent namespace
 =no turns off
 
-ordinary defaults to leaving this environment as a standard unprileged node
+unprivileged defaults to leaving this environment as a standard unprileged node
 =no starts authsrv and keyfs and copies a keyfile from /adm/keys in the 9fat
 

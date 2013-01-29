@@ -70,11 +70,11 @@ if(~ $interactive yes){
 	}
 	if((test -e /bin/cs) || (test -e /boot/cs)){
 		echo 'rely on hosted systems for cs and dns?'
-		justipconfig=`{getans justipconfig $justipconfig}
+		hostcsdns=`{getans hostcsdns $hostcsdns}
 	}
 	if((test -e /bin/authsrv) || (test -e /boot/authsrv)){
 		echo 'operate as an unprivileged system?'
-		ordinary=`{getans ordinary $ordinary}
+		unprivileged=`{getans unprivileged $unprivileged}
 	}
 }
 
@@ -116,7 +116,7 @@ if(! ~ $netsvc no){
 		ipconfig loopback /dev/null 127.1
 	}
 }
-if(~ $justipconfig no){
+if(~ $hostcsdns no){
 	echo -n 'cs and dns -r...'
 	cs
 	dns -r
@@ -130,7 +130,7 @@ if(! ~ $cpusvc no){
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
 	listen1 -t tcp!*!17009 /boot/rexexec &
 }
-if(~ $ordinary no){
+if(~ $unprivileged no){
 	if(! test -e /x/adm/keys){
 		echo -n das doskeys...
 		if(! test -e /srv/dos)
