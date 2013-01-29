@@ -104,7 +104,7 @@ boot(int argc, char *argv[])
 		readparts();
 	free(rdparts);
 
-	print("noroot bind / /...");
+	print("bind / /...");
 	if(bind("/", "/", MREPL) < 0)
 		fatal("bind /");
 	setenv("rootdir", "/root");

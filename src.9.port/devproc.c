@@ -598,8 +598,8 @@ procopen(Chan *c, int omode)
 		break;
 
 	case Qns:
-//		if(omode != OREAD)
-//			error(Eperm);
+		if((omode != OREAD) && (p->privatemem))
+			error(Eperm);
 		c->aux = malloc(sizeof(Mntwalk));
 		break;
 

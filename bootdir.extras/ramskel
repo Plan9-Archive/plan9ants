@@ -45,5 +45,5 @@ if(! ~ $usercheck bootes){
 	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
 }
 bind -c /usr/$usercheck/tmp /tmp
-echo 'partial root built on ramfs'
+echo 'partial root built'
 exit ''
