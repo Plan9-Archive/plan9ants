@@ -221,13 +221,7 @@ init(void)
 	settheenv("#e/service", service);
 	print("service: %s...", service);
 
-/* should probably remove this unused chunk of stuff
-	cpenv("/adm/timezone/local", "#e/timezone");
-	print("timezone not set...");
-	print("/boot/namespace...");
-	newns(user, "/boot/namespace");
-*/
-
+	print("bind # trees...");
 	bind("#d", "/fd", MREPL);
 	bind("#p", "/proc", MREPL);
 	bind("#¤", "/dev", MAFTER);

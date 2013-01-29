@@ -1811,7 +1811,6 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 
 		bogus.chan = bc;
 		bogus.authchan = ac;
-//		print(".nulling validaddr. in ismount\n");
 //		validaddr((ulong)spec, 1, 0);
 		bogus.spec = spec;
 		if(waserror())
@@ -1826,7 +1825,6 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 
 		ret = devno('M', 0);
 		c0 = devtab[ret]->attach((char*)&bogus);
-
 //		print("c0 devtab attach assigned\n");
 
 		poperror();	/* spec */
@@ -1837,7 +1835,6 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		cclose(bc);
 	}else{
 		bogus.spec = 0;
-//		print("skip validaddr((ulong)%s, 1, 0)\n", arg0);
 //		validaddr((ulong)arg0, 1, 0);
 //		print("c0 = pnamec(%s, Abind, 0, 0, targp)\n", arg0);
 		c0 = pnamec(arg0, Abind, 0, 0, targp);
@@ -1847,7 +1844,6 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		cclose(c0);
 		nexterror();
 	}
-//	print("skip validaddr((ulong)%s, 1, 0)\n", arg1);
 //	validaddr((ulong)arg1, 1, 0);
 //	print("c1 = pnamec(%s, Abind, 0, 0, targp)\n", arg1);
 	c1 = pnamec(arg1, Amount, 0, 0, targp);
@@ -1933,14 +1929,12 @@ procnsreq(Proc *p, char *va, int n)
 
 //	print("cbf->nf=%d\n", cbf->nf);
 	if((cbf->nf < 2) || (cbf->nf > 5)){
-//		print("wrong number of args in procnsreq cbf\n");
 		error(Ebadarg);
 		poperror();
 		free(cbf);
 		return;
 	} else if(cbf->nf == 2){
 		if(strcmp(cbf->f[0], "unmount") != 0){
-//			print("wrong number of args in procnsreq cbf\n");
 			error(Ebadarg);
 			poperror();
 			free(cbf);
@@ -1949,7 +1943,6 @@ procnsreq(Proc *p, char *va, int n)
 		new = nil;
 		old = cbf->f[1];
 		if(strncmp(old, "#|", 2)==0){
-//			print("undefined namespace operation\n");
 			error(Ebadsharp);
 			poperror();
 			free(cbf);
@@ -1988,15 +1981,7 @@ procnsreq(Proc *p, char *va, int n)
 //		print("procbindmount(0, -1, -1, %s, %s, %uld, nil, %uld)\n", new, old, flags, p->pid);
 		procbindmount(0, -1, -1, new, old, flags, nil, p);
 	} else if (strcmp(cbf->f[0], "mount")==0){
-		if(strncmp(new, "#|", 2)==0){
-//			print("undefined namespace operation\n");
-			error(Ebadsharp);
-			poperror();
-			free(cbf);
-			return;
-		}
-		if(strncmp(old, "#|", 2)==0){
-//			print("undefined namespace operation\n");
+		if((strncmp(new, "#|", 2)==0) || (strncmp(old, "#|", 2)==0)){
 			error(Ebadsharp);
 			poperror();
 			free(cbf);
@@ -2005,7 +1990,6 @@ procnsreq(Proc *p, char *va, int n)
 //		print("psysopen(%s, ORDWRP, targp)\n", new);
 		fd=psysopen(new, ORDWR, p);
 		if(fd < 0){
-//			print("can't acquire fd\n");
 			error(Ebadfd);
 			poperror();
 			free(cbf);
@@ -2014,6 +1998,12 @@ procnsreq(Proc *p, char *va, int n)
 //		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
 		procbindmount(1, fd, -1, nil, old, flags, spec, p);
 	} else if (strcmp(cbf->f[0], "unmount")==0){
+		if((strncmp(new, "#|/", 3)==0) || (strncmp(old, "#|", 2)==0)){
+			error(Ebadsharp);
+			poperror();
+			free(cbf);
+			return;
+		}
 //		print("procunmount(%s from %s on %uld)\n", new, old, p->pid);
 		procunmount(new, old, p);
 	}
