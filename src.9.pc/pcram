@@ -142,6 +142,7 @@ bootdir
 	/386/bin/gunzip
 	/386/bin/sed
 	/386/bin/rm
+#	MODIFIED OR CUSTOM USED BY ROOTLESS BOOT
 	/n/rootless/bootdir.extras/rc
 	/n/rootless/bootdir.extras/factotum
 	/n/rootless/bootdir.extras/rcmain
@@ -154,13 +155,14 @@ bootdir
 	/n/rootless/bootdir.extras/save9cfg
 	/n/rootless/bootdir.extras/skel.tar
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE
+#	FILESERVER OPTIONS AND OTHER OPTIONAL TOOLS BELOW
 	/386/bin/dossrv
 	/386/bin/fossil/fossil
-#	/386/bin/venti/venti
-#	/386/bin/usb/usbd
-#	/386/bin/disk/partfs
-#	/386/bin/disk/kfs
-#	/386/bin/cfs
+	/386/bin/venti/venti
+	/386/bin/usb/usbd
+	/386/bin/disk/partfs
+	/386/bin/disk/kfs
+	/386/bin/cfs
 	/386/bin/ls
 	/386/bin/cp
 	/386/bin/ed
@@ -183,3 +185,4 @@ bootdir
 #	/386/bin/ndb/dns
 #	/386/bin/disk/kfscmd
 #	/386/bin/fossil/flfmt
+#	ALSO CONSIDER USING A TOOLS.TGZ SEE _TOOLCOPY IN BASEDIR/ROOT/LIB

@@ -2,7 +2,7 @@ cp /bin/auth/authsrv .
 #cp /bin/auth/as .
 cp /bin/auth/changeuser .
 #cp /bin/auth/cron .
-#cp /bin/auth/debug .
+cp /bin/auth/debug .
 #cp /bin/auth/factotum .
 cp /bin/auth/keyfs .
 #cp /bin/auth/newns .
@@ -27,6 +27,8 @@ cp /bin/fossil/last fossilast
 #cp /bin/ip/ipconfig .
 cp /bin/ip/ping .
 cp /bin/ip/traceroute .
+cp /bin/ndb/cs .
+cp /bin/ndb/dns .
 #cp /bin/usb/usbd .
 cp /bin/usb/disk usbdisk
 cp /bin/venti/conf venticonf
@@ -48,8 +50,6 @@ cp /bin/acme .
 cp /bin/con .
 #cp /bin/cp .
 #cp /bin/cpu .
-cp /bin/ndb/cs .
-cp /bin/ndb/dns .
 cp /bin/date .
 #cp /bin/db .
 cp /bin/dd .
@@ -94,7 +94,7 @@ cp /bin/reboot .
 #cp /bin/rerootwin .
 #cp /bin/rm .
 #cp /bin/rx .
-#cp /bin/scp .
+cp /bin/scp .
 #cp /bin/sed .
 cp /bin/ssh .
 cp /bin/slay .
