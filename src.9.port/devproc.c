@@ -309,13 +309,12 @@ psysopen(char *filename, ulong flags, Proc *targp)
 	Chan *c = 0;
 
 	openmode(flags);	/* error check only */
-	if(waserror()){
-		if(c)
-			cclose(c);
-		nexterror();
-	}
 //	validaddr(arg[0], 1, 0);
 	c = pnamec(filename, Aopen, flags, 0, targp);
+	if(waserror()){
+		cclose(c);
+		nexterror();
+	}
 	fd = pnewfd(c, targp);
 	if(fd < 0)
 		error(Enofd);
@@ -1848,13 +1847,13 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 	}
 //	print("skip validaddr((ulong)%s, 1, 0)\n", arg1);
 //	validaddr((ulong)arg1, 1, 0);
-//	print("c1 = pnamec(%s, Abind, 0, 0, targp)\n", arg1);
+	print("c1 = pnamec(%s, Abind, 0, 0, targp)\n", arg1);
 	c1 = pnamec(arg1, Amount, 0, 0, targp);
 	if(waserror()){
 		cclose(c1);
 		nexterror();
 	}
-//	print("ret = pcmount(&c0, c1, flag, bogus.spec, targp)\n");
+	print("ret = pcmount(&c0, c1, flag, bogus.spec, targp)\n");
 	ret = pcmount(&c0, c1, flag, bogus.spec, targp);
 
 	poperror();

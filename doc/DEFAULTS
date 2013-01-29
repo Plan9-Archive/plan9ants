@@ -10,6 +10,8 @@ fs and auth are the ip of file auth servers as in standard boot and plan9.ini
 
 cfs is the pathname of a cfs partition to be used for caching when tcp booting, if desired
 
+fossil and kfs may be set to specify a given partition
+
 interactive controls whether or not the user will be prompted through the boot process and given the option to modify any parameters provided by plan9.ini. It will default to traditional mode behavior, set interactive=yes to enable interactive boot or interactive=no for automatic bootup. If no bootargs are found, interactive mode is turned on also. interactive=traditional emulates the prompts of the traditional bootup but still follows the plan9rc startup according to the variables given in plan9.ini. It prompts for local vs tcp and tcp root and auth ips if needed only. 
 
 startventi is a new variable which allows you to start a venti server even if this venti is not required for a local fossil. It defaults to not starting but it will automatically be changed to yes if the venti variable begins with # indicating it should be started for a local fossil.
