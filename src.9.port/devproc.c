@@ -1984,24 +1984,24 @@ procnsreq(Proc *p, char *va, int n)
 			spec=cbf->f[countnf];
 		}
 	}
-	if(strncmp(new, "#|", 2)==0){
-//		print("undefined namespace operation\n");
-		error(Ebadsharp);
-		poperror();
-		free(cbf);
-		return;
-	}
-	if(strncmp(old, "#|", 2)==0){
-//		print("undefined namespace operation\n");
-		error(Ebadsharp);
-		poperror();
-		free(cbf);
-		return;
-	}
 	if(strcmp(cbf->f[0], "bind")==0){
 //		print("procbindmount(0, -1, -1, %s, %s, %uld, nil, %uld)\n", new, old, flags, p->pid);
 		procbindmount(0, -1, -1, new, old, flags, nil, p);
 	} else if (strcmp(cbf->f[0], "mount")==0){
+		if(strncmp(new, "#|", 2)==0){
+//			print("undefined namespace operation\n");
+			error(Ebadsharp);
+			poperror();
+			free(cbf);
+			return;
+		}
+		if(strncmp(old, "#|", 2)==0){
+//			print("undefined namespace operation\n");
+			error(Ebadsharp);
+			poperror();
+			free(cbf);
+			return;
+		}
 //		print("psysopen(%s, ORDWRP, targp)\n", new);
 		fd=psysopen(new, ORDWR, p);
 		if(fd < 0){

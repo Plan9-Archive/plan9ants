@@ -455,7 +455,7 @@ if not if(~ $interactive traditional){
 	doinitscript
 	dochecksys
 	dorootstart
-	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(! ~ $staylocal no){
@@ -477,7 +477,7 @@ if not {
 	doinitscript
 	dochecksys
 	dorootstart
-	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(! ~ $staylocal no){
