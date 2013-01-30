@@ -75,12 +75,12 @@ rdarena(Arena *arena, u64int offset)
 	e = arena->base + arena->size;
 	if(offset != ~(u64int)0) {
 //		if(offset >= e - a)
-		fprint(2, "warning offset %#llx compared to %#llx\n", offset, e - a);
+		fprint(2, "warning clumpoff %#llx compared to %#llx\n", offset, e - a);
 		aa = offset;
 	} else
 		aa = 0;
 
-	fprint(2, "offset set to %#llx \n", aa);
+	fprint(2, "clumpoff set to %#llx \n", aa);
 	i = 0;
 	for(a = 0; maxwrites != 0 && i < arena->memstats.clumps;
 	    a += ClumpSize + ci.size){
@@ -122,7 +122,7 @@ rdarena(Arena *arena, u64int offset)
 			--maxwrites;
 	}
 	if(a > aa){
-		fprint(2, "\na > aa REAL OFFSET HERE setting aa =%#llx\n",a);
+		fprint(2, "\na > aa REAL CLUMPOFF HERE setting aa =%#llx\n",a);
 		aa = a;
 	}
 	print("end offset %#llx\n", aa);

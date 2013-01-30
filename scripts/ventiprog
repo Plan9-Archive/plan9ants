@@ -1,0 +1,12 @@
+#!/bin/rc
+
+if(! test -e /n/9fat/wrcmd)
+	9fat:
+if(! test -e /n/9fat/wrcmd)
+	exit
+
+oldcmd=`{cat /n/9fat/wrcmd}
+newoff=`{$oldcmd | grep offset |sed 's/.*0x/0x/g'}
+newcmd=`{echo $oldcmd |sed 's/0x.*/'$newoff'/g'}
+echo $oldcmd >>/n/9fat/rootscor
+echo $newcmd >/n/9fat/wrcmd
