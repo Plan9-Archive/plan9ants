@@ -3,6 +3,7 @@
 
 #ventiprog [ventilist]
 
+rfork e
 if(! test -e /n/9fat/wrcmd)
 	9fat:
 if(! test -e /n/9fat/wrcmd)

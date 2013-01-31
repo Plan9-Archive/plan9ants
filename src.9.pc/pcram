@@ -185,4 +185,5 @@ bootdir
 #	/386/bin/ndb/dns
 #	/386/bin/disk/kfscmd
 #	/386/bin/fossil/flfmt
+#	/386/bin/venti/wrarena
 #	ALSO CONSIDER USING A TOOLS.TGZ SEE _TOOLCOPY IN BASEDIR/ROOT/LIB

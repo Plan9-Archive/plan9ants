@@ -2,6 +2,7 @@
 
 #riopush TARGETPID
 
+rfork e
 local = `{ns |grep wsys |sed 's/#s/\/srv/g' |tr -d ''''}
 winid = `{cat /dev/winid |tr -d ' 
  

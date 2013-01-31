@@ -3,6 +3,7 @@
 #copy one system to another
 #cpsys SOURCE DEST
 
+rfork e
 source=$1
 dest=$2
 
