@@ -122,8 +122,9 @@ if(~ $hostcsdns no){
 	dns -r
 }
 if(! ~ $hubsvc no){
-	echo -n 'hubfs...'
+	echo -n 'hubfs exported on 17099...'
 	hub -b hubfs
+	listen1 -t tcp!*!17099 /bin/exportfs -S /srv/hubfs &
 }
 if(! ~ $cpusvc no){
 	echo -n 'listen1 cpu -R...'
