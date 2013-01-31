@@ -2,6 +2,15 @@
 
 # rerootwin targetsrv [ authagent ]
 
+if(test -e /lib/namespace.saveterm)
+	nsfile=/lib/namespace.saveterm
+if(test -e /boot/namespace.saveterm)
+	nsfile=/boot/namespace.saveterm
+if(~ $nsfile ''){
+	echo no namespace.saveterm found
+	exit
+}
+
 pivot=/net.alt
 while (~ $1 -*){
 	switch($1){
@@ -60,4 +69,9 @@ oldwsys=oldwsys.$pid
 srvfs -p 0600 oldterm.$pid /mnt/term
 srvfs -p 0600 oldwsys.$pid /mnt/wsys
 
-newns -n /boot/namespace.saveterm
+if(test -e /bin/newns){
+	newns -n $nsfile
+	exit
+}
+
+auth/newns -n $nsfile

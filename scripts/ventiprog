@@ -1,12 +1,26 @@
 #!/bin/rc
+# uses a pre-existing wrarena command at /n/9fat/wrcmd to backup a venti
+
+#ventiprog [ventilist]
 
 if(! test -e /n/9fat/wrcmd)
 	9fat:
 if(! test -e /n/9fat/wrcmd)
 	exit
 
+if(! ~ $1 '')
+	targetventis=$*
+
 oldcmd=`{cat /n/9fat/wrcmd}
 newoff=`{$oldcmd | grep offset |sed 's/.*0x/0x/g'}
+if(! ~ $targetventis ''){
+	for(i in $targetventis){
+		nxtcmd=`{echo $oldcmd |sed 's/!.*!/!'$i'!/g'}
+		$nxtcmd
+	}
+}
 newcmd=`{echo $oldcmd |sed 's/0x.*/'$newoff'/g'}
 echo $oldcmd >>/n/9fat/rootscor
 echo $newcmd >/n/9fat/wrcmd
+echo $oldcmd
+echo $newcmd
