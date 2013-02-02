@@ -5,7 +5,7 @@
 if(! ~ $venti ?*){
 	echo please set venti env variable as needed
 	echo if unneeded for this fossil set to junk value
-	exit
+	exit noventi
 }
 fossil -c 'srv -p fscons'
 echo 'fsys main config /dev/sdC0/fossil' >>/srv/fscons

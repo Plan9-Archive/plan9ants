@@ -8,7 +8,7 @@ if(test -e /boot/namespace.saveterm)
 	nsfile=/boot/namespace.saveterm
 if(~ $nsfile ''){
 	echo no namespace.saveterm found
-	exit
+	exit no.nssaveterm
 }
 
 pivot=/net.alt
@@ -24,12 +24,12 @@ while (~ $1 -*){
 }
 if(! ~ $1 ?*){
 	echo need a target srv
-	exit
+	exit no.srv
 }
 if(! test -e /mnt/wsys/wctl){
 	if(! test -e /mnt/term/mnt/wsys/wctl){
 		echo no wctl at mnt wsys
-		exit
+		exit no.wctl
 	}
 	echo binding /mnt/term/mnt/wsys to /mnt/wsys
 	bind /mnt/term/mnt/wsys /mnt/wsys
@@ -37,7 +37,7 @@ if(! test -e /mnt/wsys/wctl){
 if(! test -e /mnt/term/dev/cons){
 	if(! test -e /mnt/wsys/cons){
 		echo no cons at mnt term
-		exit
+		exit no.cons
 	}
 	if(! test -e /mnt/term/dev)
 		mkdir /mnt/term/dev
@@ -48,7 +48,7 @@ if(! test -e /srv/$1){
 	srv tcp!$1!564 $1
 	if(! test -e /srv/$1){
 		echo srv $1 couldnt be acquired
-		exit
+		exit no.srv
 	}
 }
 nsroot=$1
