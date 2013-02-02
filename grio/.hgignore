@@ -1,0 +1,6 @@
+syntax: glob
+*.8
+*.gz
+compiletemp
+root/bin
+*.tgz

@@ -17,6 +17,7 @@ if(~ $1 everything){
 	build clean
 	build patched
 	build tools
+	build extras
 	build
 	exit ''
 }
@@ -49,17 +50,23 @@ if(~ $1 patched){
 	rm -rf /tmp/factotum
 	exit
 }	
-if(~ $1 rootfs){
-	echo building rootfs
-	rm root/bin/*
-	cp root/lib/_toolcopyscript root/bin
-	cd root/bin
-	. _toolcopyscript
-	cd $builddir
-	ramfs -m /tmp
-	tar cf /tmp/rootfs.tar root
-	gzip -9 -c /tmp/rootfs.tar >rootfs.tgz
-	cd $builddir
+if(~ $1 extras){
+	echo building extras
+	cd grio
+	mk clean
+	mk
+	cp 8.out ../bootdir.extras/grio
+	cd ../hubfs1.1
+	rm hubfs
+	rm hubshell
+	rm *.8
+	8c -FTVw hubfs.c
+	8l -o hubfs hubfs.8
+	8c -FTVw hubshell.c
+	8l -o hubshell hubshell.8
+	cp hubfs ../bootdir.extras
+	cp hubshell ../bootdir.extras
+	cp hub ../bootdir.extras
 	exit
 }
 if(~ $1 tools){

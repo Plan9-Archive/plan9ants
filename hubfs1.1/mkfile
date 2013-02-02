@@ -1,0 +1,60 @@
+</$objtype/mkfile
+
+BIN=$home/bin/$objtype
+RCBIN=$home/bin/rc
+#BIN=/386/bin
+#RCBIN=/rc/bin
+MAN=/sys/man/1
+
+TARG=hubfs
+OFILES=\
+	hubfs.$O\
+
+UPDATE=\
+	mkfile\
+	${OFILES:%.$O=%.c}\
+
+CFLAGS=-FTV
+LDFLAGS=
+YFLAGS=-d
+AFLAGS=
+
+default:V:	$O.out
+
+all:V:	$O.out
+
+$O.out:	$OFILES $LIB
+	$LD $LDFLAGS -o $target $prereq
+
+%.$O:	$HFILES		# don't combine with following %.$O rules
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	%.s
+	$AS $AFLAGS $stem.s
+
+install:V:	$BIN/$TARG
+	$CC $CFLAGS hubshell.c
+	$LD $LDFLAGS -o hubshell hubshell.$O
+	cp hubshell $BIN
+	cp hub $RCBIN
+	cp hubfs.man /sys/man/1/hubfs || cat README
+
+$BIN/$TARG:	$O.out
+	cp $prereq $BIN/$TARG
+
+clean:V:
+	rm -f *.[$OS] [$OS].out y.tab.? lex.yy.c y.debug y.output $TARG $CLEANFILES
+
+safeinstall:V: $O.out
+	test -e $BIN/$TARG && mv $BIN/$TARG $BIN/_$TARG
+	cp $prereq $BIN/$TARG
+
+nuke:V:		cleanfiles
+
+cleanfiles:V:
+	rm -f [$OS].out *.[$OS] y.tab.? y.debug y.output [$OS].$TARG [$OS].units.tab $TARG bc.c bc.tab.h units.tab.h units.c [$OS]._cp
+
+%.clean:V:
+	rm -f [$OS].$stem $stem.[$OS]

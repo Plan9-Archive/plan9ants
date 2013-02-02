@@ -1,0 +1,209 @@
+.TH HUBFS 1 
+.SH NAME
+hub, hubfs, hubshell  \- persistent multiplexed i/o sessions, or 'screen without a screen'
+.SH SYNOPSIS
+.B hub
+[
+.B -b
+]
+[
+.I srvname
+]
+[
+.I hubgroup
+]
+.PP
+.B hubshell
+.I attachstring
+.PP
+.B hubfs
+[
+.B -Dasm
+]
+.I srvname
+.PP
+.SH DESCRIPTION
+.I Hub
+invokes 
+.IR hubfs (1)
+to create a 9fs filesystem of pipe-like Hubs available as a /srv and starts an 
+.IR rc (1)
+shell with its file descriptors redirected to these hubs, then uses 
+.IR hubshell (1)
+as a client for these connections. The overall usage model is somewhat similar to GNU 
+.I screen
+but without the additional complexities of TTY management.
+.PP
+The base behavior of 
+.IR hub (1)
+.I srvname
+is bimodal, and will function as either a client or server depending on whether 
+.B /srv/srvname
+exists. If no name is provided, 
+.I hub
+will create or attach to a 
+.B /srv
+named 
+.B /srv/hubfs
+containing a persistent 
+.I rc
+session. Thus, the simplest possible model of use is:
+.IP
+.EX
+hub
+.EE
+.PP
+to start a backgrounded 
+.I hubfs 
+hosted persistent rc shell, and then 
+.IP
+.EX
+hub
+.EE
+.PP
+from any window with access to that 
+.B /srv
+to connect to it. The
+.B -b
+flag to 
+.I hub
+backgrounds the initially created 
+.I rc
+instead of attaching to it.
+.PP
+Hubfs can be used to provide general purpose pipes locally or across a network, with some special features. Most notably, echoing
+.I freeze
+to the
+.B ctl
+file will change the behavior of the hub files from pipe-like with blocking reads to simple static files that can be viewed and edited with normal tools. Writing
+.I melt
+to
+.B ctl
+will restore pipe-like behavior and resume the normal flow of data.
+.PP
+While connected via a
+.I hubshell
+input beginning with a %symbol will be checked for matching command strings. These commands are used to create new subshells within the
+.I hubfs
+session and move between them. A distinctive feature is the ability for remote clients to share a local shell with other clients of the hubfs. The
+.B %local NAME
+command does this. The more traditional mode of starting new shells on the remote host is done with the
+.B %remote NAME
+command. Note that 'remote' is the machine hosting the shell you are connected to currently.
+.B %detach
+terminates the 
+.I hubshell
+and returns control to the user's original shell.
+.PP
+.SH EXAMPLES
+.Starting and connecting with the 
+.I hub
+wrapper script:
+.PP
+start and connect to a new hubfs and post /srv/aug5
+.IP
+.EX
+hub aug5
+.EE
+.PP
+connects a new client to the rc shell started by the previous command
+.PP
+.IP
+.EX
+hub aug5
+.EE
+.PP
+start and connects to new rc named rctwo within the aug5 hubfs
+.PP
+.IP
+.EX
+hub aug5 rctwo
+.EE
+.PP
+Making new shells and moving in hubshell:
+.PP
+-all commands begin with '%' as first character-
+.PP
+.IP
+.EX
+%detach  #disconnect from attached shell
+.EE
+.PP
+.IP
+.EX
+%remote NAME #start shell on remote machine
+.EE
+.PP
+.IP
+.EX
+%local NAME #start shell on local machine shared to hubfs
+.EE
+.PP
+.IP
+.EX
+%attach NAME #move to an existing hubfs shell
+.EE
+.PP
+.IP
+.EX
+%err TIME, %in TIME, %out TIME #time in ms for delay loop
+.EE
+.PP
+.IP
+.EX
+%status #basic hubfs connection info
+.EE
+.PP
+.IP
+.EX
+%list #lc of connected hubfs hubs
+.EE
+.PP
+Controlling hubfs via the ctl file:
+.PP
+-reading from ctl file returns status-
+.PP
+.IP
+.EX
+echo freeze >/n/hubsrv/ctl #freeze Hubs as static files
+.EE
+.PP
+.IP
+.EX
+echo melt >/n/hubsrv/ctl #resume normal flow of data
+.EE
+.PP
+.IP
+.EX
+echo fear >/n/hubsrv/ctl #activate paranoid mode
+.EE
+.PP
+.IP
+.EX
+echo calm >/n/hubsrv/ctl #resume non-paranoid mode
+.EE
+.PP
+.IP
+.EX
+echo quit >/n/hubsrv/ctl #kill the fs
+.EE
+.PP
+.SH SOURCE
+.B /n/sources/contrib/mycroftiv/hubfs.tgz
+.SH "SEE ALSO"
+UNIX pipes,
+.IR pipe (3)
+,
+.IR srv (3)
+and
+.IR aux/consolefs (4)
+.SH BUGS
+The command parser is primitive. There are no provided options for giving clients different levels of privilege to control the session. Mental incapacity to grapple with the combinatoric possibilities of higher-dimensional pipe topologies (see below). Reinvention of the wheel in octagonal form. Parameters such as data bucket size are compiled-in.
+.PP
+-
+.PP
+"Doug had for years and years, and he talked to us continually about it, a notion of interconnecting computers in grids, and arrays, very complex, and there were always problems in his proposals. That what you would type would be linear and what he wanted was three-dimensional, n-dimensional...I mean he wanted just topological connection of programs and to build programs with loops and and horrid things. He had such grandiose ideas and we were saying, the complexity you're generating just can't be fathomed. You don't sit down and you don't type these kind of connections together. And he persisted with the grandiose ideas where you get into Kirchoff's law problems...what happens if you have a feedback loop and every program doubles the number of characters, it reads one and writes two? It's got to go somewhere - synchronization - there's just no way to implement his ideas and we kept trying to pare him down and weed him down and get something useful and distill it. What was needed, was real ideas...and there were constant discussions all through this period, and it hit just one night, it just hit, and they went in instantly."
+.PP
+.I ~Ken Thompson on UNIX pipes' origins
+.PP
+.B http://www.princeton.edu/~hos/mike/transcripts/thompson.htm
