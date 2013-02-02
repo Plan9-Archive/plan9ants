@@ -1,0 +1,25 @@
+You may either install the prebuilt 9pcram.gz and its optional tools.tgz, or build the kernel (and optional .tgz) locally. The build script uses binds to work only within the rootless directory and leave all existing system src unmodified. It has the following modes:
+
+build - with no arguments, this builds a 9pcram.gz kernel with the kernel and its compilation files located in compiletemp. 
+
+build ramfs - this uses a ramfs for the compile and copies only the 9pcram.gz kernel to compiletemp.
+
+build tools - this creates a tools.tgz using the list of tools in root/lib/_toolcopy
+
+build clean - this simply runs mk clean with the necessary binds to clear out the compiletemp folder
+
+build everything - runs build clean, then build tools, then build
+
+The 9pcram.gz kernel and optional .tgz are placed in the conventional 9fat partition. Conventional plan9.ini are mostly supported, with many new optional additions. The most important are:
+
+interactive=
+if not provided, of if set to "traditional" the plan9rc scripts attempts to emulate the traditional bootprompts, while also executing any new options found from plan9.ini. Set interactive=yes to be prompted for all options throughout the boot process. Set interactive=no for automated bootup with no prompting unless an error condition is hit.
+
+factotum=
+rootstart=
+these default to 'cpu' because the 9pcram kernel is compiled with that flag set. This means factotum will start in the same way as a cpu server and the /rc/bin/cpurc from any mounted root will be started. If you wish to produce terminal style behavior, set both of these to "terminal". It is also possible to run cpurc with terminal factotum or vice-versa, if you understand what you are doing and why.
+
+tgzfs=
+if you wish to load an optional tools.tgz or other named extra set of utilities into the bootup ramdisk, set this tools.tgz (or the name of your toolset.)
+
+full explanation of all new plan9.ini possibilities and their defaults is found within the doc subdirectory.

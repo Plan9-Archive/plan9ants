@@ -172,12 +172,12 @@ bootdir
 	/386/bin/srvfs
 	/386/bin/ip/rexexec
 	/386/bin/rx
-	/386/bin/grio
-	/386/bin/hubfs
-	/386/bin/hubshell
-	/rc/bin/hub
-	/386/bin/sleep
-	/386/bin/touch
+	/386/bin/rio
+#	/386/bin/hubfs
+#	/386/bin/hubshell
+#	/rc/bin/hub
+#	/386/bin/sleep
+#	/386/bin/touch
 #	/386/bin/auth/as
 #	/386/bin/auth/authsrv
 #	/386/bin/auth/keyfs
