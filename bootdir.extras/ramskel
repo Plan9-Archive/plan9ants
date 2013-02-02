@@ -5,7 +5,7 @@
 hostdir=`{cat '#c/hostowner'}
 if (! ~ $hostdir ?*){
 	echo please set hostowner
-	exit ''
+	exit no.hostowner
 }
 usercheck=`{cat /dev/user}
 if(~ $usercheck '')

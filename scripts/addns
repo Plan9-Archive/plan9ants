@@ -28,16 +28,16 @@ while (~ $1 -*){
 
 if(~ $2 ''){
 	echo usage: addns MODELpid TARGETpid
-	exit
+	exit usage
 	}
 
 if(! test -e /proc/$1){
 	echo process $1 does not exist!
-	exit
+	exit no.proc
 }
 if(! test -e /proc/$2){
 	echo process $2 does not exist!
-	exit
+	exit no.proc
 }
 
 
@@ -51,7 +51,7 @@ for (i in $orig){
 }
 if(! test -e /tmp/chnsuniq){
 	echo no binds in $1 not in $2 to add
-	exit
+	exit no.binds
 }
 
 sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/  / /g' |sed '/\#\|\/data/d' |sed '/\#D\/ssl/d' >/tmp/chnscom

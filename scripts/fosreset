@@ -7,7 +7,7 @@ rfork e
 score=$1
 if(! ~ $score ???????????????????????????*){
 	echo $1 is not a fossil root score
-	exit ''
+	exit no.rootscore
 }
 fossil=$2
 if(~ $fossil '')
@@ -16,11 +16,11 @@ if(! ~ $3 '')
 	venti=$3
 if(~ $venti ''){
 	echo 'please set a venti target for your fossil!'
-	exit ''
+	exit no.venti
 }
 if(~ $fossil tcp*){
 	echo not disk
-	exit ;;
+	exit no.disk
 }
 
 if(! test -e /bin/foshalt)
@@ -36,7 +36,7 @@ sleep 1
 stillhere=`{ps |grep fossil}
 if(! ~ $stillhere ''){
 	echo 'fossil processes still running! exiting'
-	exit ''
+	exit fossilzombie
 }
 
 if(~ $score vac*)

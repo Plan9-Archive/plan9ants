@@ -9,7 +9,7 @@ dest=$2
 
 if(~ $2 ''){
 	echo usage: cpsys SOURCE DEST
-	exit ''
+	exit usage
 }
 
 resetargs=`{rx $source fossilize}

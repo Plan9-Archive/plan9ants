@@ -2,7 +2,7 @@
 
 if (! ~ $1 ?*){
 	echo usage: importroroot TARGETSYSTEM
-	exit
+	exit usage
 }
 
 import $1 / /n/$1

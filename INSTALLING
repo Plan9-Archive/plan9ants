@@ -10,7 +10,7 @@ build clean - this simply runs mk clean with the necessary binds to clear out th
 
 build everything - runs build clean, then build tools, then build
 
-The 9pcram.gz kernel and optional .tgz are placed in the conventional 9fat partition. Conventional plan9.ini are mostly supported, with many new optional additions. The most important are:
+The 9pcram.gz kernel and optional .tgz are placed in the conventional 9fat partition. Conventional plan9.ini variiables are mostly supported, with many new optional additions. The most important are:
 
 interactive=
 if not provided, of if set to "traditional" the plan9rc scripts attempts to emulate the traditional bootprompts, while also executing any new options found from plan9.ini. Set interactive=yes to be prompted for all options throughout the boot process. Set interactive=no for automated bootup with no prompting unless an error condition is hit.

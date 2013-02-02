@@ -35,12 +35,12 @@ fn getans{
 keyowner=`{cat /dev/hostowner}
 if (! ~ $keyowner ?*){
 	echo please set hostowner
-	exit ''
+	exit no.hostowner
 }
 usercheck=`{cat /dev/user}
 if (! ~ $usercheck $keyowner){
 	echo current user is not hostowner
-	exit ''
+	exit no.hostowner
 }
 if(~ $cpuport '')
 	cpuport=17020

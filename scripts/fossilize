@@ -21,7 +21,7 @@ mount -c /srv/dos /n/9 $part
 
 if(! test -e /n/9fat/plan9.ini){
 	echo '9fat?'
-	exit ''
+	exit no.plan9ini
 }
 if(test -e /bin/fossilast)
 	last=`{fossilast $fossil}
@@ -29,7 +29,7 @@ if not
 	last=`{fossil/last $fossil}
 if(! ~ $last vac*){
 	echo 'no score?!'
-	exit ''
+	exit no.score
 }
 
 echo $last $fossil $venti >>/n/9fat/rootscor

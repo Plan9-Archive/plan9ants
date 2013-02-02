@@ -1,5 +1,9 @@
 #!/bin/rc
 
+if(! test -e bootdir.extras){
+	echo this build script MUST be run only from the base rootless directory
+	exit wrong.dir
+}
 rfork ne
 builddir=`{pwd}
 bind -b $builddir/src.9.boot /sys/src/9/boot

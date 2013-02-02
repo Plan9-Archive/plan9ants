@@ -7,7 +7,7 @@ rfork e
 if(! test -e /n/9fat/wrcmd)
 	9fat:
 if(! test -e /n/9fat/wrcmd)
-	exit
+	exit no.wrcmd
 
 if(! ~ $1 '')
 	targetventis=$*

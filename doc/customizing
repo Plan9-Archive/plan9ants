@@ -1,0 +1,3 @@
+There are two main methods of customizing the install. One is to rebuild the kernel with a different selection of tools compiled into boot. This is done by editing the file src.9.pc/pcram and the final section.
+The other method is customizing the optional tools.tgz. A premade script for creating it is included at root/lib/_toolcopy and the command build tools uses that script to control what binaries and scripts will be added to the /bin of the tools.tgz
+You can customize the initial ultra-minimal skelton fs by working within bootdir.extras/root. Be cautious in modifying this or the plan9rc script may fail in unexpected ways or the early boot environment may break.

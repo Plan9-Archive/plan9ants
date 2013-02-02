@@ -33,16 +33,16 @@ while (~ $1 -*){
 
 if(~ $2 ""){
 	echo usage: cpns MODELpid TARGETpid
-	exit
+	exit usage
 }
 
 if(! test -e /proc/$1){
 	echo process $1 does not exist!
-	exit
+	exit no.proc
 }
 if(! test -e /proc/$2){
 	echo process $2 does not exist!
-	exit
+	exit no.proc
 }
 subns $saveargs
 addns $saveargs

@@ -2,7 +2,7 @@
 
 if (! ~ $1 ?*){
 	echo usage: addwrroot TARGETSYSTEM
-	exit
+	exit usage
 }
 if(! test -e /srv/$1){
 	srv tcp!$1!564 $1
