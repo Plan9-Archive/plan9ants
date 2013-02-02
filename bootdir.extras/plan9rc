@@ -274,6 +274,7 @@ fn dochecksys{
 fn dorootstart{
 	switch($rootstart){
 	case cpu
+		service=cpu
 		echo mounting $bootsrv to /root and starting cpurc
 		mount $bootsrv /root
 		if(test -e /root/rc/bin/cpurc)
@@ -281,6 +282,7 @@ fn dorootstart{
 		if not
 			echo ERROR no cpurc found
 	case terminal
+		service=terminal
 		echo mounting $bootsrv to /root and starting termrc
 		mount $bootsrv /root
 		if(~ $user ''){
@@ -371,6 +373,7 @@ if(~ $interactive yes){
 	tgzfs = `{getans tgzfs $tgzfs}
 	doramsetup
 	hostcheck
+	dochecksys
 	echo 'Start local Venti? Enter yes if so.'
 	startventi = `{getans startventi $startventi}
 	if(~ $startventi yes){
@@ -400,13 +403,8 @@ if(~ $interactive yes){
 	echo 'Create cpu server namespace on a port of your choice? Initskel if so.'
 	initscript = `{getans initscript $initscript}
 	doinitscript
-	dochecksys
 	echo 'Start cpurc termrc from the file server? Enter cpu or terminal if so.'
 	rootstart = `{getans rootstart $rootstart}
-	if(~ $rootstart cpu)
-		service=cpu
-	if(~ $rootstart terminal)
-		service=terminal
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'Keep console in ramboot namespace? yes if so.'
@@ -425,6 +423,7 @@ if not if(~ $interactive traditional){
 	dotryusb
 	doramsetup
 	hostcheck
+	dochecksys
 	doafterfact
 	echo -n 'root is from (tcp,local)['$bootargs']: '
 	bootanswer=`{read}
@@ -453,7 +452,6 @@ if not if(~ $interactive traditional){
 	interactive=traditional
 	doafterroot
 	doinitscript
-	dochecksys
 	dorootstart
 #	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
@@ -470,12 +468,12 @@ if not {
 	dotryusb
 	doramsetup
 	hostcheck
+	dochecksys
 	doafterfact
 	dostartventi
 	dogetrootfs
 	doafterroot
 	doinitscript
-	dochecksys
 	dorootstart
 #	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
