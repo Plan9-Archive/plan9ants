@@ -23,6 +23,7 @@ bind -b /boot /bin
 bind -a /root/bin /bin
 bind -a /$cputype/bin /bin
 bind -a /rc/bin /bin
+mount -a /srv/bootpaq/bin
 
 # internal networks
 # mount -a /srv/ip /net

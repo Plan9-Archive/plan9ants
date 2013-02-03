@@ -1825,7 +1825,7 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 
 		ret = devno('M', 0);
 		c0 = devtab[ret]->attach((char*)&bogus);
-//		print("c0 devtab attach assigned\n");
+		print("c0 devtab attach assigned\n");
 
 		poperror();	/* spec */
 		free(spec);
@@ -1995,7 +1995,7 @@ procnsreq(Proc *p, char *va, int n)
 			free(cbf);
 			return;
 		}
-//		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
+		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
 		procbindmount(1, fd, -1, nil, old, flags, spec, p);
 	} else if (strcmp(cbf->f[0], "unmount")==0){
 		if((strncmp(new, "#|/", 3)==0) || (strncmp(old, "#|", 2)==0)){

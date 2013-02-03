@@ -18,6 +18,7 @@ if(~ $1 everything){
 	build patched
 	build tools
 	build extras
+	build bootpaq
 	build
 	exit ''
 }
@@ -67,6 +68,16 @@ if(~ $1 extras){
 	cp hubfs ../bootdir.extras
 	cp hubshell ../bootdir.extras
 	cp hub ../bootdir.extras
+	exit
+}
+if(~ $1 bootpaq){
+	echo building bootpaq
+	rm root/bin/*
+	cp mkpaq root/bin
+	cd root/bin
+	. mkpaq
+	cd $builddir
+	mkpaqfs -o bootdir.extras/bootpaq root/bin
 	exit
 }
 if(~ $1 tools){

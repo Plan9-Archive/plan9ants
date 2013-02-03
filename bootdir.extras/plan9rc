@@ -306,6 +306,12 @@ echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
 
 #cat '#r/rtc' > '#c/time'
 
+if(test -e /boot/bootpaq){
+	echo -n paqfs...
+	paqfs -s -S bootpaq /boot/bootpaq
+	mount -a /srv/bootpaq /bin
+}
+
 if(! ~ $1 '')
 	. $1
 if(~ $bootargs ''){

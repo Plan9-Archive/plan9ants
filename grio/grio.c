@@ -143,24 +143,16 @@ threadmain(int argc, char *argv[])
 	if(access("/n/hubfs/io0", 0) != 0){
 		if(access("/bin/hub", 0) == 0){
 //			fprint(2, "no existing hubfs found at /n/hubfs, starting hubfs\n");
-			if(fork()==0)
-				execl("/bin/hub", "hub", "-b", hubstr, nil);
-			sleep(2000);
+			if(access(mountstr, 0) != 0){
+				if(fork()==0)
+					execl("/bin/hub", "hub", "-b", hubstr, nil);
+				sleep(1000);
+			}
 			if(fork()==0)
 				execl("/bin/mount", "mount", "-c", mountstr, "/n/hubfs", nil);
-			sleep(500);
-		}
-		if(access("/n/hubfs/io0", 0) != 0){
-//			fprint(2, "warning: no hubfs at /n/hubfs\n");
-			sleep(1000);
+			sleep(100);
 		}
 	}
-/*
-	if(strstr(argv[0], ".out") == nil){
-		menu3str[Exit] = nil;
-		Hidden--;
-	}
-*/
 	altcmd = strdup("/bin/acme");
 	initstr = nil;
 	kbdin = nil;
