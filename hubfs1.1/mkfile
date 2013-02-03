@@ -46,6 +46,7 @@ $BIN/$TARG:	$O.out
 
 clean:V:
 	rm -f *.[$OS] [$OS].out y.tab.? lex.yy.c y.debug y.output $TARG $CLEANFILES
+	rm hubshell
 
 safeinstall:V: $O.out
 	test -e $BIN/$TARG && mv $BIN/$TARG $BIN/_$TARG

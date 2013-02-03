@@ -1,0 +1,61 @@
+HAPPY 2011!!!!
+*******************
+Posting from remote grid node - more services coming soon. (the eternal promise!)
+06 December 2009 - Actually got some updates to the g/scripts to make them a bit more persistence friendly, mostly minor variants needed to allow easy reattaching to existing grid sessions and an alternative startup that doesnt start io.
+-- FAIL CONTENT BEGIN --
+BREAKING NEWS: Our very own drb is hosting an IRC server and we would love some visitors
+Idle at #soggy @ irc.soggymilk.com:6667
+(Dat's the power of grid advertising yotches)
+I AM IN YOUR GRAFFITI VANDALIZING YOUR SHIT :D
+--Not really too impressive as vandalism
+---Leave me alone I haven't figured out how to change font size and use comic sans yet ;-P
+---I'd like to do some ascii art but the clipboard doesn't like to store excess spaces and its ruining my brofists
+-- END OF FAIL --
+-- REAL CONTENT STARTS HERE --
+Anyone out there using 'iosrv'?
+- better off using hubfs, same features but better implementation
+OK gridfans - here is some info on new resources currently being as a public beta to YOU LUCKY READER OF THE /9/GRID GRAFFITI WALL!
+most of the time we are working within our highly redundant 9-functional node local grid with dialable cpu servers on 69.128.47.246 (cpu1) and 69.128.47.243 (cpu3) as user griduser with password griduser. when you dial in, you can choose to start the high-availability grid environment, which is a fancy term for a couple simple mounts and binds and scripts. the fun thing to do is to use the gridrc sharerc and pushchat scripts to start up persistent rc sessions interactive shared between my window system and yours.
+If that sounds interesting but makes no sense, talk to mycroftiv in #plan9chan on irc.freenode.net, or study the source code on www.9gridchan.org/rcsrv/
+"non-interactive" rio by Yiyus - run with rio -I after compiling:
+vac:f2b5c938ab24ee406c6b0be31e84a34bac7cd989
+script to control rioni by Yiyus:
+vac:cfe5a9411f5613e297961529ba7c66329fb5f5ed
+gridtools 2.0 released and mostly documented, thanks testers, enjoy anyone interested!
+(early June 2009)
+---------------------------------------------
+*** New Grid Tools release in about 3 hours ***
+(may 31 9 pm cst)
+COMING SOON 
+==========================
+Updated Grid tools of all kinds 
+Self-assembling grids based on venti data archives
+On-demand private VMs
+The Highly Available Grid prototype
+estimated release date: June 1 2009
+look for Mycroftiv in #plan9 or #plan9chan on irc.freenode.net for tech support or to help test prototypes
+============================
+Wed Apr  1 01:49:35 EDT 2009
+replica/pull for updating the g/* scripts?
+how about a tutorial that gives registries that you can connect to?
+"they can't censor you if the damn software is so hard to use that you can't say anything"
+I'd just like to interject for a moment, what you are refering to as "linux" is in fact gnu/linux, or as I have recently taken to calling it, gnu plus linux.
+^b WAIT FOR GLENDIX!!
+Fri Apr  3 23:18:26 EST 2009
+* wall file should be append-only
+wall file should really be a 9p application, not a raw text file, but its nice to see some actual comments here, thanks visitors. sorry if stuff is difficult to use, any specific questions? #plan9chan irc channel on irc.freenode.net is quiet but intended for tech support for this stuff.
+Hmm, just noticed one of the services dropped out of the registry, interesting. Need to push some host os updates etc so Ill probably be rebooting and there will be a bit of downtime around 2009/04/20.
+Hopefully that 5 minutes of downtime didn't cause any unrest and rebellion in any unstable countries. We understand our responsibilities here.
+Latest grid experiments: ramdisk based ventis for short term high frequency snapshotting.
+`{date} $sysname $user was here
+Fri May 22 22:45:34 EST 2009 millpond glenda was here
+Currently testing release candidate version of new qemu based grid tools. 
+Still on schedule for June 1 release of new image and additional resources. Testing from a beta copy.
+*********
+due to the non-chronological nature of the graffiti wall, tracking current grid status is challenging
+Now that we've posted to 9fans, will the graffiti wall find any new visitors? Anyone and everyone - feel free to edit, its just a standard text file with no permission protection, the world's simplest communication application - you can even blank the whole thing if you want, don't feel guilty, that is a feature not a bug!
+Fri Aug 21 20:26:02 EST 2009 cpu1 gridna was here
+20090831.091225 registry "tcp!millpond.dyndns.org!7888 millpond" available
+20090916.211946 bloody quiet here
+well, most of the internet is too crowded and loud, isn't it?
+20100430.175951 hell, still nowt

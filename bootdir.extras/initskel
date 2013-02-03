@@ -1,7 +1,7 @@
 #!/boot/rc
 # ramroot startup after newns
 
-# utility fns duplicated from plan9rc, initskel might be used independently
+##	utility fns duplicated from plan9rc, initskel might be used independently
 
 fn shifter{
 	shift
@@ -32,7 +32,7 @@ fn getans{
 	}
 }
 
-# set vars and quiz user if interactive=yes
+##	set vars and quiz user if interactive=yes
 
 keyowner=`{cat /dev/hostowner}
 if (! ~ $keyowner ?*){

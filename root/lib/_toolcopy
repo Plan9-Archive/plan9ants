@@ -33,6 +33,8 @@ cp /bin/ndb/dns .
 #cp /bin/ndb/dnsquery .
 #cp /bin/usb/usbd .
 cp /bin/usb/disk usbdisk
+#cp /bin/venti/checkarenas .
+#cp /bin/venti/checkindex .
 cp /bin/venti/conf venticonf
 cp /bin/venti/rdarena .
 cp /bin/venti/sync .
@@ -62,13 +64,13 @@ cp /bin/dircp .
 #cp /bin/ed .
 #cp /bin/exportfs .
 #cp /bin/faces .
+cp /bin/fortune .
 #cp /bin/foshalt .
 #cp /bin/fossilize .
 #cp /bin/fosreset .
 #cp /bin/fossilstart .
 #cp /bin/ftpfs .
 cp /bin/grep .
-#cp /bin/grio .
 #cp /bin/gzip .
 cp /bin/hget .
 cp /bin/hoc .
@@ -94,6 +96,7 @@ cp /bin/ps .
 cp /bin/pwd .
 cp /bin/reboot .
 #cp /bin/rerootwin .
+#cp /bin/rio .
 #cp /bin/rx .
 cp /bin/scp .
 cp /bin/seq .
