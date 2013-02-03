@@ -22,6 +22,7 @@ if (test -d /root/mnt)
 	bind -ac /root/mnt /mnt
 mount -b /srv/factotum /mnt
 bind -ac /root/bin /bin
+
 if(~ $tgzfs *.tgz){
 	dossrv
 	if(~ $fatpath '')
@@ -34,6 +35,7 @@ if(~ $tgzfs *.tgz){
 	if not
 		echo 'tgz not found continuing with only /boot'
 }
+
 if(! ~ $usercheck bootes){
 	echo 'copying bootes skeleton to '$usercheck
 	mkdir /root/usr/$usercheck
@@ -44,6 +46,9 @@ if(! ~ $usercheck bootes){
 	mkdir /root/usr/$usercheck/bin/386
 	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
 }
+
 bind -c /usr/$usercheck/tmp /tmp
+
 echo 'partial root built'
+
 exit ''

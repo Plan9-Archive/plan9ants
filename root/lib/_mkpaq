@@ -22,8 +22,6 @@ cp /n/rootless/bootdir.extras/skel.tar .
 cp /386/bin/dossrv .
 cp /386/bin/fossil/fossil .
 cp /386/bin/venti/venti .
-cp /386/bin/usb/usbd .
-cp /386/bin/disk/partfs .
 cp /386/bin/disk/kfs .
 cp /386/bin/cfs .
 cp /386/bin/ls .

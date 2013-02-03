@@ -126,6 +126,8 @@ boot cpu boot #S/sdC0/
 bootdir
 	bootpcram.out boot
 	/386/bin/paqfs
+	/386/bin/usb/usbd
+	/386/bin/disk/partfs
 	/386/bin/bind
 	/386/bin/mount
 	/386/bin/read
@@ -153,8 +155,6 @@ bootdir
 #	/386/bin/dossrv
 #	/386/bin/fossil/fossil
 #	/386/bin/venti/venti
-#	/386/bin/usb/usbd
-#	/386/bin/disk/partfs
 #	/386/bin/disk/kfs
 #	/386/bin/cfs
 #	/386/bin/ls

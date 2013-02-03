@@ -1,6 +1,8 @@
 #!/boot/rc
 # rootless environment startup and launcher script by mycroftiv
 
+## UTILITY FUNCTIONS ##
+
 fn shifter{
 	shift
 	echo $*
@@ -29,6 +31,8 @@ fn getans{
 		echo $value
 	}
 }
+
+## ENVIRONMENT CHECKING FUNCTIONS ##
 
 fn findpart{
 	if((test -e /boot/sed) || (test -e /bin/sed)){
@@ -67,6 +71,39 @@ fn hostcheck{
 	}
 }
 
+fn dochecksys{
+	systest=`{cat /dev/sysname}
+	switch($sysname){
+	case ?*
+		if(~ $systest ''){
+			echo setting /dev/sysname to $sysname
+			echo -n $sysname >/dev/sysname
+			systest=`{cat /dev/sysname}
+		}
+		if(! ~ $systest $sysname){
+			echo warning sysname mismatch between dev and env
+		}
+	case ''
+		if(~ $systest ''){
+			if(~ $service cpu){
+				sysname=helix
+			} 
+			if(~ $service terminal){
+				sysname=gnot
+			}
+			if(~ $sysname ''){
+				sysname=mutant
+			}
+			echo no sysname found in dev or env setting to $sysname
+			echo -n $sysname >/dev/sysname
+		}
+		if not{
+			echo setting sysname var to $systest from /dev/sysname
+			sysname = $systest
+		}
+	}
+}
+
 fn doramsetup{
 	switch($ramsetup){
 	case ''
@@ -77,6 +114,8 @@ fn doramsetup{
 		rc -c $ramsetup
 	}
 }
+
+## STARTUP ACTION FUNCTIONS ##
 
 fn dofactotum{
 	if(~ $interactive yes)
@@ -237,40 +276,6 @@ fn doinitscript{
 		echo guess i should make an easter egg here
 	}
 }
-
-fn dochecksys{
-	systest=`{cat /dev/sysname}
-	switch($sysname){
-	case ?*
-		if(~ $systest ''){
-			echo setting /dev/sysname to $sysname
-			echo -n $sysname >/dev/sysname
-			systest=`{cat /dev/sysname}
-		}
-		if(! ~ $systest $sysname){
-			echo warning sysname mismatch between dev and env
-		}
-	case ''
-		if(~ $systest ''){
-			if(~ $service cpu){
-				sysname=helix
-			} 
-			if(~ $service terminal){
-				sysname=gnot
-			}
-			if(~ $sysname ''){
-				sysname=mutant
-			}
-			echo no sysname found in dev or env setting to $sysname
-			echo -n $sysname >/dev/sysname
-		}
-		if not{
-			echo setting sysname var to $systest from /dev/sysname
-			sysname = $systest
-		}
-	}
-}
-
 fn dorootstart{
 	switch($rootstart){
 	case cpu
@@ -301,17 +306,18 @@ fn dorootstart{
 }
 
 ############# End of fn definitions #################
+############# Begin script execution ###############
+
 echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
-# Begin by parsing plan9.ini options and trying to set sane defaults
-
 #cat '#r/rtc' > '#c/time'
-
 if(test -e /boot/bootpaq){
 	echo -n paqfs...
-	paqfs -s -S bootpaq -c 512 /boot/bootpaq
+	paqfs -s -S bootpaq -c 256 /boot/bootpaq
 	mount -a /srv/bootpaq /boot
 	bind -a /boot /bin
 }
+
+## Parse plan9.ini options and trying to set sane defaults ##
 
 if(! ~ $1 '')
 	. $1
@@ -359,6 +365,8 @@ if(~ $vhttplisten '')
 	vhttplisten=tcp!127.1!8000
 if(~ $interactive '')
 	interactive=traditional
+
+## INTERACTIVE STARTUP PROMPTS AND ACTIONS ##
 
 if(~ $interactive yes){
 	echo Interactive Startup - enter to continue to options or type rc for a shell
@@ -425,6 +433,9 @@ if(~ $interactive yes){
 		rc -i
 	}
 }
+
+## TRADITIONAL STARTUP PROMPTS AND ACTIONS ##
+
 if not if(~ $interactive traditional){
 	dofactotum
 	dotryusb
@@ -470,6 +481,9 @@ if not if(~ $interactive traditional){
 		rc -i
 	}
 }
+
+## NON-IINTERACTIVE STARTUP ACTIONS ##
+
 if not {
 	dofactotum
 	dotryusb
@@ -493,3 +507,4 @@ if not {
 	}
 }
 exit ''
+

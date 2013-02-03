@@ -2,6 +2,7 @@
 # ramroot startup after newns
 
 # utility fns duplicated from plan9rc, initskel might be used independently
+
 fn shifter{
 	shift
 	echo $*
@@ -32,6 +33,7 @@ fn getans{
 }
 
 # set vars and quiz user if interactive=yes
+
 keyowner=`{cat /dev/hostowner}
 if (! ~ $keyowner ?*){
 	echo please set hostowner
@@ -78,7 +80,8 @@ if(~ $interactive yes){
 	}
 }
 
-### ACTIONS BEGIN HERE ###
+## ACTIONS BEGIN HERE ##
+
 if(! ~ $binddevs no){
 	echo -n 'binddevs...'
 	for(i in f t m v L P u U '$' Σ κ)
@@ -109,6 +112,7 @@ if(~ $hostfactotum no){
 		rm /env/authip
 	}
 }
+
 if(! ~ $netsvc no){
 	if(! test -e /net/ipifc/0/ctl){
 		echo -n 'ipconfig ' $ipparams '...'
@@ -116,21 +120,25 @@ if(! ~ $netsvc no){
 		ipconfig loopback /dev/null 127.1
 	}
 }
+
 if(~ $hostcsdns no){
 	echo -n 'cs and dns -r...'
 	cs
 	dns -r
 }
+
 if(! ~ $hubsvc no){
 	echo -n 'hubfs export on 17099...'
 	hub -b hubfs
 	listen1 -t tcp!*!17099 /bin/exportfs -S /srv/hubfs &
 }
+
 if(! ~ $cpusvc no){
 	echo -n 'listen1 cpu -R...'
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
 	listen1 -t tcp!*!17009 /boot/rexexec &
 }
+
 if(~ $unprivileged no){
 	if(! test -e /x/adm/keys){
 		echo -n das doskeys...

@@ -77,7 +77,7 @@ if(~ $1 bootpaq){
 	cd root/bin
 	. _mkpaq
 	cd $builddir
-	mkpaqfs -o bootdir.extras/bootpaq root/bin
+	mkpaqfs -b 8192 -o bootdir.extras/bootpaq root/bin
 	exit
 }
 if(~ $1 tools){
