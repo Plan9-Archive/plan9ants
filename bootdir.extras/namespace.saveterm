@@ -6,6 +6,10 @@ bind #p /proc
 bind -c #s /srv
 bind -a #¤ /dev
 bind -a #S /dev
+bind -b #k /dev
+bind -a #κ /dev
+bind -a #u /dev
+bind -b #P /dev
 bind -a #l /net
 bind -a #I /net
 
@@ -42,6 +46,11 @@ mount -a /srv/slashn /n
 mount -a /srv/cs /net
 mount -a /srv/dns /net
 mount -a /srv/net /net
+mount -b /srv/ssh /net
+
+# usbd, mainly disks
+mount /srv/usb /n/usb
+mount -a /srv/usb /dev
 
 mount -c /srv/hubfs /n/hubfs
 
