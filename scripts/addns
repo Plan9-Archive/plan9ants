@@ -39,7 +39,8 @@ if(! test -e /proc/$2){
 	echo process $2 does not exist!
 	exit no.proc
 }
-
+if(test -e /tmp/chnsuniq)
+	rm /tmp/chnsuniq
 
 orig=`{cat /proc/$1/ns}
 for (i in $orig){
