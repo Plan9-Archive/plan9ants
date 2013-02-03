@@ -134,17 +134,9 @@ bootdir
 	/386/bin/test
 #	MODIFIED OR CUSTOM USED BY ROOTLESS BOOT
 	/n/rootless/bootdir.extras/rc
-	/n/rootless/bootdir.extras/factotum
 	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/plan9rc
 	/n/rootless/bootdir.extras/bootpaq
-	/n/rootless/bootdir.extras/namespace
-	/n/rootless/bootdir.extras/namespace.standard
-	/n/rootless/bootdir.extras/namespace.saveterm
-	/n/rootless/bootdir.extras/ramskel
-	/n/rootless/bootdir.extras/initskel
-	/n/rootless/bootdir.extras/save9cfg
-	/n/rootless/bootdir.extras/skel.tar
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE
 #	FILESERVER OPTIONS AND OTHER OPTIONAL TOOLS BELOW MOVED TO PAQFS
 #	/386/bin/ip/ipconfig

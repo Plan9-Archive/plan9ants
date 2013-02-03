@@ -73,9 +73,9 @@ if(~ $1 extras){
 if(~ $1 bootpaq){
 	echo building bootpaq
 	rm root/bin/*
-	cp mkpaq root/bin
+	cp root/lib/_mkpaq root/bin
 	cd root/bin
-	. mkpaq
+	. _mkpaq
 	cd $builddir
 	mkpaqfs -o bootdir.extras/bootpaq root/bin
 	exit

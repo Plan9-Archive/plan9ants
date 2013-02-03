@@ -9,6 +9,14 @@ cp /386/bin/mkdir .
 cp /386/bin/gunzip .
 cp /386/bin/sed .
 cp /386/bin/rm .
+cp /n/rootless/bootdir.extras/factotum .
+cp /n/rootless/bootdir.extras/namespace .
+cp /n/rootless/bootdir.extras/namespace.standard .
+cp /n/rootless/bootdir.extras/namespace.saveterm .
+cp /n/rootless/bootdir.extras/ramskel .
+cp /n/rootless/bootdir.extras/initskel .
+cp /n/rootless/bootdir.extras/save9cfg .
+cp /n/rootless/bootdir.extras/skel.tar .
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE .
 #	FILESERVER OPTIONS AND OTHER OPTIONAL TOOLS BELOW .
 cp /386/bin/dossrv .
