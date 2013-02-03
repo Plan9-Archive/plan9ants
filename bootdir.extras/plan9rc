@@ -1,7 +1,7 @@
 #!/boot/rc
 # rootless environment startup and launcher script by mycroftiv
 
-## UTILITY FUNCTIONS ##
+##	UTILITY FUNCTIONS ##
 
 fn shifter{
 	shift
@@ -32,7 +32,7 @@ fn getans{
 	}
 }
 
-## ENVIRONMENT CHECKING FUNCTIONS ##
+##	ENVIRONMENT CHECKING FUNCTIONS ##
 
 fn findpart{
 	if((test -e /boot/sed) || (test -e /bin/sed)){
@@ -115,7 +115,7 @@ fn doramsetup{
 	}
 }
 
-## STARTUP ACTION FUNCTIONS ##
+##	STARTUP ACTION FUNCTIONS ##
 
 fn dofactotum{
 	if(~ $interactive yes)
@@ -309,7 +309,11 @@ fn dorootstart{
 ############# Begin script execution ###############
 
 echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
+
 #cat '#r/rtc' > '#c/time'
+
+##	if we have a paqfs set it up in both boot and bin
+
 if(test -e /boot/bootpaq){
 	echo -n paqfs...
 	paqfs -s -S bootpaq -c 256 /boot/bootpaq
@@ -317,7 +321,7 @@ if(test -e /boot/bootpaq){
 	bind -a /boot /bin
 }
 
-## Parse plan9.ini options and trying to set sane defaults ##
+##	Parse plan9.ini options and trying to set sane defaults ##
 
 if(! ~ $1 '')
 	. $1
@@ -366,7 +370,7 @@ if(~ $vhttplisten '')
 if(~ $interactive '')
 	interactive=traditional
 
-## INTERACTIVE STARTUP PROMPTS AND ACTIONS ##
+##	INTERACTIVE STARTUP PROMPTS AND ACTIONS ##
 
 if(~ $interactive yes){
 	echo Interactive Startup - enter to continue to options or type rc for a shell
@@ -434,7 +438,7 @@ if(~ $interactive yes){
 	}
 }
 
-## TRADITIONAL STARTUP PROMPTS AND ACTIONS ##
+##	TRADITIONAL STARTUP PROMPTS AND ACTIONS ##
 
 if not if(~ $interactive traditional){
 	dofactotum
@@ -482,7 +486,7 @@ if not if(~ $interactive traditional){
 	}
 }
 
-## NON-IINTERACTIVE STARTUP ACTIONS ##
+##	NON-IINTERACTIVE STARTUP ACTIONS ##
 
 if not {
 	dofactotum
@@ -506,5 +510,6 @@ if not {
 		rc -i
 	}
 }
+
 exit ''
 

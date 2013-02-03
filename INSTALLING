@@ -2,6 +2,8 @@ You may either install the prebuilt 9pcram.gz and its optional tools.tgz, or bui
 
 build - with no arguments, this builds a 9pcram.gz kernel with the kernel and its compilation files located in compiletemp. 
 
+build bootpaq - builds the bootpaq which is compiled into the kernel
+
 build ramfs - this uses a ramfs for the compile and copies only the 9pcram.gz kernel to compiletemp.
 
 build tools - this creates a tools.tgz using the list of tools in root/lib/_toolcopy

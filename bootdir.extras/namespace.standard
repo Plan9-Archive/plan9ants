@@ -1,3 +1,4 @@
+# namespace file with extras from the rootlesss boot namespace toolkit
 # root
 mount -aC #s/boot /root $rootspec
 bind -a $rootdir /

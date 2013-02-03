@@ -1,3 +1,4 @@
+# namespace file for rerootwin script
 # kernel devices
 bind #c /dev
 bind #d /fd

@@ -26,6 +26,10 @@ if(! ~ $1 ?*){
 	echo need a target srv
 	exit no.srv
 }
+
+# depending on the kind of namespace we are being run from we might need
+# to get our devices in the expected place to begin
+
 if(! test -e /mnt/wsys/wctl){
 	if(! test -e /mnt/term/mnt/wsys/wctl){
 		echo no wctl at mnt wsys
@@ -44,6 +48,7 @@ if(! test -e /mnt/term/dev/cons){
 	echo binding /mnt/wsys /mnt/term/dev
 	bind /mnt/wsys /mnt/term/dev
 }
+
 if(! test -e /srv/$1){
 	srv tcp!$1!564 $1
 	if(! test -e /srv/$1){
@@ -63,6 +68,8 @@ if(! test -e /srv/$authagent){
 }
 mount -b /srv/$authagent /mnt
 
+# use srvfs to save our old devices so the namespace.saveterm can mount them later
+
 oldterm=oldterm.$pid
 oldwsys=oldwsys.$pid
 srvfs -p 0600 oldterm.$pid /mnt/term
@@ -72,4 +79,5 @@ if(test -e /bin/newns){
 	newns -n $nsfile
 	exit
 }
+
 auth/newns -n $nsfile

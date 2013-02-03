@@ -1,3 +1,5 @@
+write grio manpage
+think about automated test harness?
 continue debugging and testing wrarena backup data flow. -n option added to p9p version
 test cpns under load and stress of weird stuff thrown at it - probably deferred, too much other stuff
 make rerootwin robust and sane - improved now, net.alt is still probably wrong! added sanity options for placement

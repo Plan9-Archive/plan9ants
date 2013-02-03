@@ -1,6 +1,6 @@
 #!/boot/rc
 
-#set up ramfs as a rootlike fs
+##	set up ramfs as a rootlike fs
 
 hostdir=`{cat '#c/hostowner'}
 if (! ~ $hostdir ?*){
@@ -23,6 +23,8 @@ if (test -d /root/mnt)
 mount -b /srv/factotum /mnt
 bind -ac /root/bin /bin
 
+##	get tgzfs if chosen and load into the ramdisk
+
 if(~ $tgzfs *.tgz){
 	dossrv
 	if(~ $fatpath '')
@@ -35,6 +37,8 @@ if(~ $tgzfs *.tgz){
 	if not
 		echo 'tgz not found continuing with only /boot'
 }
+
+##	if we aren't bootes we need to have a $home
 
 if(! ~ $usercheck bootes){
 	echo 'copying bootes skeleton to '$usercheck

@@ -1,3 +1,4 @@
+# namespace file for rootless early boot
 # root
 mount -ac #s/ramboot /root $rootspec
 bind -a $rootdir /

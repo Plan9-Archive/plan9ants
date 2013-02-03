@@ -26,7 +26,7 @@ hub, hubfs, hubshell  \- persistent multiplexed i/o sessions, or 'screen without
 .I Hub
 invokes 
 .IR hubfs (1)
-to create a 9fs filesystem of pipe-like Hubs available as a /srv and starts an 
+to create a 9p filesystem of pipe-like Hubs available as a /srv and starts an 
 .IR rc (1)
 shell with its file descriptors redirected to these hubs, then uses 
 .IR hubshell (1)

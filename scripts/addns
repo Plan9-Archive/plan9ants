@@ -42,6 +42,8 @@ if(! test -e /proc/$2){
 if(test -e /tmp/chnsuniq)
 	rm /tmp/chnsuniq
 
+# find lines in model not contained in target
+
 orig=`{cat /proc/$1/ns}
 for (i in $orig){
 	search=''^$i^''
@@ -54,6 +56,8 @@ if(! test -e /tmp/chnsuniq){
 	echo no binds in $1 not in $2 to add
 	exit no.binds
 }
+
+# convet the list of binds in model not in target into a set of namespace commands
 
 sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/  / /g' |sed '/\#\|\/data/d' |sed '/\#D\/ssl/d' >/tmp/chnscom
 
@@ -75,5 +79,8 @@ if(~ $testonly yes){
 	cat /tmp/chnscom
 	exit
 }
+
+# fire off the assembled list of namespace ops and hope the world doesnt explode
+
 . /tmp/chnscom
 
