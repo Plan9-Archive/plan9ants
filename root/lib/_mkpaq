@@ -1,3 +1,4 @@
+# 	mkpaq dotscript for paqsfs needed for rootless boot namespaces
 cp /386/bin/ip/ipconfig .
 cp /386/bin/ramfs .
 cp /386/bin/auth/newns .
@@ -18,25 +19,28 @@ cp /n/rootless/bootdir.extras/initskel .
 cp /n/rootless/bootdir.extras/save9cfg .
 cp /n/rootless/bootdir.extras/skel.tar .
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE .
-#	FILESERVER OPTIONS AND OTHER OPTIONAL TOOLS BELOW .
+#	fileserver options
 cp /386/bin/dossrv .
 cp /386/bin/fossil/fossil .
 cp /386/bin/venti/venti .
 cp /386/bin/disk/kfs .
 cp /386/bin/cfs .
+#	shell tools used by namespace scripts etc
 cp /386/bin/ls .
 cp /386/bin/cp .
 cp /386/bin/ed .
+cp /386/bin/tr .
+#	remote access
 cp /386/bin/aux/listen1 .
 cp /386/bin/exportfs .
 cp /386/bin/cpu .
 cp /386/bin/srvfs .
 cp /386/bin/ip/rexexec .
 cp /386/bin/rx .
+#	hubfs and support
 cp /n/rootless/bootdir.extras/grio .
 cp /n/rootless/bootdir.extras/hubfs .
 cp /n/rootless/bootdir.extras/hubshell .
 cp /n/rootless/bootdir.extras/hub .
 cp /386/bin/sleep .
 cp /386/bin/touch .
-#	ALSO CONSIDER USING A TOOLS.TGZ SEE _TOOLCOPY IN BASEDIR/ROOT/LIB

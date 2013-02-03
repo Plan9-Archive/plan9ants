@@ -1,7 +1,8 @@
+#	toolcopy dotscript for optional tools.tgz for rootless boot support
 cp /bin/auth/authsrv .
 cp /bin/auth/as .
 cp /bin/auth/changeuser .
-#cp /bin/auth/cron .
+cp /bin/auth/cron .
 cp /bin/auth/debug .
 cp /bin/auth/keyfs .
 cp /bin/aux/mouse .
@@ -110,7 +111,6 @@ cp /bin/syscall .
 #cp /bin/tlssrvtunnel .
 #cp /bin/togif .
 cp /bin/topng .
-cp /bin/tr .
 cp /bin/unmount .
 #cp /bin/unzip .
 cp /bin/vac .

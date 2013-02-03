@@ -48,7 +48,6 @@ if(! ~ $usercheck bootes){
 }
 
 bind -c /usr/$usercheck/tmp /tmp
-
 echo 'partial root built'
 
 exit ''
