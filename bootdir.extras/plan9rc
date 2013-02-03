@@ -308,7 +308,7 @@ echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
 
 if(test -e /boot/bootpaq){
 	echo -n paqfs...
-	paqfs -s -S bootpaq /boot/bootpaq
+	paqfs -s -S bootpaq -c 512 /boot/bootpaq
 	mount -a /srv/bootpaq /boot
 	bind -a /boot /bin
 }

@@ -138,7 +138,7 @@ bootdir
 	/n/rootless/bootdir.extras/plan9rc
 	/n/rootless/bootdir.extras/bootpaq
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE
-#	FILESERVER OPTIONS AND OTHER OPTIONAL TOOLS BELOW MOVED TO PAQFS
+#	FILESERVERS AND OTHER TOOLS BELOW MOVED TO PAQFS
 #	/386/bin/ip/ipconfig
 #	/386/bin/auth/newns
 #	/386/bin/ramfs

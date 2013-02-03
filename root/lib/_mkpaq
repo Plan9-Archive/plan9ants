@@ -41,13 +41,4 @@ cp /n/rootless/bootdir.extras/hubshell .
 cp /n/rootless/bootdir.extras/hub .
 cp /386/bin/sleep .
 cp /386/bin/touch .
-#cp /386/bin/auth/as .
-#cp /386/bin/auth/authsrv .
-#cp /386/bin/auth/keyfs .
-#cp /386/bin/ndb/cs .
-#cp /386/bin/ndb/dns .
-#cp /386/bin/disk/kfscmd .
-#cp /386/bin/fossil/flfmt .
-#cp /386/bin/venti/wrarena .
-#	ALSO CONSIDER USING A TOOLS.TGZ SEE _TOOLCOPY IN BASEDIR/ROOT/LIB .
-#	SOME OF THE ABOVE COMMENTED OUT FILES ARE FOUND IN THE DEFAULT TOOLS.TGZ .
+#	ALSO CONSIDER USING A TOOLS.TGZ SEE _TOOLCOPY IN BASEDIR/ROOT/LIB
