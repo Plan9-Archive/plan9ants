@@ -97,6 +97,7 @@ if(~ $1 tools){
 echo building kernel
 cp scripts/* bootdir.extras/root/bin
 cd bootdir.extras
+rm skel.tar
 tar cf skel.tar root
 if(~ $1 ramfs){
 	echo building kernel in tmp

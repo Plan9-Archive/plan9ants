@@ -2,6 +2,7 @@
 mount -ac #s/ramboot /root $rootspec
 bind -a $rootdir /
 bind -c $rootdir/mnt /mnt
+mount -a #s/bootpaq /boot
 
 # kernel devices
 bind #c /dev
@@ -25,7 +26,6 @@ bind -a /root/bin /bin
 bind -a /root/bin /boot
 bind -a /$cputype/bin /bin
 bind -a /rc/bin /bin
-mount -a /srv/bootpaq /bin
 
 # internal networks
 # mount -a /srv/ip /net

@@ -1,42 +1,23 @@
 cp /386/bin/ip/ipconfig .
 cp /386/bin/ramfs .
 cp /386/bin/auth/newns .
-#cp /386/bin/bind .
-#cp /386/bin/mount .
 cp /386/bin/mntgen .
 cp /386/bin/srv .
-#cp /386/bin/read .
-#cp /386/bin/cat .
-#cp /386/bin/echo .
 cp /386/bin/tar .
-#cp /386/bin/test .
 cp /386/bin/chmod .
 cp /386/bin/mkdir .
 cp /386/bin/gunzip .
 cp /386/bin/sed .
 cp /386/bin/rm .
-#	MODIFIED OR CUSTOM USED BY ROOTLESS BOOT .
-#cp /n/rootless/bootdir.extras/rc .
-#cp /n/rootless/bootdir.extras/factotum .
-#cp /n/rootless/bootdir.extras/rcmain .
-#cp /n/rootless/bootdir.extras/plan9rc .
-#cp /n/rootless/bootdir.extras/namespace .
-#cp /n/rootless/bootdir.extras/namespace.standard .
-#cp /n/rootless/bootdir.extras/namespace.saveterm .
-#cp /n/rootless/bootdir.extras/ramskel .
-#cp /n/rootless/bootdir.extras/initskel .
-#cp /n/rootless/bootdir.extras/save9cfg .
-#cp /n/rootless/bootdir.extras/skel.tar .
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE .
 #	FILESERVER OPTIONS AND OTHER OPTIONAL TOOLS BELOW .
 cp /386/bin/dossrv .
 cp /386/bin/fossil/fossil .
-#cp /386/bin/venti/venti .
+cp /386/bin/venti/venti .
 cp /386/bin/usb/usbd .
 cp /386/bin/disk/partfs .
-#cp /386/bin/disk/kfs .
-#cp /386/bin/cfs .
-cp /386/bin/paqfs .
+cp /386/bin/disk/kfs .
+cp /386/bin/cfs .
 cp /386/bin/ls .
 cp /386/bin/cp .
 cp /386/bin/ed .
@@ -61,4 +42,4 @@ cp /386/bin/touch .
 #cp /386/bin/fossil/flfmt .
 #cp /386/bin/venti/wrarena .
 #	ALSO CONSIDER USING A TOOLS.TGZ SEE _TOOLCOPY IN BASEDIR/ROOT/LIB .
-#	THE ABOVE COMMENTED OUT FILES ARE FOUND IN THE DEFAULT TOOLS.TGZ .
+#	SOME OF THE ABOVE COMMENTED OUT FILES ARE FOUND IN THE DEFAULT TOOLS.TGZ .

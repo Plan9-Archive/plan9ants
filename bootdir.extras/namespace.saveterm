@@ -27,13 +27,13 @@ mount -a #s/$authagent /mnt
 mount -ac #s/$nsroot /root $rootspec
 bind -a $rootdir /
 bind -b $rootdir/mnt /mnt
+mount -a #s/bootpaq /boot
 
 # standard bin
 bind -b /boot /bin
 bind -a /root/bin /bin
 bind -a /$cputype/bin /bin
 bind -a /rc/bin /bin
-mount -a /srv/bootpaq /bin
 
 # internal networks
 

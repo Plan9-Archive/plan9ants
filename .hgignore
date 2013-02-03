@@ -5,3 +5,7 @@ syntax: glob
 compiletemp
 root/bin
 root/acme
+8.out
+hubfs
+hubshell
+bootpaq

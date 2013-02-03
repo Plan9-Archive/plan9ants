@@ -180,14 +180,4 @@ bootdir
 #	/n/rootless/bootdir.extras/hub
 #	/386/bin/sleep
 #	/386/bin/touch
-#	BELOW THIS LINE USUALLY FOUND IN TOOLS.TGZ
-#	/386/bin/auth/as
-#	/386/bin/auth/authsrv
-#	/386/bin/auth/keyfs
-#	/386/bin/ndb/cs
-#	/386/bin/ndb/dns
-#	/386/bin/disk/kfscmd
-#	/386/bin/fossil/flfmt
-#	/386/bin/venti/wrarena
 #	ALSO CONSIDER USING A TOOLS.TGZ SEE _TOOLCOPY IN BASEDIR/ROOT/LIB
-#	THE ABOVE COMMENTED OUT FILES ARE FOUND IN THE DEFAULT TOOLS.TGZ
