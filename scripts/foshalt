@@ -1,5 +1,7 @@
 #!/bin/rc
 
+# slightly simplified fossil-only fshalt script
+
 f=`{ls /srv/fscons*>[2]/dev/null}
 
 sync -h localhost >[2]/dev/null &

@@ -13,7 +13,7 @@ hostcsdns=no activates cs and dns in addition to ipconfig
 
 cpusvc=no turns off the cpu listener
 
-hubsvc=no turns off the hubfs. 
+hubsvc=no turns off the hubfs and 17099 hub exportfs listener
 
 cpuport= sets the listening port. the default is 17020 so it is necessary to use a full dialstring to connect ( cpu -h tcp!address!17020)
 

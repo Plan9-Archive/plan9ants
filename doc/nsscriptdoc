@@ -4,7 +4,7 @@ cpns MODELpid TARGETpid -t -r -x [pattern] -o [pattern]
 addns MODELpid TARGETpid -t -r -x [pattern] -o [pattern]
 subns MODELpid TARGETpid -t -r -x [pattern] -o [pattern]
 
-These scripts perform namespace modifications on processes via /proc/$pid/ns using the writable ns mod. cpns make TARGET a copy of MODEL. addns adds to TARGET binds and mounts found in MODEL but not TARGET, and subns removes from TARGET binds and mounts not present in MODEL. The options are any combination of:
+These scripts perform namespace modifications on processes via /proc/$pid/ns using the writable ns mod. cpns attempts to make TARGET a copy of MODEL. addns adds to TARGET binds and mounts found in MODEL but not TARGET, and subns removes from TARGET binds and mounts not present in MODEL. Please note that these scripts work by simple "lines in common" and do not understand the graph structure and dependencies of a namespace structure. The options are any combination of:
 
 -t test only, print commands to standard output
 -r riosafe, avoid operations involving /mnt/wsys /mnt/term /dev/cons and rio
@@ -19,4 +19,5 @@ These commands also have variants addroroot and importroroot to bring in read-on
 
 addsources dials sources and binds to its binaries and lib
 
-rerootwin TARGET is used to allow processes running in rio on remote machines via drawterm or cpu to "reroot" themselves without losing use of the mouse and keyboard. 
+rerootwin TARGET is used to allow processes running in rio on remote machines via drawterm or cpu to "reroot" themselves without losing use of the mouse and keyboard. This script is very useful for allowing free use of other namespaces from within a 'rootless' service environment.
+

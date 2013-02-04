@@ -31,3 +31,5 @@ setfactotum=no turns off putting a default password into bootes factotum
 netsvc=no turns off ipconfig
 hubcpu=no turns off hubfs and cpu listener
 cpuport=number of port for cpu to listen on
+hostcsdns=no starts a cs and dns server if available in the rootless service namespace
+unprivileged=no starts a keyfs and auth server if available

@@ -2,6 +2,7 @@
 #freeze a fossil for preservation
 
 #fossilize [partition]
+
 rfork e
 fossil=$1
 if(~ $fossil '')
