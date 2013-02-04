@@ -34,8 +34,10 @@ if(~ $1 clean){
 	cd $builddir
 	cd grio
 	mk clean
+	cd $builddir
 	cd hubfs1.1
 	mk clean
+	cd $builddir
 	rm root/bin/*
 	exit
 }
