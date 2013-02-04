@@ -1,0 +1,26 @@
+GUIDE TO CONTENTS OF THIS DIRECTORY
+
+9pcram.gz - prebuilt kernel. install in 9fat partition as usual
+tools.tgz - optional support utilities. place in 9fat and set tgzfs=tools.tgz in plan9.ini to use
+INSTALLING README INDEX - intro documentation
+build - script to build all component of the namespace toolkit
+build.hashes  - hashes of the most recent kernel, tools.tgz, and bootpaq (compiled into kernel)
+bootdir.extras/ - central point for main rootless boot tools
+	bootpaq - this is compiled into the kernel and contains tools from root/lib/_mkpaq
+	factotum grio hub hubfs hubshell rc rcmain - programs compiled into boot
+	namespace namespace.saveterm namespace.standard - customized namespace files adapted to the rootless environment
+	plan9rc - the main namespace launcher script which controls boot and launching additional namespaces
+	ramskel - sets up the ramfs skeleton and optional tgzfs
+	initskel - acts as a mini-cpurc for the rootless environment and its network services
+	save9cfg - script to save variables used in plan9.ini and by plan9rc and initskel
+	skel.tar - this is the tar of the bootdir.extras/root subdirectory
+	root/ - this is what becomes the skeleton ramfs used in the early boot environment. it contains mostly empty directories and a /usr/bootes template user director.
+compiletemp/ - used by the build script to compile things in, after running build the new 9pcram.gz kernel will be found here
+doc/ - documentation for bootup, namespace scripts, fossil/venti tools, plan9.ini/plan9rc/initskel variables
+patched/ - contains the source code for modifications of standard plan9 programs adapted to the rootless environment
+root/ - used to build the tools.tgz. It contains additional chunks of information used to provide a slightly richer plan 9 environment.
+	lib/ - contains the _mkpaq and _toolcopy scripts which can be used to customize the contents of the early boot namespace
+scripts/ - contains the non-bootup related namespace manipulation and fossil/venti maintenance scripts.
+src.9.boot/ - modified files from /sys/src/9/boot. The build script binds these modified files over the parallel directory. 
+src.9.pc/ - the 9pcram kernel configuration file and its mkfile
+src.9.port/ - modified files for writable /proc/ns and the rootless boot. These two mods are separable if desired. The ns mod affects chan.c devproc.c and portfns.h. The boot related files are devroot.c and devsrv.c
