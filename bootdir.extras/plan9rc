@@ -17,7 +17,7 @@ fn errorshell{
 fn getans{
 	query=$1
 	value=`{shifter $*}
-	echo '* '$query is':' $value - accept, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
+	echo '* '$"query' = '$"value' : accept, new value, '''clear'''', or '''rc''' : >>/fd/2
 	answer=`{read}
 	switch($answer){
 	case rc

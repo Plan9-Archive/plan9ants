@@ -17,7 +17,7 @@ fn errorshell{
 fn getans{
 	query=$1
 	value=`{shifter $*}
-	echo '* '$query is':' $value - accept, new value, '"'clear'"', or '"'rc'"' : >>/fd/2
+	echo '* '$"query' = '$"value' : accept, '''no'''' to change, or '''rc''' : >>/fd/2
 	answer=`{read}
 	switch($answer){
 	case rc
@@ -50,7 +50,7 @@ if(~ $cpuport '')
 echo 'INITSKEL minimal setup for rootless plan 9 environment'
 if(~ $interactive yes){
 	echo 'For configuration questions, answer no to disable default behaviors'
-	echo 'bind hardware devices?'
+	echo 'bind all known hardware devices?'
 	binddevs=`{getans binddevs $binddevs}
 	echo 'rely on main factotum for this environment?'
 	hostfactotum =`{getans hostfactotum $hostfactotum}
@@ -59,7 +59,7 @@ if(~ $interactive yes){
 		netsvc=`{getans netsvc $netsvc}
 	}
 	if((test -e /bin/cpu) || (test -e /boot/cpu)){
-		echo 'start cpu and rx listener ?'
+		echo 'start cpu rx exportfs listeners?'
 		cpusvc=`{getans cpusvc $cpusvc}
 	}
 	if(! ~ $cpusvc no){
@@ -71,11 +71,11 @@ if(~ $interactive yes){
 		hubsvc=`{getans hubsvc $hubsvc}
 	}
 	if((test -e /bin/cs) || (test -e /boot/cs)){
-		echo 'rely on hosted systems for cs and dns?'
+		echo 'rely on launched systems for cs and dns?'
 		hostcsdns=`{getans hostcsdns $hostcsdns}
 	}
 	if((test -e /bin/authsrv) || (test -e /boot/authsrv)){
-		echo 'operate as an unprivileged system?'
+		echo 'operate without auth privileges?'
 		unprivileged=`{getans unprivileged $unprivileged}
 	}
 }
@@ -128,14 +128,14 @@ if(~ $hostcsdns no){
 }
 
 if(! ~ $hubsvc no){
-	echo -n 'hubfs export on 17099...'
+	echo -n 'hubfs...'
 	hub -b hubfs
-	listen1 -t tcp!*!17099 /bin/exportfs -S /srv/hubfs &
 }
 
 if(! ~ $cpusvc no){
-	echo -n 'listen1 cpu -R...'
+	echo 'listen1 '$cpuport' cpu 17027 exportfs rexexec...'
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
+	listen1 -t tcp!*!17027 /bin/exportfs -a &
 	listen1 -t tcp!*!17009 /boot/rexexec &
 }
 
