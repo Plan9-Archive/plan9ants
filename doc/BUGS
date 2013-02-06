@@ -1,3 +1,5 @@
+FIXED wrong perms for ventiprog script - NOT PUSHED yet to sources
+----
 FIXED bug in default plan9.ini correlated with local! parsing
 broken for local!/dev
 FIXED only 2 known bugs, reuploading feb 4 beta version 0.9988

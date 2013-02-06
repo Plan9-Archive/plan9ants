@@ -1,5 +1,7 @@
 Attack of the giant ANTS - Advanced Namespace ToolS
 
+I. Intro
+
 The Advanced Namespace ToolS are a collection of plan 9 software designed to serve many purposes. To enumerate:
 
 1. Reliability, Resiliency, Recoverability - make grids of Plan 9 machines tolerant to hardware and software failures.
@@ -12,7 +14,7 @@ The Advanced Namespace ToolS are a collection of plan 9 software designed to ser
 
 The goal is to present to the user a computing and data environment abstracted as far away from the underlying hardware as possible, by leveraging the power of namespaces and network transparency, and make that computing and data environment as "indestructible" as possible. No matter what happens to the hardware of an individual machine or machines, the user can continue working with as little hassle as possible. Certainly, there are limits. A running application on a machine that dies will probably result in the loss of some state and perhaps some unsaved data, but this need not be more than a minor annoyance in the overall computing environment.
 
-Background: I've been working with multiple-machine plan 9 systems for about 5 years, trying to experience the "original design" of separate services acquired from the network via a terminal. I have found this to be an environment with desirable properties, many of them as described in the original papers. I also encountered some obstacles as a home user trying to deploy a true distributed plan 9 environment. In the original plan 9 design, the "infrastructure" of file and cpu servers was intended to be installed in a professional managed datacenter. The default assumptions, though somewhat adjusted over the years, remain best suited for a world where a given hardware and network configuration has a lifespan measured in years. In a home network, things may often change on a timescale of weeks, days, or even hours. The user is likely to turn off and turn on machines more often, shift both public and private nat ips, and in general operate the machines in a much less predictable way. Also, the hardware a home user is likely to be using for plan 9 is a mixture of older machines, virtual machines, and desktops hosting related software like plan9port. This is a very different reliability profile than professional datacenter hardware.
+Background: I've been working with multiple-machine plan 9 systems for about 5 years, trying to experience the "original design" of separate services acquired from the network via a terminal. I have found this to be an environment with desirable properties, many of them as described in the original papers. I also encountered some obstacles as a home user trying to deploy a true distributed plan 9 environment. In the original plan 9 design, the "infrastructure" of file and cpu servers was intended to be installed in a professionally managed datacenter. The default assumptions, though somewhat adjusted over the years, remain best suited for a world where a given hardware and network configuration has a lifespan measured in years. In a home network, things may often change on a timescale of weeks, days, or even hours. The user is likely to turn off and turn on machines more often, shift both public and private nat ips, and in general operate the machines in a much less predictable way. Also, the hardware a home user is likely to be using for plan 9 is a mixture of older machines, virtual machines, and desktops hosting related software like plan9port. This is a very different reliability profile than professional datacenter hardware.
 
 My experience as a home user building on top of older hardware mixed with virtual machines and making frequent changes to my network arrangement was that the user environment I had in plan 9 was amazing, but somewhat fragile. The grid architecture created dependencies between the different machines. If you have a backing store machine (venti) supporting a file server supporting a cpu server, the user environment breaks if there is any disruption of the machines and their network connections. At the time four years ago, Qemu virtualization also seemed less robust than now, and my VMs were prone to crashing if placed under significant load. Plan 9 was giving me a user environment that I loved, but I was also struggling with reliability issues - qemu VMs running fossil often corrupted their filesystem when crashing badly. 
 
@@ -24,7 +26,11 @@ As I experimented with different partial solutions (just running 3 copies of eve
 
 If the user at their terminal is using that cpu server, and also importing their $home from a different fileserver, the user's connection to their $home and working data set is disrupted, even though the $home fileserver is still fine - it is just the boot fileserver for the cpu server with the binaries that had a disruption. The failure of one system (the cpu root fileserver with the binaries) has caused the "failure" of 3 other working systems and ended the workflow of the user until the cpu is rebooted. The cpu kernel is still running fine - why does it need to reboot because a user-space program lost a file descriptor?
 
-The solution to all these challenges seemed clear - remove the dependency of the kernel on the root filesystem. Once the kernel is loaded into memory, it can "stand back" from userland, and instruct userspace programs to dial each other and create a namespace for the user, but the main flow of control of the master process on the system should not depend on any filedescriptor acquired from an outside system. That way, anything can die and the master flow of control never freezes trying to read from a dead fd. Here is the namespace of the "master process" on a rootless box:
+The solution to all these challenges seemed clear - remove the dependency of the kernel on the root filesystem. Once the kernel is loaded into memory, it can "stand back" from userland, and instruct userspace programs to dial each other and create a namespace for the user, but the main flow of control of the master process on the system should not depend on any filedescriptor acquired from an outside system. That way, anything can die and the master flow of control never freezes trying to read from a dead fd. 
+
+II. The boot namespace and later namespaces
+
+Here is the namespace of the "master process" on a rootless box:
 
 bind #c /dev
 bind #ec /dev
@@ -47,7 +53,7 @@ Nothing can kill this shell except the failure of the kernel itself. The tools c
 
 plan9rc is a script which acts as a general purpose "environment launcher" for plan 9 environments. It takes over the work usually done by the kernel to attach a root fileserver and launch a cpurc or termrc. It also provides an optional "interactive" mode which has offers complete user control of all bootup parameters. Once an environment has been "launched" it saves the parameters used to its local ramdisk, allowing the same environment to be spawned again non-interactively. 
 
-plan9rc is written to be compatible with existing installations and plan9.ini values to a great extent. It is focused on pc bootup and handles tcp booting, fossil, venti, and cfs in the same manner as the conventional kernel. USB boot is currently untested but I will be working on making sure it is supported as well. plan9rc creates the foundation environment to allow termrc or cpurc to be run as usual, and an existing standard plan 9 install should perform as usual when launched in this fashion. In this way the rootless kernel acts like a foundation lift for a building that lifts the entire structure and installs a new floor at ground level.
+plan9rc is written to be compatible with existing installations and plan9.ini values to a great extent. It is focused on pc bootup and handles tcp booting, fossil, venti, and cfs in the same manner as the conventional kernel. (USB boot has been tested with qemu VMs but I have not found physical hardware yet with a suitable bios). plan9rc creates the foundation environment to allow termrc or cpurc to be run as usual, and an existing standard plan 9 install should perform as usual when launched in this fashion. In this way the rootless kernel acts like a foundation lift for a building that lifts the entire structure and installs a new floor at ground level.
 
 How do we access and use this new foundation level to give us control over the system? This is done by a small cpurc-equivalent script named "initskel" that may be run by plan9rc. The initskel creates a miniature user environment rooted on a small ramdisk, so it is also independent of any non-kernel resources. This environment has a much richer namespace than the core kernel control process but it is still independent of any external resources. Compiled into /boot are enough tools to allow this namespace to run a cpu listener (on a non-standard port). Here is what the ns looks like when we cpu in on port 17020:
 
@@ -57,6 +63,8 @@ bind  / /
 bind -a /root / 
 mount -a '#s/ramboot' / 
 bind -c /root/mnt /mnt 
+bind  /boot /boot 
+mount -a '#s/bootpaq' /boot 
 bind  '#c' /dev 
 bind  '#d' /fd 
 bind -c '#e' /env 
@@ -64,21 +72,27 @@ bind  '#p' /proc
 bind -c '#s' /srv 
 bind -a '#¤' /dev 
 bind -a '#S' /dev 
+bind -b '#k' /dev 
+bind -a '#κ' /dev 
+bind -a '#u' /dev 
+bind -b '#P' /dev 
 bind  /n /n 
 mount -a '#s/slashn' /n 
 mount -a '#s/factotum' /mnt 
 bind  /bin /bin 
 bind -b /boot /bin 
+mount -b '#s/bootpaq' /bin 
 bind -a /root/bin /bin 
-bind  /boot /boot 
 bind -a /root/bin /boot 
 bind  /net /net 
 bind -a '#l' /net 
 bind -a '#I' /net 
 mount -a '#s/cs' /net 
 mount -a '#s/dns' /net 
+mount  '#s/usb' /n/usb 
+mount -a '#s/usb' /dev 
 mount -c '#s/hubfs' /n/hubfs 
-mount -c '#D/ssl/0/data' /mnt/term 
+mount -c '#D/ssl/3/data' /mnt/term 
 bind -a /usr/bootes/bin/rc /bin 
 bind -a /usr/bootes/bin/386 /bin 
 bind -c /usr/bootes/tmp /tmp 
@@ -88,7 +102,7 @@ bind  /mnt/term/dev/consctl /dev/consctl
 bind -a /mnt/term/dev /dev 
 cd /usr/bootes
 
-This namespace is a very important namespace in the structure of the grid. It exists on every single machine, created under whatever kind of cpurc or termrc they run. This environment is a perfectly user-friendly namespace, unlike the pure kernel namespace with no ramdisk attached. In fact, depending on what is compiled into boot and the optional tools.tgz contained in 9fat which may also be added to the ramdisk, this environment, while slightly spartan (no manpages, only 1 or 2 fonts 9 in /lib, etc) is in fact sufficient for many tasks. Furthermore, since you are cpu-ing in as usual to a new flow of control, you can freely acquire new resources from here without fear. If your cpu-d in environment breaks, it hasnt harmed the flow of control it spawned from, the service and utility namespace will be the same on next cpu in.
+This namespace is a very important namespace in the structure of the grid. It exists on every single machine, created under whatever kind of cpurc or termrc they run. This environment is a perfectly user-friendly namespace, unlike the pure kernel namespace with no ramdisk attached. In fact, depending on what is compiled into the bootpaq and the optional tools.tgz contained in 9fat which may also be added to the ramdisk, this environment, while slightly spartan (no manpages, only 1 or 2 fonts 9 in /lib, etc) is in fact sufficient for many tasks. Furthermore, since you are cpu-ing in as usual to a new flow of control, you can freely acquire new resources from here without fear. If your cpu-d in environment breaks, it hasnt harmed the flow of control it spawned from, the service and utility namespace will be the same on next cpu in.
 
 To aid in working using the service namespace as a base, scripts are provided to provide forms of re-rooting. Some of the simplest are "addwrroot" and "importwrroot" which target external file or cpu servers and acquire their resources and bind them in locally while still keeping the ramboot root. The binds are to acquire the binaries, lib and sys, and usr directories from the remote system. If you wish to "fully" attach to a new root while mainting your drawterm and cpu connection, the script "rerootwin" provides this functionality. This is one of the most important tools for fast transformation of a user sub-environment. rerootwin works by "saving" the active devices with srvfs of /mnt/term and /mnt/wsys, then it uses a custom namespace file to root to a named /srv or network machine, and then re-acquire the original devices from the srvfs to allow the user to remain in full control and continue to run graphical applications in that window. Here is what the namespace looks like after cpu into a "service namespace", start rio, then open a window and run "rerootwin" targeting a different machine on the network:
 
@@ -99,27 +113,34 @@ bind  '#p' /proc
 bind -c '#s' /srv 
 bind -a '#¤' /dev 
 bind -a '#S' /dev 
+bind -b '#k' /dev 
+bind -a '#κ' /dev 
+bind -a '#u' /dev 
+bind -b '#P' /dev 
 bind  /net /net 
 bind -a '#l' /net 
 bind -a '#I' /net 
 bind  /net.alt /net.alt 
 mount -a '#s/slashn' /net.alt 
-mount -c '#s/oldterm.967' /net.alt/oldterm.967 
-mount -c '#s/oldwsys.967' /net.alt/oldwsys.967 
-bind  /net.alt/oldterm.967/dev/cons /dev/cons 
-bind  /net.alt/oldterm.967/dev/consctl /dev/consctl 
-bind -a /net.alt/oldterm.967/dev /dev 
-mount -b '#s/oldwsys.967' /dev 
+mount -c '#s/oldterm.1005' /net.alt/oldterm.1005 
+mount -c '#s/oldwsys.1005' /net.alt/oldwsys.1005 
+bind  /net.alt/oldterm.1005/dev/cons /dev/cons 
+bind  /net.alt/oldterm.1005/dev/consctl /dev/consctl 
+bind -a /net.alt/oldterm.1005/dev /dev 
+mount -b '#s/oldwsys.1005' /dev 
 bind  /mnt /mnt 
 mount -a '#s/factotum' /mnt 
 bind  /root /root 
-mount -ac '#s/gridfront' /root 
+mount -ac '#s/gridfour' /root 
 bind  / / 
 bind -a /root / 
-mount -a '#s/gridfront' / 
+mount -a '#s/gridfour' / 
 bind -b /root/mnt /mnt 
+bind  /boot /boot 
+mount -a '#s/bootpaq' /boot 
 bind  /bin /bin 
 bind -b /boot /bin 
+mount -b '#s/bootpaq' /bin 
 bind -a /386/bin /bin 
 bind -a /rc/bin /bin 
 bind  /n /n 
@@ -127,7 +148,20 @@ mount -a '#s/slashn' /n
 mount -a '#s/cs' /net 
 mount -a '#s/dns' /net 
 mount -c '#s/hubfs' /n/hubfs 
+bind  /mnt/term /mnt/term 
+mount -bc '#s/oldterm.1005' /mnt/term 
+bind  /mnt/wsys /mnt/wsys 
+mount -bc '#s/oldwsys.1005' /mnt/wsys 
 bind -c /usr/bootes/tmp /tmp 
 cd /usr/bootes
 
 Using the rerootwin script in combination with the service namespace makes the cpu server a true cpu server, because you are no longer using the cpu's root at all. It is truly just providing execution resources at the junction of two totally independent systems. By cpu into the service namespace and then rerootwin to different file servers, the user environment is equivalent to one rooted conventionally to that environment, but without the depency. If the re-rooted environment breaks, the user's active workspace on the cpu outside the re-rooted window is unharmed. 
+
+The use of multiple independent namespaces, the ability of the kernel to launch and manage services without depending on a root fs, and provision of needed programs in the bootpaq and tools.tgz give us the foundation to make a highly reliable grid. How do we build services on the platform the kernel provides that create the properties we seek? (Reliability, redundancy, ease of maintenance and administration.)
+
+III. Redundant roots on demand: fast system replication and efficient progressive backup
+
+Two high-level scripts provide management of the grid's data flow via the service namespaces: ventiprog and cpsys. ventiprog is run either via a cronjob, or whenver the user wishes to update their backups. It is an efficient progressive backup script so running the script more frequently simply means less data sent, more often. cpsys uses flfmt -v to duplicate the state of fossils between systems. By using first ventiprog to replicate data between ventis, then cpsys to clone a fossil via the rootscore, and then setting the venti env variable used by the fossil to one of the backup ventis, the user is given a current working copy of their environment with a completely chain of hardware dependencies. 
+
+The preferred mode of operation is to run two ventis and two fossils, one per venti. One fossil and venti are assigned the role of 'main/future'. Data is backed up frequently between the ventis, and whenever desired, the user resets the rootscore of the 'backup/past' fossil. From their terminal, the user can keep working with their data if one 'leg' of the system needs to be reset for whatever reason. In general the user will work on the main/future fossil (probably via another cpu) but has the backup/past available for scratch and testing. Because this fossil's data basically "dead ends" unless it is needed as a backup, it can be used for destructive tests.
+
