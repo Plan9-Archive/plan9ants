@@ -39,6 +39,7 @@ if(~ $1 clean){
 	mk clean
 	cd $builddir
 	rm root/bin/*
+	rm bootdir.extras/bootpaq
 	exit
 }
 

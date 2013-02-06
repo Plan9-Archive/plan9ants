@@ -18,5 +18,3 @@ hubsvc=no turns off the hubfs and 17099 hub exportfs listener
 cpuport= sets the listening port. the default is 17020 so it is necessary to use a full dialstring to connect ( cpu -h tcp!address!17020)
 
 unprivileged=no starts an auth server if you have provided a keyfs file in 9fat and compiled in the auth and keyfs programs.
-
-One more dangerous variable is not prompted for and must be set in the environment (usually in plan9.ini)
