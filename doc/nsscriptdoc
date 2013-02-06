@@ -21,3 +21,10 @@ addsources dials sources and binds to its binaries and lib
 
 rerootwin TARGET is used to allow processes running in rio on remote machines via drawterm or cpu to "reroot" themselves without losing use of the mouse and keyboard. This script is very useful for allowing free use of other namespaces from within a 'rootless' service environment.
 
+savedevs NAME and getdevs NAME use the basic operation of the rerootwin script - saving the active window's devices with a srvfs - to let you reconnect the same (or possibly different) flow of control to the cons and wsys after changing the namespace in other ways.
+
+riobind [mount/bind namespace operation] uses the writable proc/ns mod to change the namespace of a running rio. the script simply greps the process list for rio so it may be fooled if you are running multiple rios or sub-rios.
+
+winpush PID finds the window system of the target pid and pops a window open onto that rio.
+
+riopush PID is a "trick" script to grab the window of another process (possibly remote) and run a rio inside it, under control of the local devices.

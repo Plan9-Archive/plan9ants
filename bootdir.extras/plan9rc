@@ -486,7 +486,7 @@ if not if(~ $interactive traditional){
 	}
 }
 
-##	NON-IINTERACTIVE STARTUP ACTIONS ##
+##	NON-INTERACTIVE STARTUP ACTIONS ##
 
 if not {
 	dofactotum

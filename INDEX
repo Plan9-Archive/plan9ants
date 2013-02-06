@@ -3,7 +3,7 @@ GUIDE TO CONTENTS OF THIS DIRECTORY
 9pcram.gz - prebuilt kernel. install in 9fat partition as usual
 tools.tgz - optional support utilities. place in 9fat and set tgzfs=tools.tgz in plan9.ini to use
 INSTALLING README INDEX - intro documentation
-build - script to build all component of the namespace toolkit
+build - script to build all components of the namespace toolkit
 build.hashes  - hashes of the most recent kernel, tools.tgz, and bootpaq (compiled into kernel)
 bootdir.extras/ - central point for main rootless boot tools
 	bootpaq - this is compiled into the kernel and contains tools from root/lib/_mkpaq
@@ -14,7 +14,7 @@ bootdir.extras/ - central point for main rootless boot tools
 	initskel - acts as a mini-cpurc for the rootless environment and its network services
 	save9cfg - script to save variables used in plan9.ini and by plan9rc and initskel
 	skel.tar - this is the tar of the bootdir.extras/root subdirectory
-	root/ - this is what becomes the skeleton ramfs used in the early boot environment. it contains mostly empty directories and a /usr/bootes template user director.
+	root/ - this is what becomes the skeleton ramfs used in the early boot environment. it contains mostly empty directories and a /usr/bootes template user directory.
 compiletemp/ - used by the build script to compile things in, after running build the new 9pcram.gz kernel will be found here
 doc/ - documentation for bootup, namespace scripts, fossil/venti tools, plan9.ini/plan9rc/initskel variables
 patched/ - contains the source code for modifications of standard plan9 programs adapted to the rootless environment

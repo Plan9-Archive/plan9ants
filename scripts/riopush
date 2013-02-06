@@ -3,12 +3,12 @@
 #riopush TARGETPID
 
 rfork e
-local = `{ns |grep wsys |sed 's/#s/\/srv/g' |tr -d ''''}
+local = `{ns |grep wsys |grep rio |sed 's/#s/\/srv/g' |tr -d ''''}
 winid = `{cat /dev/winid |tr -d ' 
  
 	'}
 localmount = `{echo $local(1) $local(2) $local(3) $winid}
-remote = `{ns $1 |grep wsys |sed 's/#s/\/srv/g' |tr -d ''''}
+remote = `{ns $1 |grep wsys |grep rio |sed 's/#s/\/srv/g' |tr -d ''''}
 bind /mnt/wsys /n/oldwin
 $remote
 bind -b /mnt/wsys /dev

@@ -1,0 +1,11 @@
+#!/bin/rc
+# save current window and console devices for later attachment
+
+rfork e
+srvname=$pid
+if(! ~ $1 '')
+	srvname=$1
+
+srvfs -p 0600 oldterm.$srvname /mnt/term
+srvfs -p 0600 oldwsys.$srvname /mnt/wsys
+echo devices saved at oldterm.$srvname oldwsys.$srvname

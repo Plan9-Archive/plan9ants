@@ -1,0 +1,21 @@
+#!/bin/rc
+# retrieve devices to re-attach to window system
+# getdevs name
+
+if(~ $1 ''){
+	echo need a srvname with saved devices
+	exit no.srvname
+}
+if(! test -e /srv/oldterm.$1){
+	echo no devices saved at /srv/oldterm.$1
+	exit no.devices
+}
+
+mount -c /srv/oldterm.$1 /n/oldterm
+mount -c /srv/oldwsys.$1 /n/oldwsys
+bind /n/oldterm/dev/cons /dev/cons
+bind /n/oldterm/dev/consctl /dev/consctl
+bind -a /n/oldterm/dev /dev
+bind -b /n/oldwsys /dev
+bind -bc /n/oldterm /mnt/term
+bind -bc /n/oldwsys /mnt/wsys
