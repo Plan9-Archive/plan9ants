@@ -1,0 +1,85 @@
+
+Plan 9
+E820: 00000000 0009f400 memory
+E820: 0009f400 000a0000 reserved
+E820: 000f0000 00100000 reserved
+E820: 00100000 1fffe000 memory
+E820: 1fffe000 20000000 reserved
+E820: fffc0000 100000000 reserved
+cpu0:  3200MHz GenuineIntel PentiumII (cpuid: AX 0x0633 DX 0x781ABF9)
+ELCR: 0C00
+#l0: igbe: 1Gbps port 0xFEBA0000 irq 11: 525400123456
+512M memory: 89M kernel data, 423M user, 1048M swap
+usbinit.../boot/usbd: /dev/usb: no hubs
+no /srv/usb...kbmap...bind / /...time...
+init...service: cpu...bind # trees...plan9rc...
+ROOTLESS PLAN 9 NAMESPACE LAUNCHER
+paqfs...bin: Wed Feb  6 05:59:29 GMT 2013
+fingerprint: 835063a9b486bfeac6c935f6c10a0c32cda827df
+cpu factotum...
+ramsetup ramskel...
+ramfs -S ramboot...tar xf /boot/skel.tar...dossrv: serving #s/dos
+tar xzf tools.tgz...partial root built
+no sysname found in dev or env setting to helix
+root is from (tcp,local)[local!#S/sdC0/fossil]: tcp
+* fs =  : accept, new value, 'clear', or 'rc' :
+192.168,1.1.125
+* auth =  : accept, new value, 'clear', or 'rc' :
+192.168.1.125
+ipconfig
+srv 192.168.1.125 to /srv/boot...
+post...
+INITSKEL minimal setup for rootless plan 9 environment
+binddevs...mntgen...hubfs...creating hubfs /srv/hubfs
+listen1 17060 cpu 17027 exportfs rexexec...
+mounting /srv/boot to /root and starting cpurc
+storing startup configuration to ramdisk in /usr/bootes/tmp/p9cfg
+starting mntgen and shell in current namespace
+% mv /srv/boot /srv/cputcpboot
+% interactive ==yes
+% plan9rc
+ROOTLESS PLAN 9 NAMESPACE LAUNCHER
+paqfs...bin: Wed Feb  6 05:59:29 GMT 2013
+fingerprint: 835063a9b486bfeac6c935f6c10a0c32cda827df
+paqfs: create #s/bootpaq: '#s/bootpaq' srv file already exists
+Interactive Startup - enter to continue to options or type rc for a shell
+
+Internet config DHCP by default. Enter ipconfig parameters if needed
+* ipparams =  : accept, new value, 'clear', or 'rc' :
+
+Choose factotum mode - cpu terminal or debug.
+* factotum = cpu : accept, new value, 'clear', or 'rc' :
+clear
+no factotum
+* sysname = helix : accept, new value, 'clear', or 'rc' :
+
+Skeleton fs required for mountpoints. Default ramskel recommended.
+* ramsetup = ramskel : accept, new value, 'clear', or 'rc' :
+clear
+Load optional tools from 9fat? Enter tools.tgz or other if desired
+* tgzfs = tools.tgz : accept, new value, 'clear', or 'rc' :
+clear
+no ramsetup
+Start local Venti? Enter yes if so.
+* startventi =  : accept, new value, 'clear', or 'rc' :
+
+Attach to a file server? Choose local or tcp or leave blank for none.
+* getrootfs = local : accept, new value, 'clear', or 'rc' :
+
+Dial a venti server? Enter a dialstring or ip if so.
+* venti =  : accept, new value, 'clear', or 'rc' :
+
+parsed fossil bootpartition as  /dev/sdC0/fossil  enter new value if this is incorrect
+* bootpartition = /dev/sdC0/fossil : accept, new value, 'clear', or 'rc' :
+
+starting fossil from /dev/sdC0/fossil...
+Create cpu server namespace on a port of your choice? Initskel if so.
+* initscript = initskel : accept, new value, 'clear', or 'rc' :
+clear
+Start cpurc termrc from the file server? Enter cpu or terminal if so.
+* rootstart = cpu : accept, new value, 'clear', or 'rc' :
+terminal
+mounting /srv/boot to /root and starting termrc
+mntgen: postfd slashn: '/srv/slashn' srv file already exists
+upas/fs: opening /mail/box/bootes/mbox: '/mail/box/bootes/mbox' does not exist
+mount: can't open /srv/upasfs.bootes: '/srv/upasfs.bootes' file does not exist
