@@ -1,3 +1,4 @@
+# first create a hubfs on a hub server machine and make some extra hubfiles
 gridterm: hub -b aes
 creating hubfs /srv/aes
 gridterm: mount -c /srv/aes /n/aes
@@ -5,29 +6,37 @@ gridterm: touch /n/aes/encin
 gridterm: touch /n/aes/encout
 gridterm: touch /n/aes/decout
 
+# now on another machine we mount the hubfs and have this machine do encryption
 cpu -h gridtwo
 import -a gridterm /srv
 mount -c /srv/aes /n/aes
 hub aes g2
 g2% auth/aescbc -i -e </n/aes/encin >>/n/aes/encout <[3] cryptkey
 
+# on another machine we mount the hubfs and read the encrypted data and decrypt it
 cpu -h gridfront
 import -a gridterm /srv
 mount -c /srv/aes /n/aes
 hub aes gfront
 gfront% auth/aescbc -i -d </n/aes/encout >>/n/aes/decout <[3] cryptkey
 
+# back on the hubfs host we will start bursts of data flowing into the hubfs
 gridterm:
 bind /n/aes/encin /x
-while(sleep 10){cat /lib/words >>/x
+while(sleep 10){
+	cat /lib/words >>/x
 	echo $c
 	c=`{echo $c' + 1' |hoc}
-	}
+}
 
+# and on the fourth machine we mount the hubfs and read the decrypted stream
 helix:
 import -a gridterm /srv
 mount /srv/aes /n/aes
 cat /n/aes/decout
 
-gridterm > g2 encrypt > gfront decrypt > helix read
-any node can host hubfs and any code and read/write to any hub file descriptor
+
+# gridterm > g2 encrypt > gfront decrypt > helix read
+# any node can host hubfs and any code and read/write to any hub file descriptor
+
+# Tested @ 6579 repetitions and running 20 hour runtime Fri Feb 7-8

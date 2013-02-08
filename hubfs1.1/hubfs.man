@@ -198,7 +198,9 @@ UNIX pipes,
 and
 .IR aux/consolefs (4)
 .SH BUGS
-The command parser is primitive. There are no provided options for giving clients different levels of privilege to control the session. Mental incapacity to grapple with the combinatoric possibilities of higher-dimensional pipe topologies (see below). Reinvention of the wheel in octagonal form. Parameters such as data bucket size are compiled-in.
+In the standard mode of use for interactive rc shells, the synchronization between stdout and stderr is not maintained. The symptom is prompts appearing in seemingly the wrong place.
+.PP
+Because hubfs maintains static buffers and always allows clients to write to avoid loss of interactivity, slow readers may experience data loss while reading output larger than the size of the static buffer if the output was also transmitted fast enough to "wrap around" the location of the reader in the data buffer. The purpose of "paranoid" mode is to restrict the speed of writers if this is a concern.
 .PP
 -
 .PP

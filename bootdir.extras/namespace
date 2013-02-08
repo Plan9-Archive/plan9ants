@@ -25,10 +25,10 @@ mount -a /srv/slashn /n
 mount -a /srv/factotum /mnt
 
 # standard bin
-bind -b /boot /bin
-bind -a /root/bin /bin
+bind -a /boot /bin
+bind -b /root/bin /bin
 bind -a /root/bin /boot
-bind -a /$cputype/bin /bin
+bind -b /$cputype/bin /bin
 bind -a /rc/bin /bin
 
 # internal networks

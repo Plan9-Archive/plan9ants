@@ -35,9 +35,9 @@ bind -b $rootdir/mnt /mnt
 mount -a #s/bootpaq /boot
 
 # standard bin
-bind -b /boot /bin
-bind -a /root/bin /bin
-bind -a /$cputype/bin /bin
+bind -a /boot /bin
+bind -b /root/bin /bin
+bind -b /$cputype/bin /bin
 bind -a /rc/bin /bin
 
 # internal networks

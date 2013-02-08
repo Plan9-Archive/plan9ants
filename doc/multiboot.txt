@@ -23,9 +23,9 @@ tar xzf tools.tgz...partial root built
 no sysname found in dev or env setting to helix
 root is from (tcp,local)[local!#S/sdC0/fossil]: tcp
 * fs =  : accept, new value, 'clear', or 'rc' :
-192.168,1.1.125
+192.168.1.124
 * auth =  : accept, new value, 'clear', or 'rc' :
-192.168.1.125
+192.168.1.120
 ipconfig
 srv 192.168.1.125 to /srv/boot...
 post...
@@ -35,8 +35,8 @@ listen1 17060 cpu 17027 exportfs rexexec...
 mounting /srv/boot to /root and starting cpurc
 storing startup configuration to ramdisk in /usr/bootes/tmp/p9cfg
 starting mntgen and shell in current namespace
-% mv /srv/boot /srv/cputcpboot
-% interactive ==yes
+% mv /srv/boot /srv/tcpboot
+% interactive=yes
 % plan9rc
 ROOTLESS PLAN 9 NAMESPACE LAUNCHER
 paqfs...bin: Wed Feb  6 05:59:29 GMT 2013
