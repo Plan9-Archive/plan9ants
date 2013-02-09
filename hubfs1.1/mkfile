@@ -17,3 +17,9 @@ $O.hubfs: hubfs.$O
 
 $O.hubshell: hubshell.$O
 	$LD -o $target $prereq
+
+install:V:
+	for (i in $TARG)
+		mk $MKFLAGS $i.install
+	cp hub /rc/bin/hub
+	cp hubfs.man /sys/man/1/hubfs

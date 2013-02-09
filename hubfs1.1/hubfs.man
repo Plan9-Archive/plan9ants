@@ -175,7 +175,7 @@ echo melt >/n/hubsrv/ctl #resume normal flow of data
 .PP
 .IP
 .EX
-echo fear >/n/hubsrv/ctl #activate paranoid mode
+echo fear >/n/hubsrv/ctl #activate paranoid(safe) mode - writers wait for readers
 .EE
 .PP
 .IP
