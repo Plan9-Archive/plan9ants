@@ -5,15 +5,25 @@
 #include <thread.h>
 #include <9p.h>
 
-#define BUCKSIZE 777777
-#define MAGIC 77777
-#define MAXQ 777
-#define SMBUF 777
-
 /* provides input/output multiplexing for 'screen' like functionality */
 /* usually used in combination with hubshell client and hub wrapper script */
 
-typedef struct Hub	Hub;			/* A Hub is a file that functions as a multiplexed pipe */
+/* These flags are used to set the state of queued 9p requests and also ketchup/wait in paranoid mode */
+enum flags{
+	UP = 1,
+	DOWN = 2,
+	WAIT = 3,
+	DONE = 4,
+};
+
+enum buffersizes{
+	BUCKSIZE = 777777,			/* Make this bigger if you want larger buffers */
+	MAGIC = 77777,			/* This is how many bytes readers are allowed to lag in paranoid mode */
+	MAXQ = 777,				/* Maximum number of 9p requests to queue */
+	SMBUF = 777,				/* Just for names, small strings, etc */
+};
+
+typedef struct Hub	Hub;			/* A Hub is a file that functions as a multiplexed pipe-like data buffer */
 typedef struct Msgq	Msgq;		/* The Msgq is a per-client fid structure to track location */
 
 struct Hub{
@@ -25,29 +35,22 @@ struct Hub{
 	Req *qreqs[MAXQ];			/* pointers to queued read Reqs */
 	int rstatus[MAXQ];			/* status of read requests */
 	int qrnum;				/* index of read Reqs waiting to be filled */
-	int qans;					/* number of read Reqs answered */
+	int qrans;					/* number of read Reqs answered */
 	Req *qwrits[MAXQ];			/* Similar for write Reqs */
 	int wstatus[MAXQ];
 	int qwnum;
 	int qwans;
-	int ketchup;				/* makes it all taste better */
-	int tomatoflag;				/* fruit vs veggies  */
+	int ketchup;				/* used to track lag of readers relative to writers in paranoid mode */
+	int tomatoflag;				/* readers put up the tomatoflag to tell writers to wait for them  */
 	QLock wrlk;				/* writer lock during fear */
 	QLock replk;				/* reply lock during fear */
-	int killme;					/* i need to die */
+	int killme;					/* in paranoid mode we fork new procs and need to kill old ones */
 };
 
 struct Msgq{
 	ulong myfid;				/* Msgq is associated with client fids */
 	char *nxt;					/* Location of this client in the buffer */
 	int bufuse;				/* how much of the buffer has been used */
-};
-
-enum {
-	UP = 1,
-	DOWN = 2,
-	WAIT = 3,
-	DONE = 4,
 };
 
 char *srvname;
@@ -75,6 +78,10 @@ Srv fs = {
 	.create=	fscreate,
 };
 
+/* Basic logic - we have a buffer/bucket of data (a hub) that is mapped to a file. For each hub we keep two queues of 9p requests, one for reads and one for writes. As the requests come in, we add them to the queue, and then fulfill the older requests we have queued. */
+
+/* The data buffers are statically sized at creation. This means that data is continuously read and written in a "rotating" pattern. When we reach the end, we wrap back around to the beginning. Our job is just accurately transferring the bytes in and out of the bucket and tracking the location of the 'read and write heads' for each writer and each reader. */
+
 /* msgsend replies to Reqs queued by fsread */
 void
 msgsend(Hub *h)
@@ -86,14 +93,14 @@ msgsend(Hub *h)
 	if(h->qrnum == 0){
 		return;
 	}
-	for(int i = h->qans; i <= h->qrnum; i++){
+	for(int i = h->qrans; i <= h->qrnum; i++){
 
 		if(paranoia == UP){
 			qlock(&h->replk);
 		}
 		if(h->rstatus[i] != WAIT){
-			if((i == h->qans) && (i < h->qrnum)){
-				h->qans++;
+			if((i == h->qrans) && (i < h->qrnum)){
+				h->qrans++;
 			}
 			if(paranoia == UP){
 				qunlock(&h->replk);
@@ -126,8 +133,8 @@ msgsend(Hub *h)
 		mq->nxt += count;
 		mq->bufuse += count;
 		h->rstatus[i] = DONE;
-		if((i == h->qans) && (i < h->qrnum)){
-			h->qans++;
+		if((i == h->qrans) && (i < h->qrnum)){
+			h->qrans++;
 		}
 		respond(r, nil);
 
@@ -243,7 +250,7 @@ fsread(Req *r)
 		if(mq->bufuse > 0){
 			if(h->qrnum >= MAXQ -2){
 				h->qrnum = 1;
-				h->qans = 1;
+				h->qrans = 1;
 			}
 			h->qrnum++;
 			h->rstatus[h->qrnum] = WAIT;
@@ -273,7 +280,7 @@ fsread(Req *r)
 	if(h->qrnum >= MAXQ - 2){
 		msgsend(h);
 		h->qrnum = 1;
-		h->qans = 1;
+		h->qrans = 1;
 	}
 	h->rstatus[h->qrnum] = WAIT;
 	h->qreqs[h->qrnum] = r;
@@ -325,6 +332,7 @@ fswrite(Req *r)
 	msgsend(h);
 }
 
+/* making a file is making a new hub so we allocate and zero it to prepare for i/o */
 void
 fscreate(Req *r)
 {
@@ -344,6 +352,8 @@ fscreate(Req *r)
 	respond(r, Ebad);
 }
 
+
+/* an open is a new client for the hubfile so we associate a new message queue with the client fid and hub file */
 void
 fsopen(Req *r)
 {
@@ -365,6 +375,7 @@ fsopen(Req *r)
 	respond(r, nil);
 }
 
+/* delete the hub. Note that we don't track the associated mqs of clients so we leak them. This is a small leak and in normal usage hubs aren't deleted anyway. */
 void
 fsdestroyfile(File *f)
 {
@@ -376,19 +387,21 @@ fsdestroyfile(File *f)
 	}
 }
 
+/* called when a hubfile is created. I'm not sure about the eccentricity of qrans being set to 1 and qwans to 0. Both are set to 1 upon looping. */
 void
 zerohub(Hub *h)
 {
 	memset(h, 0, sizeof(Hub));
 	h->inbuckp = h->bucket;
 	h->qrnum = 0;
-	h->qans = 1;
+	h->qrans = 1;
 	h->qwnum = 0;
 	h->qwans = 0;
 	h->ketchup = 0;
 	h->buckwrap = h->inbuckp + BUCKSIZE;
 }
 
+/* set status of paranoid mode and frozen/normal from ctl messages */
 void
 hubcmd(char *cmd)
 {
@@ -466,3 +479,13 @@ main(int argc, char **argv)
 }
 
 /* basic 9pfile implementation taken from /sys/src/lib9p/ramfs.c */
+
+/* A note on paranoid mode and writer/reader synchronization. The default behavior is "broadcast like" rather than pipelike, because writers are never blocked by default. This is because in a network situation with remote readers, blocking writes to wait for remote client reads to complete produces an unpleasant user experience where the remote latency limits the local environment. As a consequence, by default it is up to the writer to a file to limit the quantity and speed of data writen to what clients are able receive. The normal intended mode of operation is for shells, and in this case data is both 'bursty' and usually fairly small. */
+
+/* Paranoid mode is intended as "safe mode" and changes this first-come first served behavior. In paranoid mode, the readers and writers attempt to synchronize. The hub ketchup and tomatoflag variables are used to monitor if readers have 'fallen behind' the current data pointer, and if so, the writer is qlocked and sleeps while we fork off a new flow of control. We need to do more than just answer the queued reads - because we are inside the 9p library (we are the functions called by its srv pointer) we want the 9p library to actually answer the incoming reads so we have read messages queued to answer. Just clearing out the read message queue isn't enough to prioritize readers - we need to fork off so the controlling 9p library has a chance to answer NEW reads. By forking and sleeping the writer, we allow the os to answer a new read request, which will unlock the writer, which then needs to die at the end of its function because we are a single-threaded 9p server and need to maintain one master flow of control. */
+
+/* The paranoid/safe mode code is still limited in its logic for handling multiple readers. The ketchup and tomatoflag are per hub, and a hub can have multiple clients. It is intentional that these multiple clients will 'race for the flag' and the writer will stop waiting when one reader catches up enough to set ketchup and tomato flag. A more comprehensive solution would require adding new structure to the client mq and a ref-counting implementation for attaches to the hub so the hub could check the status of each client individually. There are additional problems with this because clients are free to 'stop reading' at any time and thus a single client unattaching will end up forcing the hub into 'as slow as possible' mode. */
+
+/* To avoid completely freezing a hub, there is still a default "go ahead" time even when clients have not caught up. This time is difficult to assess literally because it is a repeated sleep loop so the os may perform many activities during the sleep. Extending the length of this delay time increases the safety guarantee for lagging clients, but also increases the potential for lag and for molasses-like shells after remote clients disconnect. */
+
+/* In general for the standard use of interactive shells paranoid mode is unnecessary and all of this can and should be ignored. For data critical applications aiming for high speed constant throughput, paranoid mode can and should be used, but additional data verification, such as a cryptographic hashing protocol, would still be recommended. */

@@ -1,4 +1,5 @@
 syntax: glob
+8.*
 *.8
 *.gz
 *.tgz

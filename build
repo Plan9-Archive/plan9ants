@@ -73,15 +73,10 @@ if(~ $1 extras){
 	mk
 	cp 8.out ../bootdir.extras/grio
 	cd ../hubfs1.1
-	rm hubfs
-	rm hubshell
-	rm *.8
-	8c -FTVw hubfs.c
-	8l -o hubfs hubfs.8
-	8c -FTVw hubshell.c
-	8l -o hubshell hubshell.8
-	cp hubfs ../bootdir.extras
-	cp hubshell ../bootdir.extras
+	mk clean
+	mk all
+	cp 8.hubfs ../bootdir.extras/hubfs
+	cp 8.hubshell ../bootdir.extras/hubshell
 	cp hub ../bootdir.extras
 	exit
 }
