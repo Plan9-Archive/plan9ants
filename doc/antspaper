@@ -210,6 +210,8 @@ This is another way hubfs functions - to 'save' namespaces. If there is a namesp
 As a proof of concept, I used hubfs to create a 4 machine encrypt/decrypt pipeline. Machine A hosted a hubfs and created the extra hubfiles encin encout decout. Machine B then both mounted the hubfs and attached to it, and began running auth/aescbc -e </n/aes/encin >>/n/aes/encout. Machine B mounted the hubfs, attached a local shell, and began running auth/aescbc -d </n/aes/encout >>/n/aes/decout. Machine D mounted the hubfs and viewed the decrypted output of decout. Machine A also 'spied' on the encrypted channel by watching /n/aes/encout to see the encrypted version of the data.
 
 At the moment this is being written, the grid is simultaneously rrunning the aescbc hubfs test and has reached 7560 cats of /lib/words through the encryption filter, while simultaneously running ventiprog to mirror the venti data and maintaining persistent hubfs connections to all local and remote nodes, as well as preparing this document and using another set of hubs to maintain persistent emu ircfs sessions, and performing multiple other tasks distributed across all grid nodes. (contrib/install font packages, vnc connection to a linux box, etc.)
+[ The test was brief paused with no errors after 24+ hours of continuous operation and 8gb+ of cumulative data written through to take a few snapshots of the state of hubs. ]
+[ The test was stopped after 35 hours with no errors and 12314 loops and the data saved ]
 
 VI. The sum of the parts: A case study in creating an always available data environment on a home grid
 
