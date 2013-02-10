@@ -1,5 +1,5 @@
 take screenshots write walkthroughs tutorials get up on 9gridchan and post to 9fans
-write grio manpage
+write grio manpage - write ns script manpages - write fossil script manpages - write rerootwin/other ns script manpage
 think about automated test harness?
 continue debugging and testing wrarena backup data flow. -n option added to p9p version -got this all scripted now with ventiprog
 test cpns under load and stress of weird stuff thrown at it - probably deferred, too much other stuff - tested more, updated filters on bad mounts, seems ok

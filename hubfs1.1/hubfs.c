@@ -18,12 +18,12 @@ enum flags{
 
 enum buffersizes{
 	BUCKSIZE = 777777,			/* Make this bigger if you want larger buffers */
-	MAGIC = 77777,			/* This is how many bytes readers are allowed to lag in paranoid mode */
+	MAGIC = 77777,			/* In paranoid mode let readers lag this many bytes */
 	MAXQ = 777,				/* Maximum number of 9p requests to queue */
 	SMBUF = 777,				/* Just for names, small strings, etc */
 };
 
-typedef struct Hub	Hub;			/* A Hub is a file that functions as a multiplexed pipe-like data buffer */
+typedef struct Hub	Hub;			/* A Hub file functions as a multiplexed pipe-like data buffer */
 typedef struct Msgq	Msgq;		/* The Msgq is a per-client fid structure to track location */
 
 struct Hub{
@@ -78,9 +78,15 @@ Srv fs = {
 	.create=	fscreate,
 };
 
-/* Basic logic - we have a buffer/bucket of data (a hub) that is mapped to a file. For each hub we keep two queues of 9p requests, one for reads and one for writes. As the requests come in, we add them to the queue, and then fulfill the older requests we have queued. */
-
-/* The data buffers are statically sized at creation. This means that data is continuously read and written in a "rotating" pattern. When we reach the end, we wrap back around to the beginning. Our job is just accurately transferring the bytes in and out of the bucket and tracking the location of the 'read and write heads' for each writer and each reader. */
+/*
+ * Basic logic - we have a buffer/bucket of data (a hub) that is mapped to a file.
+ * For each hub we keep two queues of 9p requests, one for reads and one for writes.
+ * As requests come in, we add them to the queue, then fill queued requests that are waiting.
+ * The data buffers are statically sized at creation. This means that data is continuously read
+ * and written in a "rotating" pattern. When we reach the end, we wrap back around to the beginning. 
+ * Our job is accurately transferring the bytes in and out of the bucket and 
+ * tracking the location of the 'read and write heads' for each writer and each reader. 
+*/
 
 /* msgsend replies to Reqs queued by fsread */
 void
@@ -93,6 +99,7 @@ msgsend(Hub *h)
 	if(h->qrnum == 0){
 		return;
 	}
+	/* LOOP through all queued 9p read requests for this hub and answer if needed */
 	for(int i = h->qrans; i <= h->qrnum; i++){
 
 		if(paranoia == UP){
@@ -107,7 +114,7 @@ msgsend(Hub *h)
 			}
 			continue;
 		}
-
+		/* request found, if it has already read all data then keep it waiting for more and return */
 		r = h->qreqs[i];
 		mq = r->fid->aux;
 		if(mq->nxt == h->inbuckp){
@@ -116,8 +123,9 @@ msgsend(Hub *h)
 			}
 			continue;
 		}
-
 		count = r->ifcall.count;
+
+		/* BUCKET WRAPAROUND LOGIC CHECK HERE FOR BUGS */
 		if(mq->nxt >= h->buckwrap){
 			mq->nxt = h->bucket;
 			mq->bufuse = 0;
@@ -128,6 +136,8 @@ msgsend(Hub *h)
 		if((mq->bufuse + count > h->buckfull) && (mq->bufuse < h->buckfull)){
 			count = h->buckfull - mq->bufuse;
 		}
+
+		/* Done with wraparound checks, now we can send the data */
 		memmove(r->ofcall.data, mq->nxt, count);
 		r->ofcall.count = count;
 		mq->nxt += count;
@@ -175,7 +185,7 @@ wrsend(Hub *h)
 			}
 		}
 	}
-
+	/* LOOP through queued 9p write requests for this hub */
 	for(int i = h->qwans; i <= h->qwnum; i++){
 		if(h->wstatus[i] != WAIT){
 			if((i == h->qwans) && (i < h->qwnum)){
@@ -183,14 +193,17 @@ wrsend(Hub *h)
 			}
 			continue;
 		}
-
 		r = h->qwrits[i];
 		count = r->ifcall.count;
+
+		/* BUCKET WRAPAROUND LOGIC CHECK HERE FOR BUGS */
 		if((h->buckfull + count) >= BUCKSIZE - 8192){
 			h->buckwrap = h->inbuckp;
 			h->inbuckp = h->bucket;
 			h->buckfull = 0;
 		}
+
+		/* Move the data into the bucket, update our counters, and respond */
 		memmove(h->inbuckp, r->ifcall.data, count);
 		h->inbuckp += count;
 		h->buckfull += count;
@@ -275,7 +288,7 @@ fsread(Req *r)
 		respond(r, nil);
 		return;
 	}
-
+	/* Actual queue logic, ctl file and freeze mode logic is rarely used */
 	h->qrnum++;
 	if(h->qrnum >= MAXQ - 2){
 		msgsend(h);
@@ -320,6 +333,7 @@ fswrite(Req *r)
 		respond(r, nil);
 		return;
 	}
+	/* Actual queue logic here */
 	h->qwnum++;
 	if(h->qwnum >= MAXQ - 2){
 		msgsend(h);
@@ -330,6 +344,8 @@ fswrite(Req *r)
 	h->qwrits[h->qwnum] = r;
 	wrsend(h);
 	msgsend(h);
+	/* CRUCIAL - we do msgsend here after wrsend because we KNOW a write has happened */
+	/* THEREFORE we know that there will be new data for readers and should send it to them ASAP */
 }
 
 /* making a file is making a new hub so we allocate and zero it to prepare for i/o */
@@ -353,7 +369,7 @@ fscreate(Req *r)
 }
 
 
-/* an open is a new client for the hubfile so we associate a new message queue with the client fid and hub file */
+/* new client for the hubfile so associate a new message queue with client fid and hub file */
 void
 fsopen(Req *r)
 {
@@ -375,7 +391,8 @@ fsopen(Req *r)
 	respond(r, nil);
 }
 
-/* delete the hub. Note that we don't track the associated mqs of clients so we leak them. This is a small leak and in normal usage hubs aren't deleted anyway. */
+/* delete the hub. Note that we don't track the associated mqs of clients so we leak them. */
+/* This is a small leak and in normal usage hubs aren't deleted anyway. */
 void
 fsdestroyfile(File *f)
 {
@@ -387,7 +404,7 @@ fsdestroyfile(File *f)
 	}
 }
 
-/* called when a hubfile is created. I'm not sure about the eccentricity of qrans being set to 1 and qwans to 0. Both are set to 1 upon looping. */
+/* called when a hubfile is created ?Why is qrans being set to 1 and qwans to 0 when both are set to 1 upon looping? */
 void
 zerohub(Hub *h)
 {

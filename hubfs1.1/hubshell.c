@@ -6,6 +6,7 @@
 
 /* hubshell is the client for hubfs, usually started by the hub wrapper script */
 
+/* A Shell gets "glued on" to an rc and bucket-brigades data between the rc fd's and hubfs */
 typedef struct Shell	Shell;
 
 struct Shell {
@@ -37,10 +38,16 @@ setupshell(char *name)
 	Shell *s;
 
 	s = (Shell*)malloc(sizeof(Shell));
+	if(s == nil){
+		sysfatal("Hubshell malloc failed!\n");
+	}
 	memset(s, 0, sizeof(Shell));
 	strncat(s->basename, name, SMBUF);
 	for(int i = 1; i < 3; i++){
 		s->fdname[i] = (char*)malloc((strlen(s->basename)+1));
+		if(s->fdname[i] == nil){
+			sysfatal("Hubshell malloc failed!\n");
+		}
 		sprint(s->fdname[i], "%s%d", s->basename, i);
 		if((s->fd[i] = open(s->fdname[i], OREAD)) < 0){
 			fprint(2, "hubshell: giving up on task - cant open %s\n", s->fdname[i]);
@@ -48,6 +55,9 @@ setupshell(char *name)
 		};
 	}
 	s->fdname[0] =  (char*)malloc((strlen(s->basename)+1));
+	if(s->fdname[0] == nil){
+		sysfatal("Hubshell malloc failed!\n");
+	}
 	sprint(s->fdname[0], "%s%d", s->basename, 0);
 	if((s->fd[0] = open(s->fdname[0], OWRITE)) < 0){
 		fprint(2, "hubshell: giving up on task - cant open %s\n", s->fdname[0]);
@@ -63,6 +73,7 @@ setupshell(char *name)
 void
 startshell(Shell *s)
 {
+	/* fork cats for each file descriptor used by a shell */
 	if(rfork(RFPROC|RFMEM|RFNOWAIT|RFNOTEG)==0){
 		fdonecat(s->fd[1], 1, s);
 		exits(nil);
@@ -191,6 +202,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		closefds(s);
 		exits(nil);
 	}
+	/* %remote command makes new shell on hubfs host by creating new hubfiles starting new rc and exiting current */
 	if(strncmp(buf, "remote", 6) == 0){
 		if(isalpha(*(buf + 7)) == 0){
 			fprint(2, "remote needs a name parameter to create new hubs\n:io ");
@@ -225,6 +237,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		startshell(newshell);
 		exits(nil);
 	}
+	/* %local command makes new shell on local machine by executing the hub command and exiting */
 	if(strncmp(buf, "local", 5) == 0){
 		if(isalpha(*(buf + 6)) == 0){
 			fprint(2, "local needs a name parameter to create new hubs\nio: ");
@@ -239,6 +252,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		execl("/bin/hub", "hub", srvname, tmpstr, 0);
 		exits(nil);
 	}
+	/* %attach name starts new shell and exits the current one */
 	if(strncmp(buf, "attach", 6) == 0){
 		if(isalpha(*(buf + 7)) == 0){
 			fprint(2, "attach needs a name parameter to know what hubs to use, try %%list\nio: ");
@@ -313,8 +327,8 @@ main(int argc, char *argv[])
 	Shell *s;
 
 	if(argc != 2){
-		fprint(2, "usage: hubshell hubsname - and probably you want the hub wrapper script instead");
-		exits(nil);
+		fprint(2, "usage: hubshell hubsname - and probably you want the hub wrapper script instead.");
+		sysfatal("usage\n");
 	}
 	strncpy(initname, argv[1], SMBUF);
 	strncat(srvname, initname+3, SMBUF);

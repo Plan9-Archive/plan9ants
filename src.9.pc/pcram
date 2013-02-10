@@ -125,15 +125,15 @@ boot cpu boot #S/sdC0/
 
 bootdir
 	bootpcram.out boot
-	/386/bin/paqfs
-	/386/bin/usb/usbd
-	/386/bin/disk/partfs
-	/386/bin/bind
-	/386/bin/mount
-	/386/bin/read
-	/386/bin/cat
-	/386/bin/echo
-	/386/bin/test
+	/n/rootless/root/bin/paqfs
+	/n/rootless/root/bin/usbd
+	/n/rootless/root/bin/partfs
+	/n/rootless/root/bin/bind
+	/n/rootless/root/bin/mount
+	/n/rootless/root/bin/read
+	/n/rootless/root/bin/cat
+	/n/rootless/root/bin/echo
+	/n/rootless/root/bin/test
 	/n/rootless/bootdir.extras/rc
 	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/plan9rc

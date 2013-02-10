@@ -23,6 +23,7 @@ gfront% auth/aescbc -i -d </n/aes/encout >>/n/aes/decout <[3] cryptkey
 # back on the hubfs host we will start bursts of data flowing into the hubfs
 gridterm:
 bind /n/aes/encin /x
+c=0
 while(sleep 10){
 	cat /lib/words >>/x
 	echo $c

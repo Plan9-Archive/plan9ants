@@ -61,6 +61,8 @@ if(~ $1 patched){
 	mk 8.factotum
 	cp 8.factotum $builddir/bootdir.extras/factotum
 	cd $builddir
+	strip bootdir.extras/rc
+	strip bootdir.extras/factotum
 	rm -rf /tmp/rc
 	rm -rf /tmp/factotum
 	exit
@@ -78,6 +80,10 @@ if(~ $1 extras){
 	cp 8.hubfs ../bootdir.extras/hubfs
 	cp 8.hubshell ../bootdir.extras/hubshell
 	cp hub ../bootdir.extras
+	cd $builddir
+	strip bootdir.extras/grio
+	strip bootdir.extras/hubfs
+	strip bootdir.extras/hubshell
 	exit
 }
 
@@ -88,6 +94,7 @@ if(~ $1 bootpaq){
 	cd root/bin
 	. _mkpaq
 	cd $builddir
+	strip root/bin/*
 	mkpaqfs -b 8192 -o bootdir.extras/bootpaq root/bin
 	sha1sum bootdir.extras/bootpaq >>build.hashes
 	exit
@@ -100,6 +107,7 @@ if(~ $1 tools){
 	cd root/bin
 	. _toolcopy
 	cd $builddir
+	strip root/bin/*
 	ramfs -m /tmp
 	tar cf /tmp/tools.tar root
 	gzip -9 -c /tmp/tools.tar >tools.tgz
@@ -111,6 +119,17 @@ if(~ $1 tools){
 
 echo building kernel
 cp scripts/* bootdir.extras/root/bin
+rm root/bin/*
+cp /bin/paqfs root/bin
+cp /bin/usb/usbd root/bin
+cp /bin/disk/partfs root/bin
+cp /bin/bind root/bin
+cp /bin/mount root/bin
+cp /bin/read root/bin
+cp /bin/cat root/bin
+cp /bin/echo root/bin
+cp /bin/test root/bin
+strip root/bin/*
 cd bootdir.extras
 rm skel.tar
 tar cf skel.tar root

@@ -1,3 +1,5 @@
 There are two main methods of customizing the install. One is to rebuild the kernel with a different selection of tools compiled into boot. This is done mostly by editing the file root/lib/_mkpaq which controls the tools compiled into the bootpaq.
 The other method is customizing the optional tools.tgz. A premade script for creating it is included at root/lib/_toolcopy and the command build tools uses that script to control what binaries and scripts will be added to the /bin of the tools.tgz
 You can customize the initial ultra-minimal skelton fs by working within bootdir.extras/root. Be cautious in modifying this or the plan9rc script may fail in unexpected ways or the early boot environment may break.
+
+It is also beneficial if some of the ANTS software is also present in the main hosted environments. rerootwin and the namespace scripts, /lib/namespace.saveterm, and hubfs hubshell hub and grio can all be installed to the main environment without disrupting it.
