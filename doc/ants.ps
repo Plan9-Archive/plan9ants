@@ -1,0 +1,6426 @@
+%!PS-Adobe-2.0
+%%Version: 0.1
+%%DocumentFonts: (atend)
+%%Pages: (atend)
+%%EndComments
+%
+% Version 3.3.2 prologue for troff files.
+%
+
+/#copies 1 store
+/aspectratio 1 def
+/formsperpage 1 def
+/landscape false def
+/linewidth .3 def
+/magnification 1 def
+/margin 0 def
+/orientation 0 def
+/resolution 720 def
+/rotation 1 def
+/xoffset 0 def
+/yoffset 0 def
+
+/roundpage true def
+/useclippath true def
+/pagebbox [0 0 612 792] def
+
+/R  /Times-Roman def
+/I  /Times-Italic def
+/B  /Times-Bold def
+/BI /Times-BoldItalic def
+/H  /Helvetica def
+/HI /Helvetica-Oblique def
+/HB /Helvetica-Bold def
+/HX /Helvetica-BoldOblique def
+/CW /Courier def
+/CO /Courier def
+/CI /Courier-Oblique def
+/CB /Courier-Bold def
+/CX /Courier-BoldOblique def
+/PA /Palatino-Roman def
+/PI /Palatino-Italic def
+/PB /Palatino-Bold def
+/PX /Palatino-BoldItalic def
+/Hr /Helvetica-Narrow def
+/Hi /Helvetica-Narrow-Oblique def
+/Hb /Helvetica-Narrow-Bold def
+/Hx /Helvetica-Narrow-BoldOblique def
+/KR /Bookman-Light def
+/KI /Bookman-LightItalic def
+/KB /Bookman-Demi def
+/KX /Bookman-DemiItalic def
+/AR /AvantGarde-Book def
+/AI /AvantGarde-BookOblique def
+/AB /AvantGarde-Demi def
+/AX /AvantGarde-DemiOblique def
+/NR /NewCenturySchlbk-Roman def
+/NI /NewCenturySchlbk-Italic def
+/NB /NewCenturySchlbk-Bold def
+/NX /NewCenturySchlbk-BoldItalic def
+/ZD /ZapfDingbats def
+/ZI /ZapfChancery-MediumItalic def
+/S  /S def
+/S1 /S1 def
+/GR /Symbol def
+
+/inch {72 mul} bind def
+/min {2 copy gt {exch} if pop} bind def
+
+/setup {
+	counttomark 2 idiv {def} repeat pop
+
+	landscape {/orientation 90 orientation add def} if
+	/scaling 72 resolution div def
+	linewidth setlinewidth
+	1 setlinecap
+
+	pagedimensions
+	xcenter ycenter translate
+	orientation rotation mul rotate
+	width 2 div neg height 2 div translate
+	xoffset inch yoffset inch neg translate
+	margin 2 div dup neg translate
+	magnification dup aspectratio mul scale
+	scaling scaling scale
+
+	addmetrics
+	0 0 moveto
+} def
+
+/pagedimensions {
+	useclippath userdict /gotpagebbox known not and {
+		/pagebbox [clippath pathbbox newpath] def
+		roundpage currentdict /roundpagebbox known and {roundpagebbox} if
+	} if
+	pagebbox aload pop
+	4 -1 roll exch 4 1 roll 4 copy
+	landscape {4 2 roll} if
+	sub /width exch def
+	sub /height exch def
+	add 2 div /xcenter exch def
+	add 2 div /ycenter exch def
+	userdict /gotpagebbox true put
+} def
+
+/addmetrics {
+	/Symbol /S null Sdefs cf
+	/Times-Roman /S1 StandardEncoding dup length array copy S1defs cf
+} def
+
+/pagesetup {
+	/page exch def
+	currentdict /pagedict known currentdict page known and {
+		page load pagedict exch get cvx exec
+	} if
+} def
+
+/decodingdefs [
+	{counttomark 2 idiv {y moveto show} repeat}
+	{neg /y exch def counttomark 2 idiv {y moveto show} repeat}
+	{neg moveto {2 index stringwidth pop sub exch div 0 32 4 -1 roll widthshow} repeat}
+	{neg moveto {spacewidth sub 0.0 32 4 -1 roll widthshow} repeat}
+	{counttomark 2 idiv {y moveto show} repeat}
+	{neg setfunnytext}
+] def
+
+/setdecoding {/t decodingdefs 3 -1 roll get bind def} bind def
+
+/w {neg moveto show} bind def
+/m {neg dup /y exch def moveto} bind def
+/done {/lastpage where {pop lastpage} if} def
+
+/f {
+	dup /font exch def findfont exch
+	dup /ptsize exch def scaling div dup /size exch def scalefont setfont
+	linewidth ptsize mul scaling 10 mul div setlinewidth
+	/spacewidth ( ) stringwidth pop def
+} bind def
+
+/changefont {
+	/fontheight exch def
+	/fontslant exch def
+	currentfont [
+		1 0
+		fontheight ptsize div fontslant sin mul fontslant cos div
+		fontheight ptsize div
+		0 0
+	] makefont setfont
+} bind def
+
+/sf {f} bind def
+
+/cf {
+	dup length 2 idiv
+	/entries exch def
+	/chtab exch def
+	/newencoding exch def
+	/newfont exch def
+
+	findfont dup length 1 add dict
+	/newdict exch def
+	{1 index /FID ne {newdict 3 1 roll put}{pop pop} ifelse} forall
+
+	newencoding type /arraytype eq {newdict /Encoding newencoding put} if
+
+	newdict /Metrics entries dict put
+	newdict /Metrics get
+	begin
+		chtab aload pop
+		1 1 entries {pop def} for
+		newfont newdict definefont pop
+	end
+} bind def
+
+%
+% A few arrays used to adjust reference points and character widths in some
+% of the printer resident fonts. If square roots are too high try changing
+% the lines describing /radical and /radicalex to,
+%
+%	/radical	[0 -75 550 0]
+%	/radicalex	[-50 -75 500 0]
+%
+% Move braceleftbt a bit - default PostScript character is off a bit.
+%
+
+/Sdefs [
+	/bracketlefttp		[201 500]
+	/bracketleftbt		[201 500]
+	/bracketrighttp		[-81 380]
+	/bracketrightbt		[-83 380]
+	/braceleftbt		[203 490]
+	/bracketrightex		[220 -125 500 0]
+	/radical		[0 0 550 0]
+	/radicalex		[-50 0 500 0]
+	/parenleftex		[-20 -170 0 0]
+	/integral		[100 -50 500 0]
+	/infinity		[10 -75 730 0]
+] def
+
+/S1defs [
+	/underscore		[0 80 500 0]
+	/endash			[7 90 650 0]
+] def
+%
+% Tries to round clipping path dimensions, as stored in array pagebbox, so they
+% match one of the known sizes in the papersizes array. Lower left coordinates
+% are always set to 0.
+%
+
+/roundpagebbox {
+    7 dict begin
+	/papersizes [8.5 inch 11 inch 14 inch 17 inch] def
+
+	/mappapersize {
+		/val exch def
+		/slop .5 inch def
+		/diff slop def
+		/j 0 def
+		0 1 papersizes length 1 sub {
+			/i exch def
+			papersizes i get val sub abs
+			dup diff le {/diff exch def /j i def} {pop} ifelse
+		} for
+		diff slop lt {papersizes j get} {val} ifelse
+	} def
+
+	pagebbox 0 0 put
+	pagebbox 1 0 put
+	pagebbox dup 2 get mappapersize 2 exch put
+	pagebbox dup 3 get mappapersize 3 exch put
+    end
+} bind def
+
+%%EndProlog
+%%BeginSetup
+mark
+%
+% Encoding vector and redefinition of findfont for the ISO Latin1 standard.
+% The 18 characters missing from ROM based fonts on older printers are noted
+% below.
+%
+
+/ISOLatin1Encoding [
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/space
+	/exclam
+	/quotedbl
+	/numbersign
+	/dollar
+	/percent
+	/ampersand
+	/quoteright
+	/parenleft
+	/parenright
+	/asterisk
+	/plus
+	/comma
+	/minus
+	/period
+	/slash
+	/zero
+	/one
+	/two
+	/three
+	/four
+	/five
+	/six
+	/seven
+	/eight
+	/nine
+	/colon
+	/semicolon
+	/less
+	/equal
+	/greater
+	/question
+	/at
+	/A
+	/B
+	/C
+	/D
+	/E
+	/F
+	/G
+	/H
+	/I
+	/J
+	/K
+	/L
+	/M
+	/N
+	/O
+	/P
+	/Q
+	/R
+	/S
+	/T
+	/U
+	/V
+	/W
+	/X
+	/Y
+	/Z
+	/bracketleft
+	/backslash
+	/bracketright
+	/asciicircum
+	/underscore
+	/quoteleft
+	/a
+	/b
+	/c
+	/d
+	/e
+	/f
+	/g
+	/h
+	/i
+	/j
+	/k
+	/l
+	/m
+	/n
+	/o
+	/p
+	/q
+	/r
+	/s
+	/t
+	/u
+	/v
+	/w
+	/x
+	/y
+	/z
+	/braceleft
+	/bar
+	/braceright
+	/asciitilde
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/dotlessi
+	/grave
+	/acute
+	/circumflex
+	/tilde
+	/macron
+	/breve
+	/dotaccent
+	/dieresis
+	/.notdef
+	/ring
+	/cedilla
+	/.notdef
+	/hungarumlaut
+	/ogonek
+	/caron
+	/space
+	/exclamdown
+	/cent
+	/sterling
+	/currency
+	/yen
+	/brokenbar		% missing
+	/section
+	/dieresis
+	/copyright
+	/ordfeminine
+	/guillemotleft
+	/logicalnot
+	/hyphen
+	/registered
+	/macron
+	/degree			% missing
+	/plusminus		% missing
+	/twosuperior		% missing
+	/threesuperior		% missing
+	/acute
+	/mu			% missing
+	/paragraph
+	/periodcentered
+	/cedilla
+	/onesuperior		% missing
+	/ordmasculine
+	/guillemotright
+	/onequarter		% missing
+	/onehalf		% missing
+	/threequarters		% missing
+	/questiondown
+	/Agrave
+	/Aacute
+	/Acircumflex
+	/Atilde
+	/Adieresis
+	/Aring
+	/AE
+	/Ccedilla
+	/Egrave
+	/Eacute
+	/Ecircumflex
+	/Edieresis
+	/Igrave
+	/Iacute
+	/Icircumflex
+	/Idieresis
+	/Eth			% missing
+	/Ntilde
+	/Ograve
+	/Oacute
+	/Ocircumflex
+	/Otilde
+	/Odieresis
+	/multiply		% missing
+	/Oslash
+	/Ugrave
+	/Uacute
+	/Ucircumflex
+	/Udieresis
+	/Yacute			% missing
+	/Thorn			% missing
+	/germandbls
+	/agrave
+	/aacute
+	/acircumflex
+	/atilde
+	/adieresis
+	/aring
+	/ae
+	/ccedilla
+	/egrave
+	/eacute
+	/ecircumflex
+	/edieresis
+	/igrave
+	/iacute
+	/icircumflex
+	/idieresis
+	/eth			% missing
+	/ntilde
+	/ograve
+	/oacute
+	/ocircumflex
+	/otilde
+	/odieresis
+	/divide			% missing
+	/oslash
+	/ugrave
+	/uacute
+	/ucircumflex
+	/udieresis
+	/yacute			% missing
+	/thorn			% missing
+	/ydieresis
+] def
+
+/NewFontDirectory FontDirectory maxlength dict def
+
+%
+% Apparently no guarantee findfont is defined in systemdict so the obvious
+%
+%	systemdict /findfont get exec
+%
+% can generate an error. So far the only exception is a VT600 (version 48.0).
+%
+
+userdict /@RealFindfont known not {
+	userdict begin
+		/@RealFindfont systemdict begin /findfont load end def
+	end
+} if
+
+/findfont {
+	dup NewFontDirectory exch known not {
+		dup
+		%dup systemdict /findfont get exec	% not always in systemdict
+		dup userdict /@RealFindfont get exec
+		dup /Encoding get StandardEncoding eq {
+			dup length dict begin
+				{1 index /FID ne {def}{pop pop} ifelse} forall
+				/Encoding ISOLatin1Encoding def
+				currentdict
+			end
+			/DummyFontName exch definefont
+		} if
+		NewFontDirectory 3 1 roll put
+	} if
+	NewFontDirectory exch get
+} bind def
+
+setup
+%%EndSetup
+%%Page: 1 1
+/saveobj save def
+mark
+1 pagesetup
+14 /Times-Bold f
+(Attack of the) 2096 1230 w
+(giant ANTS!) 2906 1230 w
+(Advanced Namespace) 2032 1530 w
+(ToolS) 3377 1530 w
+12 /Times-Bold f
+(for) 2227 1830 w
+(Plan 9 from) 2410 1830 w
+(Bell) 3047 1830 w
+(Labs) 3278 1830 w
+10 /Times-Italic f
+(Ben Kidwell, "mycroftiv") 2366 2070 w
+(ABSTRACT) 2643 2510 w
+10 /Times-Roman f
+(The) 1330 2770 w
+(Advanced) 1522 2770 w
+(Namespace) 1963 2770 w
+(ToolS) 2459 2770 w
+(are) 2741 2770 w
+(a) 2899 2770 w
+(collection) 2980 2770 w
+(of) 3411 2770 w
+(plan) 3531 2770 w
+(9) 3740 2770 w
+(software) 3828 2770 w
+(designed) 4209 2770 w
+(to) 4602 2770 w
+(serve many purposes. To enumerate:) 1080 2890 w
+(1.) 1080 3130 w
+(Reliability,) 1198 3130 w
+(Resiliency,) 1689 3130 w
+(Recoverability) 2179 3130 w
+(\255) 2810 3130 w
+(make) 2886 3130 w
+(grids) 3145 3130 w
+(of) 3389 3130 w
+(Plan) 3516 3130 w
+(9) 3738 3130 w
+(machines) 3832 3130 w
+(tolerant) 4253 3130 w
+(to) 4602 3130 w
+(hardware and software failures.) 1080 3250 w
+(2.) 1080 3490 w
+(Flexibility) 1186 3490 w
+(and) 1635 3490 w
+(Configurability) 1810 3490 w
+(\255) 2458 3490 w
+(make) 2522 3490 w
+(it) 2769 3490 w
+(easy) 2856 3490 w
+(to) 3064 3490 w
+(change) 3173 3490 w
+(what) 3486 3490 w
+(role) 3711 3490 w
+(a) 3897 3490 w
+(system) 3972 3490 w
+(is) 4281 3490 w
+(playing) 4380 3490 w
+(in) 1080 3610 w
+(a) 1187 3610 w
+(grid,) 1260 3610 w
+(to) 1475 3610 w
+(add) 1582 3610 w
+(in) 1755 3610 w
+(new) 1862 3610 w
+(systems,) 2057 3610 w
+(and) 2428 3610 w
+(retire) 2600 3610 w
+(old) 2838 3610 w
+(ones,) 2994 3610 w
+(without) 3230 3610 w
+(disrupting) 3564 3610 w
+(the) 3998 3610 w
+(user) 4148 3610 w
+(environ\255) 4342 3610 w
+(ment.) 1080 3730 w
+(3.) 1080 3970 w
+(Multiplexing) 1183 3970 w
+(namespaces) 1734 3970 w
+(on) 2238 3970 w
+(one) 2366 3970 w
+(machine) 2538 3970 w
+(\255) 2904 3970 w
+(the) 2966 3970 w
+(standard) 3117 3970 w
+(Plan) 3484 3970 w
+(9) 3691 3970 w
+(installer) 3770 3970 w
+(sets) 4121 3970 w
+(up) 4300 3970 w
+(a) 4429 3970 w
+(Plan) 4502 3970 w
+(9) 1080 4090 w
+(environment) 1166 4090 w
+(with) 1706 4090 w
+(a) 1919 4090 w
+(namespace) 1998 4090 w
+(organized) 2470 4090 w
+(to) 2898 4090 w
+(appear) 3011 4090 w
+(similar) 3311 4090 w
+(to) 3624 4090 w
+(a) 3737 4090 w
+(traditional) 3816 4090 w
+(unix) 4262 4090 w
+(envi\255) 4475 4090 w
+(ronment,) 1080 4210 w
+(and) 1468 4210 w
+(all) 1642 4210 w
+(software) 1772 4210 w
+(on) 2146 4210 w
+(the) 2277 4210 w
+(machine) 2430 4210 w
+(operates) 2799 4210 w
+(within) 3162 4210 w
+(this) 3449 4210 w
+(namespace.) 3625 4210 w
+(This) 4118 4210 w
+(is) 4327 4210 w
+(purely) 4425 4210 w
+(conventional,) 1080 4330 w
+(and) 1649 4330 w
+(the) 1821 4330 w
+(Plan) 1971 4330 w
+(9) 2177 4330 w
+(kernel) 2255 4330 w
+(is) 2532 4330 w
+(happy) 2626 4330 w
+(to) 2897 4330 w
+(run) 3002 4330 w
+(multiple) 3162 4330 w
+(user) 3523 4330 w
+(environments) 3716 4330 w
+(with) 4287 4330 w
+(radi\255) 4492 4330 w
+(cally) 1080 4450 w
+(different) 1307 4450 w
+(namespaces) 1683 4450 w
+(on) 2192 4450 w
+(the) 2325 4450 w
+(same) 2480 4450 w
+(machine.) 2718 4450 w
+(One) 3114 4450 w
+(notable) 3313 4450 w
+(application) 3640 4450 w
+(of) 4117 4450 w
+(this) 4234 4450 w
+(is) 4413 4450 w
+(run\255) 4514 4450 w
+(ning) 1080 4570 w
+(both) 1292 4570 w
+(9front) 1504 4570 w
+(userland) 1782 4570 w
+(and) 2154 4570 w
+(standard) 2332 4570 w
+(Bell) 2704 4570 w
+(Labs) 2905 4570 w
+(userland) 3133 4570 w
+(on) 3505 4570 w
+(the) 3639 4570 w
+(same) 3794 4570 w
+(box) 4032 4570 w
+(at) 4215 4570 w
+(the) 4320 4570 w
+(same) 4475 4570 w
+(time, one available via CPU\(1\) and one via the terminal's physical display and i/o.) 1080 4690 w
+(4.) 1080 4930 w
+(Ad\255hoc) 1185 4930 w
+(namespaces) 1514 4930 w
+(built) 2020 4930 w
+(from) 2234 4930 w
+(multiple) 2458 4930 w
+(machines) 2823 4930 w
+(\255) 3231 4930 w
+(The) 3295 4930 w
+(converse) 3481 4930 w
+(of) 3866 4930 w
+(the) 3980 4930 w
+(previous) 4133 4930 w
+(goal) 4508 4930 w
+(is) 1080 5050 w
+(the) 1182 5050 w
+(ability) 1339 5050 w
+(to) 1630 5050 w
+(easily) 1743 5050 w
+(create) 2011 5050 w
+(an) 2283 5050 w
+(envrionment) 2411 5050 w
+(built) 2950 5050 w
+(from) 3168 5050 w
+(diverse) 3396 5050 w
+(and) 3718 5050 w
+(distinct) 3896 5050 w
+(services) 4225 5050 w
+(on) 4580 5050 w
+(different) 1080 5170 w
+(machines.) 1463 5170 w
+(This) 1905 5170 w
+(is) 2123 5170 w
+(part) 2230 5170 w
+(of) 2425 5170 w
+("standard") 2548 5170 w
+(plan) 3008 5170 w
+(9) 3220 5170 w
+(but) 3310 5170 w
+(the) 3478 5170 w
+(existing) 3640 5170 w
+(tools) 3998 5170 w
+(and) 4234 5170 w
+(scripts) 4419 5170 w
+(don't provide many much high\255level semantics for en masse namespace operations.) 1080 5290 w
+(5.) 1080 5530 w
+(Data) 1189 5530 w
+(sharing) 1411 5530 w
+(and) 1739 5530 w
+(persistence) 1917 5530 w
+(\255) 2394 5530 w
+(Multiple) 2461 5530 w
+(machines) 2840 5530 w
+(should) 3251 5530 w
+(be) 3552 5530 w
+(able) 3680 5530 w
+(to) 3881 5530 w
+(work) 3994 5530 w
+(easily) 4234 5530 w
+(with) 4502 5530 w
+(the) 1080 5650 w
+(same) 1228 5650 w
+(data,) 1459 5650 w
+(even) 1676 5650 w
+(dynamic,) 1890 5650 w
+(flowing) 2285 5650 w
+(data,) 2622 5650 w
+(and being able to study and replicate past data) 2839 5650 w
+(flows is useful.) 1080 5770 w
+(6.) 1080 6010 w
+(Adminstration) 1189 6010 w
+(\255) 1801 6010 w
+(It) 1868 6010 w
+(should) 1963 6010 w
+(be) 2264 6010 w
+(easy) 2392 6010 w
+(for) 2603 6010 w
+(the) 2753 6010 w
+(user) 2909 6010 w
+(to) 3110 6010 w
+(administer) 3223 6010 w
+(all) 3680 6010 w
+(the) 3815 6010 w
+(machines) 3972 6010 w
+(used) 4384 6010 w
+(to) 4602 6010 w
+(create) 1080 6130 w
+(the) 1346 6130 w
+(workspace.) 1497 6130 w
+(Administration) 1976 6130 w
+(should) 2610 6130 w
+(be) 2905 6130 w
+(contained) 3027 6130 w
+(away) 3443 6130 w
+(from) 3681 6130 w
+(the) 3903 6130 w
+(main) 4053 6130 w
+(user) 4281 6130 w
+(envi\255) 4475 6130 w
+(ronment, but constantly and easily accessible.) 1080 6250 w
+(7.) 1080 6490 w
+(Automatic) 1181 6490 w
+(backup/replication) 1629 6490 w
+(and) 2398 6490 w
+(recovery.) 2568 6490 w
+(Redundant) 2967 6490 w
+(usable) 3426 6490 w
+(copies) 3707 6490 w
+(of) 3989 6490 w
+(data) 4099 6490 w
+(should) 4292 6490 w
+(be) 4586 6490 w
+(made automatically, and reverting to an earlier environment should be painless and fast.) 1080 6610 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 1 1
+%%Page: 2 2
+/saveobj save def
+mark
+2 pagesetup
+10 /Times-Roman f
+(\255 2 \255) 2797 480 w
+10 /Times-Bold f
+(I. Intro) 720 840 w
+10 /Times-Roman f
+(The) 970 996 w
+(goal) 1154 996 w
+(is) 1355 996 w
+(to) 1451 996 w
+(present) 1558 996 w
+(to) 1875 996 w
+(the) 1982 996 w
+(user) 2134 996 w
+(a) 2330 996 w
+(computing) 2404 996 w
+(and) 2862 996 w
+(data) 3036 996 w
+(environment) 3232 996 w
+(abstracted) 3767 996 w
+(as) 4201 996 w
+(far) 4314 996 w
+(away) 4454 996 w
+(from) 4694 996 w
+(the) 4918 996 w
+(underlying) 720 1116 w
+(hardware) 1182 1116 w
+(as) 1581 1116 w
+(possible,) 1693 1116 w
+(by) 2075 1116 w
+(leveraging) 2204 1116 w
+(the) 2654 1116 w
+(power) 2805 1116 w
+(of) 3083 1116 w
+(namespaces) 3195 1116 w
+(and) 3700 1116 w
+(network) 3873 1116 w
+(transparency,) 4228 1116 w
+(and) 4790 1116 w
+(to) 4962 1116 w
+(make) 720 1236 w
+(that) 967 1236 w
+(computing) 1148 1236 w
+(and) 1607 1236 w
+(data) 1782 1236 w
+(environment) 1979 1236 w
+(as) 2515 1236 w
+("indestructible") 2629 1236 w
+(as) 3286 1236 w
+(possible.) 3400 1236 w
+(No) 3784 1236 w
+(matter) 3937 1236 w
+(what) 4223 1236 w
+(happens) 4449 1236 w
+(to) 4808 1236 w
+(the) 4918 1236 w
+(hardware) 720 1356 w
+(of) 1116 1356 w
+(an) 1225 1356 w
+(individual) 1345 1356 w
+(machine) 1777 1356 w
+(or machines, the user can continue working with as little hassle as possi\255) 2141 1356 w
+(ble.) 720 1476 w
+(The) 893 1476 w
+(goal) 1074 1476 w
+(of) 1272 1476 w
+(no) 1381 1476 w
+(disruption) 1507 1476 w
+(must) 1939 1476 w
+(acknowledge) 2160 1476 w
+(some) 2712 1476 w
+(limits.) 2950 1476 w
+(A) 3231 1476 w
+(running) 3330 1476 w
+(application) 3668 1476 w
+(on) 4139 1476 w
+(a) 4266 1476 w
+(machine) 4337 1476 w
+(that) 4702 1476 w
+(dies) 4879 1476 w
+(will) 720 1596 w
+(probably) 908 1596 w
+(result) 1295 1596 w
+(in) 1549 1596 w
+(the) 1659 1596 w
+(loss) 1813 1596 w
+(of) 2001 1596 w
+(some) 2116 1596 w
+(state) 2359 1596 w
+(and) 2574 1596 w
+(perhaps) 2750 1596 w
+(some) 3092 1596 w
+(unsaved) 3335 1596 w
+(data,) 3694 1596 w
+(but) 3917 1596 w
+(this) 4077 1596 w
+(should) 4253 1596 w
+(not) 4551 1596 w
+(be) 4710 1596 w
+(more) 4835 1596 w
+(than a minor annoyance in the overall computing environment.) 720 1716 w
+(I) 970 1872 w
+(began) 1040 1872 w
+(working) 1315 1872 w
+(with) 1685 1872 w
+(multiple\255machine) 1900 1872 w
+(plan) 2642 1872 w
+(9) 2851 1872 w
+(system) 2938 1872 w
+(about) 3253 1872 w
+(5) 3513 1872 w
+(years) 3601 1872 w
+(ago,) 3849 1872 w
+(trying) 4056 1872 w
+(to) 4333 1872 w
+(experience) 4449 1872 w
+(the) 4918 1872 w
+("original) 720 1992 w
+(design") 1104 1992 w
+(of) 1438 1992 w
+(separate) 1553 1992 w
+(services) 1910 1992 w
+(acquired) 2262 1992 w
+(from) 2636 1992 w
+(the) 2861 1992 w
+(network) 3014 1992 w
+(via) 3372 1992 w
+(a) 3525 1992 w
+(terminal.) 3600 1992 w
+(I) 3989 1992 w
+(have) 4053 1992 w
+(found) 4272 1992 w
+(this) 4536 1992 w
+(to) 4712 1992 w
+(be) 4821 1992 w
+(an) 4946 1992 w
+(environment) 720 2112 w
+(with) 1252 2112 w
+(desirable) 1457 2112 w
+(properties,) 1844 2112 w
+(many) 2295 2112 w
+(of) 2544 2112 w
+(them) 2654 2112 w
+(as) 2881 2112 w
+(described) 2991 2112 w
+(in) 3400 2112 w
+(the) 3505 2112 w
+(original) 3654 2112 w
+(papers.) 3992 2112 w
+(I) 4304 2112 w
+(also) 4364 2112 w
+(encountered) 4553 2112 w
+(some) 720 2232 w
+(obstacles) 959 2232 w
+(as) 1353 2232 w
+(a) 1464 2232 w
+(home) 1536 2232 w
+(user) 1786 2232 w
+(trying) 1980 2232 w
+(to) 2247 2232 w
+(deploy) 2353 2232 w
+(a) 2653 2232 w
+(true) 2724 2232 w
+(distributed) 2906 2232 w
+(plan) 3361 2232 w
+(9) 3560 2232 w
+(environment.) 3637 2232 w
+(In) 4194 2232 w
+(the) 4304 2232 w
+(original) 4453 2232 w
+(plan) 4791 2232 w
+(9) 4990 2232 w
+(design,) 720 2352 w
+(the) 1034 2352 w
+("infrastructure") 1184 2352 w
+(of) 1831 2352 w
+(file) 1942 2352 w
+(and) 2103 2352 w
+(cpu) 2275 2352 w
+(servers) 2447 2352 w
+(was) 2757 2352 w
+(intended) 2940 2352 w
+(to) 3312 2352 w
+(be) 3418 2352 w
+(installed) 3540 2352 w
+(in) 3907 2352 w
+(a) 4013 2352 w
+(professionally) 4085 2352 w
+(managed) 4680 2352 w
+(datacenter.) 720 2472 w
+(The) 1194 2472 w
+(default) 1388 2472 w
+(assumptions,) 1704 2472 w
+(though) 2263 2472 w
+(somewhat) 2580 2472 w
+(adjusted) 3024 2472 w
+(over) 3396 2472 w
+(the) 3612 2472 w
+(years,) 3773 2472 w
+(remain) 4047 2472 w
+(best) 4363 2472 w
+(suited) 4563 2472 w
+(for) 4841 2472 w
+(a) 4996 2472 w
+(world) 720 2592 w
+(where) 982 2592 w
+(a) 1254 2592 w
+(given) 1327 2592 w
+(hardware) 1579 2592 w
+(and) 1979 2592 w
+(network) 2153 2592 w
+(configuration) 2510 2592 w
+(has) 3078 2592 w
+(a) 3241 2592 w
+(lifespan) 3315 2592 w
+(measured) 3661 2592 w
+(in) 4073 2592 w
+(years.) 4181 2592 w
+(In) 4446 2592 w
+(a) 4559 2592 w
+(home) 4633 2592 w
+(net\255) 4885 2592 w
+(work,) 720 2712 w
+(things) 981 2712 w
+(may) 1257 2712 w
+(often) 1460 2712 w
+(change) 1696 2712 w
+(on) 2009 2712 w
+(a) 2140 2712 w
+(timescale) 2215 2712 w
+(of) 2623 2712 w
+(weeks,) 2737 2712 w
+(days,) 3042 2712 w
+(or) 3281 2712 w
+(even) 3394 2712 w
+(hours.) 3612 2712 w
+(The) 3889 2712 w
+(user) 4074 2712 w
+(is) 4270 2712 w
+(likely) 4367 2712 w
+(to) 4625 2712 w
+(turn) 4733 2712 w
+(off) 4924 2712 w
+(and) 720 2832 w
+(turn) 892 2832 w
+(on) 1081 2832 w
+(machines) 1209 2832 w
+(more) 1614 2832 w
+(often,) 1847 2832 w
+(shift) 2105 2832 w
+(both) 2311 2832 w
+(public) 2517 2832 w
+(and) 2795 2832 w
+(private) 2967 2832 w
+(nat) 3272 2832 w
+(ips,) 3422 2832 w
+(and) 3592 2832 w
+(in) 3764 2832 w
+(general) 3870 2832 w
+(operate) 4191 2832 w
+(the) 4512 2832 w
+(machines) 4663 2832 w
+(in) 720 2952 w
+(a) 826 2952 w
+(much) 898 2952 w
+(less) 1148 2952 w
+(predictable) 1326 2952 w
+(way.) 1797 2952 w
+(Also,) 2016 2952 w
+(the) 2258 2952 w
+(hardware) 2408 2952 w
+(a) 2806 2952 w
+(home) 2878 2952 w
+(user) 3128 2952 w
+(is) 3322 2952 w
+(likely) 3417 2952 w
+(to) 3673 2952 w
+(be) 3779 2952 w
+(using) 3901 2952 w
+(for) 4145 2952 w
+(plan) 4288 2952 w
+(9) 4487 2952 w
+(is) 4564 2952 w
+(a) 4658 2952 w
+(mixture) 4729 2952 w
+(of) 720 3072 w
+(older) 839 3072 w
+(machines,) 1080 3072 w
+(virtual) 1518 3072 w
+(machines,) 1815 3072 w
+(and) 2253 3072 w
+(desktops) 2433 3072 w
+(hosting) 2819 3072 w
+(related) 3150 3072 w
+(software) 3457 3072 w
+(like) 3836 3072 w
+(plan9port.) 4022 3072 w
+(This) 4466 3072 w
+(is) 4680 3072 w
+(a) 4783 3072 w
+(very) 4863 3072 w
+(different reliability profile than professional datacenter hardware.) 720 3192 w
+(My) 970 3348 w
+(experience) 1143 3348 w
+(as) 1608 3348 w
+(a) 1725 3348 w
+(home) 1803 3348 w
+(user) 2059 3348 w
+(building) 2260 3348 w
+(on) 2629 3348 w
+(top) 2764 3348 w
+(of) 2927 3348 w
+(older) 3045 3348 w
+(hardware) 3285 3348 w
+(mixed) 3690 3348 w
+(with) 3975 3348 w
+(virtual) 4188 3348 w
+(machines) 4484 3348 w
+(and) 4896 3348 w
+(making) 720 3468 w
+(frequent) 1056 3468 w
+(changes) 1424 3468 w
+(to) 1781 3468 w
+(my) 1895 3468 w
+(network) 2059 3468 w
+(arrangement) 2422 3468 w
+(was) 2956 3468 w
+(that) 3147 3468 w
+(the) 3333 3468 w
+(user) 3491 3468 w
+(environment) 3693 3468 w
+(I) 4233 3468 w
+(had) 4301 3468 w
+(in) 4480 3468 w
+(plan) 4593 3468 w
+(9) 4800 3468 w
+(was) 4885 3468 w
+(amazing,) 720 3588 w
+(but) 1110 3588 w
+(somewhat) 1265 3588 w
+(fragile.) 1697 3588 w
+(The) 2009 3588 w
+(grid) 2191 3588 w
+(architecture) 2379 3588 w
+(created) 2877 3588 w
+(dependencies) 3192 3588 w
+(between) 3757 3588 w
+(the) 4117 3588 w
+(different) 4267 3588 w
+(machines.) 4638 3588 w
+(If) 720 3708 w
+(you) 816 3708 w
+(have) 996 3708 w
+(a) 1214 3708 w
+(backing) 1288 3708 w
+(store) 1634 3708 w
+(machine) 1858 3708 w
+(\(venti\)) 2226 3708 w
+(supporting) 2522 3708 w
+(a) 2980 3708 w
+(file) 3054 3708 w
+(server) 3217 3708 w
+(supporting) 3489 3708 w
+(a) 3946 3708 w
+(cpu) 4019 3708 w
+(server,) 4192 3708 w
+(the) 4489 3708 w
+(user) 4640 3708 w
+(envi\255) 4835 3708 w
+(ronment) 720 3828 w
+(breaks) 1085 3828 w
+(if) 1377 3828 w
+(there) 1470 3828 w
+(is) 1701 3828 w
+(any) 1800 3828 w
+(disruption) 1976 3828 w
+(of) 2414 3828 w
+(the) 2529 3828 w
+(machines) 2683 3828 w
+(and) 3092 3828 w
+(their) 3268 3828 w
+(network) 3483 3828 w
+(connections.) 3842 3828 w
+(At) 4376 3828 w
+(the) 4508 3828 w
+(time) 4663 3828 w
+(four) 4874 3828 w
+(years) 720 3948 w
+(ago,) 964 3948 w
+(Qemu) 1167 3948 w
+(virtualization) 1445 3948 w
+(also) 2012 3948 w
+(seemed) 2207 3948 w
+(less) 2539 3948 w
+(robust) 2722 3948 w
+(than) 3005 3948 w
+(now,) 3210 3948 w
+(and) 3440 3948 w
+(my) 3617 3948 w
+(VMs) 3778 3948 w
+(were) 4011 3948 w
+(prone) 4237 3948 w
+(to) 4497 3948 w
+(crashing) 4608 3948 w
+(if) 4979 3948 w
+(placed) 720 4068 w
+(under) 1011 4068 w
+(significant) 1269 4068 w
+(load.) 1722 4068 w
+(Plan) 1950 4068 w
+(9) 2159 4068 w
+(was) 2240 4068 w
+(giving) 2426 4068 w
+(me) 2713 4068 w
+(a) 2866 4068 w
+(user) 2941 4068 w
+(environment) 3139 4068 w
+(that) 3676 4068 w
+(I) 3858 4068 w
+(loved,) 3923 4068 w
+(but) 4202 4068 w
+(I) 4362 4068 w
+(was) 4427 4068 w
+(also) 4614 4068 w
+(strug\255) 4807 4068 w
+(gling) 720 4188 w
+(with) 969 4188 w
+(reliability) 1190 4188 w
+(issues) 1621 4188 w
+(\255) 1902 4188 w
+(qemu) 1977 4188 w
+(VMs) 2241 4188 w
+(running) 2483 4188 w
+(fossil) 2836 4188 w
+(often) 3095 4188 w
+(corrupted) 3342 4188 w
+(their) 3766 4188 w
+(filesystem) 3991 4188 w
+(when) 4444 4188 w
+(crashing) 4702 4188 w
+(badly.) 720 4308 w
+(It) 970 4464 w
+(seemed) 1065 4464 w
+(to) 1398 4464 w
+(me) 1510 4464 w
+(that) 1666 4464 w
+(a) 1850 4464 w
+(grid) 1928 4464 w
+(of) 2123 4464 w
+(multiple) 2241 4464 w
+(machines) 2610 4464 w
+(should) 3022 4464 w
+(create) 3324 4464 w
+(the) 3596 4464 w
+(property) 3753 4464 w
+(of) 4126 4464 w
+(being) 4244 4464 w
+(more) 4501 4464 w
+(reliable) 4741 4464 w
+(and) 720 4584 w
+(resilient) 895 4584 w
+(than) 1248 4584 w
+(any) 1451 4584 w
+(of) 1626 4584 w
+(the) 1740 4584 w
+(components,) 1892 4584 w
+(and) 2430 4584 w
+(I) 2604 4584 w
+(was) 2667 4584 w
+(experiencing) 2852 4584 w
+(more) 3397 4584 w
+(of) 3632 4584 w
+(a) 3745 4584 w
+("one) 3819 4584 w
+(fall,) 4034 4584 w
+(they) 4222 4584 w
+(all) 4424 4584 w
+(fall") 4554 4584 w
+(experi\255) 4758 4584 w
+(ence.) 720 4704 w
+(The) 964 4704 w
+(more) 1156 4704 w
+(tightly) 1398 4704 w
+(I) 1698 4704 w
+(tried) 1769 4704 w
+(to) 1990 4704 w
+(bind) 2106 4704 w
+(my) 2322 4704 w
+(machines) 2488 4704 w
+(together) 2903 4704 w
+(by) 3268 4704 w
+(importing) 3406 4704 w
+(services) 3839 4704 w
+(from) 4198 4704 w
+(each) 4430 4704 w
+(other,) 4650 4704 w
+(the) 4918 4704 w
+(more) 720 4824 w
+(fragile) 967 4824 w
+(everything) 1269 4824 w
+(became.) 1738 4824 w
+(I) 2109 4824 w
+(wanted) 2184 4824 w
+(to) 2514 4824 w
+(cpurc) 2634 4824 w
+(on) 2897 4824 w
+(the) 3039 4824 w
+(machines) 3203 4824 w
+(to) 3622 4824 w
+(acquire) 3741 4824 w
+(services) 4075 4824 w
+(from) 4437 4824 w
+(the) 4672 4824 w
+(other) 4835 4824 w
+(machines) 720 4944 w
+(on) 1134 4944 w
+(the) 1271 4944 w
+(grid,) 1430 4944 w
+(to) 1653 4944 w
+(put) 1768 4944 w
+(those) 1933 4944 w
+("underneath") 2181 4944 w
+(the) 2743 4944 w
+(user) 2902 4944 w
+(namespace) 3105 4944 w
+(so) 3579 4944 w
+(that) 3705 4944 w
+(when) 3893 4944 w
+(I) 4147 4944 w
+(cpu'd) 4218 4944 w
+(in,) 4483 4944 w
+(a) 4624 4944 w
+(multiple) 4706 4944 w
+(machine) 720 5064 w
+(namespace) 1088 5064 w
+(would) 1555 5064 w
+(be) 1835 5064 w
+(built) 1959 5064 w
+(and) 2173 5064 w
+(waiting.) 2347 5064 w
+(Doing) 2702 5064 w
+(this) 2982 5064 w
+(kind) 3156 5064 w
+(of) 3363 5064 w
+(service) 3475 5064 w
+(acquisition) 3786 5064 w
+(from) 4254 5064 w
+(the) 4477 5064 w
+(main) 4628 5064 w
+(flow) 4857 5064 w
+(of) 720 5184 w
+(control) 831 5184 w
+(in) 1142 5184 w
+(cpurc) 1248 5184 w
+(though) 1497 5184 w
+(created) 1803 5184 w
+(system) 2118 5184 w
+(wide) 2424 5184 w
+(dependencies) 2646 5184 w
+(on) 3211 5184 w
+(those) 3340 5184 w
+(resources,) 3580 5184 w
+(and) 4010 5184 w
+(my) 4183 5184 w
+(user) 4340 5184 w
+(environment) 4535 5184 w
+(would) 720 5304 w
+(freeze) 998 5304 w
+(up) 1268 5304 w
+(if) 1396 5304 w
+(a) 1485 5304 w
+(read) 1557 5304 w
+(from) 1756 5304 w
+(a) 1978 5304 w
+(network) 2050 5304 w
+(mount) 2405 5304 w
+(didn't) 2689 5304 w
+(return.) 2956 5304 w
+(I) 3247 5304 w
+(tried) 3308 5304 w
+(using) 3519 5304 w
+(aan) 3764 5304 w
+(and) 3930 5304 w
+(recover,) 4102 5304 w
+(but) 4452 5304 w
+(those) 4607 5304 w
+(tools) 4845 5304 w
+(are for dealing with network\255level disruptions, not a machine that dies and has to reboot.) 720 5424 w
+(Another) 970 5580 w
+(issue) 1324 5580 w
+(I) 1551 5580 w
+(experienced) 1611 5580 w
+(working) 2119 5580 w
+(with) 2479 5580 w
+(my) 2684 5580 w
+(grid) 2839 5580 w
+(was) 3027 5580 w
+(the) 3209 5580 w
+(lack) 3358 5580 w
+(of) 3552 5580 w
+(higher\255level) 3663 5580 w
+(tools) 4173 5580 w
+(for) 4396 5580 w
+(dealing) 4540 5580 w
+(with) 4862 5580 w
+(namespaces,) 720 5700 w
+(and) 1248 5700 w
+(a) 1419 5700 w
+(general) 1490 5700 w
+(focus) 1810 5700 w
+(on) 2053 5700 w
+(creating) 2180 5700 w
+(a) 2528 5700 w
+(namespace) 2599 5700 w
+(which) 3063 5700 w
+(roughly) 3334 5700 w
+(mirrored) 3672 5700 w
+(conventional) 4048 5700 w
+(unix.) 4591 5700 w
+(It) 4820 5700 w
+(felt) 4907 5700 w
+(to) 720 5820 w
+(me) 834 5820 w
+(that) 992 5820 w
+(the) 1178 5820 w
+(mechanism) 1336 5820 w
+(of) 1827 5820 w
+(namespaces) 1946 5820 w
+(was) 2458 5820 w
+(so) 2650 5820 w
+(brilliant) 2776 5820 w
+(and) 3130 5820 w
+(so) 3311 5820 w
+(flexible) 3437 5820 w
+(and) 3779 5820 w
+(open\255ended) 3960 5820 w
+(that) 4462 5820 w
+(there) 4649 5820 w
+(was) 4885 5820 w
+(much) 720 5940 w
+(more) 969 5940 w
+(that) 1200 5940 w
+(could) 1376 5940 w
+(be) 1624 5940 w
+(done) 1744 5940 w
+(with) 1964 5940 w
+(manipulating) 2168 5940 w
+(namespaces) 2722 5940 w
+(and) 3224 5940 w
+(network) 3394 5940 w
+(transparency) 3747 5940 w
+(to) 4282 5940 w
+(build) 4386 5940 w
+(interesting) 4618 5940 w
+(environments.) 720 6060 w
+(What) 1338 6060 w
+(I) 1603 6060 w
+(wanted) 1685 6060 w
+(was) 2022 6060 w
+(a) 2226 6060 w
+(way) 2319 6060 w
+(to) 2534 6060 w
+("weave") 2661 6060 w
+(a) 3046 6060 w
+(complicated) 3139 6060 w
+(namespace) 3677 6060 w
+(that) 4164 6060 w
+(unified) 4364 6060 w
+(different) 4697 6060 w
+(machines, but was also resilient to their failure and would replicate and secure my data without extra work.) 720 6180 w
+(As) 970 6336 w
+(I) 1117 6336 w
+(experimented) 1187 6336 w
+(with) 1767 6336 w
+(different) 1982 6336 w
+(partial) 2362 6336 w
+(solutions) 2654 6336 w
+(\(just) 3053 6336 w
+(running) 3268 6336 w
+(3) 3616 6336 w
+(copies) 3703 6336 w
+(of) 3995 6336 w
+(everything,) 4115 6336 w
+(which) 4604 6336 w
+(was) 4885 6336 w
+(definitely) 720 6456 w
+(part) 1138 6456 w
+(of) 1328 6456 w
+(the) 1446 6456 w
+(way) 1603 6456 w
+(forward\)) 1803 6456 w
+(it) 2185 6456 w
+(became) 2275 6456 w
+(clear) 2613 6456 w
+(to) 2840 6456 w
+(me) 2952 6456 w
+(that) 3108 6456 w
+(there) 3292 6456 w
+(was) 3525 6456 w
+(a) 3714 6456 w
+(fundamental,) 3792 6456 w
+(and) 4350 6456 w
+(unnecessary,) 4528 6456 w
+(dependency that was at the root \255 so to speak \255 of my troubles.) 720 6576 w
+(This) 3225 6576 w
+(was) 3429 6576 w
+(the) 3610 6576 w
+(dependency) 3758 6576 w
+(of) 4260 6576 w
+(the) 4369 6576 w
+(plan) 4517 6576 w
+(9) 4715 6576 w
+(kernel) 4791 6576 w
+(on) 720 6696 w
+(a) 863 6696 w
+(given) 950 6696 w
+(root) 1215 6696 w
+(filesystem) 1419 6696 w
+(chosen) 1873 6696 w
+(at) 2193 6696 w
+(boot\255time.) 2308 6696 w
+(When) 2765 6696 w
+(a) 3046 6696 w
+(running) 3133 6696 w
+(cpu) 3487 6696 w
+(server) 3674 6696 w
+(loses) 3959 6696 w
+(its) 4201 6696 w
+(root) 4338 6696 w
+(fileserver,) 4541 6696 w
+(it) 4984 6696 w
+(becomes) 720 6816 w
+("dead") 1101 6816 w
+(\255) 1403 6816 w
+(even) 1468 6816 w
+(though) 1688 6816 w
+(it) 1998 6816 w
+(experienced) 2086 6816 w
+(no) 2599 6816 w
+(failure) 2731 6816 w
+(or) 3023 6816 w
+(data) 3138 6816 w
+(corruption) 3337 6816 w
+(or) 3786 6816 w
+(any) 3902 6816 w
+(disruption) 4079 6816 w
+(in) 4518 6816 w
+(its) 4629 6816 w
+(normal) 4757 6816 w
+(function, it just lost a file descriptor.) 720 6936 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 2 2
+%%Page: 3 3
+/saveobj save def
+mark
+3 pagesetup
+10 /Times-Roman f
+(\255 3 \255) 2797 480 w
+(If) 970 840 w
+(the) 1066 840 w
+(user) 1218 840 w
+(at) 1414 840 w
+(their) 1516 840 w
+(terminal) 1729 840 w
+(is) 2092 840 w
+(using) 2189 840 w
+(that) 2436 840 w
+(cpu) 2616 840 w
+(server,) 2790 840 w
+(and) 3088 840 w
+(also) 3262 840 w
+(importing) 3454 840 w
+(their) 3880 840 w
+($home) 4094 840 w
+(from) 4397 840 w
+(a) 4622 840 w
+(different) 4697 840 w
+(fileserver,) 720 960 w
+(the) 1153 960 w
+(user's) 1307 960 w
+(connection) 1577 960 w
+(to) 2047 960 w
+(their) 2157 960 w
+($home) 2372 960 w
+(and) 2676 960 w
+(working) 2852 960 w
+(data) 3217 960 w
+(set) 3415 960 w
+(is) 3558 960 w
+(disrupted,) 3657 960 w
+(even) 4086 960 w
+(though) 4306 960 w
+(the) 4615 960 w
+($home) 4768 960 w
+(fileserver) 720 1080 w
+(is) 1123 1080 w
+(still) 1217 1080 w
+(fine) 1395 1080 w
+(\255) 1577 1080 w
+(it) 1638 1080 w
+(is) 1722 1080 w
+(just) 1817 1080 w
+(the) 1990 1080 w
+(boot) 2140 1080 w
+(fileserver) 2346 1080 w
+(for) 2750 1080 w
+(the) 2894 1080 w
+(cpu) 3044 1080 w
+(server) 3216 1080 w
+(with) 3487 1080 w
+(the) 3693 1080 w
+(binaries) 3843 1080 w
+(that) 4187 1080 w
+(had) 4365 1080 w
+(a) 4537 1080 w
+(disruption.) 4609 1080 w
+(The) 720 1200 w
+(failure) 911 1200 w
+(of) 1207 1200 w
+(one) 1326 1200 w
+(system) 1506 1200 w
+(\(the) 1820 1200 w
+(cpu's) 2011 1200 w
+(root) 2263 1200 w
+(fileserver) 2459 1200 w
+(with) 2870 1200 w
+(the) 3083 1200 w
+(binaries\)) 3240 1200 w
+(has) 3624 1200 w
+(caused) 3792 1200 w
+(the) 4098 1200 w
+("failure") 4255 1200 w
+(of) 4632 1200 w
+(3) 4750 1200 w
+(other) 4835 1200 w
+(working) 720 1320 w
+(systems) 1083 1320 w
+(and) 1430 1320 w
+(ended) 1604 1320 w
+(the) 1872 1320 w
+(workflow) 2024 1320 w
+(of) 2443 1320 w
+(the) 2557 1320 w
+(user) 2710 1320 w
+(until) 2907 1320 w
+(the) 3122 1320 w
+(cpu) 3275 1320 w
+(is) 3450 1320 w
+(rebooted.) 3548 1320 w
+(The) 3953 1320 w
+(cpu) 4139 1320 w
+(kernel) 4314 1320 w
+(is) 4594 1320 w
+(still) 4692 1320 w
+(run\255) 4874 1320 w
+(ning fine \255 why does it need to reboot because a user\255space program lost a file descriptor?) 720 1440 w
+(The) 970 1596 w
+(solution) 1156 1596 w
+(to) 1510 1596 w
+(all) 1619 1596 w
+(these) 1750 1596 w
+(challenges) 1986 1596 w
+(seemed) 2438 1596 w
+(clear) 2768 1596 w
+(\255) 2992 1596 w
+(remove) 3056 1596 w
+(the) 3386 1596 w
+(dependency) 3539 1596 w
+(of) 4046 1596 w
+(the) 4160 1596 w
+(kernel) 4313 1596 w
+(on) 4593 1596 w
+(the) 4725 1596 w
+(root) 4879 1596 w
+(filesystem.) 720 1716 w
+(Once) 1193 1716 w
+(the) 1440 1716 w
+(kernel) 1599 1716 w
+(is) 1885 1716 w
+(loaded) 1989 1716 w
+(into) 2291 1716 w
+(memory,) 2483 1716 w
+(it) 2877 1716 w
+(can) 2969 1716 w
+("stand) 3143 1716 w
+(back") 3431 1716 w
+(from) 3696 1716 w
+(userland,) 3926 1716 w
+(and) 4325 1716 w
+(instruct) 4505 1716 w
+(user\255) 4841 1716 w
+(space) 720 1836 w
+(programs) 971 1836 w
+(to) 1378 1836 w
+(dial) 1486 1836 w
+(each) 1666 1836 w
+(other) 1878 1836 w
+(and) 2113 1836 w
+(create) 2287 1836 w
+(a) 2554 1836 w
+(namespace) 2629 1836 w
+(for) 3097 1836 w
+(the) 3244 1836 w
+(user,) 3397 1836 w
+(but) 3619 1836 w
+(the) 3778 1836 w
+(main) 3931 1836 w
+(flow) 4162 1836 w
+(of) 4376 1836 w
+(control) 4490 1836 w
+(of) 4804 1836 w
+(the) 4918 1836 w
+(master) 720 1956 w
+(process) 1025 1956 w
+(on) 1363 1956 w
+(the) 1502 1956 w
+(system) 1662 1956 w
+(should) 1978 1956 w
+(not) 2283 1956 w
+(depend) 2449 1956 w
+(on) 2775 1956 w
+(any) 2913 1956 w
+(filedescriptor) 3095 1956 w
+(acquired) 3665 1956 w
+(from) 4046 1956 w
+(an) 4278 1956 w
+(outside) 4410 1956 w
+(system.) 4737 1956 w
+(That way, anything can die and the master flow of control never freezes trying to read from a dead fd.) 720 2076 w
+10 /Times-Bold f
+(II. The boot namespace and later namespaces) 720 2316 w
+10 /Times-Roman f
+(Here is the namespace of the "master process" on a rootless box:) 970 2472 w
+(bind #c /dev) 1080 2652 w
+(bind #ec /dev) 1080 2772 w
+(bind \255bc #e /env) 1080 2892 w
+(bind \255c #s /srv) 1080 3012 w
+(bind \255a #u /dev) 1080 3132 w
+(bind / /) 1080 3252 w
+(bind #d /fd) 1080 3372 w
+(bind #p /proc) 1080 3492 w
+(bind \255a #\244 /dev) 1080 3612 w
+(bind \255a #S /dev) 1080 3732 w
+(bind /net /net) 1080 3852 w
+(bind \255a #l /net) 1080 3972 w
+(bind \255a #I /net) 1080 4092 w
+(bind /bin /bin) 1080 4212 w
+(bind \255a /boot /bin) 1080 4332 w
+(cd /) 1080 4452 w
+(Nothing can kill this shell except the failure of the kernel itself. The tools compiled into) 970 4668 w
+(/boot) 4504 4668 w
+(allow) 4736 4668 w
+(it) 4984 4668 w
+(to) 720 4788 w
+(fork) 832 4788 w
+(off) 1032 4788 w
+(new) 1182 4788 w
+(environments) 1382 4788 w
+(rooted) 1960 4788 w
+(to) 2249 4788 w
+(disk) 2361 4788 w
+(or) 2562 4788 w
+(network) 2679 4788 w
+(resources) 3040 4788 w
+(without) 3450 4788 w
+(connecting) 3789 4788 w
+(to) 4260 4788 w
+(it) 4371 4788 w
+(themself.) 4460 4788 w
+(This) 4862 4788 w
+(master) 720 4908 w
+(process) 1017 4908 w
+(can) 1347 4908 w
+(be) 1516 4908 w
+(thought) 1641 4908 w
+(of) 1978 4908 w
+(as) 2092 4908 w
+(a) 2206 4908 w
+("namespace) 2281 4908 w
+(hypervisor") 2790 4908 w
+(which) 3289 4908 w
+(stays) 3564 4908 w
+(behind) 3795 4908 w
+(the) 4098 4908 w
+(scenes) 4251 4908 w
+(creating) 4543 4908 w
+(dif\255) 4896 4908 w
+(ferent) 720 5028 w
+(namespace) 978 5028 w
+(environments.) 1441 5028 w
+(We) 2036 5028 w
+(arrange) 2200 5028 w
+(for) 2524 5028 w
+(this master process to exist by rewriting boot and init into a) 2666 5028 w
+(single) 720 5148 w
+(program) 986 5148 w
+(which) 1351 5148 w
+(sets) 1622 5148 w
+(up) 1799 5148 w
+(the) 1927 5148 w
+(kernel\255only) 2077 5148 w
+(environment.) 2565 5148 w
+(Once) 3123 5148 w
+(this) 3361 5148 w
+(is) 3534 5148 w
+(done,) 3629 5148 w
+(the) 3876 5148 w
+(script) 4026 5148 w
+("plan9rc") 4276 5148 w
+(is) 4685 5148 w
+(forked) 4780 5148 w
+(off) 720 5268 w
+(to) 869 5268 w
+(take) 980 5268 w
+(control) 1179 5268 w
+(of) 1495 5268 w
+(setting) 1611 5268 w
+(up) 1911 5268 w
+(a) 2044 5268 w
+(user) 2121 5268 w
+(environment) 2320 5268 w
+(of) 2858 5268 w
+(services) 2974 5268 w
+(on) 3328 5268 w
+(top) 3461 5268 w
+(of) 3622 5268 w
+(the) 3738 5268 w
+(kernel,) 3893 5268 w
+(but) 4200 5268 w
+(leaving) 4360 5268 w
+(the) 4686 5268 w
+(main) 4840 5268 w
+(flow of control unattached to those resources.) 720 5388 w
+(plan9rc is a script which acts as a general purpose "environment launcher") 970 5544 w
+(for) 3968 5544 w
+(plan) 4110 5544 w
+(9) 4308 5544 w
+(environments.) 4384 5544 w
+(It) 4979 5544 w
+(takes) 720 5664 w
+(over) 958 5664 w
+(the) 1168 5664 w
+(work) 1323 5664 w
+(usually) 1561 5664 w
+(done) 1883 5664 w
+(by) 2110 5664 w
+(the) 2243 5664 w
+(kernel) 2398 5664 w
+(to) 2680 5664 w
+(attach) 2791 5664 w
+(a) 3062 5664 w
+(root) 3139 5664 w
+(fileserver) 3333 5664 w
+(and) 3742 5664 w
+(launch) 3919 5664 w
+(a) 4218 5664 w
+(cpurc) 4294 5664 w
+(or) 4547 5664 w
+(termrc.) 4662 5664 w
+(It) 4979 5664 w
+(also) 720 5784 w
+(provides) 911 5784 w
+(an) 1285 5784 w
+(optional) 1409 5784 w
+("interactive") 1767 5784 w
+(mode) 2300 5784 w
+(which) 2552 5784 w
+(has) 2826 5784 w
+(offers) 2989 5784 w
+(complete) 3252 5784 w
+(user) 3649 5784 w
+(control) 3846 5784 w
+(of) 4160 5784 w
+(all) 4274 5784 w
+(bootup) 4405 5784 w
+(parame\255) 4714 5784 w
+(ters.) 720 5904 w
+(Once) 921 5904 w
+(an) 1163 5904 w
+(environment) 1289 5904 w
+(has) 1826 5904 w
+(been) 1991 5904 w
+("launched") 2210 5904 w
+(it) 2683 5904 w
+(saves) 2770 5904 w
+(the) 3017 5904 w
+(parameters) 3170 5904 w
+(used) 3638 5904 w
+(to) 3852 5904 w
+(its) 3961 5904 w
+(local) 4087 5904 w
+(ramdisk,) 4312 5904 w
+(allowing) 4690 5904 w
+(the same environment to be spawned again non\255interactively.) 720 6024 w
+(plan9rc) 970 6180 w
+(is) 1295 6180 w
+(written) 1388 6180 w
+(to) 1697 6180 w
+(be) 1801 6180 w
+(compatible) 1921 6180 w
+(with) 2391 6180 w
+(existing) 2595 6180 w
+(installations) 2938 6180 w
+(and) 3448 6180 w
+(plan9.ini) 3619 6180 w
+(values) 3999 6180 w
+(to) 4281 6180 w
+(a) 4386 6180 w
+(great) 4457 6180 w
+(extent.) 4683 6180 w
+(It) 4979 6180 w
+(is) 720 6300 w
+(focused) 820 6300 w
+(on) 1163 6300 w
+(pc) 1296 6300 w
+(bootup) 1423 6300 w
+(and) 1733 6300 w
+(handles) 1909 6300 w
+(tcp) 2246 6300 w
+(booting,) 2400 6300 w
+(fossil,) 2763 6300 w
+(venti,) 3037 6300 w
+(and) 3294 6300 w
+(cfs) 3470 6300 w
+(in) 3618 6300 w
+(the) 3728 6300 w
+(same) 3882 6300 w
+(manner) 4119 6300 w
+(as) 4450 6300 w
+(the) 4565 6300 w
+(conven\255) 4719 6300 w
+(tional) 720 6420 w
+(kernel.) 974 6420 w
+(\(USB) 1274 6420 w
+(boot) 1528 6420 w
+(has) 1732 6420 w
+(been) 1891 6420 w
+(tested) 2105 6420 w
+(with) 2364 6420 w
+(qemu) 2568 6420 w
+(VMs) 2816 6420 w
+(but) 3042 6420 w
+(I) 3196 6420 w
+(have) 3255 6420 w
+(not) 3470 6420 w
+(found) 3625 6420 w
+(physical) 3885 6420 w
+(hardware) 4245 6420 w
+(yet) 4642 6420 w
+(with) 4791 6420 w
+(a) 4996 6420 w
+(suitable) 720 6540 w
+(bios\).) 1062 6540 w
+(plan9rc) 1318 6540 w
+(creates) 1648 6540 w
+(the) 1955 6540 w
+(foundation) 2108 6540 w
+(environment) 2572 6540 w
+(to) 3108 6540 w
+(allow) 3216 6540 w
+(termrc) 3468 6540 w
+(or) 3758 6540 w
+(cpurc) 3871 6540 w
+(to) 4122 6540 w
+(be) 4230 6540 w
+(run) 4354 6540 w
+(as) 4517 6540 w
+(usual,) 4630 6540 w
+(and) 4896 6540 w
+(an) 720 6660 w
+(existing) 846 6660 w
+(standard) 1195 6660 w
+(plan) 1565 6660 w
+(9) 1769 6660 w
+(install) 1851 6660 w
+(should) 2128 6660 w
+(perform) 2428 6660 w
+(as) 2782 6660 w
+(usual) 2898 6660 w
+(when) 3142 6660 w
+(launched) 3391 6660 w
+(in) 3784 6660 w
+(this) 3895 6660 w
+(fashion.) 4073 6660 w
+(In) 4425 6660 w
+(this) 4541 6660 w
+(way) 4719 6660 w
+(the) 4918 6660 w
+(rootless) 720 6780 w
+(kernel) 1059 6780 w
+(acts) 1336 6780 w
+(like) 1519 6780 w
+(a) 1697 6780 w
+(foundation) 1769 6780 w
+(lift) 2230 6780 w
+(for) 2375 6780 w
+(a) 2519 6780 w
+(building) 2591 6780 w
+(that) 2953 6780 w
+(lifts) 3131 6780 w
+(the) 3315 6780 w
+(entire) 3465 6780 w
+(structure) 3720 6780 w
+(and) 4097 6780 w
+(installs) 4269 6780 w
+(a) 4581 6780 w
+(new) 4653 6780 w
+(floor) 4846 6780 w
+(at ground level.) 720 6900 w
+(How) 970 7056 w
+(do) 1190 7056 w
+(we) 1316 7056 w
+(access) 1458 7056 w
+(and) 1738 7056 w
+(use) 1909 7056 w
+(this) 2069 7056 w
+(new) 2241 7056 w
+(foundation) 2434 7056 w
+(level) 2894 7056 w
+(to) 3115 7056 w
+(give) 3220 7056 w
+(us) 3419 7056 w
+(control) 3535 7056 w
+(over) 3845 7056 w
+(the) 4049 7056 w
+(system?) 4198 7056 w
+(This) 4547 7056 w
+(is) 4752 7056 w
+(done) 4846 7056 w
+(by) 720 7176 w
+(a) 863 7176 w
+(small) 950 7176 w
+(cpurc\255equivalent) 1210 7176 w
+(script) 1923 7176 w
+(named) 2188 7176 w
+("initskel") 2497 7176 w
+(that) 2917 7176 w
+(may) 3110 7176 w
+(be) 3325 7176 w
+(run) 3461 7176 w
+(by) 3636 7176 w
+(plan9rc.) 3778 7176 w
+(The) 4144 7176 w
+(initskel) 4341 7176 w
+(creates) 4678 7176 w
+(a) 4996 7176 w
+(miniature) 720 7296 w
+(user) 1155 7296 w
+(environment) 1373 7296 w
+(rooted) 1930 7296 w
+(on) 2237 7296 w
+(a) 2389 7296 w
+(small) 2485 7296 w
+(ramdisk,) 2754 7296 w
+(so) 3153 7296 w
+(it) 3294 7296 w
+(is) 3402 7296 w
+(also) 3521 7296 w
+(independent) 3734 7296 w
+(of) 4275 7296 w
+(any) 4411 7296 w
+(non\255kernel) 4608 7296 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 3 3
+%%Page: 4 4
+/saveobj save def
+mark
+4 pagesetup
+10 /Times-Roman f
+(\255 4 \255) 2797 480 w
+(resources.) 720 840 w
+(This) 1149 840 w
+(environment) 1355 840 w
+(has) 1888 840 w
+(a) 2049 840 w
+(much) 2121 840 w
+(richer) 2371 840 w
+(namespace) 2631 840 w
+(than) 3096 840 w
+(the) 3296 840 w
+(core) 3446 840 w
+(kernel) 3645 840 w
+(control) 3921 840 w
+(process) 4231 840 w
+(but) 4557 840 w
+(it) 4712 840 w
+(is) 4795 840 w
+(still) 4889 840 w
+(independent) 720 960 w
+(of) 1234 960 w
+(any) 1343 960 w
+(external) 1513 960 w
+(resources.) 1860 960 w
+(Compiled) 2287 960 w
+(into) 2708 960 w
+(/boot) 2890 960 w
+(are) 3122 960 w
+(enough) 3269 960 w
+(tools) 3590 960 w
+(to) 3812 960 w
+(allow) 3917 960 w
+(this) 4166 960 w
+(namespace) 4338 960 w
+(to) 4802 960 w
+(run) 4907 960 w
+(a cpu listener \(on a non\255standard port\). Here is what the ns looks like when we cpu in on port 17020:) 720 1080 w
+(bind) 1080 1296 w
+(/root /root) 1308 1296 w
+(mount \255ac '#s/ramboot' /root) 1080 1416 w
+(bind) 1080 1536 w
+(/ /) 1308 1536 w
+(bind \255a /root /) 1080 1656 w
+(mount \255a '#s/ramboot' /) 1080 1776 w
+(bind \255c /root/mnt /mnt) 1080 1896 w
+(bind) 1080 2016 w
+(/boot /boot) 1308 2016 w
+(mount \255a '#s/bootpaq' /boot) 1080 2136 w
+([ standadr kernel binds omitted ]) 1080 2256 w
+(bind) 1080 2376 w
+(/n /n) 1308 2376 w
+(mount \255a '#s/slashn' /n) 1080 2496 w
+(mount \255a '#s/factotum' /mnt) 1080 2616 w
+(bind) 1080 2736 w
+(/bin /bin) 1308 2736 w
+(bind \255b /boot /bin) 1080 2856 w
+(mount \255b '#s/bootpaq' /bin) 1080 2976 w
+(bind \255a /root/bin /bin) 1080 3096 w
+(bind \255a /root/bin /boot) 1080 3216 w
+(bind) 1080 3336 w
+(/net /net) 1308 3336 w
+(bind \255a '#l' /net) 1080 3456 w
+(bind \255a '#I' /net) 1080 3576 w
+(mount \255a '#s/cs' /net) 1080 3696 w
+(mount \255a '#s/dns' /net) 1080 3816 w
+(mount) 1080 3936 w
+('#s/usb' /n/usb) 1386 3936 w
+(mount \255a '#s/usb' /dev) 1080 4056 w
+(mount \255c '#s/hubfs' /n/hubfs) 1080 4176 w
+(mount \255c '#D/ssl/3/data' /mnt/term) 1080 4296 w
+(bind \255a /usr/bootes/bin/rc /bin) 1080 4416 w
+(bind \255a /usr/bootes/bin/386 /bin) 1080 4536 w
+(bind \255c /usr/bootes/tmp /tmp) 1080 4656 w
+(bind \255a /mnt/term/mnt/wsys /dev) 1080 4776 w
+(bind) 1080 4896 w
+(/mnt/term/dev/cons /dev/cons) 1308 4896 w
+(bind) 1080 5016 w
+(/mnt/term/dev/consctl /dev/consctl) 1308 5016 w
+(bind \255a /mnt/term/dev /dev) 1080 5136 w
+(cd /usr/bootes) 1080 5256 w
+(This) 970 5472 w
+(namespace) 1180 5472 w
+(is) 1649 5472 w
+(a) 1748 5472 w
+(very) 1824 5472 w
+(important) 2033 5472 w
+(namespace) 2454 5472 w
+(in) 2923 5472 w
+(the) 3033 5472 w
+(structure) 3187 5472 w
+(of) 3569 5472 w
+(the) 3685 5472 w
+(grid.) 3840 5472 w
+(It) 4059 5472 w
+(exists) 4153 5472 w
+(on) 4414 5472 w
+(every) 4547 5472 w
+(single) 4801 5472 w
+(machine,) 720 5592 w
+(created) 1119 5592 w
+(under) 1442 5592 w
+(whatever) 1705 5592 w
+(kind) 2106 5592 w
+(of) 2320 5592 w
+(cpurc) 2439 5592 w
+(or) 2696 5592 w
+(termrc) 2815 5592 w
+(they) 3111 5592 w
+(run.) 3319 5592 w
+(This) 3513 5592 w
+(environment) 3727 5592 w
+(is) 4268 5592 w
+(a) 4371 5592 w
+(perfectly) 4451 5592 w
+(user\255) 4841 5592 w
+(friendly namespace, unlike the pure kernel namespace with) 720 5712 w
+(no) 3112 5712 w
+(ramdisk) 3238 5712 w
+(attached.) 3586 5712 w
+(In) 3969 5712 w
+(fact,) 4078 5712 w
+(depending) 4278 5712 w
+(on) 4720 5712 w
+(what) 4846 5712 w
+(is) 720 5832 w
+(compiled) 822 5832 w
+(into) 1229 5832 w
+(the) 1420 5832 w
+(bootpaq) 1576 5832 w
+(and) 1932 5832 w
+(the) 2110 5832 w
+(optional) 2266 5832 w
+(tools.tgz) 2628 5832 w
+(contained) 3004 5832 w
+(in) 3426 5832 w
+(9fat) 3538 5832 w
+(which) 3727 5832 w
+(may) 4005 5832 w
+(also) 4211 5832 w
+(be) 4406 5832 w
+(added) 4534 5832 w
+(to) 4806 5832 w
+(the) 4918 5832 w
+(ramdisk,) 720 5952 w
+(this) 1100 5952 w
+(environment,) 1278 5952 w
+(while) 1841 5952 w
+(slightly) 2096 5952 w
+(spartan) 2430 5952 w
+(\(no) 2751 5952 w
+(manpages,) 2917 5952 w
+(only) 3375 5952 w
+(1) 3587 5952 w
+(or) 3671 5952 w
+(2) 3788 5952 w
+(fonts) 3872 5952 w
+(9) 4106 5952 w
+(in) 4190 5952 w
+(/lib,) 4302 5952 w
+(etc\)) 4495 5952 w
+(is) 4678 5952 w
+(in) 4779 5952 w
+(fact) 4891 5952 w
+(sufficient) 720 6072 w
+(for) 1127 6072 w
+(many) 1273 6072 w
+(tasks.) 1524 6072 w
+(Furthermore,) 1778 6072 w
+(since) 2331 6072 w
+(you) 2565 6072 w
+(are) 2744 6072 w
+(cpu\255ing) 2894 6072 w
+(in) 3228 6072 w
+(as) 3335 6072 w
+(usual) 3447 6072 w
+(to) 3687 6072 w
+(a) 3794 6072 w
+(new) 3867 6072 w
+(flow) 4062 6072 w
+(of) 4274 6072 w
+(control,) 4386 6072 w
+(you) 4723 6072 w
+(can) 4902 6072 w
+(freely) 720 6192 w
+(acquire) 982 6192 w
+(new) 1305 6192 w
+(resources) 1501 6192 w
+(from) 1908 6192 w
+(here) 2133 6192 w
+(without) 2335 6192 w
+(fear.) 2672 6192 w
+(If) 2882 6192 w
+(your) 2979 6192 w
+(cpu\255d) 3193 6192 w
+(in) 3451 6192 w
+(environment) 3560 6192 w
+(breaks,) 4096 6192 w
+(it) 4412 6192 w
+(hasnt) 4499 6192 w
+(harmed) 4741 6192 w
+(the flow of control it spawned from, the service and utility namespace will be the same on next cpu in.) 720 6312 w
+(To) 970 6468 w
+(aid) 1108 6468 w
+(in) 1257 6468 w
+(working) 1362 6468 w
+(using) 1722 6468 w
+(the) 1966 6468 w
+(service) 2115 6468 w
+(namespace) 2424 6468 w
+(as) 2888 6468 w
+(a) 2998 6468 w
+(base,) 3069 6468 w
+(scripts) 3298 6468 w
+(are) 3587 6468 w
+(provided) 3736 6468 w
+(to) 4119 6468 w
+(provide) 4225 6468 w
+(forms) 4558 6468 w
+(of) 4819 6468 w
+(re\255) 4930 6468 w
+(rooting.) 720 6588 w
+(Some) 1063 6588 w
+(of) 1320 6588 w
+(the) 1432 6588 w
+(simplest) 1583 6588 w
+(are) 1946 6588 w
+("addwrroot") 2096 6588 w
+(and) 2617 6588 w
+("importwrroot") 2790 6588 w
+(which) 3434 6588 w
+(target) 3707 6588 w
+(external) 3963 6588 w
+(file) 4313 6588 w
+(or) 4475 6588 w
+(cpu) 4586 6588 w
+(servers) 4758 6588 w
+(and) 720 6708 w
+(acquire) 894 6708 w
+(their) 1217 6708 w
+(resources) 1430 6708 w
+(and) 1836 6708 w
+(bind) 2010 6708 w
+(them) 2218 6708 w
+(in) 2448 6708 w
+(locally) 2557 6708 w
+(while) 2860 6708 w
+(still) 3113 6708 w
+(keeping) 3295 6708 w
+(the) 3642 6708 w
+(ramboot) 3795 6708 w
+(root.) 4159 6708 w
+(The) 4376 6708 w
+(binds) 4562 6708 w
+(are) 4810 6708 w
+(to) 4962 6708 w
+(acquire) 720 6828 w
+(the) 1040 6828 w
+(binaries,) 1189 6828 w
+(lib) 1557 6828 w
+(and) 1690 6828 w
+(sys,) 1861 6828 w
+(and) 2041 6828 w
+(usr) 2212 6828 w
+(directories) 2361 6828 w
+(from) 2809 6828 w
+(the) 3030 6828 w
+(remote) 3179 6828 w
+(system.) 3483 6828 w
+(If) 3813 6828 w
+(you) 3906 6828 w
+(wish) 4082 6828 w
+(to) 4297 6828 w
+("fully") 4401 6828 w
+(attach) 4698 6828 w
+(to) 4962 6828 w
+(a new root while mainting) 720 6948 w
+(your) 1795 6948 w
+(drawterm) 2004 6948 w
+(and) 2412 6948 w
+(cpu) 2582 6948 w
+(connection,) 2752 6948 w
+(the) 3241 6948 w
+(script) 3389 6948 w
+("rerootwin") 3637 6948 w
+(provides) 4133 6948 w
+(this) 4503 6948 w
+(function\255) 4674 6948 w
+(ality.) 720 7068 w
+(This) 956 7068 w
+(is) 1166 7068 w
+(one) 1265 7068 w
+(of) 1441 7068 w
+(the) 1556 7068 w
+(most) 1710 7068 w
+(important) 1937 7068 w
+(tools) 2358 7068 w
+(for) 2585 7068 w
+(fast) 2733 7068 w
+(transformation) 2909 7068 w
+(of) 3529 7068 w
+(a) 3644 7068 w
+(user) 3720 7068 w
+(sub\255environment.) 3918 7068 w
+(rerootwin) 4652 7068 w
+(works) 720 7188 w
+(by) 994 7188 w
+("saving") 1124 7188 w
+(the) 1497 7188 w
+(active) 1649 7188 w
+(devices) 1917 7188 w
+(with) 2247 7188 w
+(srvfs) 2456 7188 w
+(of) 2681 7188 w
+(/mnt/term) 2795 7188 w
+(and) 3221 7188 w
+(/mnt/wsys,) 3396 7188 w
+(then) 3864 7188 w
+(it) 4067 7188 w
+(uses) 4154 7188 w
+(a) 4357 7188 w
+(custom) 4432 7188 w
+(names\255) 4752 7188 w
+(pace) 720 7308 w
+(file) 928 7308 w
+(to) 1087 7308 w
+(root) 1191 7308 w
+(to) 1378 7308 w
+(a) 1482 7308 w
+(named) 1552 7308 w
+(/srv) 1844 7308 w
+(or) 2020 7308 w
+(network) 2129 7308 w
+(machine,) 2482 7308 w
+(and) 2871 7308 w
+(then) 3041 7308 w
+(re\255acquire) 3239 7308 w
+(the) 3668 7308 w
+(original) 3816 7308 w
+(devices) 4153 7308 w
+(from) 4478 7308 w
+(the) 4698 7308 w
+(srvfs) 4846 7308 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 4 4
+%%Page: 5 5
+/saveobj save def
+mark
+5 pagesetup
+10 /Times-Roman f
+(\255 5 \255) 2797 480 w
+(to allow the user to remain) 720 840 w
+(in) 1814 840 w
+(full) 1918 840 w
+(control) 2083 840 w
+(and) 2392 840 w
+(continue) 2562 840 w
+(to) 2932 840 w
+(run) 3036 840 w
+(graphical) 3195 840 w
+(applications) 3592 840 w
+(in) 4101 840 w
+(that) 4205 840 w
+(window.) 4381 840 w
+(Here) 4754 840 w
+(is) 4973 840 w
+(what) 720 960 w
+(the) 944 960 w
+(namespace) 1096 960 w
+(looks) 1563 960 w
+(like) 1810 960 w
+(after) 1990 960 w
+(cpu) 2202 960 w
+(into) 2376 960 w
+(a) 2562 960 w
+("service) 2636 960 w
+(namespace",) 2988 960 w
+(start) 3520 960 w
+(rio,) 3721 960 w
+(then) 3886 960 w
+(open) 4087 960 w
+(a) 4310 960 w
+(window) 4383 960 w
+(and) 4734 960 w
+(run) 4907 960 w
+("rerootwin" targeting a different machine on the network:) 720 1080 w
+([ standard kernel binds omitted ]) 1080 1296 w
+(bind) 1080 1416 w
+(/net /net) 1308 1416 w
+(bind \255a '#l' /net) 1080 1536 w
+(bind \255a '#I' /net) 1080 1656 w
+(bind) 1080 1776 w
+(/net.alt /net.alt) 1308 1776 w
+(mount \255a '#s/slashn' /net.alt) 1080 1896 w
+(mount \255c '#s/oldterm.1005' /net.alt/oldterm.1005) 1080 2016 w
+(mount \255c '#s/oldwsys.1005' /net.alt/oldwsys.1005) 1080 2136 w
+(bind) 1080 2256 w
+(/net.alt/oldterm.1005/dev/cons /dev/cons) 1308 2256 w
+(bind) 1080 2376 w
+(/net.alt/oldterm.1005/dev/consctl /dev/consctl) 1308 2376 w
+(bind \255a /net.alt/oldterm.1005/dev /dev) 1080 2496 w
+(mount \255b '#s/oldwsys.1005' /dev) 1080 2616 w
+(bind) 1080 2736 w
+(/mnt /mnt) 1308 2736 w
+(mount \255a '#s/factotum' /mnt) 1080 2856 w
+(bind) 1080 2976 w
+(/root /root) 1308 2976 w
+(mount \255ac '#s/gridfour' /root) 1080 3096 w
+(bind) 1080 3216 w
+(/ /) 1308 3216 w
+(bind \255a /root /) 1080 3336 w
+(mount \255a '#s/gridfour' /) 1080 3456 w
+(bind \255b /root/mnt /mnt) 1080 3576 w
+(bind) 1080 3696 w
+(/boot /boot) 1308 3696 w
+(mount \255a '#s/bootpaq' /boot) 1080 3816 w
+(bind) 1080 3936 w
+(/bin /bin) 1308 3936 w
+(bind \255b /boot /bin) 1080 4056 w
+(mount \255b '#s/bootpaq' /bin) 1080 4176 w
+(bind \255a /386/bin /bin) 1080 4296 w
+(bind \255a /rc/bin /bin) 1080 4416 w
+(bind) 1080 4536 w
+(/n /n) 1308 4536 w
+(mount \255a '#s/slashn' /n) 1080 4656 w
+(mount \255a '#s/cs' /net) 1080 4776 w
+(mount \255a '#s/dns' /net) 1080 4896 w
+(mount \255c '#s/hubfs' /n/hubfs) 1080 5016 w
+(bind) 1080 5136 w
+(/mnt/term /mnt/term) 1308 5136 w
+(mount \255bc '#s/oldterm.1005' /mnt/term) 1080 5256 w
+(bind) 1080 5376 w
+(/mnt/wsys /mnt/wsys) 1308 5376 w
+(mount \255bc '#s/oldwsys.1005' /mnt/wsys) 1080 5496 w
+(bind \255c /usr/bootes/tmp /tmp) 1080 5616 w
+(cd /usr/bootes) 1080 5736 w
+(Using) 970 5952 w
+(the) 1244 5952 w
+(rerootwin) 1402 5952 w
+(script) 1826 5952 w
+(in) 2084 5952 w
+(combination) 2198 5952 w
+(with) 2734 5952 w
+(the) 2948 5952 w
+(service) 3106 5952 w
+(namespace) 3424 5952 w
+(makes) 3897 5952 w
+(the) 4188 5952 w
+(cpu) 4346 5952 w
+(server) 4526 5952 w
+(a) 4805 5952 w
+(true) 4885 5952 w
+(cpu) 720 6072 w
+(server,) 910 6072 w
+(because) 1224 6072 w
+(you) 1585 6072 w
+(are) 1781 6072 w
+(no) 1948 6072 w
+(longer) 2093 6072 w
+(using) 2393 6072 w
+(the) 2655 6072 w
+(cpu's) 2822 6072 w
+(root) 3083 6072 w
+(at) 3289 6072 w
+(all.) 3406 6072 w
+(It) 3576 6072 w
+(is) 3682 6072 w
+(truly) 3794 6072 w
+(just) 4028 6072 w
+(providing) 4218 6072 w
+(execution) 4652 6072 w
+(resources) 720 6192 w
+(at) 1129 6192 w
+(the) 1234 6192 w
+(junction) 1389 6192 w
+(of) 1750 6192 w
+(two) 1866 6192 w
+(totally) 2049 6192 w
+(independent) 2338 6192 w
+(systems.) 2859 6192 w
+(By) 3234 6192 w
+(cpu) 3384 6192 w
+(into) 3561 6192 w
+(the) 3750 6192 w
+(service) 3905 6192 w
+(namespace) 4220 6192 w
+(and) 4690 6192 w
+(then) 4868 6192 w
+(rerootwin) 720 6312 w
+(to) 1142 6312 w
+(different) 1253 6312 w
+(file) 1629 6312 w
+(servers,) 1795 6312 w
+(the) 2135 6312 w
+(user) 2290 6312 w
+(environment) 2489 6312 w
+(is) 3027 6312 w
+(equivalent) 3127 6312 w
+(to) 3576 6312 w
+(one) 3687 6312 w
+(rooted) 3864 6312 w
+(conventionally) 4152 6312 w
+(to) 4779 6312 w
+(that) 4890 6312 w
+(environment,) 720 6432 w
+(but) 1279 6432 w
+(without) 1436 6432 w
+(the) 1771 6432 w
+(depency.) 1922 6432 w
+(If) 2308 6432 w
+(the) 2403 6432 w
+(re\255rooted) 2554 6432 w
+(environment) 2948 6432 w
+(breaks,) 3482 6432 w
+(the) 3796 6432 w
+(user's) 3948 6432 w
+(active) 4216 6432 w
+(workspace) 4484 6432 w
+(on) 4940 6432 w
+(the cpu outside the re\255rooted window is unharmed.) 720 6552 w
+(The) 970 6708 w
+(use) 1153 6708 w
+(of) 1314 6708 w
+(multiple) 1425 6708 w
+(independent) 1787 6708 w
+(namespaces,) 2303 6708 w
+(the) 2832 6708 w
+(ability) 2982 6708 w
+(of) 3266 6708 w
+(the) 3377 6708 w
+(kernel) 3527 6708 w
+(to) 3805 6708 w
+(launch) 3912 6708 w
+(and) 4207 6708 w
+(manage) 4380 6708 w
+(services) 4719 6708 w
+(without) 720 6828 w
+(depending) 1057 6828 w
+(on) 1503 6828 w
+(a) 1633 6828 w
+(root) 1707 6828 w
+(fs,) 1898 6828 w
+(and) 2025 6828 w
+(provision) 2199 6828 w
+(of) 2607 6828 w
+(needed) 2720 6828 w
+(programs) 3032 6828 w
+(in) 3439 6828 w
+(the) 3547 6828 w
+(bootpaq) 3699 6828 w
+(and) 4051 6828 w
+(tools.tgz) 4225 6828 w
+(give) 4597 6828 w
+(us) 4799 6828 w
+(the) 4918 6828 w
+(foundation) 720 6948 w
+(to) 1187 6948 w
+(make) 1299 6948 w
+(a) 1549 6948 w
+(highly) 1627 6948 w
+(reliable) 1917 6948 w
+(grid.) 2251 6948 w
+(How) 2472 6948 w
+(do) 2701 6948 w
+(we) 2836 6948 w
+(build) 2987 6948 w
+(services) 3228 6948 w
+(on) 3584 6948 w
+(the) 3719 6948 w
+(platform) 3876 6948 w
+(the) 4255 6948 w
+(kernel) 4412 6948 w
+(provides) 4696 6948 w
+(that create the properties we seek? \(Reliability, redundancy, ease of maintenance and administration.\)) 720 7068 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 5 5
+%%Page: 6 6
+/saveobj save def
+mark
+6 pagesetup
+10 /Times-Roman f
+(\255 6 \255) 2797 480 w
+10 /Times-Bold f
+(III. Redundant roots on demand: fast system replication and efficient progressive backup) 720 840 w
+10 /Times-Roman f
+(Two) 970 996 w
+(high\255level) 1182 996 w
+(scripts) 1616 996 w
+(provide) 1906 996 w
+(management) 2240 996 w
+(of) 2779 996 w
+(the) 2891 996 w
+(grid's) 3042 996 w
+(data) 3304 996 w
+(flow) 3500 996 w
+(via) 3713 996 w
+(the) 3865 996 w
+(service) 4017 996 w
+(namespaces:) 4329 996 w
+(ven\255) 4863 996 w
+(tiprog) 720 1116 w
+(and) 988 1116 w
+(cpsys.) 1161 1116 w
+(ventiprog) 1437 1116 w
+(is) 1849 1116 w
+(run) 1945 1116 w
+(either) 2107 1116 w
+(via) 2363 1116 w
+(a) 2514 1116 w
+(cronjob,) 2587 1116 w
+(or) 2946 1116 w
+(whenver) 3058 1116 w
+(the) 3430 1116 w
+(user) 3581 1116 w
+(wishes) 3776 1116 w
+(to) 4077 1116 w
+(update) 4183 1116 w
+(their) 4477 1116 w
+(backups.) 4688 1116 w
+(It) 720 1236 w
+(is) 818 1236 w
+(an) 922 1236 w
+(efficient) 1053 1236 w
+(progressive) 1422 1236 w
+(backup) 1919 1236 w
+(script) 2244 1236 w
+(so) 2503 1236 w
+(running) 2629 1236 w
+(the) 2977 1236 w
+(script) 3136 1236 w
+(more) 3395 1236 w
+(frequently) 3637 1236 w
+(simply) 4084 1236 w
+(means) 4394 1236 w
+(less) 4686 1236 w
+(data) 4874 1236 w
+(sent,) 720 1356 w
+(more) 939 1356 w
+(often.) 1177 1356 w
+(cpsys) 1440 1356 w
+(uses) 1695 1356 w
+(flfmt) 1900 1356 w
+(\255v) 2133 1356 w
+(to) 2249 1356 w
+(duplicate) 2360 1356 w
+(the) 2759 1356 w
+(state) 2914 1356 w
+(of) 3130 1356 w
+(fossils) 3246 1356 w
+(between) 3534 1356 w
+(systems.) 3898 1356 w
+(By) 4272 1356 w
+(using) 4421 1356 w
+(first) 4670 1356 w
+(ven\255) 4863 1356 w
+(tiprog) 720 1476 w
+(to) 992 1476 w
+(replicate) 1103 1476 w
+(data) 1479 1476 w
+(between) 1678 1476 w
+(ventis,) 2043 1476 w
+(then) 2340 1476 w
+(cpsys) 2545 1476 w
+(to) 2800 1476 w
+(clone) 2912 1476 w
+(a) 3162 1476 w
+(fossil) 3240 1476 w
+(via) 3491 1476 w
+(the) 3647 1476 w
+(rootscore,) 3803 1476 w
+(and) 4233 1476 w
+(then) 4411 1476 w
+(setting) 4617 1476 w
+(the) 4918 1476 w
+(venti) 720 1596 w
+(env) 946 1596 w
+(variable) 1116 1596 w
+(used) 1463 1596 w
+(by) 1672 1596 w
+(the) 1798 1596 w
+(fossil) 1946 1596 w
+(to) 2189 1596 w
+(one) 2293 1596 w
+(of) 2463 1596 w
+(the) 2572 1596 w
+(backup) 2720 1596 w
+(ventis,) 3034 1596 w
+(the) 3324 1596 w
+(user) 3472 1596 w
+(is) 3664 1596 w
+(given a current working copy of) 3757 1596 w
+(their environment with a completely different chain of hardware dependencies.) 720 1716 w
+(The) 970 1872 w
+(preferred) 1158 1872 w
+(mode) 1555 1872 w
+(of) 1810 1872 w
+(operation) 1926 1872 w
+(is) 2336 1872 w
+(to) 2436 1872 w
+(run) 2547 1872 w
+(two) 2713 1872 w
+(ventis) 2897 1872 w
+(and) 3170 1872 w
+(two) 3348 1872 w
+(fossils,) 3532 1872 w
+(one) 3847 1872 w
+(per) 4025 1872 w
+(venti.) 4186 1872 w
+(One) 4445 1872 w
+(fossil) 4645 1872 w
+(and) 4896 1872 w
+(venti) 720 1992 w
+(are) 948 1992 w
+(assigned) 1097 1992 w
+(the) 1469 1992 w
+(role) 1619 1992 w
+(of) 1802 1992 w
+('main/future'.) 1913 1992 w
+(Data) 2498 1992 w
+(is) 2714 1992 w
+(backed) 2809 1992 w
+(up) 3119 1992 w
+(frequently) 3246 1992 w
+(between) 3683 1992 w
+(the) 4042 1992 w
+(ventis,) 4191 1992 w
+(and) 4482 1992 w
+(whenever) 4653 1992 w
+(desired,) 720 2112 w
+(the) 1072 2112 w
+(user) 1233 2112 w
+(resets) 1438 2112 w
+(the) 1705 2112 w
+(rootscore) 1867 2112 w
+(of) 2278 2112 w
+(the) 2401 2112 w
+('backup/past') 2563 2112 w
+(fossil.) 3146 2112 w
+(From) 3428 2112 w
+(their) 3685 2112 w
+(terminal,) 3908 2112 w
+(the) 4306 2112 w
+(user) 4468 2112 w
+(can) 4674 2112 w
+(keep) 4852 2112 w
+(working) 720 2232 w
+(with) 1082 2232 w
+(their) 1289 2232 w
+(data) 1501 2232 w
+(if) 1696 2232 w
+(one) 1786 2232 w
+('leg') 1959 2232 w
+(of) 2176 2232 w
+(the) 2287 2232 w
+(system) 2437 2232 w
+(needs) 2743 2232 w
+(to) 2998 2232 w
+(be) 3104 2232 w
+(reset) 3226 2232 w
+(for) 3442 2232 w
+(whatever) 3586 2232 w
+(reason.) 3979 2232 w
+(In) 4292 2232 w
+(general) 4403 2232 w
+(the) 4724 2232 w
+(user) 4874 2232 w
+(will) 720 2352 w
+(work) 904 2352 w
+(on) 1137 2352 w
+(the) 1265 2352 w
+(main/future) 1415 2352 w
+(fossil) 1909 2352 w
+(\(probably) 2154 2352 w
+(via) 2570 2352 w
+(another) 2720 2352 w
+(cpu\)) 3047 2352 w
+(but) 3252 2352 w
+(has) 3408 2352 w
+(the) 3569 2352 w
+(backup/past) 3719 2352 w
+(available) 4224 2352 w
+(for) 4613 2352 w
+(scratch) 4758 2352 w
+(and) 720 2472 w
+(testing.) 895 2472 w
+(Because) 1218 2472 w
+(this) 1581 2472 w
+(fossil's) 1757 2472 w
+(data) 2077 2472 w
+(basically) 2274 2472 w
+("dead) 2660 2472 w
+(ends") 2920 2472 w
+(unless) 3174 2472 w
+(it) 3454 2472 w
+(is) 3540 2472 w
+(needed) 3637 2472 w
+(as) 3949 2472 w
+(a) 4062 2472 w
+(backup,) 4136 2472 w
+(it) 4479 2472 w
+(can) 4565 2472 w
+(be) 4733 2472 w
+(used) 4857 2472 w
+(for destructive tests.) 720 2592 w
+(A) 970 2748 w
+(core) 1075 2748 w
+(concept) 1279 2748 w
+(is) 1622 2748 w
+(focusing) 1722 2748 w
+(on) 2099 2748 w
+(venti) 2232 2748 w
+(and) 2465 2748 w
+(rootscores) 2642 2748 w
+(as) 3085 2748 w
+(the) 3201 2748 w
+(essence) 3356 2748 w
+(of) 3693 2748 w
+(your) 3809 2748 w
+(environment,) 4025 2748 w
+(not) 4589 2748 w
+(the) 4751 2748 w
+(on\255) 4907 2748 w
+(disk) 720 2868 w
+(fossil) 917 2868 w
+(buffers.) 1164 2868 w
+(A) 1501 2868 w
+(fossil) 1603 2868 w
+(is) 1850 2868 w
+(thought) 1947 2868 w
+(of) 2283 2868 w
+(as) 2396 2868 w
+(a) 2509 2868 w
+(convenient) 2583 2868 w
+(way) 3051 2868 w
+(of) 3247 2868 w
+(reading) 3360 2868 w
+(and) 3689 2868 w
+(writing) 3863 2868 w
+(venti) 4182 2868 w
+(blocks,) 4412 2868 w
+(not) 4727 2868 w
+(as) 4884 2868 w
+(a) 4996 2868 w
+(long\255term) 720 2988 w
+(reliable) 1143 2988 w
+(storage) 1471 2988 w
+(system.) 1788 2988 w
+(The) 2120 2988 w
+('fossilize') 2304 2988 w
+(script) 2733 2988 w
+(takes) 2985 2988 w
+(the) 3220 2988 w
+(most) 3372 2988 w
+(recent) 3597 2988 w
+(rootscore) 3870 2988 w
+(and) 4271 2988 w
+(appends) 4445 2988 w
+(it) 4802 2988 w
+(to) 4888 2988 w
+(a) 4996 2988 w
+(file) 720 3108 w
+(stored) 883 3108 w
+(in) 1157 3108 w
+(the) 1265 3108 w
+(9fat.) 1417 3108 w
+(Once) 1627 3108 w
+(a) 1867 3108 w
+(fossil) 1941 3108 w
+(file) 2188 3108 w
+(exists) 2351 3108 w
+(\(usually) 2608 3108 w
+(as) 2959 3108 w
+(a) 3071 3108 w
+(drive) 3144 3108 w
+(partition\)) 3378 3108 w
+(the) 3779 3108 w
+(flfmt) 3930 3108 w
+(\255v) 4159 3108 w
+(operation) 4271 3108 w
+(is) 4677 3108 w
+(almost) 4773 3108 w
+(instantaneous. The use of frequent flfmt \255v keeps fossils small and bypasses many) 720 3228 w
+(issues) 4022 3228 w
+(historically) 4287 3228 w
+(associ\255) 4763 3228 w
+(ated) 720 3348 w
+(with) 913 3348 w
+(fossil/venti) 1118 3348 w
+(coordination.) 1590 3348 w
+(A) 2147 3348 w
+(valid) 2245 3348 w
+(rootscore) 2471 3348 w
+(in) 2868 3348 w
+(combination) 2972 3348 w
+(with) 3498 3348 w
+(multiple) 3702 3348 w
+(ventis) 4062 3348 w
+(hosting) 4327 3348 w
+(those) 4648 3348 w
+(dat\255) 4885 3348 w
+(ablocks) 720 3468 w
+(means) 1051 3468 w
+(that) 1332 3468 w
+(any) 1508 3468 w
+(reliability) 1678 3468 w
+(issues) 2093 3468 w
+(with) 2359 3468 w
+(fossil's) 2564 3468 w
+(on\255disk) 2880 3468 w
+(storage) 3207 3468 w
+(has) 3522 3468 w
+(little) 3682 3468 w
+(impact) 3893 3468 w
+(on) 4192 3468 w
+(the) 4319 3468 w
+(user.) 4468 3468 w
+(Any) 4686 3468 w
+(fos\255) 4885 3468 w
+(sil) 720 3588 w
+(that) 846 3588 w
+('goes) 1027 3588 w
+(bad') 1274 3588 w
+(is) 1482 3588 w
+(simply) 1580 3588 w
+(flfmt) 1884 3588 w
+(\255v.) 2115 3588 w
+(Only) 2254 3588 w
+(the) 2485 3588 w
+(integrity) 2638 3588 w
+(of) 3007 3588 w
+(the) 3120 3588 w
+(venti) 3272 3588 w
+(blocks) 3502 3588 w
+(is) 3793 3588 w
+(important,) 3890 3588 w
+(and) 4334 3588 w
+(venti) 4508 3588 w
+(and) 4738 3588 w
+(it's) 4912 3588 w
+(administrative tools have been reliable in this author's experience.) 720 3708 w
+(The) 970 3864 w
+(early) 1152 3864 w
+(boot) 1378 3864 w
+(environment) 1583 3864 w
+(runs) 2115 3864 w
+(an) 2314 3864 w
+(rx) 2435 3864 w
+(listener) 2545 3864 w
+(to) 2866 3864 w
+(allow) 2971 3864 w
+(the) 3220 3864 w
+(venti/fossil) 3369 3864 w
+(and) 3841 3864 w
+(other) 4012 3864 w
+(administrative) 4245 3864 w
+(tools) 4845 3864 w
+(to) 720 3984 w
+(be) 824 3984 w
+(executed) 944 3984 w
+(easily) 1324 3984 w
+(from) 1583 3984 w
+(other) 1803 3984 w
+(nodes) 2034 3984 w
+(or) 2293 3984 w
+(via) 2402 3984 w
+(cron.) 2550 3984 w
+(Testing) 2778 3984 w
+(revealed) 3104 3984 w
+(an) 3467 3984 w
+(issue) 3587 3984 w
+(which compromised reliability) 3813 3984 w
+(in) 720 4104 w
+(the) 831 4104 w
+(case) 986 4104 w
+(of) 1190 4104 w
+(failure:) 1307 4104 w
+(factotum) 1629 4104 w
+(tries) 2018 4104 w
+(to) 2224 4104 w
+(acquire) 2336 4104 w
+(/srv/cs,) 2663 4104 w
+(and) 2983 4104 w
+(the) 3161 4104 w
+(connection) 3317 4104 w
+(server) 3789 4104 w
+(is) 4066 4104 w
+(running) 4167 4104 w
+(in) 4512 4104 w
+(a) 4624 4104 w
+(standard) 4702 4104 w
+(rooted) 720 4224 w
+(environment,) 1002 4224 w
+(if) 1559 4224 w
+(the) 1647 4224 w
+(connection) 1796 4224 w
+(server) 2261 4224 w
+(goes) 2531 4224 w
+(down,) 2741 4224 w
+(factotum) 3015 4224 w
+(will) 3397 4224 w
+(space) 3580 4224 w
+(out) 3828 4224 w
+(waiting) 3983 4224 w
+(for) 4310 4224 w
+(the) 4453 4224 w
+(connection) 4602 4224 w
+(server to help it authdial. To avoid this, one) 720 4344 w
+(can) 2489 4344 w
+(either) 2653 4344 w
+(host) 2906 4344 w
+(cs) 3099 4344 w
+(and) 3208 4344 w
+(dns) 3378 4344 w
+(also) 3543 4344 w
+(in) 3730 4344 w
+(the) 3834 4344 w
+("rootless") 3982 4344 w
+(environment,) 4401 4344 w
+(or) 4957 4344 w
+(use) 720 4464 w
+(factotum) 885 4464 w
+(with) 1272 4464 w
+(the) 1482 4464 w
+(new) 1636 4464 w
+(\255x) 1834 4464 w
+(option,) 1949 4464 w
+(which) 2261 4464 w
+(prohibits) 2536 4464 w
+(it) 2923 4464 w
+(from) 3010 4464 w
+(mounting) 3235 4464 w
+(a) 3650 4464 w
+(cs.) 3725 4464 w
+(In) 3864 4464 w
+(this) 3978 4464 w
+(case,) 4154 4464 w
+(factotum) 4381 4464 w
+(simply) 4767 4464 w
+(uses the auth server provided as a parameter with the \255a flag.) 720 4584 w
+(In) 970 4740 w
+(this) 1079 4740 w
+(way) 1250 4740 w
+(we) 1442 4740 w
+(establish) 1584 4740 w
+(the) 1960 4740 w
+(isolation) 2108 4740 w
+(of) 2479 4740 w
+(function) 2588 4740 w
+(and) 2947 4740 w
+(access) 3118 4740 w
+(of) 3399 4740 w
+(the) 3509 4740 w
+(ram/paq) 3658 4740 w
+(namespace) 4012 4740 w
+(from) 4476 4740 w
+(the) 4697 4740 w
+(stan\255) 4846 4740 w
+(dard) 720 4860 w
+(user) 941 4860 w
+(environment) 1151 4860 w
+(namespace.) 1700 4860 w
+(This) 2206 4860 w
+(allows) 2428 4860 w
+(the) 2733 4860 w
+(plan9rc) 2898 4860 w
+(script) 3240 4860 w
+(to) 3505 4860 w
+(function) 3626 4860 w
+(as) 4002 4860 w
+(a) 4128 4860 w
+(kind) 4215 4860 w
+(of) 4436 4860 w
+("namespace) 4562 4860 w
+(launcher" which can start multiple cpurc or termrc on the same machine, each with a different root.) 720 4980 w
+10 /Times-Bold f
+(IIII. User namespace management: multiple roots and writable /proc/*/ns) 720 5256 w
+10 /Times-Roman f
+(Because) 970 5412 w
+(the) 1331 5412 w
+(main) 1482 5412 w
+(flow) 1711 5412 w
+(of) 1923 5412 w
+(control) 2035 5412 w
+(launches) 2347 5412 w
+(the) 2725 5412 w
+("root") 2876 5412 w
+(environment) 3148 5412 w
+(using) 3683 5412 w
+(newns) 3930 5412 w
+(but) 4215 5412 w
+(stays) 4373 5412 w
+(separate,) 4603 5412 w
+(it) 4984 5412 w
+(is) 720 5532 w
+(possible) 821 5532 w
+(to) 1183 5532 w
+(run) 1295 5532 w
+(the) 1462 5532 w
+(plan9rc) 1618 5532 w
+(script) 1951 5532 w
+(multiple) 2207 5532 w
+(times) 2575 5532 w
+(to) 2826 5532 w
+(run) 2938 5532 w
+(the) 3105 5532 w
+(cpurc/termrc) 3261 5532 w
+(from) 3803 5532 w
+(different) 4030 5532 w
+(root) 4406 5532 w
+(fileservers.) 4600 5532 w
+(One) 720 5652 w
+(example) 917 5652 w
+(would) 1286 5652 w
+(be) 1567 5652 w
+(doing) 1692 5652 w
+(the) 1951 5652 w
+(initial) 2104 5652 w
+(plan9rc) 2369 5652 w
+(script) 2699 5652 w
+(in) 2952 5652 w
+(the) 3061 5652 w
+(manner) 3214 5652 w
+(of) 3545 5652 w
+(a) 3660 5652 w
+(tcp) 3736 5652 w
+(booted) 3890 5652 w
+(cpu) 4194 5652 w
+(server,) 4370 5652 w
+(serving) 4670 5652 w
+(a) 4996 5652 w
+(cpu) 720 5772 w
+(envionment) 898 5772 w
+(rooted) 1404 5772 w
+(on) 1693 5772 w
+(a) 1827 5772 w
+(remote) 1905 5772 w
+(fs,) 2216 5772 w
+(and) 2347 5772 w
+(then) 2525 5772 w
+(rerunning) 2731 5772 w
+(plan9rc) 3153 5772 w
+(and) 3486 5772 w
+(launching) 3664 5772 w
+(a) 4092 5772 w
+(terminal) 4169 5772 w
+(environment) 4535 5772 w
+(from a local disk fs.) 720 5892 w
+(An) 970 6048 w
+(example) 1124 6048 w
+(of) 1494 6048 w
+(this) 1609 6048 w
+(flow) 1786 6048 w
+(is) 2001 6048 w
+(included) 2100 6048 w
+(in) 2476 6048 w
+(the) 2586 6048 w
+(multiboot.txt) 2740 6048 w
+(and) 3293 6048 w
+(multibootns.txt) 3470 6048 w
+(files.) 4113 6048 w
+(After) 4343 6048 w
+(the) 4586 6048 w
+(plan9rc) 4741 6048 w
+(script runs and sets up a normal tcp boot cpu server environment, the user issues the commands:) 720 6168 w
+(mv /srv/boot /srv/tcpboot) 1080 6384 w
+(# standard namespace files look for /boot so make it available) 2330 6384 w
+(interactive=yes) 1080 6504 w
+(# we want to change all our previous variables) 2330 6504 w
+(plan9rc) 1080 6624 w
+(# run the plan9rc script and this time create a terminal environment) 2330 6624 w
+(On) 970 6840 w
+(the) 1120 6840 w
+(second) 1270 6840 w
+(run) 1575 6840 w
+(of) 1736 6840 w
+(the) 1847 6840 w
+(plan9rc) 1997 6840 w
+(script,) 2324 6840 w
+(the) 2599 6840 w
+(user) 2749 6840 w
+(answers) 2943 6840 w
+("clear") 3292 6840 w
+(to) 3596 6840 w
+(almost) 3703 6840 w
+(all) 3999 6840 w
+(prompts) 4128 6840 w
+(because) 4485 6840 w
+(those) 4829 6840 w
+(services) 720 6960 w
+(and) 1078 6960 w
+(actions) 1259 6960 w
+(have) 1579 6960 w
+(already) 1804 6960 w
+(been) 2134 6960 w
+(taken.) 2359 6960 w
+(The) 2637 6960 w
+(user) 2828 6960 w
+(provides) 3030 6960 w
+(the) 3410 6960 w
+(new) 3568 6960 w
+(root) 3770 6960 w
+(from) 3967 6960 w
+(the) 4197 6960 w
+(local) 4355 6960 w
+(disk) 4585 6960 w
+(fs) 4788 6960 w
+(and) 4896 6960 w
+(chooses) 720 7080 w
+(terminal) 1068 7080 w
+(to) 1433 7080 w
+(start) 1543 7080 w
+(the) 1747 7080 w
+(termrc,) 1901 7080 w
+(and) 2218 7080 w
+(now) 2394 7080 w
+(the) 2598 7080 w
+(machine) 2752 7080 w
+(initiates) 3122 7080 w
+(a) 3471 7080 w
+(standard) 3548 7080 w
+(terminal) 3919 7080 w
+(for) 4285 7080 w
+(the) 4434 7080 w
+(user.) 4589 7080 w
+(How\255) 4813 7080 w
+(ever,) 720 7200 w
+(the) 946 7200 w
+(tcp) 1098 7200 w
+(boot) 1250 7200 w
+(cpu) 1458 7200 w
+(namespace) 1632 7200 w
+(is) 2099 7200 w
+(still) 2196 7200 w
+(available.) 2377 7200 w
+(The) 2792 7200 w
+(user) 2977 7200 w
+(can) 3173 7200 w
+(cpu) 3341 7200 w
+(\255h) 3515 7200 w
+(tcp!localhost!17060) 3627 7200 w
+(to) 4455 7200 w
+(the) 4562 7200 w
+(ram/paq) 4713 7200 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 6 6
+%%Page: 7 7
+/saveobj save def
+mark
+7 pagesetup
+10 /Times-Roman f
+(\255 7 \255) 2797 480 w
+(namespace,) 720 840 w
+(then) 1211 840 w
+(rerootwin) 1412 840 w
+(tcpboot.) 1829 840 w
+(Now) 2183 840 w
+(if) 2406 840 w
+(they) 2496 840 w
+(start) 2697 840 w
+(grio) 2898 840 w
+(and) 3088 840 w
+(maximize) 3261 840 w
+(it,) 3684 840 w
+(they) 3794 840 w
+(have) 3995 840 w
+(a) 4212 840 w
+(namespace) 4285 840 w
+(exactly) 4752 840 w
+(identical) 720 960 w
+(to) 1098 960 w
+(cpu) 1210 960 w
+(to) 1388 960 w
+(a) 1500 960 w
+(remote) 1578 960 w
+(tcp) 1889 960 w
+(boot) 2045 960 w
+(cpu) 2257 960 w
+(server) 2434 960 w
+(attached) 2710 960 w
+(to) 3075 960 w
+(a) 3186 960 w
+(remote) 3263 960 w
+(fileserver) 3573 960 w
+(\255) 3982 960 w
+(except) 4048 960 w
+(they) 4341 960 w
+(have) 4546 960 w
+(simply) 4767 960 w
+(cpu'd into another namespace hosted) 720 1080 w
+(on) 2226 1080 w
+(the) 2352 1080 w
+(local) 2500 1080 w
+(terminal.) 2720 1080 w
+(One) 3104 1080 w
+(interesting) 3296 1080 w
+(fact) 3744 1080 w
+(to) 3919 1080 w
+(note) 4023 1080 w
+(is) 4221 1080 w
+(that) 4314 1080 w
+(due) 4490 1080 w
+(to) 4660 1080 w
+(the) 4764 1080 w
+(mv) 4912 1080 w
+(of) 720 1200 w
+(the) 844 1200 w
+(/srv,) 1007 1200 w
+(unless) 1223 1200 w
+(the) 1514 1200 w
+(user) 1677 1200 w
+(has) 1883 1200 w
+(changed) 2056 1200 w
+(the) 2428 1200 w
+(/lib/namespace) 2590 1200 w
+(files) 3229 1200 w
+(to) 3441 1200 w
+(non\255default) 3559 1200 w
+(settins) 4059 1200 w
+(for) 4355 1200 w
+(the) 4511 1200 w
+(boot/root) 4673 1200 w
+(mounts,) 720 1320 w
+(the) 1068 1320 w
+(cpu) 1218 1320 w
+(listener) 1390 1320 w
+(started) 1712 1320 w
+(by) 2006 1320 w
+(the) 2134 1320 w
+(cpurc) 2284 1320 w
+(now) 2533 1320 w
+(cpus) 2733 1320 w
+(into) 2944 1320 w
+(the) 3128 1320 w
+(terminal) 3278 1320 w
+(namespace,) 3640 1320 w
+(because) 4131 1320 w
+(that) 4475 1320 w
+(is) 4654 1320 w
+(what) 4750 1320 w
+(is) 4973 1320 w
+(located at /srv/boot.) 720 1440 w
+(To) 970 1596 w
+(demonstrate) 1125 1596 w
+(that) 1657 1596 w
+(these) 1851 1596 w
+(principles) 2100 1596 w
+(work) 2538 1596 w
+(for) 2787 1596 w
+(even) 2947 1596 w
+(more) 3179 1596 w
+(strongly) 3428 1596 w
+(diverging) 3800 1596 w
+(namespaces,) 4228 1596 w
+(I) 4774 1596 w
+(have) 4852 1596 w
+(tested) 720 1716 w
+(using) 987 1716 w
+(the) 1238 1716 w
+(plan9rc) 1394 1716 w
+(to) 1727 1716 w
+(launch) 1839 1716 w
+(both) 2139 1716 w
+(9front) 2351 1716 w
+(and) 2629 1716 w
+(Bell) 2807 1716 w
+(Labs) 3007 1716 w
+(user) 3234 1716 w
+(environments) 3433 1716 w
+(simultaneously.) 4010 1716 w
+(Both) 4674 1716 w
+(can) 4902 1716 w
+(coexist) 720 1836 w
+(on) 1039 1836 w
+(the) 1175 1836 w
+(same) 1333 1836 w
+(machine) 1574 1836 w
+(as) 1948 1836 w
+(normal) 2067 1836 w
+(self) 2386 1836 w
+(sufficient) 2566 1836 w
+(environments) 2979 1836 w
+(without) 3559 1836 w
+(competing) 3901 1836 w
+(and) 4359 1836 w
+(the) 4540 1836 w
+(user) 4699 1836 w
+(can) 4902 1836 w
+(even create a mixed namespace that has elements of each.) 720 1956 w
+(This) 970 2112 w
+(points) 1174 2112 w
+(to) 1445 2112 w
+(the) 1549 2112 w
+(next) 1697 2112 w
+(component) 1896 2112 w
+(of) 2367 2112 w
+(the) 2477 2112 w
+(toolkit) 2626 2112 w
+(for) 2915 2112 w
+(working) 3058 2112 w
+(in) 3418 2112 w
+(and) 3523 2112 w
+(controlling) 3694 2112 w
+(divergent) 4160 2112 w
+(namespaces) 4564 2112 w
+(\255) 720 2232 w
+(the) 782 2232 w
+(writable) 933 2232 w
+(/proc/*/ns) 1289 2232 w
+(kernel) 1718 2232 w
+(modification) 1995 2232 w
+(and) 2534 2232 w
+(the) 2706 2232 w
+(addns,) 2856 2232 w
+(subns,) 3142 2232 w
+(and) 3423 2232 w
+(cpns) 3595 2232 w
+(scripts.) 3806 2232 w
+(With) 4120 2232 w
+(processes) 4348 2232 w
+(operat\255) 4758 2232 w
+(ing) 720 2352 w
+(in) 874 2352 w
+(many) 978 2352 w
+(different) 1226 2352 w
+(namespaces,) 1595 2352 w
+(it) 2122 2352 w
+(may) 2204 2352 w
+(be) 2402 2352 w
+(useful) 2522 2352 w
+(or) 2792 2352 w
+(necessary) 2901 2352 w
+(to) 3314 2352 w
+(modify) 3418 2352 w
+(the) 3733 2352 w
+(mounts) 3882 2352 w
+(and) 4204 2352 w
+(binds) 4375 2352 w
+(of) 4619 2352 w
+(running) 4729 2352 w
+(services) 720 2472 w
+(\255) 1074 2472 w
+(but) 1140 2472 w
+(most) 1301 2472 w
+(services) 1529 2472 w
+(do) 1882 2472 w
+(not) 2014 2472 w
+(provide) 2174 2472 w
+(a) 2511 2472 w
+(method) 2587 2472 w
+(for) 2919 2472 w
+(doing) 3067 2472 w
+(so.) 3327 2472 w
+(From) 3473 2472 w
+(a) 3722 2472 w
+(shell) 3798 2472 w
+(you) 4019 2472 w
+(can) 4201 2472 w
+(issue) 4371 2472 w
+(namespace) 4603 2472 w
+(commands,) 720 2592 w
+(and) 1215 2592 w
+(some) 1396 2592 w
+(programs) 1644 2592 w
+(such) 2058 2592 w
+(as) 2278 2592 w
+(acme) 2398 2592 w
+(provide) 2645 2592 w
+(tools) 2988 2592 w
+(\(Local\)) 3221 2592 w
+(to) 3552 2592 w
+(change) 3668 2592 w
+(their) 3988 2592 w
+(namespace,) 4209 2592 w
+(but) 4709 2592 w
+(as) 4875 2592 w
+(a) 4996 2592 w
+(general) 720 2712 w
+(rule) 1042 2712 w
+(standard) 1226 2712 w
+(plan) 1593 2712 w
+(9) 1794 2712 w
+(only) 1873 2712 w
+(allows) 2080 2712 w
+(you) 2370 2712 w
+(to) 2549 2712 w
+(actively) 2656 2712 w
+(modify) 3001 2712 w
+(the) 3319 2712 w
+(namespace) 3470 2712 w
+(of) 3935 2712 w
+(your) 4046 2712 w
+(shells,) 4257 2712 w
+(the) 4538 2712 w
+("system\255) 4688 2712 w
+(wide" namespace of services remains mostly constant after they are started.) 720 2832 w
+(The) 970 2988 w
+(writable) 1154 2988 w
+(ns) 1510 2988 w
+(provides) 1628 2988 w
+(a) 2001 2988 w
+(simple) 2074 2988 w
+(and) 2370 2988 w
+(direct) 2543 2988 w
+(mechanism) 2800 2988 w
+(to) 3285 2988 w
+(allow) 3393 2988 w
+(modifications) 3645 2988 w
+(of) 4225 2988 w
+(the) 4338 2988 w
+(namespace) 4490 2988 w
+(of) 4957 2988 w
+(any process owned by the user, including processes on remote nodes via import of /proc. Simply writing the) 720 3108 w
+(same text string as used by the namespace file or) 720 3228 w
+(interactive) 2695 3228 w
+(shells) 3142 3228 w
+(to) 3396 3228 w
+(/proc/*/ns) 3500 3228 w
+(will) 3926 3228 w
+(perform) 4108 3228 w
+(the) 4455 3228 w
+(namespace) 4603 3228 w
+(modification) 720 3348 w
+(on) 1263 3348 w
+(that) 1395 3348 w
+(program) 1577 3348 w
+(equivalent) 1947 3348 w
+(to) 2394 3348 w
+(it) 2503 3348 w
+(issuing) 2590 3348 w
+(that) 2905 3348 w
+(command) 3086 3348 w
+(itself.) 3511 3348 w
+(In) 3767 3348 w
+(this) 3881 3348 w
+(way) 4057 3348 w
+(the) 4254 3348 w
+(ns) 4407 3348 w
+(file) 4527 3348 w
+(becomes) 4691 3348 w
+(more) 720 3468 w
+(tightly) 954 3468 w
+(mapped) 1245 3468 w
+(to) 1590 3468 w
+(the) 1698 3468 w
+(process) 1850 3468 w
+(namespace.) 2179 3468 w
+(The) 2671 3468 w
+(action) 2856 3468 w
+(of) 3130 3468 w
+(writing) 3243 3468 w
+(namespace) 3562 3468 w
+(commands) 4029 3468 w
+(to) 4492 3468 w
+(the) 4600 3468 w
+(names\255) 4752 3468 w
+(pace) 720 3588 w
+(file) 933 3588 w
+(with) 1097 3588 w
+(echo) 1306 3588 w
+(commands) 1525 3588 w
+(is) 1989 3588 w
+(simple) 2087 3588 w
+(and) 2385 3588 w
+(natural) 2560 3588 w
+(and) 2868 3588 w
+(provides) 3043 3588 w
+(full) 3418 3588 w
+(generality.) 3588 3588 w
+(The) 4043 3588 w
+(exception) 4229 3588 w
+(is) 4648 3588 w
+(mounts) 4745 3588 w
+(requiring authentication, which are not performed. This restriction can be worked) 720 3708 w
+(around) 4000 3708 w
+(by) 4303 3708 w
+(creating) 4429 3708 w
+(a) 4776 3708 w
+(srvfs) 4846 3708 w
+(of any any authentication\255required mounts so the non\255authed /srv on the local machine may be acquired.) 720 3828 w
+(The) 970 3984 w
+(generality) 1155 3984 w
+(of) 1584 3984 w
+(this) 1697 3984 w
+(mechanism) 1872 3984 w
+(allows) 2357 3984 w
+(it) 2648 3984 w
+(to) 2734 3984 w
+(be) 2842 3984 w
+(used) 2966 3984 w
+(as) 3179 3984 w
+(the) 3292 3984 w
+(foundation) 3445 3984 w
+(for) 3909 3984 w
+(another) 4056 3984 w
+(level) 4386 3984 w
+(of) 4611 3984 w
+(abstrac\255) 4725 3984 w
+(tion) 720 4104 w
+(\255) 914 4104 w
+(scripts) 985 4104 w
+(which) 1284 4104 w
+(perform) 1566 4104 w
+(namespace) 1925 4104 w
+(operations) 2400 4104 w
+(en) 2854 4104 w
+(masse) 2986 4104 w
+(on) 3268 4104 w
+(target) 3406 4104 w
+(processes.) 3671 4104 w
+(The) 4116 4104 w
+(addns,) 4309 4104 w
+(subns,) 4605 4104 w
+(and) 4896 4104 w
+(cpns) 720 4224 w
+(scripts) 938 4224 w
+(perform) 1234 4224 w
+(simple) 1590 4224 w
+(comparisons) 1892 4224 w
+(on) 2432 4224 w
+(the) 2567 4224 w
+(contents) 2724 4224 w
+(of) 3092 4224 w
+(process) 3211 4224 w
+(namespaces) 3546 4224 w
+(and) 4058 4224 w
+(make) 4238 4224 w
+(modifications) 4490 4224 w
+(accordingly.) 720 4344 w
+(It) 1252 4344 w
+(should) 1349 4344 w
+(be) 1652 4344 w
+(noted) 1782 4344 w
+(that) 2040 4344 w
+(the) 2226 4344 w
+(scripts) 2384 4344 w
+(in) 2681 4344 w
+(their) 2795 4344 w
+(current) 3014 4344 w
+(state) 3331 4344 w
+(do) 3549 4344 w
+(not) 3684 4344 w
+(parse) 3847 4344 w
+(and) 4092 4344 w
+(understand) 4271 4344 w
+(the) 4744 4344 w
+(full) 4901 4344 w
+('graph/tree') 720 4464 w
+(structure) 1228 4464 w
+(of) 1615 4464 w
+(namespaces) 1736 4464 w
+(so) 2250 4464 w
+(their) 2377 4464 w
+(modifcations) 2598 4464 w
+(are) 3158 4464 w
+(somwhat) 3317 4464 w
+(naive.) 3716 4464 w
+(This) 3995 4464 w
+(is) 4211 4464 w
+(not) 4317 4464 w
+(a) 4484 4464 w
+(limit) 4567 4464 w
+(of) 4796 4464 w
+(the) 4918 4464 w
+(writable) 720 4584 w
+(ns) 1090 4584 w
+(modification,) 1222 4584 w
+(more) 1801 4584 w
+(sophisticated) 2049 4584 w
+(tools) 2614 4584 w
+(should) 2852 4584 w
+(be) 3161 4584 w
+(able) 3297 4584 w
+(to) 3505 4584 w
+(do) 3625 4584 w
+("perfect) 3767 4584 w
+(rewrites") 4126 4584 w
+(of) 4530 4584 w
+(a) 4655 4584 w
+(process) 4741 4584 w
+(namespace,) 720 4704 w
+(but) 1216 4704 w
+(doing) 1378 4704 w
+(this) 1640 4704 w
+(requires) 1819 4704 w
+(understanding) 2174 4704 w
+(the) 2774 4704 w
+(dependencies) 2931 4704 w
+(of) 3503 4704 w
+(later) 3621 4704 w
+(binds) 3833 4704 w
+(on) 4085 4704 w
+(previous) 4220 4704 w
+(operations.) 4599 4704 w
+(The) 720 4824 w
+(current) 904 4824 w
+(scripts) 1215 4824 w
+(simply) 1505 4824 w
+(compare) 1807 4824 w
+(the) 2179 4824 w
+(ns) 2330 4824 w
+(files) 2448 4824 w
+(for) 2649 4824 w
+(matching) 2794 4824 w
+(and) 3195 4824 w
+(non\255matching) 3368 4824 w
+(lines) 3952 4824 w
+(and) 4170 4824 w
+(use) 4343 4824 w
+(this) 4505 4824 w
+(to) 4679 4824 w
+(gener\255) 4786 4824 w
+(ate) 720 4944 w
+(a) 869 4944 w
+(list) 946 4944 w
+(of) 1102 4944 w
+(actions.) 1218 4944 w
+(In) 1560 4944 w
+(practice,) 1677 4944 w
+(this) 2051 4944 w
+(mechanism) 2230 4944 w
+(is) 2719 4944 w
+(usually) 2820 4944 w
+(adequate) 3143 4944 w
+(to) 3531 4944 w
+(perform) 3643 4944 w
+(even) 3998 4944 w
+(dramatic) 4220 4944 w
+(namespace) 4603 4944 w
+(modifications,) 720 5064 w
+(and) 1321 5064 w
+(the) 1491 5064 w
+(user) 1639 5064 w
+(can) 1831 5064 w
+(always) 1995 5064 w
+(make) 2298 5064 w
+(additional) 2540 5064 w
+(changes) 2966 5064 w
+(or) 3313 5064 w
+(modify) 3422 5064 w
+(the) 3737 5064 w
+(actions) 3885 5064 w
+(of) 4194 5064 w
+(the) 4303 5064 w
+(script by using) 4451 5064 w
+(the \255t flag to print actions without executing them.) 720 5184 w
+(I) 970 5340 w
+(don't) 1029 5340 w
+(want) 1266 5340 w
+(to) 1486 5340 w
+(sound) 1590 5340 w
+(too) 1855 5340 w
+(jargonistic,) 2010 5340 w
+(but) 2484 5340 w
+(it) 2639 5340 w
+(seems) 2722 5340 w
+(accurate) 2993 5340 w
+(to) 3351 5340 w
+(describe) 3456 5340 w
+(the) 3815 5340 w
+(modified) 3964 5340 w
+(boot) 4352 5340 w
+(system) 4557 5340 w
+(with) 4862 5340 w
+(ram/paq) 720 5460 w
+(namespace) 1085 5460 w
+(and) 1560 5460 w
+(the) 1742 5460 w
+(plan9rc) 1902 5460 w
+(script) 2239 5460 w
+(as) 2498 5460 w
+(a) 2618 5460 w
+("namespace) 2699 5460 w
+(hypervisor") 3214 5460 w
+(because) 3719 5460 w
+(it) 4071 5460 w
+(can) 4164 5460 w
+(and) 4339 5460 w
+(does) 4520 5460 w
+(support) 4740 5460 w
+(multiple) 720 5580 w
+(independent) 1080 5580 w
+(namespaces) 1594 5580 w
+(and) 2096 5580 w
+(allow) 2266 5580 w
+(travel) 2514 5580 w
+(between) 2767 5580 w
+(them.) 3125 5580 w
+(The) 3376 5580 w
+(writable) 3558 5580 w
+(ns) 3912 5580 w
+(mod) 4028 5580 w
+(enables) 4233 5580 w
+(fine) 4559 5580 w
+(grained) 4741 5580 w
+(control over the namespace of every process owned by a user on an entire grid of machines.) 720 5700 w
+(The) 970 5856 w
+(final) 1165 5856 w
+(component) 1388 5856 w
+(used) 1872 5856 w
+(to) 2095 5856 w
+(bind) 2213 5856 w
+(the) 2431 5856 w
+(diverse) 2593 5856 w
+(namespaces) 2921 5856 w
+(together) 3437 5856 w
+(into) 3804 5856 w
+(a) 4000 5856 w
+(controllable) 4084 5856 w
+(and) 4601 5856 w
+(usable) 4785 5856 w
+(environment) 720 5976 w
+(is) 1252 5976 w
+(the) 1346 5976 w
+(persistence) 1495 5976 w
+(and) 1965 5976 w
+(multiplexing) 2136 5976 w
+(layer) 2675 5976 w
+(provided) 2901 5976 w
+(by) 3283 5976 w
+(hubfs) 3410 5976 w
+(and) 3659 5976 w
+(integration) 3830 5976 w
+(into) 4290 5976 w
+(a) 4472 5976 w
+(modified) 4542 5976 w
+(rio) 4929 5976 w
+(named grio.) 720 6096 w
+10 /Times-Bold f
+(V. Hubfs and grio: persistent rc shells from all nodes and namespaces and multiplexed grid) 720 6372 w
+(i/o) 4634 6372 w
+(piping) 4766 6372 w
+(in rio) 720 6492 w
+10 /Times-Roman f
+(The ANTS toolkit is designed to create different namespaces for different purposes. The) 970 6648 w
+(top) 4524 6648 w
+(layer) 4678 6648 w
+(is) 4903 6648 w
+(a) 4996 6648 w
+(modified) 720 6768 w
+(rio) 1109 6768 w
+(named) 1248 6768 w
+(grio) 1542 6768 w
+(which) 1731 6768 w
+(integrates) 2002 6768 w
+(with) 2417 6768 w
+(hubfs.) 2622 6768 w
+(The) 2896 6768 w
+(modificatioin) 3078 6768 w
+(is) 3644 6768 w
+(simple:) 3738 6768 w
+(the) 4060 6768 w
+(addition) 4209 6768 w
+(to) 4564 6768 w
+(the) 4669 6768 w
+(menu) 4818 6768 w
+(of) 720 6888 w
+(a) 830 6888 w
+(Hub) 901 6888 w
+(command,) 1100 6888 w
+(which) 1546 6888 w
+(operates) 1817 6888 w
+(identically) 2176 6888 w
+(to) 2625 6888 w
+(New) 2730 6888 w
+(except) 2945 6888 w
+(the) 3232 6888 w
+(rc) 3381 6888 w
+(in) 3485 6888 w
+(the) 3590 6888 w
+(window) 3739 6888 w
+(is) 4088 6888 w
+(connected) 4183 6888 w
+(to) 4615 6888 w
+(a) 4721 6888 w
+(hubfs.) 4793 6888 w
+(It) 720 7008 w
+(is) 809 7008 w
+(intended) 904 7008 w
+(that) 1276 7008 w
+(each) 1454 7008 w
+(node) 1664 7008 w
+(on) 1886 7008 w
+(a) 2014 7008 w
+(grid,) 2086 7008 w
+(and) 2300 7008 w
+(possibly) 2472 7008 w
+(different) 2834 7008 w
+(namespaces) 3205 7008 w
+(on) 3709 7008 w
+(each) 3837 7008 w
+(node,) 4047 7008 w
+(will) 4293 7008 w
+(connect) 4476 7008 w
+(to) 4813 7008 w
+(the) 4918 7008 w
+(hubfs) 720 7128 w
+(and) 973 7128 w
+(create) 1148 7128 w
+(a) 1416 7128 w
+(shell) 1491 7128 w
+(with) 1711 7128 w
+(%local.) 1920 7128 w
+(In) 2253 7128 w
+(this) 2367 7128 w
+(way,) 2543 7128 w
+(shells) 2765 7128 w
+(from) 3025 7128 w
+(every) 3251 7128 w
+(machine) 3504 7128 w
+(become) 3874 7128 w
+(available) 4216 7128 w
+(within) 4608 7128 w
+(one) 4896 7128 w
+(hubfs.) 720 7248 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 7 7
+%%Page: 8 8
+/saveobj save def
+mark
+8 pagesetup
+10 /Times-Roman f
+(\255 8 \255) 2797 480 w
+(To) 970 840 w
+(make) 1114 840 w
+(this) 1363 840 w
+(environment) 1541 840 w
+(available) 2079 840 w
+(to) 2472 840 w
+(the) 2583 840 w
+(user) 2738 840 w
+(by) 2937 840 w
+(default,) 3071 840 w
+(a) 3407 840 w
+(few) 3485 840 w
+(commands) 3668 840 w
+(can) 4135 840 w
+(be) 4307 840 w
+(added) 4435 840 w
+(to) 4707 840 w
+(cpurc) 4819 840 w
+(and) 720 960 w
+(the) 902 960 w
+(user) 1062 960 w
+(profile.) 1266 960 w
+(One) 1595 960 w
+(machine) 1799 960 w
+(within) 2175 960 w
+(a) 2469 960 w
+(grid) 2551 960 w
+(will) 2750 960 w
+(probably) 2944 960 w
+(act) 3337 960 w
+(as) 3490 960 w
+(a) 3610 960 w
+(primary) 3691 960 w
+("hubserver") 4044 960 w
+(and) 4556 960 w
+(begin) 4737 960 w
+(a) 4996 960 w
+(hubfs) 720 1080 w
+(for) 969 1080 w
+(the) 1112 1080 w
+(user) 1261 1080 w
+(at) 1454 1080 w
+(its) 1553 1080 w
+(startup.) 1675 1080 w
+(Other) 1999 1080 w
+(machines) 2253 1080 w
+(will) 2657 1080 w
+('export') 2840 1080 w
+(shells) 3188 1080 w
+(to) 3443 1080 w
+(that) 3549 1080 w
+(machine,) 3727 1080 w
+(using) 4118 1080 w
+(a) 4363 1080 w
+(command) 4435 1080 w
+(such) 4857 1080 w
+(as) 720 1200 w
+(cpu \255h gridserver \255c hub \255b srvname rc.$sysname) 1330 1380 w
+(The user adds a statement to profile such as:) 970 1596 w
+(import \255a hubserver /srv &) 1330 1776 w
+(When grio is started, it looks for /srv/riohubfs.username to mount.) 970 1992 w
+(This) 3644 1992 w
+(way,) 3848 1992 w
+(whichever) 4065 1992 w
+(node) 4506 1992 w
+(the) 4726 1992 w
+(user) 4874 1992 w
+(cpus) 720 2112 w
+(to) 940 2112 w
+(will) 1055 2112 w
+(have) 1248 2112 w
+(the) 1473 2112 w
+(same) 1632 2112 w
+(hubfs) 1874 2112 w
+(opened) 2133 2112 w
+(from) 2458 2112 w
+(the) 2689 2112 w
+(Hub) 2848 2112 w
+(menu) 3057 2112 w
+(option) 3316 2112 w
+(in) 3609 2112 w
+(rio,) 3724 2112 w
+(and) 3897 2112 w
+(because) 4078 2112 w
+(all) 4430 2112 w
+(systems) 4566 2112 w
+(are) 4919 2112 w
+(exporting) 720 2232 w
+(shells) 1144 2232 w
+(to) 1413 2232 w
+(the) 1532 2232 w
+(hub,) 1695 2232 w
+(the) 1912 2232 w
+(user) 2076 2232 w
+(can) 2284 2232 w
+(cpu) 2464 2232 w
+(to) 2650 2232 w
+(any) 2770 2232 w
+(node) 2956 2232 w
+(and) 3192 2232 w
+(then) 3378 2232 w
+(have) 3592 2232 w
+(persistent) 3822 2232 w
+(workspaces) 4247 2232 w
+(on) 4754 2232 w
+(any) 4896 2232 w
+(machine. The state of the hubs remains regardless of where and how the user attaches or unattaches.) 720 2352 w
+(The) 970 2508 w
+(initskel) 1151 2508 w
+(script) 1472 2508 w
+(also) 1720 2508 w
+(starts) 1907 2508 w
+(a) 2144 2508 w
+(hubfs) 2214 2508 w
+(by) 2462 2508 w
+(default) 2588 2508 w
+(in) 2891 2508 w
+(the) 2995 2508 w
+(early) 3143 2508 w
+(boot) 3368 2508 w
+(environment.) 3572 2508 w
+(This) 4128 2508 w
+(allows) 4332 2508 w
+(the) 4620 2508 w
+(user) 4769 2508 w
+(to) 4962 2508 w
+(easily) 720 2628 w
+(access) 991 2628 w
+(the) 1283 2628 w
+(ramroot) 1443 2628 w
+(namespace) 1796 2628 w
+(from) 2270 2628 w
+(the) 2501 2628 w
+(standard) 2660 2628 w
+(user) 3035 2628 w
+(environment.) 3238 2628 w
+(If) 3805 2628 w
+(the) 3908 2628 w
+(user) 4067 2628 w
+(desires,) 4270 2628 w
+(they) 4609 2628 w
+(could) 4818 2628 w
+(pre\255mount the /srv/hubfs started at boot instead of the networked riohubfs to enable easy admin work in) 720 2748 w
+(that) 4890 2748 w
+(namespcae.) 720 2868 w
+(It) 1218 2868 w
+(is) 1315 2868 w
+(even) 1418 2868 w
+(possible) 1642 2868 w
+(to) 2006 2868 w
+(create) 2120 2868 w
+(two) 2393 2868 w
+(layers) 2579 2868 w
+(of) 2853 2868 w
+(shared) 2972 2868 w
+(hubs) 3268 2868 w
+(\255) 3493 2868 w
+(a) 3562 2868 w
+(shared) 3642 2868 w
+(administrative) 3938 2868 w
+(layer) 4546 2868 w
+(shared) 4780 2868 w
+(between) 720 2988 w
+(machines) 1078 2988 w
+(running) 1481 2988 w
+(shells) 1818 2988 w
+(in) 2073 2988 w
+(the) 2178 2988 w
+(ram) 2327 2988 w
+(namespace,) 2509 2988 w
+(and) 2998 2988 w
+(another) 3169 2988 w
+(set) 3495 2988 w
+(of) 3633 2988 w
+(hubs) 3743 2988 w
+(in) 3959 2988 w
+(the) 4064 2988 w
+(standard) 4213 2988 w
+(namespace.) 4578 2988 w
+(In fact, these two layers can be freely mixed.) 720 3108 w
+(This) 970 3264 w
+(is) 1179 3264 w
+(another) 1278 3264 w
+(way) 1609 3264 w
+(hubfs) 1807 3264 w
+(functions) 2061 3264 w
+(\255) 2465 3264 w
+(to) 2530 3264 w
+('save') 2640 3264 w
+(namespaces.) 2915 3264 w
+(If) 3448 3264 w
+(there) 3546 3264 w
+(is) 3777 3264 w
+(a) 3876 3264 w
+(namespace) 3952 3264 w
+(which) 4421 3264 w
+(is) 4697 3264 w
+(some\255) 4796 3264 w
+(times) 720 3384 w
+(useful,) 964 3384 w
+(but) 1260 3384 w
+(diverges) 1415 3384 w
+(from) 1779 3384 w
+(the) 1999 3384 w
+(main) 2147 3384 w
+(environment,) 2373 3384 w
+(it) 2929 3384 w
+(can) 3011 3384 w
+(be) 3175 3384 w
+(built) 3295 3384 w
+(with) 3505 3384 w
+(in) 3709 3384 w
+(a) 3813 3384 w
+(hubfs) 3883 3384 w
+(shell) 4131 3384 w
+(to) 4346 3384 w
+(be) 4450 3384 w
+(visited) 4570 3384 w
+(later) 4863 3384 w
+(at) 720 3504 w
+(will.) 822 3504 w
+(A) 1033 3504 w
+(single) 1135 3504 w
+(hubfs) 1404 3504 w
+(can) 1656 3504 w
+(provide) 1824 3504 w
+(a) 2159 3504 w
+(meeting) 2233 3504 w
+(point) 2585 3504 w
+(for) 2821 3504 w
+(any) 2968 3504 w
+(number) 3143 3504 w
+(of) 3479 3504 w
+(namespaces) 3593 3504 w
+(built) 4100 3504 w
+(on) 4315 3504 w
+(any) 4446 3504 w
+(number) 4621 3504 w
+(of) 4957 3504 w
+(machines and allow data to be pumped directly between processes file descriptors.) 720 3624 w
+(As a) 970 3780 w
+(proof) 1176 3780 w
+(of) 1418 3780 w
+(concept,) 1527 3780 w
+(I) 1888 3780 w
+(used) 1947 3780 w
+(hubfs) 2156 3780 w
+(to) 2404 3780 w
+(create) 2508 3780 w
+(a) 2771 3780 w
+(4) 2841 3780 w
+(machine) 2917 3780 w
+(encrypt/decrypt) 3281 3780 w
+(pipeline.) 3933 3780 w
+(Machine) 4306 3780 w
+(A) 4681 3780 w
+(hosted) 4779 3780 w
+(a) 720 3900 w
+(hubfs) 800 3900 w
+(and) 1058 3900 w
+(created) 1238 3900 w
+(the) 1561 3900 w
+(extra) 1719 3900 w
+(hubfiles) 1954 3900 w
+(encin) 2312 3900 w
+(encout) 2564 3900 w
+(decout.) 2865 3900 w
+(Machine) 3191 3900 w
+(B) 3575 3900 w
+(then) 3677 3900 w
+(both) 3884 3900 w
+(mounted) 4097 3900 w
+(the) 4482 3900 w
+(hubfs) 4639 3900 w
+(and) 4896 3900 w
+(attached) 720 4020 w
+(to) 1091 4020 w
+(it,) 1208 4020 w
+(and) 1328 4020 w
+(began) 1511 4020 w
+(running) 1788 4020 w
+(auth/aescbc) 2138 4020 w
+(\255e) 2642 4020 w
+(</n/aes/encin) 2758 4020 w
+(>>/n/aes/encout.) 3330 4020 w
+(Machine) 4033 4020 w
+(B) 4421 4020 w
+(mounted) 4528 4020 w
+(the) 4918 4020 w
+(hubfs,) 720 4140 w
+(attached) 997 4140 w
+(a) 1359 4140 w
+(local) 1433 4140 w
+(shell,) 1656 4140 w
+(and) 1899 4140 w
+(began) 2072 4140 w
+(running) 2339 4140 w
+(auth/aescbc) 2679 4140 w
+(\255d) 3173 4140 w
+(</n/aes/encout) 3285 4140 w
+(>>/n/aes/decout.) 3897 4140 w
+(Machine) 4590 4140 w
+(D) 4968 4140 w
+(mounted) 720 4260 w
+(the) 1105 4260 w
+(hubfs) 1263 4260 w
+(and) 1521 4260 w
+(viewed) 1701 4260 w
+(the) 2025 4260 w
+(decrypted) 2183 4260 w
+(output) 2612 4260 w
+(of) 2904 4260 w
+(decout.) 3023 4260 w
+(Machine) 3350 4260 w
+(A) 3735 4260 w
+(also) 3843 4260 w
+('spied') 4040 4260 w
+(on) 4353 4260 w
+(the) 4489 4260 w
+(encrypted) 4647 4260 w
+(channel by watching /n/aes/encout to see the encrypted version of the data.) 720 4380 w
+(At) 970 4536 w
+(the) 1098 4536 w
+(moment) 1248 4536 w
+(this) 1604 4536 w
+(is) 1777 4536 w
+(being) 1872 4536 w
+(written,) 2122 4536 w
+(the) 2458 4536 w
+(grid) 2609 4536 w
+(is) 2799 4536 w
+(simultaneously) 2895 4536 w
+(running) 3530 4536 w
+(the) 3870 4536 w
+(aescbc) 4021 4536 w
+(hubfs) 4315 4536 w
+(test) 4566 4536 w
+(and) 4734 4536 w
+(has) 4907 4536 w
+(reached) 720 4656 w
+(7560) 1067 4656 w
+(cats) 1305 4656 w
+(of) 1498 4656 w
+(/lib/words) 1619 4656 w
+(through) 2063 4656 w
+(the) 2412 4656 w
+(encryption) 2572 4656 w
+(filter,) 3036 4656 w
+(while) 3292 4656 w
+(simultaneously) 3551 4656 w
+(running) 4194 4656 w
+(ventiprog) 4542 4656 w
+(to) 4962 4656 w
+(mirror) 720 4776 w
+(the) 1003 4776 w
+(venti) 1153 4776 w
+(data) 1381 4776 w
+(and) 1575 4776 w
+(maintaining) 1747 4776 w
+(persistent) 2253 4776 w
+(hubfs) 2664 4776 w
+(connections) 2914 4776 w
+(to) 3419 4776 w
+(all) 3526 4776 w
+(local) 3655 4776 w
+(and) 3878 4776 w
+(remote) 4051 4776 w
+(nodes,) 4357 4776 w
+(as) 4644 4776 w
+(well) 4756 4776 w
+(as) 4957 4776 w
+(preparing) 720 4896 w
+(this) 1136 4896 w
+(document) 1315 4896 w
+(and) 1743 4896 w
+(using) 1921 4896 w
+(another) 2172 4896 w
+(set) 2505 4896 w
+(of) 2650 4896 w
+(hubs) 2767 4896 w
+(to) 2990 4896 w
+(maintain) 3102 4896 w
+(persistent) 3486 4896 w
+(emu) 3902 4896 w
+(ircfs) 4107 4896 w
+(sessions,) 4317 4896 w
+(and) 4703 4896 w
+(per\255) 4880 4896 w
+(forming) 720 5016 w
+(multiple) 1068 5016 w
+(other) 1428 5016 w
+(tasks) 1659 5016 w
+(distributed) 1885 5016 w
+(across) 2339 5016 w
+(all) 2614 5016 w
+(grid) 2740 5016 w
+(nodes.) 2927 5016 w
+(\(contrib/install) 3211 5016 w
+(font) 3826 5016 w
+(packages,) 4014 5016 w
+(vnc) 4431 5016 w
+(connection) 4602 5016 w
+(to a linux box, etc.\)) 720 5136 w
+([ The test) 970 5292 w
+(was) 1373 5292 w
+(brief) 1554 5292 w
+(paused) 1768 5292 w
+(with) 2071 5292 w
+(no) 2275 5292 w
+(errors) 2401 5292 w
+(after) 2659 5292 w
+(24+) 2867 5292 w
+(hours) 3049 5292 w
+(of) 3297 5292 w
+(continuous) 3406 5292 w
+(operation) 3871 5292 w
+(and) 4274 5292 w
+(8gb+) 4444 5292 w
+(of) 4676 5292 w
+(cumu\255) 4785 5292 w
+(lative) 720 5412 w
+(data) 971 5412 w
+(written) 1166 5412 w
+(through) 1478 5412 w
+(to) 1817 5412 w
+(take) 1923 5412 w
+(a) 2117 5412 w
+(few) 2189 5412 w
+(snapshots) 2366 5412 w
+(of) 2783 5412 w
+(the) 2894 5412 w
+(state) 3044 5412 w
+(of) 3255 5412 w
+(hubs.) 3366 5412 w
+(The) 3608 5412 w
+(test) 3791 5412 w
+(was) 3958 5412 w
+(stopped) 4141 5412 w
+(after) 4480 5412 w
+(35) 4690 5412 w
+(hours) 4818 5412 w
+(with no errors and 12314 loops and the data saved. ]) 720 5532 w
+10 /Times-Bold f
+(VI.) 720 5772 w
+(The) 886 5772 w
+(sum) 1083 5772 w
+(of) 1291 5772 w
+(the) 1404 5772 w
+(parts:) 1567 5772 w
+(A) 1852 5772 w
+(case) 1954 5772 w
+(study) 2162 5772 w
+(in) 2427 5772 w
+(creating) 2542 5772 w
+(an) 2922 5772 w
+(always) 3059 5772 w
+(available) 3379 5772 w
+(data) 3794 5772 w
+(environment) 4014 5772 w
+(on) 4589 5772 w
+(a) 4726 5772 w
+(home) 4807 5772 w
+(grid) 720 5892 w
+10 /Times-Roman f
+(I) 970 6048 w
+(run) 1030 6048 w
+(my) 1190 6048 w
+(kernel) 1345 6048 w
+(and) 1622 6048 w
+(tools) 1794 6048 w
+(on) 2017 6048 w
+(all) 2145 6048 w
+(of) 2273 6048 w
+(my) 2384 6048 w
+(systems) 2540 6048 w
+(except) 2885 6048 w
+(those) 3173 6048 w
+(which) 3412 6048 w
+(run) 3684 6048 w
+(9front,) 3845 6048 w
+(because) 4142 6048 w
+(I) 4485 6048 w
+(have) 4546 6048 w
+(not) 4762 6048 w
+(yet) 4918 6048 w
+(studied) 720 6168 w
+(how) 1039 6168 w
+(to) 1241 6168 w
+(adapt) 1349 6168 w
+(my) 1595 6168 w
+(modifications) 1753 6168 w
+(for) 2333 6168 w
+(that) 2479 6168 w
+(distribution.) 2659 6168 w
+(Here) 3176 6168 w
+(is) 3399 6168 w
+(a) 3496 6168 w
+(description) 3570 6168 w
+(of) 4044 6168 w
+(how) 4156 6168 w
+(my) 4357 6168 w
+(grid) 4514 6168 w
+(is) 4704 6168 w
+(set) 4800 6168 w
+(up) 4940 6168 w
+(and how the tools described above fit together to give me the properties I want.) 720 6288 w
+(The) 970 6444 w
+(main) 1159 6444 w
+(leg) 1393 6444 w
+(of) 1549 6444 w
+(services) 1666 6444 w
+(is) 2021 6444 w
+(a) 2122 6444 w
+(native) 2200 6444 w
+(venti,) 2478 6444 w
+(native) 2737 6444 w
+(fossil,) 3016 6444 w
+(and) 3293 6444 w
+(native) 3472 6444 w
+(tcp) 3751 6444 w
+(boot) 3908 6444 w
+(cpu) 4121 6444 w
+(each) 4300 6444 w
+(as) 4517 6444 w
+(a) 4635 6444 w
+(separate) 4714 6444 w
+(box.) 720 6564 w
+(All) 937 6564 w
+(run) 1107 6564 w
+(the) 1282 6564 w
+(rootless) 1446 6564 w
+(kernel) 1799 6564 w
+(and) 2090 6564 w
+(launch) 2276 6564 w
+(their) 2584 6564 w
+(services) 2809 6564 w
+(from) 3172 6564 w
+(the) 3407 6564 w
+(rootless) 3570 6564 w
+(environment,) 3922 6564 w
+(which) 4493 6564 w
+(I) 4778 6564 w
+(have) 4852 6564 w
+(cpu/rx access to on each, independent of any other boxes status or activity.) 720 6684 w
+(The) 970 6840 w
+(primary) 1157 6840 w
+(backup) 1505 6840 w
+(leg) 1825 6840 w
+(of) 1979 6840 w
+(services) 2094 6840 w
+(is) 2447 6840 w
+(provided) 2546 6840 w
+(by) 2933 6840 w
+(a) 3066 6840 w
+(single) 3143 6840 w
+(linux) 3415 6840 w
+(box) 3654 6840 w
+(running) 3837 6840 w
+(a) 4181 6840 w
+(p9p) 4258 6840 w
+(venti) 4441 6840 w
+(duplicate) 4674 6840 w
+(and) 720 6960 w
+(qemu) 899 6960 w
+(fossil/cpu) 1156 6960 w
+(servers) 1580 6960 w
+(on) 1897 6960 w
+(demand.) 2032 6960 w
+(This) 2408 6960 w
+(venti) 2621 6960 w
+(is) 2856 6960 w
+(constantly) 2958 6960 w
+(progressively) 3404 6960 w
+(backed) 3977 6960 w
+(up) 4294 6960 w
+(from) 4429 6960 w
+(the) 4658 6960 w
+(main,) 4815 6960 w
+(and) 720 7080 w
+(the) 899 7080 w
+(qemu) 1056 7080 w
+(fossils) 1313 7080 w
+(are) 1604 7080 w
+(frequently) 1761 7080 w
+(cpsys) 2207 7080 w
+(refreshed) 2465 7080 w
+(to) 2871 7080 w
+(a) 2985 7080 w
+(current) 3065 7080 w
+(rootscore.) 3383 7080 w
+(If) 3815 7080 w
+(the) 3917 7080 w
+(main) 4075 7080 w
+(leg) 4311 7080 w
+(has) 4469 7080 w
+(trouble) 4638 7080 w
+(or) 4957 7080 w
+(needs) 720 7200 w
+(to) 979 7200 w
+(be) 1089 7200 w
+(rebooted) 1215 7200 w
+(for) 1596 7200 w
+(reasons) 1744 7200 w
+(like) 2075 7200 w
+(a) 2257 7200 w
+(kernel) 2332 7200 w
+(upgrade,) 2612 7200 w
+(I) 2989 7200 w
+(continue) 3053 7200 w
+(working) 3428 7200 w
+(via) 3792 7200 w
+(this) 3945 7200 w
+(p9p) 4121 7200 w
+(venti) 4302 7200 w
+(and) 4533 7200 w
+(attached) 4708 7200 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 8 8
+%%Page: 9 9
+/saveobj save def
+mark
+9 pagesetup
+10 /Times-Roman f
+(\255 9 \255) 2797 480 w
+(qemus. They are) 720 840 w
+(also) 1408 840 w
+(always) 1595 840 w
+(available) 1898 840 w
+(as) 2284 840 w
+(part) 2393 840 w
+(of) 2574 840 w
+(my) 2683 840 w
+(normal) 2837 840 w
+(enviornment,) 3146 840 w
+(not) 3702 840 w
+(simply) 3856 840 w
+(as) 4155 840 w
+(emergency) 4264 840 w
+(backup.) 4727 840 w
+(I) 720 960 w
+(often) 780 960 w
+(keep) 1012 960 w
+(the) 1226 960 w
+(qemus) 1374 960 w
+(tcp) 1661 960 w
+(rooted) 1809 960 w
+(to) 2090 960 w
+(the) 2194 960 w
+(main) 2342 960 w
+(file) 2568 960 w
+(server,) 2727 960 w
+(but) 3021 960 w
+(they) 3175 960 w
+(can) 3373 960 w
+(start) 3537 960 w
+(a) 3735 960 w
+(fossil) 3805 960 w
+(rooted) 4048 960 w
+(from) 4329 960 w
+(the) 4549 960 w
+(alternate) 4697 960 w
+(venti at any moment to provide a copy of my root.) 720 1080 w
+(Additional) 970 1236 w
+(remote) 1435 1236 w
+(nodes) 1749 1236 w
+(are) 2019 1236 w
+(hosted) 2177 1236 w
+(on) 2475 1236 w
+(9cloud) 2612 1236 w
+(and) 2921 1236 w
+(are) 3102 1236 w
+(another) 3260 1236 w
+("rootless) 3596 1236 w
+(labs") 3985 1236 w
+(instance) 4224 1236 w
+(and) 4589 1236 w
+(9front.) 4771 1236 w
+(There) 720 1356 w
+(nodes) 994 1356 w
+(are) 1269 1356 w
+(integrated) 1432 1356 w
+(primarily) 1873 1356 w
+(via) 2287 1356 w
+(hubfs.) 2451 1356 w
+(The) 2740 1356 w
+(labs) 2937 1356 w
+(node) 3140 1356 w
+(hosts) 3376 1356 w
+(a) 3623 1356 w
+(hub) 3708 1356 w
+(which) 3899 1356 w
+(is) 4184 1356 w
+(then) 4292 1356 w
+(mounted) 4505 1356 w
+(and) 4896 1356 w
+(attached) 720 1476 w
+(to) 1085 1476 w
+(from) 1196 1476 w
+(within) 1423 1476 w
+(the) 1712 1476 w
+(main) 1867 1476 w
+(local) 2100 1476 w
+(hub,) 2327 1476 w
+(so) 2535 1476 w
+(it) 2657 1476 w
+(is) 2746 1476 w
+(a) 2846 1476 w
+(hubfs) 2923 1476 w
+(to) 3178 1476 w
+(hubfs) 3289 1476 w
+(linkup) 3545 1476 w
+(between) 3835 1476 w
+(the) 4201 1476 w
+(local) 4357 1476 w
+(and) 4585 1476 w
+(remote) 4763 1476 w
+(systems.) 720 1596 w
+(This) 1089 1596 w
+(allows) 1294 1596 w
+(the) 1582 1596 w
+(local) 1731 1596 w
+(and) 1952 1596 w
+(remote) 2123 1596 w
+(grids) 2427 1596 w
+(to) 2654 1596 w
+(be) 2759 1596 w
+(reset) 2880 1596 w
+(independently) 3095 1596 w
+(without) 3688 1596 w
+(disrupting) 4020 1596 w
+(the) 4452 1596 w
+(state) 4600 1596 w
+(of) 4809 1596 w
+(the) 4918 1596 w
+(hubfs) 720 1716 w
+(and) 970 1716 w
+(shells) 1142 1716 w
+(on) 1398 1716 w
+(the) 1526 1716 w
+(other) 1676 1716 w
+(side) 1909 1716 w
+(of) 2098 1716 w
+(wan.) 2209 1716 w
+(A) 2428 1716 w
+(final) 2528 1716 w
+(wan) 2739 1716 w
+(component) 2933 1716 w
+(is) 3405 1716 w
+(another) 3500 1716 w
+(remote) 3827 1716 w
+(venti) 4132 1716 w
+(clone) 4361 1716 w
+(which) 4606 1716 w
+(also) 4879 1716 w
+(receives a steady flow of progressive backup and stores the current list of rootscores.) 720 1836 w
+(The) 970 1992 w
+(main) 1151 1992 w
+(native) 1377 1992 w
+(cpu) 1647 1992 w
+(server) 1817 1992 w
+(is) 2086 1992 w
+(the) 2179 1992 w
+(primary) 2327 1992 w
+(hubfs) 2669 1992 w
+(server,) 2917 1992 w
+(with) 3211 1992 w
+(an) 3415 1992 w
+(import) 3536 1992 w
+(\255a) 3830 1992 w
+(&) 3934 1992 w
+(of) 4039 1992 w
+(its) 4149 1992 w
+(/srv) 4271 1992 w
+(in) 4448 1992 w
+(the) 4553 1992 w
+(standard) 4702 1992 w
+(user) 720 2112 w
+(profile.) 924 2112 w
+(This) 1253 2112 w
+(puts) 1469 2112 w
+(its) 1674 2112 w
+(hubfs) 1806 2112 w
+(as) 2065 2112 w
+(the) 2185 2112 w
+(default) 2344 2112 w
+(hubfs) 2658 2112 w
+(opened) 2917 2112 w
+(by) 3242 2112 w
+(grio,) 3379 2112 w
+(allowing) 3602 2112 w
+(each) 3989 2112 w
+(cpu) 4208 2112 w
+(node) 4389 2112 w
+(to) 4620 2112 w
+(provide) 4735 2112 w
+(access) 720 2232 w
+(to) 1008 2232 w
+(a) 1120 2232 w
+(common) 1198 2232 w
+(set) 1582 2232 w
+(of) 1728 2232 w
+(hubs.) 1846 2232 w
+(Each) 2095 2232 w
+(machine) 2329 2232 w
+(exports) 2702 2232 w
+(a) 3031 2232 w
+(shell) 3110 2232 w
+(to) 3334 2232 w
+(the) 3447 2232 w
+(hubfs) 3604 2232 w
+(so) 3861 2232 w
+(I) 3985 2232 w
+(can) 4053 2232 w
+(sweep) 4226 2232 w
+(open) 4510 2232 w
+(a) 4739 2232 w
+(hubfs) 4818 2232 w
+(window) 720 2352 w
+(and) 1068 2352 w
+(easily) 1238 2352 w
+(switch) 1497 2352 w
+(to) 1784 2352 w
+(a) 1888 2352 w
+(persistent) 1958 2352 w
+(shell on any node. A separate hubfs is run by the hostowner as part) 2367 2352 w
+(of) 720 2472 w
+(the) 836 2472 w
+(standard) 991 2472 w
+(initskel) 1362 2472 w
+(script.) 1690 2472 w
+(Hubfs) 1995 2472 w
+(is) 2273 2472 w
+(also) 2374 2472 w
+(used) 2569 2472 w
+(to) 2786 2472 w
+(hold) 2898 2472 w
+(the) 3110 2472 w
+(emu) 3266 2472 w
+(client) 3472 2472 w
+(and) 3728 2472 w
+(server) 3906 2472 w
+(for) 4183 2472 w
+(ircfs,) 4333 2472 w
+(and) 4569 2472 w
+(general) 4747 2472 w
+(inter\255machine datasharing when needed.) 720 2592 w
+(The) 970 2748 w
+(user) 1154 2748 w
+(terminal) 1349 2748 w
+(is) 1711 2748 w
+(a) 1807 2748 w
+(native) 1880 2748 w
+(9front) 2153 2748 w
+(machine,) 2426 2748 w
+(but) 2818 2748 w
+(the) 2975 2748 w
+(user) 3127 2748 w
+(environment) 3323 2748 w
+(is) 3858 2748 w
+(always) 3955 2748 w
+(built) 4262 2748 w
+(from) 4476 2748 w
+(grid) 4700 2748 w
+(ser\255) 4891 2748 w
+(vices) 720 2868 w
+(with) 957 2868 w
+(the) 1167 2868 w
+(terminal) 1321 2868 w
+(functioning) 1686 2868 w
+(as) 2179 2868 w
+(just) 2294 2868 w
+(that.) 2471 2868 w
+(The) 2678 2868 w
+(main) 2865 2868 w
+(resources) 3097 2868 w
+(in) 3504 2868 w
+(the) 3613 2868 w
+(namespace) 3766 2868 w
+(are) 4234 2868 w
+(the) 4386 2868 w
+(2) 4539 2868 w
+(local) 4620 2868 w
+(CPU) 4845 2868 w
+(servers,) 720 2988 w
+(which) 1054 2988 w
+(act) 1325 2988 w
+(as) 1468 2988 w
+(the) 1578 2988 w
+(central) 1727 2988 w
+(junctions) 2025 2988 w
+(by) 2419 2988 w
+(running) 2546 2988 w
+(applications,) 2884 2988 w
+(mounting) 3419 2988 w
+(fileservers,) 3830 2988 w
+(and) 4298 2988 w
+(hosting) 4470 2988 w
+(hubfs.) 4793 2988 w
+(The) 720 3108 w
+(native) 911 3108 w
+(cpu's) 1191 3108 w
+(/srv) 1443 3108 w
+(acts) 1629 3108 w
+(as) 1820 3108 w
+(the) 1939 3108 w
+(primary) 2097 3108 w
+(focal) 2449 3108 w
+(point) 2683 3108 w
+(for) 2924 3108 w
+(integrating) 3075 3108 w
+(and) 3543 3108 w
+(accessing) 3722 3108 w
+(grid) 4139 3108 w
+(services.) 4335 3108 w
+(All) 4716 3108 w
+(grid) 4879 3108 w
+(nodes) 720 3228 w
+(except) 986 3228 w
+(venti) 1279 3228 w
+(and) 1512 3228 w
+(auth) 1689 3228 w
+(provide) 1894 3228 w
+(exportfs) 2232 3228 w
+(so) 2592 3228 w
+(/srv) 2714 3228 w
+(and) 2897 3228 w
+(/proc) 3074 3228 w
+(of) 3312 3228 w
+(almost) 3429 3228 w
+(all) 3730 3228 w
+(machines) 3864 3228 w
+(can) 4275 3228 w
+(be) 4447 3228 w
+(accessed) 4575 3228 w
+(as) 4957 3228 w
+(needed.) 720 3348 w
+(The) 1060 3348 w
+(writable) 1248 3348 w
+(proc/*/ns) 1608 3348 w
+(mod) 2013 3348 w
+(makes) 2224 3348 w
+(importing) 2511 3348 w
+(/proc) 2938 3348 w
+(an) 3175 3348 w
+(even) 3301 3348 w
+(more) 3521 3348 w
+(powerful) 3758 3348 w
+(and) 4150 3348 w
+(flexible) 4326 3348 w
+(operation) 4663 3348 w
+(for) 720 3468 w
+(controlling) 869 3468 w
+(remote) 1341 3468 w
+(resources.) 1651 3468 w
+(Being) 2085 3468 w
+(able) 2357 3468 w
+(to) 2556 3468 w
+(cpns) 2667 3468 w
+(to) 2883 3468 w
+(rewrite) 2994 3468 w
+(the) 3309 3468 w
+(namespace) 3464 3468 w
+(of) 3935 3468 w
+(remote) 4052 3468 w
+(processes) 4363 3468 w
+(allows) 4779 3468 w
+(for server processes to be rebound to new services or namespaces as they are available.) 720 3588 w
+(My) 970 3744 w
+(data) 1145 3744 w
+(is) 1347 3744 w
+(replicated) 1450 3744 w
+(constantly) 1879 3744 w
+(with) 2326 3744 w
+(ventiprog,) 2540 3744 w
+(and) 2984 3744 w
+(I) 3164 3744 w
+(can) 3233 3744 w
+(instantly) 3407 3744 w
+(create) 3788 3744 w
+(new) 4061 3744 w
+(writable) 4263 3744 w
+(roots) 4626 3744 w
+(with) 4862 3744 w
+(cpsys.) 720 3864 w
+(From) 1000 3864 w
+(any) 1250 3864 w
+(namespace) 1427 3864 w
+(on) 1897 3864 w
+(the) 2030 3864 w
+(grid,) 2185 3864 w
+(I) 2404 3864 w
+(can) 2470 3864 w
+(rerootwin) 2641 3864 w
+(to) 3062 3864 w
+(a) 3173 3864 w
+(new) 3250 3864 w
+(root) 3449 3864 w
+(and) 3643 3864 w
+(still) 3820 3864 w
+(maintain) 4004 3864 w
+(control) 4387 3864 w
+(with) 4702 3864 w
+(my) 4912 3864 w
+(active) 720 3984 w
+(devices) 986 3984 w
+(and) 1313 3984 w
+(window) 1485 3984 w
+(system.) 1835 3984 w
+(If) 2166 3984 w
+(any) 2260 3984 w
+(node) 2432 3984 w
+(has) 2654 3984 w
+(trouble,) 2815 3984 w
+(I) 3152 3984 w
+(can) 3214 3984 w
+(cpu) 3381 3984 w
+(into) 3554 3984 w
+(the) 3739 3984 w
+('service) 3890 3984 w
+(namespace') 4234 3984 w
+(with) 4733 3984 w
+(no) 4940 3984 w
+(dependencies) 720 4104 w
+(on) 1286 4104 w
+(other) 1415 4104 w
+(services) 1649 4104 w
+(to) 1999 4104 w
+(repair) 2106 4104 w
+(or) 2367 4104 w
+(reset) 2479 4104 w
+(the) 2696 4104 w
+(node.) 2847 4104 w
+(Any) 3095 4104 w
+(textual) 3296 4104 w
+(application) 3597 4104 w
+(on) 4070 4104 w
+(any) 4198 4104 w
+(node) 4370 4104 w
+(can) 4592 4104 w
+(be) 4758 4104 w
+(per\255) 4880 4104 w
+(sisted) 720 4224 w
+(with) 975 4224 w
+(hubfs) 1180 4224 w
+(to) 1429 4224 w
+(keep) 1534 4224 w
+(it) 1749 4224 w
+(active,) 1832 4224 w
+(out) 2122 4224 w
+(of) 2277 4224 w
+(the) 2387 4224 w
+(way) 2536 4224 w
+(but) 2729 4224 w
+(available) 2884 4224 w
+(for) 3271 4224 w
+(interaction) 3414 4224 w
+(if) 3868 4224 w
+(needed,) 3956 4224 w
+(and) 4291 4224 w
+(hubfs) 4463 4224 w
+(also) 4713 4224 w
+(can) 4902 4224 w
+(be used for distributed processing although I don't personally need to crunch many numbers.) 720 4344 w
+(All) 970 4500 w
+(grid) 1126 4500 w
+(services) 1315 4500 w
+(are) 1664 4500 w
+('hot) 1813 4500 w
+(pluggable') 2002 4500 w
+(and) 2458 4500 w
+(I) 2631 4500 w
+(can) 2693 4500 w
+(keep) 2860 4500 w
+(working) 3077 4500 w
+(with) 3439 4500 w
+(my) 3646 4500 w
+(current) 3803 4500 w
+(data) 4114 4500 w
+(if) 4309 4500 w
+(I) 4399 4500 w
+(need) 4461 4500 w
+(to) 4678 4500 w
+(reboot) 4785 4500 w
+(some) 720 4620 w
+(machines) 961 4620 w
+(to) 1368 4620 w
+(upgrade) 1475 4620 w
+(their) 1825 4620 w
+(kernels) 2037 4620 w
+(or) 2354 4620 w
+(just) 2466 4620 w
+(want) 2640 4620 w
+(to) 2863 4620 w
+(turn) 2970 4620 w
+(them) 3160 4620 w
+(off.) 3389 4620 w
+(All) 3559 4620 w
+(my) 3716 4620 w
+(services) 3873 4620 w
+(are) 4223 4620 w
+(constantly) 4373 4620 w
+(avail\255) 4813 4620 w
+(able) 720 4740 w
+(and) 922 4740 w
+(my) 1102 4740 w
+(namespace) 1266 4740 w
+(has) 1739 4740 w
+(no) 1908 4740 w
+('extra') 2044 4740 w
+(dependencies) 2345 4740 w
+(on) 2918 4740 w
+(services) 3054 4740 w
+(it) 3411 4740 w
+(isn't) 3503 4740 w
+(making) 3717 4740 w
+(use) 4054 4740 w
+(of.) 4224 4740 w
+(Cpus) 4369 4740 w
+(act) 4612 4740 w
+(as) 4765 4740 w
+(true) 4885 4740 w
+('platforms') 720 4860 w
+(to) 1196 4860 w
+(build) 1301 4860 w
+(namespaces) 1534 4860 w
+(because) 2037 4860 w
+(the) 2379 4860 w
+(user) 2528 4860 w
+(can) 2720 4860 w
+(work) 2884 4860 w
+(within) 3115 4860 w
+(the) 3397 4860 w
+(service) 3545 4860 w
+(environment) 3853 4860 w
+(and) 4384 4860 w
+(freely) 4554 4860 w
+(climb) 4812 4860 w
+(into any root with rerootwin.) 720 4980 w
+(All) 970 5136 w
+(of) 1136 5136 w
+(these) 1257 5136 w
+(properties) 1500 5136 w
+(are) 1937 5136 w
+(based) 2096 5136 w
+(firmly) 2361 5136 w
+(on) 2650 5136 w
+(the) 2789 5136 w
+(simple) 2950 5136 w
+(core) 3256 5136 w
+(of) 3466 5136 w
+(plan) 3588 5136 w
+(9) 3799 5136 w
+(\255) 3888 5136 w
+(user) 3960 5136 w
+(definable) 4165 5136 w
+(per) 4575 5136 w
+(process) 4741 5136 w
+(namespaces,) 720 5256 w
+(network) 1252 5256 w
+(transparency,) 1610 5256 w
+(and) 2175 5256 w
+(simple) 2350 5256 w
+(file) 2648 5256 w
+(access) 2812 5256 w
+(as) 3097 5256 w
+(the) 3210 5256 w
+(primary) 3362 5256 w
+(abstraction.) 3708 5256 w
+(The) 4201 5256 w
+(reconfigurations) 4386 5256 w
+(from) 720 5376 w
+(the) 941 5376 w
+(standard) 1090 5376 w
+(system) 1455 5376 w
+(are) 1760 5376 w
+(intended) 1908 5376 w
+(to) 2279 5376 w
+(focus) 2384 5376 w
+(and) 2627 5376 w
+(leverage) 2798 5376 w
+(these) 3162 5376 w
+(design) 3394 5376 w
+(aspects) 3682 5376 w
+(of) 3998 5376 w
+(the) 4109 5376 w
+(system.) 4259 5376 w
+(I) 4590 5376 w
+(am) 4651 5376 w
+(trying) 4801 5376 w
+(to) 720 5496 w
+(extend) 832 5496 w
+(plan) 1132 5496 w
+(9) 1337 5496 w
+(in) 1420 5496 w
+(natural) 1531 5496 w
+(directions,) 1841 5496 w
+(using) 2293 5496 w
+(the) 2543 5496 w
+(existing) 2698 5496 w
+(code) 3048 5496 w
+(as) 3269 5496 w
+(much) 3385 5496 w
+(as) 3640 5496 w
+(possible,) 3756 5496 w
+(and) 4142 5496 w
+(just) 4319 5496 w
+(provide) 4497 5496 w
+(addi\255) 4835 5496 w
+(tional flexibility and control of the already existing capabilities.) 720 5616 w
+10 /Times-Bold f
+(Appendix I: The pieces of the toolkit and how they serve the design goals:) 720 5856 w
+12 /Times-Roman f
+(bootup kernel) 970 6012 w
+(mods, plan9rc, initskel, bootpaq, tools.tgz) 1664 6012 w
+10 /Times-Roman f
+(These) 970 6168 w
+(create) 1237 6168 w
+(a) 1503 6168 w
+(more) 1576 6168 w
+(flexible) 1810 6168 w
+(platform) 2144 6168 w
+(namespace) 2517 6168 w
+(operations,) 2983 6168 w
+(and) 3454 6168 w
+(remove) 3628 6168 w
+(the) 3957 6168 w
+(dependency) 4109 6168 w
+(of) 4615 6168 w
+(the) 4728 6168 w
+(ker\255) 4880 6168 w
+(nel) 720 6288 w
+(on) 875 6288 w
+(external) 1008 6288 w
+(services.) 1362 6288 w
+(They) 1741 6288 w
+(create) 1979 6288 w
+(a) 2249 6288 w
+(functional) 2326 6288 w
+(enviornment) 2764 6288 w
+(that) 3301 6288 w
+(acts) 3483 6288 w
+(as) 3670 6288 w
+(a) 3785 6288 w
+(minimal) 3861 6288 w
+(cpu) 4227 6288 w
+(server,) 4403 6288 w
+(and) 4703 6288 w
+(also) 4879 6288 w
+(are) 720 6408 w
+(able) 880 6408 w
+(to) 1085 6408 w
+(launch) 1202 6408 w
+(standard) 1507 6408 w
+(environments) 1884 6408 w
+(with) 2467 6408 w
+(normal) 2684 6408 w
+(cpurc) 3006 6408 w
+(or) 3266 6408 w
+(termrc.) 3388 6408 w
+(The) 3712 6408 w
+(bootup) 3906 6408 w
+(process) 4223 6408 w
+(may) 4561 6408 w
+(be) 4773 6408 w
+(left) 4907 6408 w
+(almost) 720 6528 w
+(unchanged) 1021 6528 w
+(in) 1487 6528 w
+(terms) 1599 6528 w
+(of) 1855 6528 w
+(user) 1972 6528 w
+(visible) 2172 6528 w
+(interaction,) 2473 6528 w
+(but) 2959 6528 w
+(the) 3121 6528 w
+(pre\255existing) 3277 6528 w
+(installation) 3788 6528 w
+(now) 4267 6528 w
+(co\255exists) 4473 6528 w
+(with) 4862 6528 w
+(the new boot "service/namespace hypervisor" layer.) 720 6648 w
+12 /Times-Roman f
+(rerootwin, addwrroot, hubfs, savedevs/getdevs:) 970 6804 w
+10 /Times-Roman f
+(These) 970 6960 w
+(allow) 1234 6960 w
+(the) 1482 6960 w
+(user) 1631 6960 w
+(to) 1824 6960 w
+(navigate) 1929 6960 w
+(namespaces) 2294 6960 w
+(easily,) 2797 6960 w
+(to) 3082 6960 w
+(attach) 3187 6960 w
+(to) 3452 6960 w
+(new) 3557 6960 w
+(roots,) 3750 6960 w
+(to) 4002 6960 w
+("save") 4107 6960 w
+(namespaces) 4393 6960 w
+(and) 4896 6960 w
+(shells) 720 7080 w
+(for) 974 7080 w
+(later) 1116 7080 w
+(use) 1319 7080 w
+(in) 1478 7080 w
+(hubfs,) 1582 7080 w
+(and) 1855 7080 w
+(to) 2025 7080 w
+(keep) 2129 7080 w
+(control) 2343 7080 w
+(of) 2652 7080 w
+(their) 2761 7080 w
+(current) 2970 7080 w
+(devices) 3278 7080 w
+(and) 3603 7080 w
+(window) 3773 7080 w
+(system) 4121 7080 w
+(while) 4425 7080 w
+(doing so.) 4673 7080 w
+(They) 720 7200 w
+(are) 963 7200 w
+(necessary) 1122 7200 w
+(to) 1547 7200 w
+(get) 1663 7200 w
+(the) 1823 7200 w
+(best) 1983 7200 w
+(use) 2182 7200 w
+(from) 2353 7200 w
+(the) 2586 7200 w
+(rootless) 2747 7200 w
+(environment,) 3097 7200 w
+(but) 3666 7200 w
+(they) 3833 7200 w
+(are) 4044 7200 w
+(not) 4204 7200 w
+(dependent) 4371 7200 w
+(on) 4820 7200 w
+(it.) 4959 7200 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 9 9
+%%Page: 10 10
+/saveobj save def
+mark
+10 pagesetup
+10 /Times-Roman f
+(\255 10 \255) 2772 480 w
+(These namespaces control tools may be useful even without any changes to the kernel or boot process.) 720 840 w
+12 /Times-Roman f
+(writable) 970 996 w
+(proc/*/ns, cpns, addns, subns:) 1394 996 w
+10 /Times-Roman f
+(This) 970 1152 w
+(kernel) 1178 1152 w
+(mod) 1457 1152 w
+(extends) 1665 1152 w
+(the) 2000 1152 w
+(power) 2152 1152 w
+(of) 2431 1152 w
+(/proc) 2544 1152 w
+(to) 2779 1152 w
+(modify) 2888 1152 w
+(the) 3208 1152 w
+(namespace) 3361 1152 w
+(of) 3829 1152 w
+(any) 3943 1152 w
+(processes) 4118 1152 w
+(you) 4531 1152 w
+(own,) 4712 1152 w
+(on) 4940 1152 w
+(local) 720 1272 w
+(or) 947 1272 w
+(remote) 1063 1272 w
+(machines,) 1373 1272 w
+(simply) 1807 1272 w
+(by) 2112 1272 w
+(writing) 2244 1272 w
+(the) 2565 1272 w
+(same) 2719 1272 w
+(text) 2956 1272 w
+(string) 3138 1272 w
+(to) 3398 1272 w
+(the) 3508 1272 w
+(ns) 3662 1272 w
+(file) 3783 1272 w
+(of) 3948 1272 w
+(the) 4063 1272 w
+(proc) 4217 1272 w
+(that) 4426 1272 w
+(you) 4608 1272 w
+(would) 4790 1272 w
+(write) 720 1392 w
+(in) 951 1392 w
+(a) 1055 1392 w
+(shell.) 1125 1392 w
+(This) 1365 1392 w
+(mod) 1569 1392 w
+(is) 1773 1392 w
+(very) 1866 1392 w
+(general) 2069 1392 w
+(and) 2388 1392 w
+(powerful,) 2559 1392 w
+(but) 2971 1392 w
+(only) 3126 1392 w
+(cpns) 3331 1392 w
+(and) 3541 1392 w
+(its) 3712 1392 w
+(related) 3834 1392 w
+(scripts) 4132 1392 w
+(directly) 4420 1392 w
+(depend) 4752 1392 w
+(on) 720 1512 w
+(it.) 853 1512 w
+(I) 967 1512 w
+(believe) 1033 1512 w
+(being) 1354 1512 w
+(able) 1609 1512 w
+(to) 1808 1512 w
+(do) 1919 1512 w
+(these) 2052 1512 w
+(namespace) 2290 1512 w
+(operations) 2760 1512 w
+(is) 3208 1512 w
+(a) 3307 1512 w
+(good) 3383 1512 w
+(part) 3615 1512 w
+(of) 3802 1512 w
+(plan) 3917 1512 w
+(9) 4121 1512 w
+(design,) 4203 1512 w
+(but) 4521 1512 w
+(the) 4681 1512 w
+(other) 4835 1512 w
+(pieces of the toolkit are not written requiring this mod. The bootup sequence and plan9rc mod is separable.) 720 1632 w
+12 /Times-Roman f
+(ventiprog, cpsys, fossilize, /n/9fat/rootscor:) 970 1788 w
+10 /Times-Roman f
+(These) 970 1944 w
+(scripts) 1236 1944 w
+(are) 1525 1944 w
+(written) 1674 1944 w
+(to) 1986 1944 w
+(help) 2093 1944 w
+(make) 2294 1944 w
+(use) 2539 1944 w
+(of) 2701 1944 w
+(the) 2813 1944 w
+(existing) 2964 1944 w
+(fossil) 3310 1944 w
+(and) 3556 1944 w
+(venti) 3729 1944 w
+(tools) 3958 1944 w
+(to) 4182 1944 w
+(improve) 4289 1944 w
+(reliability) 4651 1944 w
+(and) 720 2064 w
+(let) 899 2064 w
+(you) 1034 2064 w
+(easily) 1219 2064 w
+(clone/change) 1487 2064 w
+(root) 2048 2064 w
+(filesystems) 2244 2064 w
+(and) 2729 2064 w
+(preserve) 2908 2064 w
+(your) 3280 2064 w
+(rootscores.) 3498 2064 w
+(If) 3968 2064 w
+(you) 4069 2064 w
+(are) 4254 2064 w
+(using) 4410 2064 w
+(venti) 4662 2064 w
+(and) 4896 2064 w
+(fossil,) 720 2184 w
+(I) 991 2184 w
+(believe) 1053 2184 w
+(these) 1370 2184 w
+(tools) 1604 2184 w
+(are) 1828 2184 w
+(at) 1978 2184 w
+(least) 2079 2184 w
+(a) 2291 2184 w
+(good) 2364 2184 w
+(model) 2593 2184 w
+(for) 2872 2184 w
+(how) 3018 2184 w
+(to) 3220 2184 w
+(manage) 3328 2184 w
+(them.) 3668 2184 w
+(There) 3923 2184 w
+(is) 4185 2184 w
+(no) 4282 2184 w
+(inherent) 4412 2184 w
+(depen\255) 4769 2184 w
+(dency) 720 2304 w
+(on) 989 2304 w
+(the) 1120 2304 w
+(rest) 1273 2304 w
+(of) 1448 2304 w
+(the) 1562 2304 w
+(tools) 1715 2304 w
+(on) 1941 2304 w
+(venti) 2072 2304 w
+(or) 2303 2304 w
+(fossil,) 2417 2304 w
+(but) 2690 2304 w
+(the) 2849 2304 w
+(ability) 3002 2304 w
+(of) 3289 2304 w
+(fossil) 3403 2304 w
+(to) 3651 2304 w
+(instantly) 3759 2304 w
+(create) 4134 2304 w
+(a) 4401 2304 w
+(new) 4475 2304 w
+(root) 4671 2304 w
+(with) 4862 2304 w
+(flfmt) 720 2424 w
+(\255v) 953 2424 w
+(is) 1069 2424 w
+(a) 1169 2424 w
+(powerful) 1247 2424 w
+(tool) 1641 2424 w
+(and) 1831 2424 w
+(many) 2009 2424 w
+(of) 2265 2424 w
+(my) 2382 2424 w
+(workflows) 2544 2424 w
+(are) 3005 2424 w
+(built) 3160 2424 w
+(upon) 3378 2424 w
+(it.) 3612 2424 w
+(The) 3727 2424 w
+(flow) 3916 2424 w
+(of) 4133 2424 w
+(flfmt) 4250 2424 w
+(\255v,) 4484 2424 w
+(fossilstart,) 4626 2424 w
+(rerootwin) 720 2544 w
+(into) 1135 2544 w
+(the) 1318 2544 w
+(new) 1467 2544 w
+(fossil) 1660 2544 w
+(can) 1904 2544 w
+(be) 2068 2544 w
+(done) 2188 2544 w
+(in) 2408 2544 w
+(a) 2512 2544 w
+(few) 2582 2544 w
+(seconds) 2757 2544 w
+(and) 3099 2544 w
+(provides) 3269 2544 w
+(a) 3639 2544 w
+(new) 3709 2544 w
+(interactive) 3901 2544 w
+(root) 4348 2544 w
+(envrionment) 4535 2544 w
+(that 'flows' directly from your old one without eliminating it.) 720 2664 w
+12 /Times-Roman f
+(hubfs, grio:) 970 2820 w
+10 /Times-Roman f
+(Hubfs) 970 2976 w
+(is) 1245 2976 w
+(listed) 1343 2976 w
+(again) 1591 2976 w
+(because) 1838 2976 w
+(it) 2184 2976 w
+(is) 2271 2976 w
+(also) 2369 2976 w
+(part) 2561 2976 w
+(of) 2747 2976 w
+(the) 2861 2976 w
+(upper) 3014 2976 w
+(user) 3272 2976 w
+(interface) 3469 2976 w
+(layer) 3848 2976 w
+(in) 4079 2976 w
+(addition) 4189 2976 w
+(to) 4549 2976 w
+(the) 4659 2976 w
+(lower) 4813 2976 w
+(network) 720 3096 w
+(piping) 1076 3096 w
+(layer.) 1361 3096 w
+(The) 1614 3096 w
+(user) 1798 3096 w
+(can) 1993 3096 w
+(work) 2160 3096 w
+(easily) 2394 3096 w
+(in) 2655 3096 w
+(all) 2761 3096 w
+(their) 2889 3096 w
+(different) 3100 3096 w
+(namespaces) 3471 3096 w
+(because) 3975 3096 w
+(grio+hubfs) 4318 3096 w
+(makes) 4785 3096 w
+(access) 720 3216 w
+(to) 1005 3216 w
+(persistent) 1114 3216 w
+(shells) 1528 3216 w
+(in) 1787 3216 w
+(diverse) 1896 3216 w
+(namespaces) 2215 3216 w
+(as) 2722 3216 w
+(easy) 2837 3216 w
+(as) 3046 3216 w
+(opening) 3161 3216 w
+(a) 3515 3216 w
+(New) 3591 3216 w
+(rc.) 3811 3216 w
+(The) 3945 3216 w
+(color\255setting) 4132 3216 w
+(option) 4669 3216 w
+(of) 4957 3216 w
+(grio also lets the user 'organize' their namespaces by sub\255rios with different colors.) 720 3336 w
+(These components are all separable, but I believe the whole is greater than the sum of the parts and) 970 3492 w
+(so) 4951 3492 w
+(created) 720 3612 w
+(the) 1035 3612 w
+(giant) 1185 3612 w
+(ANTS) 1413 3612 w
+(packages.) 1702 3612 w
+(It) 2120 3612 w
+(is) 2209 3612 w
+(possible) 2304 3612 w
+(to) 2660 3612 w
+(use) 2766 3612 w
+(hubfs+grio) 2927 3612 w
+(without) 3394 3612 w
+(changing) 3728 3612 w
+(bootup) 4122 3612 w
+(or) 4428 3612 w
+(namespaces,) 4539 3612 w
+(or) 720 3732 w
+(possible) 833 3732 w
+(to) 1191 3732 w
+(create) 1299 3732 w
+(a) 1566 3732 w
+(more) 1640 3732 w
+(reliable) 1875 3732 w
+(bootup) 2204 3732 w
+(and) 2512 3732 w
+(independent) 2686 3732 w
+(early) 3204 3732 w
+(namespace) 3434 3732 w
+(without) 3902 3732 w
+(using) 4239 3732 w
+(hubfs) 4487 3732 w
+(or) 4740 3732 w
+(grio,) 4854 3732 w
+(and) 720 3852 w
+(the) 891 3852 w
+(concepts) 1040 3852 w
+(of) 1416 3852 w
+(the) 1526 3852 w
+(rerootwin) 1675 3852 w
+(script) 2090 3852 w
+(may) 2339 3852 w
+(be) 2538 3852 w
+(generally) 2659 3852 w
+(useful) 3057 3852 w
+(independent) 3328 3852 w
+(of) 3843 3852 w
+(any) 3953 3852 w
+(tools) 4124 3852 w
+(at) 4345 3852 w
+(all.) 4443 3852 w
+(The) 4594 3852 w
+(goal) 4775 3852 w
+(is) 4973 3852 w
+(to) 720 3972 w
+(provide) 824 3972 w
+(a) 1155 3972 w
+(true) 1225 3972 w
+(toolkit) 1406 3972 w
+(approach) 1694 3972 w
+(to) 2085 3972 w
+(namespaces) 2189 3972 w
+(where) 2691 3972 w
+(the) 2960 3972 w
+(user) 3108 3972 w
+(can) 3300 3972 w
+(make) 3464 3972 w
+(the) 3706 3972 w
+(environment) 3855 3972 w
+(that) 4387 3972 w
+(serves) 4564 3972 w
+(them) 4840 3972 w
+(best.) 720 4092 w
+10 /Times-Bold f
+(Appendix II: Implementation details:) 720 4332 w
+10 /Times-Roman f
+(Boot mods: the goal is to create a working environment with only kernel resources, roughly speaking.) 970 4488 w
+(This) 720 4608 w
+(is) 934 4608 w
+(pretty) 1037 4608 w
+(established) 1306 4608 w
+(territory,) 1786 4608 w
+(the) 2174 4608 w
+(main) 2332 4608 w
+(thing) 2568 4608 w
+(I) 2810 4608 w
+(have) 2879 4608 w
+(done) 3103 4608 w
+(differently) 3332 4608 w
+(than) 3788 4608 w
+(some) 3995 4608 w
+(other) 4241 4608 w
+(modders) 4481 4608 w
+(is) 4860 4608 w
+(to) 4962 4608 w
+(parameterize) 720 4728 w
+(as) 1262 4728 w
+(much) 1373 4728 w
+(as) 1623 4728 w
+(possible) 1734 4728 w
+(and) 2090 4728 w
+(just) 2262 4728 w
+(not) 2435 4728 w
+(get) 2591 4728 w
+(the) 2742 4728 w
+(root) 2893 4728 w
+(fs!) 3083 4728 w
+(Boot/init) 3217 4728 w
+(are) 3603 4728 w
+(combined) 3753 4728 w
+(into) 4176 4728 w
+(a) 4361 4728 w
+(single) 4434 4728 w
+(program) 4702 4728 w
+(and) 720 4848 w
+(most) 901 4848 w
+(of) 1133 4848 w
+(their) 1253 4848 w
+(functionality) 1473 4848 w
+(is) 2021 4848 w
+(shifted) 2125 4848 w
+(to) 2434 4848 w
+(the) 2549 4848 w
+(plan9rc) 2708 4848 w
+(script,) 3044 4848 w
+(supported) 3328 4848 w
+(by) 3759 4848 w
+(a) 3896 4848 w
+(compiled) 3977 4848 w
+(in) 4386 4848 w
+(bootpaq.) 4501 4848 w
+(The) 4885 4848 w
+(plan9rc,) 720 4968 w
+(ramskel,) 1073 4968 w
+(and) 1443 4968 w
+(initskel) 1616 4968 w
+(scripts) 1940 4968 w
+(work) 2230 4968 w
+(to) 2464 4968 w
+(make) 2572 4968 w
+(a) 2818 4968 w
+(minimal) 2892 4968 w
+(but) 3256 4968 w
+(working) 3414 4968 w
+(environment) 3777 4968 w
+(by) 4312 4968 w
+(gluing) 4442 4968 w
+(a) 4728 4968 w
+(skele\255) 4802 4968 w
+(ton) 720 5088 w
+(ramfs) 874 5088 w
+(to) 1127 5088 w
+(the) 1231 5088 w
+(compiled) 1379 5088 w
+(in) 1777 5088 w
+(bootpaq.) 1881 5088 w
+(Once this is done, a "root" fileserver can be acquired and its termrc or) 2254 5088 w
+(cpurc) 720 5208 w
+(forked) 977 5208 w
+(off) 1273 5208 w
+(into) 1425 5208 w
+(a) 1617 5208 w
+(newns) 1697 5208 w
+(where) 1988 5208 w
+(it) 2267 5208 w
+(becomes) 2359 5208 w
+(a) 2744 5208 w
+(working) 2824 5208 w
+(environment) 3193 5208 w
+(without) 3734 5208 w
+(taking) 4077 5208 w
+(over) 4364 5208 w
+(the) 4578 5208 w
+(flow) 4737 5208 w
+(of) 4957 5208 w
+(control in the kernel only environment.) 720 5328 w
+(Writable) 970 5484 w
+(proc/*/ns:) 1346 5484 w
+(this) 1773 5484 w
+(was) 1945 5484 w
+(implemented) 2127 5484 w
+(by) 2676 5484 w
+(more) 2803 5484 w
+(or) 3035 5484 w
+(less) 3145 5484 w
+('cloning') 3322 5484 w
+(the) 3715 5484 w
+(entire) 3864 5484 w
+(code) 4119 5484 w
+(path) 4335 5484 w
+(that) 4535 5484 w
+(happens) 4713 5484 w
+(for) 720 5604 w
+(mounts) 870 5604 w
+(and) 1199 5604 w
+(binds) 1377 5604 w
+(and) 1628 5604 w
+(adding) 1806 5604 w
+(a) 2112 5604 w
+(new) 2190 5604 w
+(parameter) 2390 5604 w
+(for) 2822 5604 w
+(process) 2972 5604 w
+(id.) 3305 5604 w
+(All) 3442 5604 w
+(of) 3604 5604 w
+(the) 3721 5604 w
+(existing) 3876 5604 w
+(routines) 4226 5604 w
+(use) 4581 5604 w
+("up") 4747 5604 w
+(to) 4962 5604 w
+(figure) 720 5724 w
+(out) 991 5724 w
+(what) 1152 5724 w
+(namespace) 1379 5724 w
+(is) 1849 5724 w
+(being) 1949 5724 w
+(modified) 2204 5724 w
+(and) 2598 5724 w
+(what) 2776 5724 w
+(the) 3004 5724 w
+(chans) 3160 5724 w
+(are) 3421 5724 w
+(\255) 3576 5724 w
+(by) 3643 5724 w
+(copying) 3777 5724 w
+(all) 4133 5724 w
+(of) 4267 5724 w
+(the) 4384 5724 w
+(routines) 4540 5724 w
+(and) 4896 5724 w
+(adding) 720 5844 w
+(a) 1018 5844 w
+(new) 1088 5844 w
+(parameter,) 1280 5844 w
+(I) 1729 5844 w
+(allow) 1788 5844 w
+(the) 2036 5844 w
+(/proc) 2184 5844 w
+(file) 2415 5844 w
+(system) 2574 5844 w
+(to perform mounts and binds "on behalf" of a process,) 2878 5844 w
+(acccording to the string written to that processes ns file. I made the mechanism use a copy of all) 720 5964 w
+(the) 4581 5964 w
+(original) 4729 5964 w
+(routines) 720 6084 w
+(with) 1076 6084 w
+(a) 1288 6084 w
+(new) 1366 6084 w
+(parameter) 1566 6084 w
+(because) 1998 6084 w
+(I) 2347 6084 w
+(didn't) 2414 6084 w
+(want) 2687 6084 w
+(my) 2915 6084 w
+(modifications) 3077 6084 w
+(to) 3661 6084 w
+(affect) 3773 6084 w
+(the) 4033 6084 w
+(existing) 4189 6084 w
+(code) 4540 6084 w
+(paths) 4762 6084 w
+(\255) 5007 6084 w
+(especially) 720 6204 w
+(because) 1151 6204 w
+(some) 1498 6204 w
+(sanity) 1742 6204 w
+(checks) 2014 6204 w
+(don't) 2318 6204 w
+(make) 2562 6204 w
+(sense) 2811 6204 w
+(if) 3060 6204 w
+(your) 3154 6204 w
+(context) 3370 6204 w
+(is) 3697 6204 w
+(not) 3797 6204 w
+("up",) 3958 6204 w
+(and) 4198 6204 w
+(removing) 4375 6204 w
+(kernel) 4791 6204 w
+(sanity) 720 6324 w
+(checks) 985 6324 w
+(is) 1282 6324 w
+(scary.) 1375 6324 w
+(I) 1636 6324 w
+(have) 1695 6324 w
+(tested) 1909 6324 w
+(this) 2168 6324 w
+(mod) 2339 6324 w
+(extensively) 2543 6324 w
+(and) 3024 6324 w
+(I) 3194 6324 w
+(believe) 3253 6324 w
+(it is not inherently destablizing but it) 3567 6324 w
+(may pose unalyzed security risks if abused by malicious users.) 720 6444 w
+(The) 970 6600 w
+(cpns,) 1154 6600 w
+(addns,) 1391 6600 w
+(subns) 1678 6600 w
+(scripts) 1935 6600 w
+(perform) 2225 6600 w
+(their) 2575 6600 w
+(operations) 2787 6600 w
+(by) 3232 6600 w
+(comparing) 3361 6600 w
+(the) 3817 6600 w
+(lines) 3968 6600 w
+(of) 4186 6600 w
+(the) 4298 6600 w
+(textual) 4449 6600 w
+(ns) 4750 6600 w
+(files) 4868 6600 w
+(of) 720 6720 w
+(the) 843 6720 w
+(model) 1005 6720 w
+(and) 1295 6720 w
+(target) 1479 6720 w
+(processes,) 1746 6720 w
+(and) 2193 6720 w
+(issuing) 2377 6720 w
+(mount/unmount) 2701 6720 w
+(commands) 3381 6720 w
+(based) 3854 6720 w
+(on) 4121 6720 w
+(matching) 4261 6720 w
+(and) 4673 6720 w
+(non\255) 4857 6720 w
+(matching) 720 6840 w
+(lines.) 1130 6840 w
+(This) 1382 6840 w
+(mechanism) 1598 6840 w
+(is) 2091 6840 w
+(functional) 2196 6840 w
+(but) 2639 6840 w
+(better) 2805 6840 w
+(tools) 3071 6840 w
+(should) 3305 6840 w
+(be) 3611 6840 w
+(written,) 3744 6840 w
+(which) 4091 6840 w
+(fully) 4374 6840 w
+(understand) 4602 6840 w
+(how) 720 6960 w
+(namespaces) 929 6960 w
+(are) 1442 6960 w
+(structures) 1600 6960 w
+(as) 2025 6960 w
+(graphs) 2145 6960 w
+(with) 2448 6960 w
+(dependencies.) 2663 6960 w
+(Treating) 3262 6960 w
+(the) 3637 6960 w
+(ns) 3796 6960 w
+(files) 3922 6960 w
+(as) 4131 6960 w
+(text) 4251 6960 w
+(without) 4438 6960 w
+(under\255) 4780 6960 w
+(standing) 720 7080 w
+(the) 1099 7080 w
+(real) 1261 7080 w
+(semantics) 1450 7080 w
+(of) 1884 7080 w
+(namespaces) 2007 7080 w
+(is) 2523 7080 w
+(a) 2630 7080 w
+(limitation) 2714 7080 w
+(of) 3144 7080 w
+(these) 3268 7080 w
+(scripts,) 3514 7080 w
+(not) 3841 7080 w
+(the) 4010 7080 w
+(writable) 4173 7080 w
+(ns) 4541 7080 w
+(mod) 4671 7080 w
+(that) 4890 7080 w
+(enables them.) 720 7200 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 10 10
+%%Page: 11 11
+/saveobj save def
+mark
+11 pagesetup
+10 /Times-Roman f
+(\255 11 \255) 2772 480 w
+(Hubfs:) 970 840 w
+(hubfs) 1274 840 w
+(is) 1528 840 w
+(a) 1628 840 w
+(9p) 1705 840 w
+(filesystem) 1838 840 w
+(which) 2282 840 w
+(implements) 2559 840 w
+(a) 3059 840 w
+(new) 3136 840 w
+(abstraction) 3335 840 w
+(which) 3806 840 w
+(is) 4083 840 w
+(similar) 4183 840 w
+(to) 4494 840 w
+(a) 4605 840 w
+(pipe,) 4682 840 w
+(but) 4912 840 w
+(designed) 720 960 w
+(for) 1110 960 w
+(multiple) 1261 960 w
+(readers) 1630 960 w
+(and) 1952 960 w
+(writers.) 2131 960 w
+(One) 2468 960 w
+(convenient) 2669 960 w
+(use) 3142 960 w
+(of) 3310 960 w
+(this) 3427 960 w
+(abstraction) 3606 960 w
+(is) 4078 960 w
+(to) 4179 960 w
+(implement) 4291 960 w
+(screen\255) 4753 960 w
+(like) 720 1080 w
+(functionality) 904 1080 w
+(by) 1449 1080 w
+(connecting) 1583 1080 w
+(rc) 2055 1080 w
+(shells) 2166 1080 w
+(to) 2428 1080 w
+(hub) 2540 1080 w
+(files.) 2724 1080 w
+(The) 2955 1080 w
+(hubfs) 3144 1080 w
+(filesystem) 3400 1080 w
+(simply) 3846 1080 w
+(provides) 4154 1080 w
+(the) 4533 1080 w
+(pipe/hub) 4690 1080 w
+(files,) 720 1200 w
+(the) 956 1200 w
+(job) 1117 1200 w
+(of) 1284 1200 w
+(managing) 1406 1200 w
+(connections) 1839 1200 w
+(is) 2355 1200 w
+(done) 2461 1200 w
+(by) 2694 1200 w
+(the) 2833 1200 w
+(hubshell) 2994 1200 w
+(program,) 3372 1200 w
+(which) 3774 1200 w
+(knows) 4057 1200 w
+(how) 4357 1200 w
+(to) 4568 1200 w
+(start) 4685 1200 w
+(and) 4896 1200 w
+(attach) 720 1320 w
+(rc) 1000 1320 w
+(to) 1119 1320 w
+(hubfiles,) 1239 1320 w
+(launch) 1628 1320 w
+(new) 1936 1320 w
+(connected) 2144 1320 w
+(rcs) 2590 1320 w
+(on) 2749 1320 w
+(either) 2892 1320 w
+(the) 3162 1320 w
+(local) 3327 1320 w
+(or) 3564 1320 w
+(remote) 3690 1320 w
+(machine,) 4010 1320 w
+(and) 4416 1320 w
+(then) 4603 1320 w
+(move) 4818 1320 w
+(between the active shells.) 720 1440 w
+(Rerootwin:) 970 1596 w
+(this) 1454 1596 w
+("device) 1633 1596 w
+(and) 1968 1596 w
+(wsys) 2146 1596 w
+(aware") 2380 1596 w
+(re\255rooting) 2692 1596 w
+(script) 3125 1596 w
+(and) 3381 1596 w
+(namespace) 3559 1596 w
+(file) 4030 1596 w
+(is) 4197 1596 w
+(based) 4298 1596 w
+(on) 4559 1596 w
+(a) 4694 1596 w
+(simple) 4773 1596 w
+(core) 720 1716 w
+(technique:) 928 1716 w
+(using) 1380 1716 w
+(srvfs) 1633 1716 w
+(to) 1863 1716 w
+(save) 1977 1716 w
+(the) 2190 1716 w
+(devices.) 2348 1716 w
+(The) 2708 1716 w
+(ability) 2899 1716 w
+(to) 3191 1716 w
+(control) 3305 1716 w
+(a) 3624 1716 w
+(given) 3704 1716 w
+(window) 3962 1716 w
+(and) 4320 1716 w
+(run) 4500 1716 w
+(graphical) 4669 1716 w
+(applications) 720 1836 w
+(in) 1239 1836 w
+(it) 1353 1836 w
+(is) 1445 1836 w
+(simply) 1548 1836 w
+(a) 1857 1836 w
+(result) 1937 1836 w
+(of) 2195 1836 w
+(what) 2315 1836 w
+(is) 2546 1836 w
+(bound) 2650 1836 w
+(into) 2937 1836 w
+(the) 3130 1836 w
+(namespace.) 3289 1836 w
+(A) 3788 1836 w
+(standard) 3897 1836 w
+("newns") 4272 1836 w
+(command) 4646 1836 w
+(can't) 720 1956 w
+(be) 951 1956 w
+(used) 1077 1956 w
+(to) 1292 1956 w
+(enter) 1402 1956 w
+(a) 1633 1956 w
+(new) 1708 1956 w
+(root) 1905 1956 w
+(filesystem) 2097 1956 w
+(when) 2539 1956 w
+(working) 2786 1956 w
+(remotely,) 3150 1956 w
+(because) 3561 1956 w
+(the) 3907 1956 w
+(new) 4060 1956 w
+(namespace) 4257 1956 w
+(will) 4725 1956 w
+(not) 4912 1956 w
+(be) 720 2076 w
+(connected) 843 2076 w
+(to) 1277 2076 w
+(the) 1385 2076 w
+(device) 1537 2076 w
+(files) 1827 2076 w
+(of) 2029 2076 w
+(the) 2142 2076 w
+(previous) 2294 2076 w
+(namespace.) 2668 2076 w
+(The) 3160 2076 w
+(solution) 3345 2076 w
+(is) 3698 2076 w
+(to) 3795 2076 w
+(srvfs) 3903 2076 w
+(the) 4127 2076 w
+(devices) 4279 2076 w
+(first,) 4608 2076 w
+(make) 4824 2076 w
+(note) 720 2196 w
+(of) 922 2196 w
+(their) 1035 2196 w
+(identity) 1248 2196 w
+(in) 1584 2196 w
+(an) 1692 2196 w
+(environment) 1816 2196 w
+(variable,) 2351 2196 w
+(then) 2727 2196 w
+(enter) 2929 2196 w
+(the) 3158 2196 w
+(new) 3310 2196 w
+(namespace) 3506 2196 w
+(and) 3973 2196 w
+(re\255acquire) 4146 2196 w
+(the) 4578 2196 w
+(original) 4729 2196 w
+(devices.) 720 2316 w
+(This) 1078 2316 w
+(operation) 1290 2316 w
+(is) 1701 2316 w
+(basically) 1802 2316 w
+(simple) 2191 2316 w
+(and) 2492 2316 w
+(seems) 2670 2316 w
+(to) 2948 2316 w
+(have) 3060 2316 w
+(broad) 3282 2316 w
+(usefulness.) 3543 2316 w
+(I) 4019 2316 w
+(am) 4087 2316 w
+(actually) 4244 2316 w
+(surprised) 4595 2316 w
+(a) 4996 2316 w
+(similar) 720 2436 w
+(script) 1030 2436 w
+(and) 1284 2436 w
+(namespace) 1460 2436 w
+(file) 1929 2436 w
+(does) 2094 2436 w
+(not) 2309 2436 w
+(already) 2469 2436 w
+(exist) 2794 2436 w
+(within) 3014 2436 w
+(plan) 3301 2436 w
+(9) 3504 2436 w
+(because) 3585 2436 w
+(it) 3931 2436 w
+(does) 4018 2436 w
+(depend) 4232 2436 w
+(on) 4551 2436 w
+(the) 4682 2436 w
+(other) 4835 2436 w
+(modifications in the toolkit.) 720 2556 w
+(The) 970 2712 w
+(venti/fossil) 1161 2712 w
+(tools) 1642 2712 w
+(simply) 1873 2712 w
+(automate) 2182 2712 w
+(actions) 2584 2712 w
+(which) 2903 2712 w
+(are) 3183 2712 w
+(useful) 3340 2712 w
+(for) 3620 2712 w
+(backup) 3772 2712 w
+(and) 4096 2712 w
+(recreation,) 4277 2712 w
+(and) 4737 2712 w
+(the) 4918 2712 w
+(other) 720 2832 w
+(namespace) 957 2832 w
+(scripts) 1425 2832 w
+(mostly) 1717 2832 w
+(perform) 2021 2832 w
+(self\255explanatory) 2373 2832 w
+(bind) 3052 2832 w
+(and) 3261 2832 w
+(mount) 3436 2832 w
+(operations.) 3723 2832 w
+(The) 4195 2832 w
+(modifications) 4381 2832 w
+(to) 4962 2832 w
+(rc) 720 2952 w
+(and) 832 2952 w
+(factotum) 1011 2952 w
+(are) 1401 2952 w
+(minimal) 1557 2952 w
+(and) 1926 2952 w
+(relatively) 2105 2952 w
+(insignificant.) 2517 2952 w
+(rc) 3077 2952 w
+(is) 3189 2952 w
+(modified) 3291 2952 w
+(only) 3687 2952 w
+(to) 3901 2952 w
+(path) 4015 2952 w
+(boot) 4223 2952 w
+(and) 4437 2952 w
+(a) 4617 2952 w
+(different) 4697 2952 w
+(location) 720 3072 w
+(for) 1070 3072 w
+(/rc/lib/rcmain,) 1214 3072 w
+(factotum) 1811 3072 w
+(simply) 2194 3072 w
+(adds) 2495 3072 w
+(a) 2706 3072 w
+(flag) 2778 3072 w
+(to) 2961 3072 w
+(prefer) 3067 3072 w
+(a) 3332 3072 w
+(code) 3404 3072 w
+(path) 3620 3072 w
+(which) 3820 3072 w
+(it) 4092 3072 w
+(had) 4176 3072 w
+(as) 4348 3072 w
+(a) 4459 3072 w
+(fallback) 4531 3072 w
+(pre\255) 4880 3072 w
+(viously, wrarena9 just adds output of the current clump as the data sending proceeds.) 720 3192 w
+(The) 970 3348 w
+(hardware) 1154 3348 w
+(infrastructure) 1553 3348 w
+(is) 2119 3348 w
+(two) 2216 3348 w
+(native) 2396 3348 w
+(pentium) 2670 3348 w
+(IV) 3028 3348 w
+(for) 3163 3348 w
+(the) 3309 3348 w
+(main) 3461 3348 w
+(venti) 3691 3348 w
+(and) 3921 3348 w
+(fossil) 4095 3348 w
+(server) 4342 3348 w
+(and) 4615 3348 w
+(a) 4789 3348 w
+(pen\255) 4863 3348 w
+(tium) 720 3468 w
+(III) 930 3468 w
+(for) 1055 3468 w
+(the) 1197 3468 w
+(main) 1345 3468 w
+(tcp) 1571 3468 w
+(cput.) 1719 3468 w
+(The) 1942 3468 w
+(user) 2123 3468 w
+(terminal) 2315 3468 w
+(is) 2674 3468 w
+(a) 2767 3468 w
+(modern) 2837 3468 w
+(desktop) 3168 3468 w
+(with) 3505 3468 w
+(an) 3709 3468 w
+(intel) 3829 3468 w
+(i7) 4033 3468 w
+(running) 4137 3468 w
+(the 9front dis\255) 4474 3468 w
+(tribution.) 720 3588 w
+(An) 1119 3588 w
+(amd) 1270 3588 w
+(ph) 1471 3588 w
+(II) 1600 3588 w
+(debian) 1695 3588 w
+(box) 1990 3588 w
+(provides) 2169 3588 w
+(p9p) 2542 3588 w
+(and) 2721 3588 w
+(qemu) 2895 3588 w
+(hosting) 3147 3588 w
+(for) 3472 3588 w
+(the) 3618 3588 w
+(backup) 3770 3588 w
+(leg) 4088 3588 w
+(of) 4240 3588 w
+(services.) 4353 3588 w
+(Remote) 4729 3588 w
+(nodes) 720 3708 w
+(are) 979 3708 w
+(hosted) 1126 3708 w
+(on) 1413 3708 w
+(9cloud) 1539 3708 w
+(with) 1837 3708 w
+(one) 2041 3708 w
+(Bell) 2211 3708 w
+(Labs) 2404 3708 w
+(and) 2624 3708 w
+(one) 2794 3708 w
+(9front) 2964 3708 w
+(install.) 3234 3708 w
+(A) 3530 3708 w
+(linode) 3628 3708 w
+(running) 3904 3708 w
+(p9p) 4241 3708 w
+(provides) 4417 3708 w
+(a) 4787 3708 w
+(final) 4857 3708 w
+(fallback venti store.) 720 3828 w
+10 /Times-Italic f
+(Ben Kidwell, "mycroftiv") 3600 4428 w
+12 /Times-Roman f
+(Mycroftiv, 9gridchan.org) 720 4428 w
+12 /Times-Italic f
+(Draft) 720 4668 w
+(version Feb 9 2013) 1011 4668 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 11 11
+%%Trailer
+done
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold
+%%Pages: 11
