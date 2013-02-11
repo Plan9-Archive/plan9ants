@@ -18,3 +18,5 @@ ventiprog $ventis # backup all the new data since the last ventiprog command
 cp /n/9fat/rootscor /n/some/remote/backup
 
 This workflow is suitable for a cron job and keeps your fossil rootscores available and venti data current so your environment can re-rooted to a new venti/new fossil and still keep working with your current active fs.
+
+The fossilconf and venticonf scripts are slightly modified versions of fossil/conf and venti/conf with less error checking to avoid dependency on awk and cmp.
