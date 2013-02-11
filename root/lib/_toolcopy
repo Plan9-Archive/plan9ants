@@ -29,10 +29,8 @@ cp /bin/disk/format .
 cp /bin/disk/kfscmd .
 cp /bin/disk/mkfs .
 cp /bin/disk/prep .
-cp /bin/fossil/conf fossilconf
 cp /bin/fossil/flfmt .
 cp /bin/fossil/last fossilast
-cp /bin/venti/conf venticonf
 cp /bin/venti/rdarena .
 cp /bin/venti/sync .
 cp /bin/venti/syncindex .
@@ -124,6 +122,7 @@ cp /bin/vt .
 cp /bin/aux/stub .
 cp /bin/aux/mouse .
 cp /bin/aux/vga .
+cp /bin/aux/zerotrunc .
 #cp /bin/aux/timesync .
 #cp /bin/aux/trampoline .
 #cp /bin/aux/watchdog .
