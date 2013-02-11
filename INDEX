@@ -17,6 +17,8 @@ bootdir.extras/ - central point for main rootless boot tools
 	root/ - this is what becomes the skeleton ramfs used in the early boot environment. it contains mostly empty directories and a /usr/bootes template user directory.
 compiletemp/ - used by the build script to compile things in, after running build the new 9pcram.gz kernel will be found here
 doc/ - documentation for bootup, namespace scripts, fossil/venti tools, plan9.ini/plan9rc/initskel variables
+	ants.ps - please page ants.ps to read the full Giant ANTS paper
+	stockplan9.ini - this file is a plan9.ini which works with the stock fossil install of the bell labs .iso and the 9pcram.gz kernel
 patched/ - contains the source code for modifications of standard plan9 programs adapted to the rootless environment
 root/ - used to build the tools.tgz. It contains additional chunks of information used to provide a slightly richer plan 9 environment.
 	lib/ - contains the _mkpaq and _toolcopy scripts which can be used to customize the contents of the early boot namespace

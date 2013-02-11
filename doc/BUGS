@@ -1,9 +1,9 @@
 edit stockplan9.ini to remind user of venti=#S possibility from stock install?
 improve intelligence of venti dialing? add tcp and 17034 to raw ips? - maybe not, possibility of local #S venti complicates trying to screw with the venti variable.
-FIXED wrong perms for ventiprog script - NOT PUSHED yet to sources
 ----
 FIXED bug in default plan9.ini correlated with local! parsing
 broken for local!/dev
 FIXED only 2 known bugs, reuploading feb 4 beta version 0.9988
 FXIED fossilconf doesnt work, it wants comp and aux/zerotrunc - edited the scripts a bit
 FIXED the issue of bin subdirs is pretty stupid, with bootpaq and ramfs maybe this can be rethought - changed namespace binds to work around
+FIXED wrong perms for ventiprog script
