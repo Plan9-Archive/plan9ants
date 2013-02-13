@@ -1,0 +1,90 @@
+.TH PLAN9RC 8
+.SH NAME
+plan9rc, ramskel, initskel \- rootless boot scripts
+.SH SYNOPSIS
+.B plan9rc
+.br
+.B ramskel
+.br
+.B initskel
+.SH DESCRIPTION
+After the kernel boots, it execs
+.B /boot
+(see
+.IR root (3)),
+which in turn execs
+.BR plan9rc .
+.IR plan9rc (8)
+reads the
+.B $service
+environment variable
+.B cpu
+or
+.BR terminal ,
+and then proceeds as an
+.B rc
+script to bring the system up.
+.PP
+.SS Startup Procedures
+The script operates according to the variables found in the environment,
+usually those provided by
+.IR plan9.ini (8)
+It proceeds in the order of 
+.TP 8
+.BR factotum
+is started in either cpu or terminal mode according to the user's choice.
+.TP
+.B USB boot check
+finds out if the system is booting to a usb volume and starts
+.IR partfs (8)
+if so
+.TP
+.B ramfs setup
+is done from /boot/skel.tar and may also make use of 9fat/tools.tgz
+.TP 
+.B system environment check
+is made to verify that a user/hostowner and system name are in place
+.TP
+.B venti startup
+will begin a 
+.IR venti (8)
+server if specified by the venti environment variable.
+.TP
+.B connect to a root fs
+will either begin a disk fileserver or dial a tcp root fileserver
+.TP
+.B setup a rootless control environment
+runs the initskel script to create a self-sufficient environment to
+.IR cpu (1)
+into for service and administrative access to the layer below the root filesystem.
+.TP
+.B launch root environment
+will begin either the
+.IR cpurc (8)
+or
+.IR termrc (8)
+from the rootfs will launch those scripts using
+.IR newns (8)
+to create a normal user environment independent of the namespace of plan9rc.
+.TP
+.B return to the early kernel namespace or stay in the ram/paq root namespace
+allows the user to retain access if desired to the toosl in the bootpaq and/or tools.tgz.
+.SH FILES
+.TF /boot/plan9rc
+.TP
+.B /boot/plan9rc
+bootup and namespace launching control script
+.TP
+.B /boot/ramskel
+sets up /boot/skel.tar as a ramfs skeleton along with an option tools.tgz from 9fat
+.TP
+.B /boot/initskel
+.IR cpurc (8)
+analog script for access to the rootless environment
+.SH SOURCE
+.B sources/contrib/mycroftiv/rootlessnext/bootdir.extras
+.SH "SEE ALSO"
+.IR srv (4),
+.IR namespace (6),
+.IR boot (8),
+.IR listen (8)

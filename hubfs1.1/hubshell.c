@@ -6,7 +6,7 @@
 
 /* hubshell is the client for hubfs, usually started by the hub wrapper script */
 
-/* A Shell gets "glued on" to an rc and bucket-brigades data between the rc fd's and hubfs */
+/* A Shell gets "glued on" to an rc and bucket-brigades data between the rc fds and hubfs */
 typedef struct Shell	Shell;
 
 struct Shell {
@@ -202,6 +202,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		closefds(s);
 		exits(nil);
 	}
+
 	/* %remote command makes new shell on hubfs host by creating new hubfiles starting new rc and exiting current */
 	if(strncmp(buf, "remote", 6) == 0){
 		if(isalpha(*(buf + 7)) == 0){
@@ -237,6 +238,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		startshell(newshell);
 		exits(nil);
 	}
+
 	/* %local command makes new shell on local machine by executing the hub command and exiting */
 	if(strncmp(buf, "local", 5) == 0){
 		if(isalpha(*(buf + 6)) == 0){
@@ -252,6 +254,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		execl("/bin/hub", "hub", srvname, tmpstr, 0);
 		exits(nil);
 	}
+
 	/* %attach name starts new shell and exits the current one */
 	if(strncmp(buf, "attach", 6) == 0){
 		if(isalpha(*(buf + 7)) == 0){
@@ -273,23 +276,8 @@ parsebuf(Shell *s, char *buf, int outfd)
 		startshell(newshell);
 		exits(nil);
 	}
-	if(strncmp(buf, "status", 6) == 0){
-		print("\tHubshell status: attached to mounted %s of /srv/%s\n", s->basename, srvname);
-		print("\tfdzero delay: %d  fdone delay: %d  fdtwo delay: %d\n", s->fdzerodelay, s->fdonedelay, s->fdtwodelay);
-		fprint(2, "io: ");
-		return;
-	}
-	if(strncmp(buf, "list", 4) == 0){
-		sprint(tmpstr, "/n/%s", srvname);
-		print("listing mounted hubfs at /n/%s\n", srvname);
-		if(rfork(RFPROC|RFNOTEG|RFNOWAIT) == 0){
-			execl("/bin/lc", "lc", tmpstr, 0);
-			exits(nil);
-		}
-		sleep(1500);
-		fprint(2, "io: ");
-		return;
-	}
+
+	/* %err %in %out INT set the delay before reading/writing on that fd to INT milliseconds */
 	if(strncmp(buf, "err", 3) == 0){
 		if(isdigit(*(buf + 4)) == 0){
 			fprint(2, "err hub delay setting requires numeric delay\nio: ");
@@ -317,6 +305,25 @@ parsebuf(Shell *s, char *buf, int outfd)
 		print("out hub delay set to %d\nio: ", atoi(buf +4));
 		return;
 	}
+
+	if(strncmp(buf, "status", 6) == 0){
+		print("\tHubshell status: attached to mounted %s of /srv/%s\n", s->basename, srvname);
+		print("\tfdzero delay: %d  fdone delay: %d  fdtwo delay: %d\n", s->fdzerodelay, s->fdonedelay, s->fdtwodelay);
+		fprint(2, "io: ");
+		return;
+	}
+	if(strncmp(buf, "list", 4) == 0){
+		sprint(tmpstr, "/n/%s", srvname);
+		print("listing mounted hubfs at /n/%s\n", srvname);
+		if(rfork(RFPROC|RFNOTEG|RFNOWAIT) == 0){
+			execl("/bin/lc", "lc", tmpstr, 0);
+			exits(nil);
+		}
+		sleep(1500);
+		fprint(2, "io: ");
+		return;
+	}
+
 	fprint(2, "hubshell %% commands: \n\tdetach, remote NAME, local NAME, attach NAME \n\tstatus, list, err TIME, in TIME, out TIME\n");
 	s->cmdresult = 'x';
 }
