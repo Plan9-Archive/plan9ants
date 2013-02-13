@@ -25,7 +25,7 @@ and then proceeds as an
 .B rc
 script to bring the system up.
 .PP
-.SS Startup Procedures
+.SH Startup Procedures
 The script operates according to the variables found in the environment,
 usually those provided by
 .IR plan9.ini (8)
@@ -63,12 +63,99 @@ will begin either the
 .IR cpurc (8)
 or
 .IR termrc (8)
-from the rootfs will launch those scripts using
+from the rootfs. These scripts are launched using
 .IR newns (8)
 to create a normal user environment independent of the namespace of plan9rc.
 .TP
 .B return to the early kernel namespace or stay in the ram/paq root namespace
-allows the user to retain access if desired to the toosl in the bootpaq and/or tools.tgz.
+allows the user to retain access if desired to the programs in the bootpaq and/or tools.tgz.
+.SH VARIABLES
+The plan9rc script makes use of standard variables from
+.IR plan9.ini (8)
+and also new variables. Both types of variables, and their default behaviors, are listed.
+.TP 8
+.BR interactive
+determines the mode of operation for plan9rc. By default, or if set to traditional, it will behave towards the user almost identically to the original plan9 bootup, but will still set up the rootless environment. If set to [yes] then the user will be prompted interactively through the boot process and given the option to alter any and all plan9.ini variable settings. If set to [no] the user will not be prompted at all and the boot process proceeds in automated fashion according to the environment variables.
+.TP
+.B bootargs
+determines the method for connecting to a root fs. tcp [internet config parameters] or local![path to disk root fs] are the standard values here.
+.TP
+.B factotum
+type of factotum [cpu terminal debug]
+.TP
+.B sysname
+standard sysname definition
+.TP
+.B fs
+standard fs address from plan9.ini, needed for tcp booting
+.TP
+.B auth
+standard auth address for tcp booting
+.TP
+.B venti
+standard venti address variable from plan9.ini
+.TP
+.B fossil
+location of fossil partition on disk
+.TP
+.B cfs
+location of cfs partition on disk
+.TP
+.B ramsetup
+program to set up ramfs for bootscripts, defaults to [ramskel]
+.TP
+.B initscript
+miniature cpurc equivalent script for the ramroot namespaces, defaults to [initskel]
+.TP
+.B startventi
+set to yes to start the venti server [yes]. This will be automatically set to yes if a venti variable is found beginning with #S which implies venti should be started from the local disk.
+.TP
+.B getrootfs
+this is a derivative variable from bootargs, determined from bootparse or set by user during interactive [tcp local]
+.TP
+.B namespace
+namespace for starting initscript, defaults to [namespace]
+.TP
+.B rootstart
+whether or not to start cpurc or termrc scripts from mounted root [cpu terminal]
+.TP
+.B staylocal
+whether to stay within the namespace of the plan9rc script on the console, set "no" to drop back to only kernel devices [yes]
+.TP
+.B afterfact
+command to execute after starting factotum (happens before everything else), not used by default
+.TP
+.B afterroot
+command to execute after mounting rootfs but before initscript or cpu or termrc, not used by default
+.SS Initskel and ramskel variables
+Variables for the other two scripts used by rootless bootup are also described here. Their meaning and default values are as follows.
+.TP
+.BR tgzfs
+name of optional .tgz to load into the ramdisk. I provide a recommended tools.tgz but this value is not set by default. This value is used by ramskel. The rest are all for initskel.
+.TP
+.B binddevs
+by default initskel binds the devices ( f t m v L P u U '$' Σ κ ). Set this to no to disable this.
+.TP
+.B hostfactotum
+by default the ramroot namespace makes use of the system wide factotum. Set this to no to enable running a private factotum for this namespace. You will be prompted for the values to set for the factotum key.
+.TP
+.B netsvc
+by default initskel will issue an ipconfig command if internet service has not already been started. Set no to disable this.
+.TP
+.B hostcsnds
+by default the factotum in the ramroot environment will use the host system cs and dns for connection information. Set no to disable this.
+.TP
+.B cpusvc
+by default initskel will start a cpu listener and an rx listener. Set no to disable this.
+.TP
+.B cpuport
+this sets the numeric port used for the cpu listener. It is set to [17020] by default to avoid conflict with the host system cpu listener.
+.TP
+.B hubsvc
+by default a hubfs server is started and an rc connected to it. Set no to disable this.
+.TP
+.B unprivileged
+by default the ramroot environment does not provide auth services. Set no to start a keyfs and authsrv using 9fat/adm.
 .SH FILES
 .TF /boot/plan9rc
 .TP

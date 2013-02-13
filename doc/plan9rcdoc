@@ -25,9 +25,10 @@ options for ramskel and initksel can also be set in plan9.ini
 
 tgzfs= specifies a compressed fs to retrive from 9fat for extra files. set to tools.tgz to use the provided example
 binddevs=no turns off binding off default kernel devices
-setfactotum=no turns off putting a default password into bootes factotum
+hostfactotum=no turns off putting a default password into bootes factotum
 netsvc=no turns off ipconfig
-hubcpu=no turns off hubfs and cpu listener
+cpusvc=no turns off cpu and rx service
+hubsvc=no turns off hubfs
 cpuport=number of port for cpu to listen on
 hostcsdns=no starts a cs and dns server if available in the rootless service namespace
 unprivileged=no starts a keyfs and auth server if available
