@@ -2,7 +2,7 @@
 .SH NAME
 plan9rc, ramskel, initskel \- rootless boot scripts
 .SH SYNOPSIS
-.B plan9rc
+.B plan9rc [file]
 .br
 .B ramskel
 .br
@@ -15,50 +15,62 @@ After the kernel boots, it execs
 which in turn execs
 .BR plan9rc .
 .IR plan9rc (8)
-reads the
+reads file if given (usually it is not) to set up environment variables. It checks the
 .B $service
 environment variable
 .B cpu
 or
 .BR terminal ,
-and then proceeds as an
+to set defaults, then proceeds as an
 .B rc
-script to bring the system up.
+script to bring the system up. It first uses
+.IR paqfs (4)
+to mount /boot/bootpaq behind both /bin and /boot to access additional programs.
 .PP
+plan9rc makes use of two additional scripts by default, ramskel and initskel. ramskel starts a 
+.IR ramfs (4)
+and loads in the skel.tar stored in the bootpaq, and optionally loads an additional user-specified .tgz from 9frat to the ramfs also.
+A default tools.tgz is provided by the author and recommended as a good default set of additional programs to have available.
+.PP
+Initskel is comparable to a cpurc script which sets up services for the ramrooted environment. It also has interactive and non-interactive modes which follow the same environment variable. It's default actions are to bind standard devices, begin internet service if it was not already, and start hubfs and rx and cpu and exportfs listeners with
+.IR listen1 (8)
+. The cpu and exportfs listener are started on non-standard ports to avoid conflicting with the main system's cpurc. The initskel also has non-default options for starting its own cs and dns and keyfs and authsrv if desired.
 .SH Startup Procedures
 The script operates according to the variables found in the environment,
 usually those provided by
 .IR plan9.ini (8)
-It proceeds in the order of 
+It executes fuctions in the order of 
 .TP 8
-.BR factotum
-is started in either cpu or terminal mode according to the user's choice.
+.BR dofactotum
+starts
+.IR factotum (4)
+in either cpu or terminal mode according to the user's choice.
 .TP
-.B USB boot check
+.B dotryusb
 finds out if the system is booting to a usb volume and starts
 .IR partfs (8)
 if so
 .TP
-.B ramfs setup
+.B doramsetup
 is done from /boot/skel.tar and may also make use of 9fat/tools.tgz
 .TP 
-.B system environment check
+.B dochecksys
 is made to verify that a user/hostowner and system name are in place
 .TP
-.B venti startup
+.B dostartventi
 will begin a 
 .IR venti (8)
 server if specified by the venti environment variable.
 .TP
-.B connect to a root fs
+.B dogetrootfs
 will either begin a disk fileserver or dial a tcp root fileserver
 .TP
-.B setup a rootless control environment
+.B doinistscript
 runs the initskel script to create a self-sufficient environment to
 .IR cpu (1)
 into for service and administrative access to the layer below the root filesystem.
 .TP
-.B launch root environment
+.B dorootstart
 will begin either the
 .IR cpurc (8)
 or
@@ -67,18 +79,22 @@ from the rootfs. These scripts are launched using
 .IR newns (8)
 to create a normal user environment independent of the namespace of plan9rc.
 .TP
-.B return to the early kernel namespace or stay in the ram/paq root namespace
-allows the user to retain access if desired to the programs in the bootpaq and/or tools.tgz.
+.B staylocal
+allows the user to retain access if desired to the programs in the bootpaq and/or tools.tgz, or choose no to drop down to kernel-device only namespace.
 .SH VARIABLES
 The plan9rc script makes use of standard variables from
 .IR plan9.ini (8)
 and also new variables. Both types of variables, and their default behaviors, are listed.
 .TP 8
 .BR interactive
-determines the mode of operation for plan9rc. By default, or if set to traditional, it will behave towards the user almost identically to the original plan9 bootup, but will still set up the rootless environment. If set to [yes] then the user will be prompted interactively through the boot process and given the option to alter any and all plan9.ini variable settings. If set to [no] the user will not be prompted at all and the boot process proceeds in automated fashion according to the environment variables.
+determines the mode of operation for plan9rc. By default, or if set to "traditional", it will behave towards the user almost identically to the original plan9 bootup, but will still set up the rootless environment. If set to "yes" then the user will be prompted interactively through the boot process and given the option to alter any and all plan9.ini variable settings. If set to "no" the user will not be prompted at all and the boot process proceeds in automated fashion according to the environment variables.
 .TP
 .B bootargs
 determines the method for connecting to a root fs. tcp [internet config parameters] or local![path to disk root fs] are the standard values here.
+.TP
+.B ipparams
+optional parameter arguments to ipconfig. This is another way of setting these values directly rather than the somewhat convoluted methods (which are still supported) described in 
+.IR boot (8)
 .TP
 .B factotum
 type of factotum [cpu terminal debug]
@@ -108,7 +124,7 @@ program to set up ramfs for bootscripts, defaults to [ramskel]
 miniature cpurc equivalent script for the ramroot namespaces, defaults to [initskel]
 .TP
 .B startventi
-set to yes to start the venti server [yes]. This will be automatically set to yes if a venti variable is found beginning with #S which implies venti should be started from the local disk.
+set to "yes" to start the venti server. This will be automatically set to yes if a venti variable is found beginning with #S which implies venti should be started from the local disk.
 .TP
 .B getrootfs
 this is a derivative variable from bootargs, determined from bootparse or set by user during interactive [tcp local]
@@ -142,7 +158,7 @@ by default the ramroot namespace makes use of the system wide factotum. Set this
 .B netsvc
 by default initskel will issue an ipconfig command if internet service has not already been started. Set no to disable this.
 .TP
-.B hostcsnds
+.B hostcsdns
 by default the factotum in the ramroot environment will use the host system cs and dns for connection information. Set no to disable this.
 .TP
 .B cpusvc
@@ -163,7 +179,7 @@ by default the ramroot environment does not provide auth services. Set no to sta
 bootup and namespace launching control script
 .TP
 .B /boot/ramskel
-sets up /boot/skel.tar as a ramfs skeleton along with an option tools.tgz from 9fat
+sets up /boot/skel.tar as a ramfs skeleton along with an optional tools.tgz from 9fat
 .TP
 .B /boot/initskel
 .IR cpurc (8)

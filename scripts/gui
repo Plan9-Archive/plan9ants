@@ -1,0 +1,8 @@
+#!/bin/rc
+# start gui in rootless environment
+
+bind -b '#P' /dev
+bind -b '#m' /dev
+mouse $mouseport
+vga -m vesa -l 1024x768x24
+grio
