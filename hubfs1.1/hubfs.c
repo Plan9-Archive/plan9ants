@@ -95,12 +95,13 @@ msgsend(Hub *h)
 	Req *r;
 	Msgq *mq;
 	u32int count;
+	int i;
 
 	if(h->qrnum == 0){
 		return;
 	}
 	/* LOOP through all queued 9p read requests for this hub and answer if needed */
-	for(int i = h->qrans; i <= h->qrnum; i++){
+	for(i = h->qrans; i <= h->qrnum; i++){
 
 		if(paranoia == UP){
 			qlock(&h->replk);
@@ -166,6 +167,8 @@ wrsend(Hub *h)
 {
 	Req *r;
 	u32int count;
+	int i;
+	int j;
 
 	if(h->qwnum == 0){
 		return;
@@ -177,7 +180,7 @@ wrsend(Hub *h)
 			if(rfork(RFPROC|RFMEM) == 0){
 				sleep(100);
 				h->killme = UP;
-				for(int i = 0; ((i < 77) && (h->tomatoflag == UP)); i++){
+				for(j = 0; ((j < 77) && (h->tomatoflag == UP)); j++){
 					sleep(7);		/* Give the readers some time to catch up and drop the flag */
 				}
 			} else {
@@ -186,7 +189,7 @@ wrsend(Hub *h)
 		}
 	}
 	/* LOOP through queued 9p write requests for this hub */
-	for(int i = h->qwans; i <= h->qwnum; i++){
+	for(i = h->qwans; i <= h->qwnum; i++){
 		if(h->wstatus[i] != WAIT){
 			if((i == h->qwans) && (i < h->qwnum)){
 				h->qwans++;

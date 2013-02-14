@@ -36,6 +36,7 @@ Shell*
 setupshell(char *name)
 {
 	Shell *s;
+	int i;
 
 	s = (Shell*)malloc(sizeof(Shell));
 	if(s == nil){
@@ -43,7 +44,7 @@ setupshell(char *name)
 	}
 	memset(s, 0, sizeof(Shell));
 	strncat(s->basename, name, SMBUF);
-	for(int i = 1; i < 3; i++){
+	for(i = 1; i < 3; i++){
 		s->fdname[i] = (char*)malloc((strlen(s->basename)+1));
 		if(s->fdname[i] == nil){
 			sysfatal("Hubshell malloc failed!\n");
@@ -179,7 +180,9 @@ touch(char *name)
 void
 closefds(Shell *s)
 {
-	for(int i = 0; i < 3; i++){
+	int i;
+
+	for(i = 0; i < 3; i++){
 		close(s->fd[i]);
 	}
 }
@@ -193,6 +196,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 	char *fi[3];
 	memset(tmpstr, 0, SMBUF);
 	memset(tmpname, 0, SMBUF);
+	int i;
 
 	if(strncmp(buf, "detach", 6) == 0){
 		fprint(2, "hubshell detaching\n");
@@ -211,7 +215,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		}
 		strncat(tmpname, buf + 7, strcspn(buf + 7, "\n"));
 		fprint(2, "creating new shell %s %s on remote host\n", srvname, tmpname);
-		for(int i = 0; i < 3; i++){
+		for(i = 0; i < 3; i++){
 			snprint(tmpstr, SMBUF, "/n/%s/%s%d", srvname, tmpname, i);
 			if(touch(tmpstr) !=0){
 				fprint(2, "cant create new hubs to remote to!\nio: ");
