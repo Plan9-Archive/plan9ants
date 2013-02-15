@@ -1,6 +1,5 @@
 #!/bin/rc
 # DANGER! This script obliterates fossils and resets them to a different score
-
 # fosreset rootscore [fossil] [venti]
 
 rfork e

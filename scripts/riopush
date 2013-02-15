@@ -1,6 +1,6 @@
 #!/bin/rc
-
-#riopush TARGETPID
+# "pushes" a running rio onto a window on another window system. mostly just a trick.
+# riopush TARGETPID
 
 rfork e
 local = `{ns |grep wsys |grep rio |sed 's/#s/\/srv/g' |tr -d ''''}

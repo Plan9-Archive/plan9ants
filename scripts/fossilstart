@@ -1,5 +1,5 @@
-#!/boot/rc
-#start standard fossil setup
+#!/bin/rc
+# start standard fossil setup
 # fossilstart PARTITION [name]
 
 rfork e

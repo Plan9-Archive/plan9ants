@@ -1,5 +1,6 @@
 #!/bin/rc
-#modiifies namespace of running rio
+# modiifies namespace of running rio
+# riobind [standard mount/bind operation]
 
 topgrio =`{ps |grep rio |sed 1q}
 echo ''$*'' >/proc/$topgrio(2)^/ns

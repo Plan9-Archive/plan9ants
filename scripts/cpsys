@@ -1,7 +1,6 @@
 #!/bin/rc
-
-#copy one system to another
-#cpsys SOURCE DEST
+# copy one system's fossil to another
+# cpsys SOURCE DEST
 
 rfork e
 source=$1
@@ -12,7 +11,7 @@ if(~ $2 ''){
 	exit usage
 }
 
+rx $dest fossilize
 resetargs=`{rx $source fossilize}
 echo rx $dest fosreset $resetargs
 rx $dest fosreset $resetargs
-rx $dest fossilize

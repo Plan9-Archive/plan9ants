@@ -1,5 +1,6 @@
 #!/bin/rc
 # save current window and console devices for later attachment
+# savedevs [name]
 
 rfork e
 srvname=$pid

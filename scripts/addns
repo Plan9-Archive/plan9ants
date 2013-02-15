@@ -1,5 +1,7 @@
 #!/bin/rc
-#binds the namespace of one process on top of another
+# binds the namespace of one process on top of another
+# requires writable /proc/ns mod
+# addns MODELpid TARGETpid
 
 rfork e
 ifs='

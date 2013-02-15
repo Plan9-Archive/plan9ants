@@ -1,10 +1,8 @@
 #!/bin/rc
 # uses a pre-existing wrarena command at /n/9fat/wrcmd to backup a venti
-
 # the expected command looks about like this:
 # wrarena -h tcp!192.168.1.123!17034 -o 537665536 /dev/sdC0/arenas 0x12224578
-
-#ventiprog [ventilist]
+# ventiprog [ventilist]
 
 rfork e
 if(! test -e /n/9fat/wrcmd)

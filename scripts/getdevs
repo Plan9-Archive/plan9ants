@@ -1,6 +1,6 @@
 #!/bin/rc
 # retrieve devices to re-attach to window system
-# getdevs name
+# getdevs [name]
 
 if(~ $1 ''){
 	echo need a srvname with saved devices

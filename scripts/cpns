@@ -1,7 +1,7 @@
 #!/bin/rc
-
-#cpns copies namespace from process 1 to process 2
-#this script requires the writable /proc/ns mod found in contrib/mycroftiv/writeprocns
+# cpns copies namespace from process 1 to process 2
+# this script requires the writable /proc/ns mod found in contrib/mycroftiv/writeprocns
+# cpns MODELpid TARGETpid
 
 rfork e
 only=()

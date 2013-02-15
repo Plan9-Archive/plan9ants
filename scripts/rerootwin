@@ -1,5 +1,5 @@
 #!/boot/rc
-
+# change your current root and stay attached to window system and devices
 # rerootwin targetsrv [ authagent ]
 
 if(test -e /lib/namespace.saveterm)

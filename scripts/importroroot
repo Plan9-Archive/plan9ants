@@ -1,4 +1,5 @@
 #!/bin/rc
+# import ns of cpu server without assuming write permission
 
 if (! ~ $1 ?*){
 	echo usage: importroroot TARGETSYSTEM
