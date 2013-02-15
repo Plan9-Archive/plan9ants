@@ -1,12 +1,12 @@
 #!/bin/rc
 # wrapper script for hubfs and hubshell - starts both servers and clients
+# hub [srvname] [shellname]
 
 rfork
 while (~ $1 -*){
 	switch($1){
 	case -b
 		background = yes
-#		echo initial rc will be backgrounded
 		shift
 	case *
 		echo bad flag $1
@@ -26,7 +26,7 @@ if (test -e /n/$srvname/$attach'0'){
 #	echo attaching hubshell to $srvname/$attach hubgroup
 	hubshell /n/$srvname/$attach
 	echo hubshell ended
-	exit
+	exit ''
 }
 
 if (test -e /n/$srvname/io0){
@@ -46,7 +46,7 @@ if (test -e /n/$srvname/io0){
 		hubshell /n/$srvname/$attach
 		echo hubshell ended
 	}
-	exit
+	exit ''
 }
 
 if (! test -e /srv/$srvname){
@@ -77,4 +77,4 @@ if(! ~ $background yes){
 	hubshell /n/$srvname/$attach
 	echo hubshell ended
 }
-exit
+exit ''

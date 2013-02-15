@@ -6,7 +6,7 @@ if(! test -e /srv/sources){
 }
 mount -n /srv/sources /n/sources
 bind -a /n/sources/plan9 /
-bind -b /$objtype/bin /bin
+bind -b /$cputype/bin /bin
 bind -b /rc/bin /bin
 bind -b /n/sources/plan9/lib/font /lib/font
 bind -a /n/sources/plan9/sys /sys

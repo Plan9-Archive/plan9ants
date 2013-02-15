@@ -1,4 +1,5 @@
 #!/bin/rc
+# import ns of cpu server and bind its resources
 
 if (! ~ $1 ?*){
 	echo usage: importwrroot TARGETSYSTEM
@@ -7,7 +8,7 @@ if (! ~ $1 ?*){
 
 import -c $1 / /n/$1
 bind -a /n/$1/ /
-bind -b /$objtype/bin /bin
+bind -b /$cputype/bin /bin
 bind -b /rc/bin /bin
 bind -b /n/$1/sys /sys
 bind -a /n/$1/srv /srv
@@ -15,5 +16,6 @@ bind -b /n/$1/lib /lib
 bind -bc /n/$1/usr /usr
 bind -bc /n/$1/$home $home
 bind -bc /n/$1/$home/tmp /tmp
-bind -bc /n/$1/$home/bin/$objtype /bin
+bind -bc /n/$1/$home/bin/$cputype /bin
 bind -bc /n/$1/$home/bin/rc /bin
+exit ''

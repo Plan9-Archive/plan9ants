@@ -1,4 +1,5 @@
 #!/bin/rc
+# import ns of cpu server without assuming write permission
 
 if (! ~ $1 ?*){
 	echo usage: importroroot TARGETSYSTEM
@@ -7,12 +8,13 @@ if (! ~ $1 ?*){
 
 import $1 / /n/$1
 bind -a /n/$1/ /
-bind -b /n/$1/$objtype/bin /bin
+bind -b /n/$1/$cputype/bin /bin
 bind -b /n/$1/rc/bin /bin
 bind -b /n/$1/lib /lib
 bind -b /n/$1/sys /sys
 bind -a /n/$1/usr /usr
 bind -a /n/$1/$home $home
 bind -a /n/$1/$home/tmp /tmp
-bind -a /n/$1/$home/bin/$objtype /bin
+bind -a /n/$1/$home/bin/$cputype /bin
 bind -a /n/$1/$home/bin/rc /bin
+exit ''

@@ -1,5 +1,5 @@
 #!/boot/rc
-
+# change your current root and stay attached to window system and devices
 # rerootwin targetsrv [ authagent ]
 
 if(test -e /lib/namespace.saveterm)
@@ -77,7 +77,8 @@ srvfs -p 0600 oldwsys.$pid /mnt/wsys
 
 if(test -e /bin/newns){
 	newns -n $nsfile
-	exit
+	exit ''
 }
 
 auth/newns -n $nsfile
+exit ''

@@ -47,7 +47,7 @@ if(! ~ $usercheck bootes){
 	mkdir /root/usr/$usercheck/tmp
 	mkdir /root/usr/$usercheck/bin
 	mkdir /root/usr/$usercheck/bin/rc
-	mkdir /root/usr/$usercheck/bin/$objtype
+	mkdir /root/usr/$usercheck/bin/$cputype
 	cp /usr/bootes/lib/profile /root/usr/$usercheck/lib/profile
 }
 
