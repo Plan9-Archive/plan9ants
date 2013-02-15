@@ -44,3 +44,5 @@ if(test -e /bin/flfmt)
 	flfmt -y -v $score $fossil
 if not
 	fossil/flfmt -y -v $score $fossil
+
+exit ''

@@ -85,4 +85,4 @@ if(~ $testonly yes){
 # fire off the assembled list of namespace ops and hope the world doesnt explode
 
 . /tmp/chnscom
-
+exit ''

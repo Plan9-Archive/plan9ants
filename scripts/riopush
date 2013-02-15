@@ -18,3 +18,4 @@ bind /n/oldwin/mouse /dev/mouse
 
 echo $localmount >/tmp/riocontrolwin
 grio
+exit ''

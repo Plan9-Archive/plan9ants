@@ -26,3 +26,4 @@ echo $oldcmd >>/n/9fat/rootscor
 echo $newcmd >/n/9fat/wrcmd
 echo $oldcmd
 echo $newcmd
+exit ''

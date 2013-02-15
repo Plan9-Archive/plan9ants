@@ -76,3 +76,4 @@ if(~ $testonly yes){
 }
 . /tmp/chnscom
 
+exit ''

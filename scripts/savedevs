@@ -10,3 +10,4 @@ if(! ~ $1 '')
 srvfs -p 0600 oldterm.$srvname /mnt/term
 srvfs -p 0600 oldwsys.$srvname /mnt/wsys
 echo devices saved at oldterm.$srvname oldwsys.$srvname
+exit ''

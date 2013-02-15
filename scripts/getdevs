@@ -19,3 +19,4 @@ bind -a /n/oldterm/dev /dev
 bind -b /n/oldwsys /dev
 bind -bc /n/oldterm /mnt/term
 bind -bc /n/oldwsys /mnt/wsys
+exit ''

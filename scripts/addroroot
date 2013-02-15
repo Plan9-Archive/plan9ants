@@ -14,3 +14,4 @@ bind -b /n/$1/$objtype/bin /bin
 bind -b /n/$1/rc/bin /bin
 bind -b /n/$1/lib /lib
 bind -b /n/$1/sys /sys
+exit ''

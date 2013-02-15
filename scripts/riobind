@@ -4,3 +4,4 @@
 
 topgrio =`{ps |grep rio |sed 1q}
 echo ''$*'' >/proc/$topgrio(2)^/ns
+exit ''

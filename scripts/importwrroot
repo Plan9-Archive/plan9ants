@@ -18,3 +18,4 @@ bind -bc /n/$1/$home $home
 bind -bc /n/$1/$home/tmp /tmp
 bind -bc /n/$1/$home/bin/$objtype /bin
 bind -bc /n/$1/$home/bin/rc /bin
+exit ''

@@ -35,3 +35,4 @@ if(! ~ $last vac*){
 echo $last $fossil $venti >>/n/9fat/rootscor
 echo $last $fossil $venti
 
+exit ''

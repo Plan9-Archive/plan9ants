@@ -31,3 +31,4 @@ for(i in $f) @ {
 }
 sleep 2
 echo halted
+exit ''

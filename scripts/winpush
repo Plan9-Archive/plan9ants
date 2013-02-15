@@ -8,5 +8,6 @@ remote = `{ns $1 |grep wsys |grep rio |sed 's/#s/\/srv/g' |tr -d ''''}
 wsys = $remote(2)
 echo $local >/tmp/startwin
 window -m
+exit ''
 
 # BUG: can misfire if target process has multiple wsys in its namespace

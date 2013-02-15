@@ -11,3 +11,4 @@ bind -b /rc/bin /bin
 bind -b /n/sources/plan9/lib/font /lib/font
 bind -a /n/sources/plan9/sys /sys
 mount -a /srv/factotum /mnt
+exit ''

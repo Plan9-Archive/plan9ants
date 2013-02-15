@@ -198,7 +198,7 @@ UNIX pipes,
 and
 .IR aux/consolefs (4)
 .SH BUGS
-In the standard mode of use for interactive rc shells, the synchronization between stdout and stderr is not maintained. The symptom is prompts appearing in seemingly the wrong place.
+In the standard mode of use for interactive rc shells, the synchronization between stdout and stderr is not maintained. The symptom is prompts appearing in seemingly the wrong place. To fix this, enter a command like %err 300 to set 300 milliseconds of delay before data from stderr is printed.
 .PP
 Because hubfs maintains static buffers and always allows clients to write to avoid loss of interactivity, slow readers may experience data loss while reading output larger than the size of the static buffer if the output was also transmitted fast enough to "wrap around" the location of the reader in the data buffer. The purpose of "paranoid" mode is to restrict the speed of writers if this is a concern.
 .PP

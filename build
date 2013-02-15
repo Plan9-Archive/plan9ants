@@ -40,7 +40,7 @@ if(~ $1 clean){
 	cd $builddir
 	rm root/bin/* >/dev/null >[2=1]
 	rm bootdir.extras/bootpaq >/dev/null >[2=1]
-	exit
+	exit ''
 }
 
 if(~ $1 patched){
@@ -65,7 +65,7 @@ if(~ $1 patched){
 	strip bootdir.extras/factotum
 	rm -rf /tmp/rc
 	rm -rf /tmp/factotum
-	exit
+	exit ''
 }	
 
 if(~ $1 extras){
@@ -84,7 +84,7 @@ if(~ $1 extras){
 	strip bootdir.extras/grio
 	strip bootdir.extras/hubfs
 	strip bootdir.extras/hubshell
-	exit
+	exit ''
 }
 
 if(~ $1 bootpaq){
@@ -102,7 +102,7 @@ if(~ $1 bootpaq){
 	strip root/bin/*
 	mkpaqfs -b 8192 -o bootdir.extras/bootpaq root/bin
 	sha1sum bootdir.extras/bootpaq >>build.hashes
-	exit
+	exit ''
 }
 
 if(~ $1 tools){
@@ -119,7 +119,7 @@ if(~ $1 tools){
 	rm /tmp/tools.tar
 	cd $builddir
 	sha1sum tools.tgz >>build.hashes
-	exit
+	exit ''
 }
 
 echo building kernel

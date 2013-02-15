@@ -47,3 +47,4 @@ if(! test -e /proc/$2){
 subns $saveargs
 addns $saveargs
 
+exit ''

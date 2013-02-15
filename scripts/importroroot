@@ -17,3 +17,4 @@ bind -a /n/$1/$home $home
 bind -a /n/$1/$home/tmp /tmp
 bind -a /n/$1/$home/bin/$objtype /bin
 bind -a /n/$1/$home/bin/rc /bin
+exit ''
