@@ -1,0 +1,42 @@
+## INSTALL
+
+9fat:
+cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
+cp 9pcram.gz /n/9fat/9pcram.gz
+cp tools.tgz /n/9fat/tools.tgz
+cp doc/PLAN9.INI /n/9fat/PLAN9.INI
+
+## documentation
+
+window -m page doc/ants.ps
+nroff -man doc/man.plan9rc
+nroff -man doc/man.rerootwin
+nroff -man doc/man.ventiprog
+nroff -man doc/man.cpns
+nroff -man doc/man.addwrroot
+
+## additional customization, building locally, installing tools to main fs are all OPTIONAL
+## customize these files if desired
+
+root/lib/_toolcopy
+root/lib/_mkpaq
+
+## compiling locally
+
+build everything
+
+## install namespace tools to local fs
+
+cd hubfs1.1 && mk install && cd ..
+cd grio && mk install && cd ..
+cp scripts/* /rc/bin
+cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+
+## copy docs
+
+cp doc/man.plan9rc /sys/man/8/plan9rc
+cp doc/man.ventiprog /sys/man/8/ventiprog
+cp doc/man.rerootwin /sys/man/1/rerootwin
+cp doc/man.cpns /sys/man/1/cpns
+cp doc/man.addwrroot /sys/man/1/addwrroot
+

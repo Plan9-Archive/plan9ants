@@ -15,7 +15,9 @@ After the kernel boots, it execs
 which in turn execs
 .BR plan9rc .
 .IR plan9rc (8)
-reads file if given (usually it is not) to set up environment variables. It checks the
+reads 
+.I file 
+if given (usually it is not) to set up environment variables. It checks the
 .B $service
 environment variable
 .B cpu
