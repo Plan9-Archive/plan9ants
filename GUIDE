@@ -15,7 +15,7 @@ nroff -man doc/man.ventiprog
 nroff -man doc/man.cpns
 nroff -man doc/man.addwrroot
 
-## additional customization, building locally, installing tools to main fs are all OPTIONAL
+## customization, building locally, installing tools to main fs are OPTIONAL
 ##
 ## customize these files if desired
 
