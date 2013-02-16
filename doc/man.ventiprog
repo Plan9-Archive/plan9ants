@@ -91,13 +91,13 @@ to begin. The first parameter to -o is calculated by subtracting 8192 from the l
 .SS Fossil replication
 Resetting running fossils to a different score and replicating fossils between systems is done with
 .IR fosreset
-which uses
+, which uses
 .I vacscore
 to flfmt -v the given
 .I partition 
-using the given
+using the
 .I ventiaddr
-If no parameter is provided the environment value of $venti will be used and if a partition is absent
+given. If no parameter is provided the environment value of $venti will be used and if a partition is absent
 .B /dev/sdC0/fossil
 will be used as a default. The script first uses the simplified fossil-only
 .IR foshalt

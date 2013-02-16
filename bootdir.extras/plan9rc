@@ -104,6 +104,8 @@ fn dochecksys{
 	}
 }
 
+##	STARTUP ACTION FUNCTIONS ##
+
 fn doramsetup{
 	switch($ramsetup){
 	case ''
@@ -114,8 +116,6 @@ fn doramsetup{
 		rc -c $ramsetup
 	}
 }
-
-##	STARTUP ACTION FUNCTIONS ##
 
 fn dofactotum{
 	if(~ $interactive yes)
@@ -253,6 +253,11 @@ fn dogetrootfs{
 			bootsrv=/srv/kfs.boot
 			bootpartition=$kfs
 		}
+	case srv
+		if(~ $interactive yes){
+			echo 'enter full path to target srv'
+			bootsrv=`{getans bootsrv $bootsrv}
+		}
 	case ''
 		echo no standard root fs attached
 	}
@@ -338,6 +343,8 @@ if(~ $bootparse(1) tcp*){
 	if(! ~ $bootparse(2) '')
 		ipparams=`{shifter $bootparse}
 }
+if(~ $bootparse(1) srv*)
+	getrootfs=srv
 if(~ $bootparse(1) *fs){
 	if(~ $kfs ''){
 		kfs=`{findpart fs}
@@ -462,6 +469,8 @@ if not if(~ $interactive traditional){
 		getrootfs=local
 	if(~ $bootparse(1) tcp*)
 		getrootfs=tcp
+	if(~ $bootparse(1) srv*)
+		getrootfs=srv
 	if(! ~ $bootparse(2) '')
 		ipparams=`{shifter $bootparse}
 	if(~ $getrootfs tcp){
