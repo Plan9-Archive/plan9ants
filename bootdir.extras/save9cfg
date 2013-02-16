@@ -67,6 +67,8 @@ if(! ~ $fatpath /dev/sdC0/9fat)
 # put last so user will notice it and think about what they want
 echo 'interactive=' $interactive >>/tmp/p9rcconfig
 
+# sed out unwanted spaces and catenate variables from plan9rc and initskel
+
 cat /tmp/p9rcconfig | sed '/.*=$/d' | sed 's/= /=/g' >/tmp/p9cfg
 rm /tmp/p9rcconfig
 if(~ $initscript initskel){

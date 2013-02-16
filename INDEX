@@ -2,7 +2,7 @@ GUIDE TO CONTENTS OF THIS DIRECTORY
 
 9pcram.gz - prebuilt kernel. install in 9fat partition as usual
 tools.tgz - optional support utilities. place in 9fat and set tgzfs=tools.tgz in plan9.ini to use
-INSTALLING README INDEX - intro documentation
+INSTALLING README INDEX GUIDE - intro documentation and help
 build - script to build all components of the namespace toolkit
 build.hashes  - hashes of the most recent kernel, tools.tgz, and bootpaq (compiled into kernel)
 bootdir.extras/ - central point for main rootless boot tools
@@ -18,6 +18,9 @@ bootdir.extras/ - central point for main rootless boot tools
 compiletemp/ - used by the build script to compile things in, after running build the new 9pcram.gz kernel will be found here
 doc/ - documentation for bootup, namespace scripts, fossil/venti tools, plan9.ini/plan9rc/initskel variables
 	ants.ps - please page ants.ps to read the full Giant ANTS paper
+	examples/ - contains saved output of tests and demonstrations
+	modified.manpages/ - modified documentation for boot (8) and proc (3)
+	textdoc/ - older plaintext forms of documentation prior to manpage writing
 	stockplan9.ini - this file is a plan9.ini which works with the stock fossil install of the bell labs .iso and the 9pcram.gz kernel
 patched/ - contains the source code for modifications of standard plan9 programs adapted to the rootless environment
 root/ - used to build the tools.tgz. It contains additional chunks of information used to provide a slightly richer plan 9 environment.

@@ -1,4 +1,6 @@
 #!/bin/rc
+# build script for advanced namespace tools/rootless boot kernel
+# build clean, build patched, build tools, build extras, build bootpaq, build ramfs / build
 
 if(! test -e bootdir.extras){
 	echo this build script MUST be run only from the base rootless directory
