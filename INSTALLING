@@ -1,37 +1,69 @@
-You may either install the prebuilt 9pcram.gz and its optional tools.tgz, or build the kernel (and optional .tgz) locally. The file doc/stockplan9.ini is an example of a plan9.ini file which works with the rootless kernel in a stock plan9 fossil install. (Add the venti= if needed). From a fresh install from the bell labs .iso, just copying 9pcram.gz, tools.tgz, and doc/stockplani.ini to the 9fat (changing the name of stockplan9.ini to plan9.ini and backing up your original plan.ini before) is a complete install of the toolkit. It may also be useful to install hubfs and grio and the scripts and namespace files also to the host system, but this is not required.
+You may either install the prebuilt 9pcram.gz and its optional
+tools.tgz, or build the kernel (and optional .tgz) locally.  The file
+doc/stockplan9.ini is an example of a plan9.ini file which works with
+the rootless kernel in a stock plan9 fossil install.  (Add the venti=
+if needed).  From a fresh install from the bell labs .iso, just
+copying 9pcram.gz, tools.tgz, and doc/stockplani.ini to the 9fat
+(changing the name of stockplan9.ini to plan9.ini and backing up your
+original plan.ini before) is a complete install of the toolkit.  It
+may also be useful to install hubfs and grio and the scripts and
+namespace files also to the host system, but this is not required.
 
-You may also build everything locally. The build script uses binds to work only within the rootless directory and leave all existing system src unmodified. It has the following modes:
+You may also build everything locally.  The build script uses binds to
+work only within the rootless directory and leave all existing system
+src unmodified.  It has the following modes:
 
-build - with no arguments, this builds a 9pcram.gz kernel with the kernel and its compilation files located in compiletemp. 
+build - with no arguments, this builds a 9pcram.gz kernel with the
+kernel and its compilation files located in compiletemp.
 
-build ramfs - this uses a ramfs for the compile and copies only the 9pcram.gz kernel to compiletemp.
+build ramfs - this uses a ramfs for the compile and copies only the
+9pcram.gz kernel to compiletemp.
 
 build bootpaq - builds the bootpaq which is compiled into the kernel
 
-build tools - this creates a tools.tgz using the list of tools in root/lib/_toolcopy
+build tools - this creates a tools.tgz using the list of tools in
+root/lib/_toolcopy
 
-build patched - this compiles the slightly modified versions of rc and factotum adapted to the early namespace
+build patched - this compiles the slightly modified versions of rc and
+factotum adapted to the early namespace
 
-build extras - this compiles hubfs and grio, screen-like hubs for persistent rcs and a modified rio to work in grid namespaces
+build extras - this compiles hubfs and grio, screen-like hubs for
+persistent rcs and a modified rio to work in grid namespaces
 
-build clean - this simply runs mk clean with the necessary binds to clear out the compiletemp folder
+build clean - this simply runs mk clean with the necessary binds to
+clear out the compiletemp folder
 
-build everything - runs build clean build patched build tools build extras build bootpaq build
+build everything - runs build clean build patched build tools build
+extras build bootpaq build
 
-The 9pcram.gz kernel and optional .tgz are placed in the conventional 9fat partition. Conventional plan9.ini variiables are mostly supported, with many new optional additions. The most important are:
+The 9pcram.gz kernel and optional .tgz are placed in the conventional
+9fat partition.  Conventional plan9.ini variiables are mostly
+supported, with many new optional additions.  The most important are:
 
-interactive=
-if not provided, of if set to "traditional" the plan9rc scripts attempts to emulate the traditional bootprompts, while also executing any new options found from plan9.ini. Set interactive=yes to be prompted for all options throughout the boot process. Set interactive=no for automated bootup with no prompting unless an error condition is hit.
+interactive= if not provided, of if set to "traditional" the plan9rc
+scripts attempts to emulate the traditional bootprompts, while also
+executing any new options found from plan9.ini.  Set interactive=yes
+to be prompted for all options throughout the boot process.  Set
+interactive=no for automated bootup with no prompting unless an error
+condition is hit.
 
-factotum=
-rootstart=
-these default to 'cpu' because the 9pcram kernel is compiled with that flag set. This means factotum will start in the same way as a cpu server and the /rc/bin/cpurc from any mounted root will be started. If you wish to produce terminal style behavior, set both of these to "terminal". It is also possible to run cpurc with terminal factotum or vice-versa, if you understand what you are doing and why.
+factotum= rootstart= these default to 'cpu' because the 9pcram kernel
+is compiled with that flag set.  This means factotum will start in the
+same way as a cpu server and the /rc/bin/cpurc from any mounted root
+will be started.  If you wish to produce terminal style behavior, set
+both of these to "terminal".  It is also possible to run cpurc with
+terminal factotum or vice-versa, if you understand what you are doing
+and why.
 
-tgzfs=
-if you wish to load an optional tools.tgz or other named extra set of utilities into the bootup ramdisk, set this tools.tgz (or the name of your toolset.)
+tgzfs= if you wish to load an optional tools.tgz or other named extra
+set of utilities into the bootup ramdisk, set this tools.tgz (or the
+name of your toolset.)
 
-full explanation of all new plan9.ini possibilities and their defaults is found within the doc subdirectory.
+full explanation of all new plan9.ini possibilities and their defaults
+is found within the doc subdirectory.
 
-page doc/ants.ps  ## please do this to read the full Giant ANTS paper also
+page doc/ants.ps ## please do this to read the full Giant ANTS paper
+also
 
-nroff -man doc/plan9rc.man ## the full documentation for plan9rc bootup
+nroff -man doc/plan9rc.man ## the full documentation for plan9rc
+bootup

@@ -92,7 +92,7 @@ and also new variables. Both types of variables, and their default behaviors, ar
 determines the mode of operation for plan9rc. By default, or if set to "traditional", it will behave towards the user almost identically to the original plan9 bootup, but will still set up the rootless environment. If set to "yes" then the user will be prompted interactively through the boot process and given the option to alter any and all plan9.ini variable settings. If set to "no" the user will not be prompted at all and the boot process proceeds in automated fashion according to the environment variables.
 .TP
 .B bootargs
-determines the method for connecting to a root fs. tcp [internet config parameters] or local![path to disk root fs] are the standard values here.
+determines the method for connecting to a root fs. tcp [internet config parameters] or local![path to disk root fs] are the standard values here. The new option srv implies the user will arrange to have a file in /srv suitable for use as a root file system.
 .TP
 .B ipparams
 optional parameter arguments to ipconfig. This is another way of setting these values directly rather than the somewhat convoluted methods (which are still supported) described in 
@@ -128,8 +128,8 @@ miniature cpurc equivalent script for the ramroot namespaces, defaults to [inits
 .B startventi
 set to "yes" to start the venti server. This will be automatically set to yes if a venti variable is found beginning with #S which implies venti should be started from the local disk.
 .TP
-.B getrootfs
-this is a derivative variable from bootargs, determined from bootparse or set by user during interactive [tcp local]
+.B bootsrv
+this is usually a derivative variable determined by the attachment to a root fileserver. If the user chooses "srv" as their boot method plan9rc will use an existing file in /srv for the root. This mode is used mostly if plan9rc is launching a new namespace subsequent to the initial boot up.
 .TP
 .B namespace
 namespace for starting initscript, defaults to [namespace]
