@@ -1,0 +1,86 @@
+#!/bin/rc
+#binds the namespace of one process on top of another
+
+rfork e
+ifs='
+'
+while (~ $1 -*){
+	switch($1){
+	case -o
+		only=$2
+		shift
+		shift
+	case -x
+		xclude=$2
+		shift
+		shift
+	case -t
+		testonly=yes
+		shift
+	case -r
+		riosafe=yes
+		shift
+	case *
+		echo bad flag $1
+		shift
+	}
+}
+
+if(~ $2 ''){
+	echo usage: addns MODELpid TARGETpid
+	exit usage
+	}
+
+if(! test -e /proc/$1){
+	echo process $1 does not exist!
+	exit no.proc
+}
+if(! test -e /proc/$2){
+	echo process $2 does not exist!
+	exit no.proc
+}
+if(test -e /tmp/chnsuniq)
+	rm /tmp/chnsuniq
+
+# find lines in model not contained in target
+
+orig=`{cat /proc/$1/ns}
+for (i in $orig){
+	search=''^$i^''
+	match=`{cat /proc/$2/ns |grep -e $search}
+	if(~ $match ''){
+		echo $i >> /tmp/chnsuniq
+	}
+}
+if(! test -e /tmp/chnsuniq){
+	echo no binds in $1 not in $2 to add
+	exit no.binds
+}
+
+# convet the list of binds in model not in target into a set of namespace commands
+
+sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/  / /g' |sed '/\#\|\/data/d' |sed '/\#D\/ssl/d' >/tmp/chnscom
+
+if(~ $riosafe yes){
+	sed '/\/mnt\/wsys/d' /tmp/chnscom | sed '/\/mnt\/term/d' |sed '/\/dev\/cons/d' |sed '/\/rio/d' >/tmp/chnssafe
+	mv /tmp/chnssafe /tmp/chnscom
+}
+if (! ~ $xclude ''){
+	grep -v $xclude /tmp/chnscom >/tmp/chnssafe
+	mv /tmp/chnssafe /tmp/chnscom
+}
+if (! ~ $only ''){
+	grep $only /tmp/chnscom >/tmp/chnssafe
+	mv /tmp/chnssafe /tmp/chnscom
+}
+if (test -e /tmp/chnssafe)
+	rm /tmp/chnssafe
+if(~ $testonly yes){
+	cat /tmp/chnscom
+	exit
+}
+
+# fire off the assembled list of namespace ops and hope the world doesnt explode
+
+. /tmp/chnscom
+
