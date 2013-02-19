@@ -4,7 +4,12 @@
 # build ramfs / build
 
 if(! test -e bootdir.extras){
-	echo this build script MUST be run only from the base rootless directory
+	echo 'This build script must be run only from the base rootless directory'
+	exit wrong.dir
+}
+
+if(~ `{pwd} /tmp*){
+	echo 'The /tmp directory is used by the build process - cannot build here'
 	exit wrong.dir
 }
 
@@ -21,12 +26,14 @@ bind -bc $builddir/compiletemp /sys/src/9/pc
 
 if(~ $1 docs){
 	echo building docs
+	cp hubfs1.1/hubfs.man doc/man.hubfs
 	cd doc
 	cp man.cpns $builddir/sys/man/1/cpns
 	cp man.rerootwin $builddir/sys/man/1/rerootwin
 	cp man.addwrroot $builddir/sys/man/1/addwrroot
 	cp man.ventiprog $builddir/sys/man/8/ventiprog
 	cp man.plan9rc $builddir/sys/man/8/plan9rc
+	cp man.hubfs $builddir/sys/man/4/hubfs
 	cp modified.manpages/proc.man $builddir/sys/man/3/proc
 	cp modified.manpages/boot.man $builddir/sys/man/8/boot
 	troff -ms antspaper.ms >ants.ps

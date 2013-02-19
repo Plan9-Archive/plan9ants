@@ -3,10 +3,11 @@ tools.tgz, or build the kernel (and optional .tgz) locally.  The file
 doc/PLAN9.INI is an example of a plan9.ini file which works with the
 rootless kernel in a stock plan9 fossil install.  (Add the venti= if
 needed).  From a fresh install from the bell labs .iso, just copying
-9pcram.gz, tools.tgz, and doc/PLAN9.INI to the 9fat
- is a complete install of the toolkit.  It
-may also be useful to install hubfs and grio and the scripts and
-namespace files also to the host system, but this is not required.
+9pcram.gz, tools.tgz, and doc/PLAN9.INI to the 9fat is a complete
+install of the toolkit.  Make any adjustsments for your specific
+hardware as needed to the PLAN9.INI file.  It may also be useful to
+install hubfs and grio and the scripts and namespace files also to the
+host system, but this is not required.
 
 You may also build everything locally.  The build script uses binds to
 work only within the rootless directory and leave all existing system

@@ -500,12 +500,58 @@ main(int argc, char **argv)
 
 /* basic 9pfile implementation taken from /sys/src/lib9p/ramfs.c */
 
-/* A note on paranoid mode and writer/reader synchronization. The default behavior is "broadcast like" rather than pipelike, because writers are never blocked by default. This is because in a network situation with remote readers, blocking writes to wait for remote client reads to complete produces an unpleasant user experience where the remote latency limits the local environment. As a consequence, by default it is up to the writer to a file to limit the quantity and speed of data writen to what clients are able receive. The normal intended mode of operation is for shells, and in this case data is both 'bursty' and usually fairly small. */
+/* A note on paranoid mode and writer/reader synchronization.  The
+default behavior is "broadcast like" rather than pipelike, because
+writers are never blocked by default.  This is because in a network
+situation with remote readers, blocking writes to wait for remote
+client reads to complete produces an unpleasant user experience where
+the remote latency limits the local environment.  As a consequence, by
+default it is up to the writer to a file to limit the quantity and
+speed of data writen to what clients are able receive.  The normal
+intended mode of operation is for shells, and in this case data is
+both 'bursty' and usually fairly small.  */
 
-/* Paranoid mode is intended as "safe mode" and changes this first-come first served behavior. In paranoid mode, the readers and writers attempt to synchronize. The hub ketchup and tomatoflag variables are used to monitor if readers have 'fallen behind' the current data pointer, and if so, the writer is qlocked and sleeps while we fork off a new flow of control. We need to do more than just answer the queued reads - because we are inside the 9p library (we are the functions called by its srv pointer) we want the 9p library to actually answer the incoming reads so we have read messages queued to answer. Just clearing out the read message queue isn't enough to prioritize readers - we need to fork off so the controlling 9p library has a chance to answer NEW reads. By forking and sleeping the writer, we allow the os to answer a new read request, which will unlock the writer, which then needs to die at the end of its function because we are a single-threaded 9p server and need to maintain one master flow of control. */
+/* Paranoid mode is intended as "safe mode" and changes this
+first-come first served behavior.  In paranoid mode, the readers and
+writers attempt to synchronize.  The hub ketchup and tomatoflag
+variables are used to monitor if readers have 'fallen behind' the
+current data pointer, and if so, the writer is qlocked and sleeps
+while we fork off a new flow of control.  We need to do more than just
+answer the queued reads - because we are inside the 9p library (we are
+the functions called by its srv pointer) we want the 9p library to
+actually answer the incoming reads so we have read messages queued to
+answer.  Just clearing out the read message queue isn't enough to
+prioritize readers - we need to fork off so the controlling 9p library
+has a chance to answer NEW reads.  By forking and sleeping the writer,
+we allow the os to answer a new read request, which will unlock the
+writer, which then needs to die at the end of its function because we
+are a single-threaded 9p server and need to maintain one master flow
+of control.  */
 
-/* The paranoid/safe mode code is still limited in its logic for handling multiple readers. The ketchup and tomatoflag are per hub, and a hub can have multiple clients. It is intentional that these multiple clients will 'race for the flag' and the writer will stop waiting when one reader catches up enough to set ketchup and tomato flag. A more comprehensive solution would require adding new structure to the client mq and a ref-counting implementation for attaches to the hub so the hub could check the status of each client individually. There are additional problems with this because clients are free to 'stop reading' at any time and thus a single client unattaching will end up forcing the hub into 'as slow as possible' mode. */
+/* The paranoid/safe mode code is still limited in its logic for
+handling multiple readers.  The ketchup and tomatoflag are per hub,
+and a hub can have multiple clients.  It is intentional that these
+multiple clients will 'race for the flag' and the writer will stop
+waiting when one reader catches up enough to set ketchup and tomato
+flag.  A more comprehensive solution would require adding new
+structure to the client mq and a ref-counting implementation for
+attaches to the hub so the hub could check the status of each client
+individually.  There are additional problems with this because clients
+are free to 'stop reading' at any time and thus a single client
+unattaching will end up forcing the hub into 'as slow as possible'
+mode.  */
 
-/* To avoid completely freezing a hub, there is still a default "go ahead" time even when clients have not caught up. This time is difficult to assess literally because it is a repeated sleep loop so the os may perform many activities during the sleep. Extending the length of this delay time increases the safety guarantee for lagging clients, but also increases the potential for lag and for molasses-like shells after remote clients disconnect. */
+/* To avoid completely freezing a hub, there is still a default "go
+ahead" time even when clients have not caught up.  This time is
+difficult to assess literally because it is a repeated sleep loop so
+the os may perform many activities during the sleep.  Extending the
+length of this delay time increases the safety guarantee for lagging
+clients, but also increases the potential for lag and for
+molasses-like shells after remote clients disconnect.  */
 
-/* In general for the standard use of interactive shells paranoid mode is unnecessary and all of this can and should be ignored. For data critical applications aiming for high speed constant throughput, paranoid mode can and should be used, but additional data verification, such as a cryptographic hashing protocol, would still be recommended. */
+/* In general for the standard use of interactive shells paranoid mode
+is unnecessary and all of this can and should be ignored.  For data
+critical applications aiming for high speed constant throughput,
+paranoid mode can and should be used, but additional data
+verification, such as a cryptographic hashing protocol, would still be
+recommended.  */
