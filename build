@@ -25,8 +25,8 @@ if(~ $1 docs){
 	cp man.cpns $builddir/sys/man/1/cpns
 	cp man.rerootwin $builddir/sys/man/1/rerootwin
 	cp man.addwrroot $builddir/sys/man/1/addwrroot
-	cp man.ventiprog $builddir/sys/man/ventiprog
-	cp man.plan9rc $builddir/sys/man/plan9rc
+	cp man.ventiprog $builddir/sys/man/8/ventiprog
+	cp man.plan9rc $builddir/sys/man/8/plan9rc
 	cp modified.manpages/proc.man $builddir/sys/man/3/proc
 	cp modified.manpages/boot.man $builddir/sys/man/8/boot
 	troff -ms antspaper.ms >ants.ps
