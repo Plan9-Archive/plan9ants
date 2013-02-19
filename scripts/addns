@@ -57,7 +57,7 @@ if(! test -e /tmp/chnsuniq){
 	exit no.binds
 }
 
-# convet the list of binds in model not in target into a set of namespace commands
+# convert the list of binds in model not in target into a set of namespace commands
 
 sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/  / /g' |sed '/\#\|\/data/d' |sed '/\#D\/ssl/d' >/tmp/chnscom
 

@@ -1,34 +1,51 @@
-plan9rc is the script run after boot(8). It supports several new options in plan9.ini. "interactive=yes" changes the boot process to an interactive question-and-response format where all variables can be changed from their defaults and the possibility of dropping to a shell is available. "interactive=no" turns off all prompts. The default behavior is equivalent to "interactive=traditional". "ramsetup=" provides the name of a command to set up an initial skeleton filesystem on a ramdisk. The default is the provided ramskel script compiled into the kernel /boot/bootpaq, which expands /boot/skel.tar. If "tgzfs=tools.tgz" then an additional root filesystem of this name will be expanded from the 9fat partition. The "fatpath=" variable is used to specify the location of the 9fat, if not /dev/sdC0/9fat. "factotum=" specifies either cpu, terminal, or user parameters to start factotum. "rootstart=" specifies either cpu, terminal, other or none parameters as the final system startup script. These default to the setting in /env/service.
+plan9rc is the script run after boot(8).  It supports several new
+options in plan9.ini.  "interactive=yes" changes the boot process to
+an interactive question-and-response format where all variables can be
+changed from their defaults and the possibility of dropping to a shell
+is available.  "interactive=no" turns off all prompts.  The default
+behavior is equivalent to "interactive=traditional".  "ramsetup="
+provides the name of a command to set up an initial skeleton
+filesystem on a ramdisk.  The default is the provided ramskel script
+compiled into the kernel /boot/bootpaq, which expands /boot/skel.tar.
+If "tgzfs=tools.tgz" then an additional root filesystem of this name
+will be expanded from the 9fat partition.  The "fatpath=" variable is
+used to specify the location of the 9fat, if not /dev/sdC0/9fat.
+"factotum=" specifies either cpu, terminal, or user parameters to
+start factotum.  "rootstart=" specifies either cpu, terminal, other or
+none parameters as the final system startup script.  These default to
+the setting in /env/service.
 
-There are tools provided to use the interactive startup as autoconfiguration. run savecfg to store a copy of the curent config in /tmp/p9cfg which can be pasted into plan9.ini as a menuitem.
+There are tools provided to use the interactive startup as
+autoconfiguration.  run savecfg to store a copy of the curent config
+in /tmp/p9cfg which can be pasted into plan9.ini as a menuitem.
 
-full list of variables:
-bootparse is a copy of bootargs as described by boot(8) and plan9.ini(8), not set as separate var
-factotum - type of factotum [cpu terminal debug]
-sysname - standard sysname from plan9.ini
-ramsetup - program to set up ramfs for bootscripts, defaults to ramskel
-startventi - set to yes to start the venti server [yes]
-getrootfs - determined from bootparse or set by user during interactive [tcp local]
-fs - standard fs address from plan9.ini, needed for tcp booting
-auth - standard auth address for tcp booting
-venti - standard venti address variable from plan9.ini
-fossil - standard fossil address from plan9.ini not parsed fully correctly in general
-cfs - standard cfs address from plan9.ini
-initscript - script forked off into namespace provided initskel begins cpu server on 17020
-namespace - namespace for starting initscript
-rootstart - whether or not to start cpurc or termrc scripts from mounted root [cpu terminal]
-staylocal - whether to stay within the namespace of the plan9rc script on the console, only option is [yes]
-afterfact - command to execute after starting factotum (happens before everything else)
-afterroot - command to execute after mounting rootfs but before initscript or cpu or termrc
+full list of variables: bootparse is a copy of bootargs as described
+by boot(8) and plan9.ini(8), not set as separate var factotum - type
+of factotum [cpu terminal debug] sysname - standard sysname from
+plan9.ini ramsetup - program to set up ramfs for bootscripts, defaults
+to ramskel startventi - set to yes to start the venti server [yes]
+getrootfs - determined from bootparse or set by user during
+interactive [tcp local] fs - standard fs address from plan9.ini,
+needed for tcp booting auth - standard auth address for tcp booting
+venti - standard venti address variable from plan9.ini fossil -
+standard fossil address from plan9.ini not parsed fully correctly in
+general cfs - standard cfs address from plan9.ini initscript - script
+forked off into namespace provided initskel begins cpu server on 17020
+namespace - namespace for starting initscript rootstart - whether or
+not to start cpurc or termrc scripts from mounted root [cpu terminal]
+staylocal - whether to stay within the namespace of the plan9rc script
+on the console, only option is [yes] afterfact - command to execute
+after starting factotum (happens before everything else) afterroot -
+command to execute after mounting rootfs but before initscript or cpu
+or termrc
 
 options for ramskel and initksel can also be set in plan9.ini
 
-tgzfs= specifies a compressed fs to retrive from 9fat for extra files. set to tools.tgz to use the provided example
-binddevs=no turns off binding off default kernel devices
-hostfactotum=no turns off putting a default password into bootes factotum
-netsvc=no turns off ipconfig
-cpusvc=no turns off cpu and rx service
-hubsvc=no turns off hubfs
-cpuport=number of port for cpu to listen on
-hostcsdns=no starts a cs and dns server if available in the rootless service namespace
+tgzfs= specifies a compressed fs to retrive from 9fat for extra files.
+set to tools.tgz to use the provided example binddevs=no turns off
+binding off default kernel devices hostfactotum=no turns off putting a
+default password into bootes factotum netsvc=no turns off ipconfig
+cpusvc=no turns off cpu and rx service hubsvc=no turns off hubfs
+cpuport=number of port for cpu to listen on hostcsdns=no starts a cs
+and dns server if available in the rootless service namespace
 unprivileged=no starts a keyfs and auth server if available

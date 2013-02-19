@@ -1,30 +1,54 @@
 namespace scripts
 
-cpns MODELpid TARGETpid -t -r -x [pattern] -o [pattern]
-addns MODELpid TARGETpid -t -r -x [pattern] -o [pattern]
+cpns MODELpid TARGETpid -t -r -x [pattern] -o [pattern] 
+addns MODELpid TARGETpid -t -r -x [pattern] -o [pattern] 
 subns MODELpid TARGETpid -t -r -x [pattern] -o [pattern]
 
-These scripts perform namespace modifications on processes via /proc/$pid/ns using the writable ns mod. cpns attempts to make TARGET a copy of MODEL. addns adds to TARGET binds and mounts found in MODEL but not TARGET, and subns removes from TARGET binds and mounts not present in MODEL. Please note that these scripts work by simple "lines in common" and do not understand the graph structure and dependencies of a namespace structure. The options are any combination of:
+These scripts perform namespace modifications on processes via
+/proc/$pid/ns using the writable ns mod.  cpns attempts to make TARGET
+a copy of MODEL.  addns adds to TARGET binds and mounts found in MODEL
+but not TARGET, and subns removes from TARGET binds and mounts not
+present in MODEL.  Please note that these scripts work by simple
+"lines in common" and do not understand the graph structure and
+dependencies of a namespace structure.  The options are any
+combination of:
 
--t test only, print commands to standard output
--r riosafe, avoid operations involving /mnt/wsys /mnt/term /dev/cons and rio
--x exclude [pattern] from namespace operations
--o only operations matching [pattern] will be issued
+-t test only, print commands to standard output -r riosafe, avoid
+operations involving /mnt/wsys /mnt/term /dev/cons and rio -x exclude
+[pattern] from namespace operations -o only operations matching
+[pattern] will be issued
 
-addwrroot TARGET attaches to a writable server from /srv/TARGET or via srv TARGET and then binds the namespace to make use of the bin and /usr/$user directories and the font library.
+addwrroot TARGET attaches to a writable server from /srv/TARGET or via
+srv TARGET and then binds the namespace to make use of the bin and
+/usr/$user directories and the font library.
 
-importwrroot TARGET uses import to attach and also binds in the target's /srv.
+importwrroot TARGET uses import to attach and also binds in the
+target's /srv.
 
-These commands also have variants addroroot and importroroot to bring in read-only servers.
+These commands also have variants addroroot and importroroot to bring
+in read-only servers.
 
 addsources dials sources and binds to its binaries and lib
 
-rerootwin TARGET is used to allow processes running in rio on remote machines via drawterm or cpu to "reroot" themselves without losing use of the mouse and keyboard. This script is very useful for allowing free use of other namespaces from within a 'rootless' service environment.
+rerootwin TARGET is used to allow processes running in rio on remote
+machines via drawterm or cpu to "reroot" themselves without losing use
+of the mouse and keyboard.  This script is very useful for allowing
+free use of other namespaces from within a 'rootless' service
+environment.
 
-savedevs NAME and getdevs NAME use the basic operation of the rerootwin script - saving the active window's devices with a srvfs - to let you reconnect the same (or possibly different) flow of control to the cons and wsys after changing the namespace in other ways.
+savedevs NAME and getdevs NAME use the basic operation of the
+rerootwin script - saving the active window's devices with a srvfs -
+to let you reconnect the same (or possibly different) flow of control
+to the cons and wsys after changing the namespace in other ways.
 
-riobind [mount/bind namespace operation] uses the writable proc/ns mod to change the namespace of a running rio. the script simply greps the process list for rio so it may be fooled if you are running multiple rios or sub-rios.
+riobind [mount/bind namespace operation] uses the writable proc/ns mod
+to change the namespace of a running rio.  the script simply greps the
+process list for rio so it may be fooled if you are running multiple
+rios or sub-rios.
 
-winpush PID finds the window system of the target pid and pops a window open onto that rio.
+winpush PID finds the window system of the target pid and pops a
+window open onto that rio.
 
-riopush PID is a "trick" script to grab the window of another process (possibly remote) and run a rio inside it, under control of the local devices.
+riopush PID is a "trick" script to grab the window of another process
+(possibly remote) and run a rio inside it, under control of the local
+devices.

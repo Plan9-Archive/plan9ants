@@ -1,8 +1,59 @@
 <html>
 <head>
-<meta http-equiv="Refresh" content="0; url=magic/webls?dir=/" />
+<title>Advanced Namespace ToolS</title>
 </head>
 <body>
-<p>Please follow <a href="magic/webls?dir=/">this link</a>.</p>
+<h1><center>Advanced Namespace ToolS for Plan 9</center></h1>
+<p>
+The Giant ANTS for Plan 9 are a collection of software for making Plan 9 systems more
+reliable and flexible by leveraging the power of namespaces.
+<p>
+The main component is a modified kernel which needs no root fs at boot and creates an
+always available ram/paq rooted namespace accessible by cpu from which the user may launch
+conventional namespaces.
+<p>
+ANTS is compatible with existing x86 Plan 9 installations. The ANTS kernel and tool modifies
+startup and creates new capabilities, but does not change the standard user environment.
+You can install the ANTS kernel and tools directly to a fresh install from the Bell Labs .iso, just 
+add the 9pcram.gz kernel as an option to your plan9.ini menu with the additional variable
+interactive=yes. An optional tools.tgz and a working example PLAN9.INI can also be installed.
+<p>
+<h2>Documentation</h2>
+<p>
+<a href="magic/man2html/1/rerootwin">rerootwin</a>
+<p>
+<a href="magic/mant2html/1/cpns">cpns</a>
+<p>
+<a href="magic/man2html/1/addwrroot">addwrroot</a>
+<p>
+<a href="magic/man2html/8/plan9rc">plan9rc</a>
+<p>
+<a href="magic/man2html/8/ventiprog">ventiprog</a>
+<p>
+<a href="doc/ants.ps">The full Attack of the Giant ANTS paper in postscript form</a>
+<p>
+<h2>Install components</h2>
+<p>
+<a href="9pcram.gz">9pcram.gz kernel compiled for x86</a>
+<p>
+<a href="tools.tgz">optional tools.tgz for additional utilities</a>
+<p>
+<a href="doc/PLAN9.INI">reference PLAN9.INI</a>
+<p>
+<h2>Full install documentation, README, and all source code</h2>
+<p>
+<b>Please browse <a href="magic/webls?dir=/">the full ANTS directory</a>.</b>
+</p>
+<h2>Demonstration micro-cpu server VM image</h2>
+You can check out how ANTS works in a VM image which includes only a small bootable
+9fat partition. The 6mb image starts a working cpu server environment with local vga, rio,
+cpu access, acme, and many other tools. It can tcp root to another root fs to function as
+a standard cpu server if desired.
+<p>
+<a href="http://www.9gridchan.org/p9tiny.raw.gz"p9tiny.raw.gz</a>
+<p>
+The ANTS include code from Plan 9 from Bell Labs. Original portions are copyright Mycroftiv.
+<p>
+Licensed under the Lucent Public License.
 </body>
 </html>

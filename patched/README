@@ -1,9 +1,30 @@
-These are very slightly patched files to help the tools interoperate with the 'rootless' environment. 
+These are very slightly patched files to help the tools interoperate
+with the 'rootless' environment.
 
-the rc simply sets the location of the rcmain initialization file to /boot/rcmain rather than /rc/lib/rcmain.
+the rc simply sets the location of the rcmain initialization file to
+/boot/rcmain rather than /rc/lib/rcmain.
 
-the factotum adds the -x option, which refuses to mount cs on /net. This is to prevent the loss of the root filesystem from blocking the ability of factotum to auth by causing cs to time out while trying to read from a dead filedescriptor. The -x option should be used in combination with the -a option to speficy a chosen auth server for access to the service namespace.
+the factotum adds the -x option, which refuses to mount cs on /net.
+This is to prevent the loss of the root filesystem from blocking the
+ability of factotum to auth by causing cs to time out while trying to
+read from a dead filedescriptor.  The -x option should be used in
+combination with the -a option to speficy a chosen auth server for
+access to the service namespace.
 
-wranenadb.c modifies wrarena to fix the handling of clump offsets in plan9port. In default plan 9 the bug does not exist and seems related to the new arena number counting logic in the p9p version. In fixing the clump offset handling however I might have broken the arena-offsets, because the origin of the bug seemed to lie in a confusion between those variables in the code. Figuring out what is going on here in detail and checking the behavior of this tool in standard plan 9 is a to-do. Added now the -n option to specificy which arena to use and made it terminate after reading just that number arena. Plan 9 port specific. Investigated the code more and discovered that plan9port seems to diverge from plan9 and the offset trouble may be related. Switched main venti to native plan 9 and now using slightly mofidied nativer wrarena with additional clump info printed.
+wranenadb.c modifies wrarena to fix the handling of clump offsets in
+plan9port.  In default plan 9 the bug does not exist and seems related
+to the new arena number counting logic in the p9p version.  In fixing
+the clump offset handling however I might have broken the
+arena-offsets, because the origin of the bug seemed to lie in a
+confusion between those variables in the code.  Figuring out what is
+going on here in detail and checking the behavior of this tool in
+standard plan 9 is a to-do.  Added now the -n option to specificy
+which arena to use and made it terminate after reading just that
+number arena.  Plan 9 port specific.  Investigated the code more and
+discovered that plan9port seems to diverge from plan9 and the offset
+trouble may be related.  Switched main venti to native plan 9 and now
+using slightly mofidied nativer wrarena with additional clump info
+printed.
 
-retired mods were things that seemed necessary or a good idea previously, but I am no longer using.
+retired mods were things that seemed necessary or a good idea
+previously, but I am no longer using.

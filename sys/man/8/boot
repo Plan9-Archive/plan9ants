@@ -1,0 +1,231 @@
+.TH BOOT 8
+.SH NAME
+boot \- transfer control from the kernel to rc
+.SH SYNOPSIS
+.B /boot/boot
+[
+.I args
+]
+.SH DESCRIPTION
+.I Boot
+is the first program run after a kernel has been loaded.
+It sets up usb input devices if needed and creates a minimal namespace.
+It then
+.IR exec (2)'s
+the
+.IR plan9rc (8)
+script.
+It is started by the kernel, never run directly by the user.  See
+.IR booting (8)
+for information about the process of loading the kernel (and
+.IR boot )
+into memory.
+.PP
+Once loaded, the kernel initializes its data structures and devices.
+It sets the two environment variables
+.B /env/cputype
+and
+.B /env/terminal
+to describe the processor.
+It then binds a place-holder file server,
+.IR root (3),
+onto
+.B /
+and crafts an initial process whose sole function is to
+.IR exec (2)
+.BR /boot/boot ,
+a binary which is compiled into
+.IR root (3).
+.I Boot
+completes by
+.IR exec (2)'ing
+.B /boot/plan9rc.
+.PP
+The following information applies mostly to 
+.IR plan9rc (8)
+but has been left in this section
+of the manual for convenience to existing users. In general read "plan9rc" for "boot"
+in the section that follows and consult the plan9rc documentation for definitive reference.
+.SS CPU Servers
+The user owning devices and console processes on CPU servers
+and that user's domain and encryption key are
+read from NVRAM on all machines except PC's.
+PC's keep the information in the disk partition
+.BI /dev/sd XX /nvram\f1.
+If a
+.B -k
+option is given or if no stored information is found
+.I boot
+will prompt for all three items and store them.
+.IP
+.EX
+password:
+authid: bootes
+authdom: research.bell-labs.com
+.EE
+.PP
+The key is used for mutual authentication of the server and its clients.
+The domain and id identify the owner of the key.
+.PP
+.SS Booting Methods
+The methods available to any system depend on what was
+compiled into the kernel.
+The complete list of booting methods are listed below.
+.TP 8
+.BR tcp
+connect via Ethernet using the TCP protocol.
+The
+.I args
+are passed to
+.IR ipconfig (8)
+when configuring the IP stack.
+The
+.IR plan9.ini (8)
+variables
+.B fs
+and
+.B auth
+override the file server and authentication server IP addresses
+obtained (if any) from DHCP during
+.IR ipconfig (8).
+.TP 8
+.B local
+connect to the local file system.
+The first argument is a disk holding a file system.
+.I Boot
+inspects the disk.
+If the disk is a
+.IR fossil (4)
+file system, it invokes
+.B /boot/fossil
+to serve it.
+If the
+.B venti
+environment variable (really,
+.IR plan9.ini (8)
+variable) is set,
+.I boot
+first arranges for fossil to be able to
+contact the named
+.IR venti (8)
+server.
+The variable's value can take the following forms:
+.RS
+.TP
+.B /dev/sdC0/arenas
+the file should be a venti partition with a configuration
+stored on it using
+.I venti/conf
+(see
+.IR venti-fmt (8)).
+.I Boot
+will start a loopback IP interface on 127.0.0.1
+and start
+.I venti
+announcing on
+.B tcp!127.1!17034
+for venti service
+and
+.B tcp!127.1!8000
+for web service,
+using the configuration stored in that partition.
+.TP
+.B /dev/sdC0/arenas tcp!*!17034
+same as the last but specify an alternate venti service address.
+In this example, using
+.B *
+will announce on all available IP interfaces (even ones configured later)
+rather than just the loopback device.
+The loopback interface is still configured.
+.TP
+.B /dev/sdC0/arenas tcp!*!17034 tcp!*!80
+same as the last but specify alternate venti service and web addresses.
+The loopback interface is still configured.
+.TP
+.B tcp!135.104.9.2!17034 \fR[ \fIargs\fR ]
+the network address of a venti server running on a separate machine.
+.I Boot
+will configure the IP stack by passing
+.IR args ,
+if any, to
+.IR ipconfig (8).
+.RE
+.IP
+If the disk is not a
+.IR fossil (4)
+partition,
+.I boot
+invokes
+.BR /boot/kfs .
+A variety of programs, like
+.I 9660srv
+and
+.IR dossrv (4)
+masquerade as
+.I kfs
+to allow booting from alternate media formats,
+so as long as the disk is not a
+.I fossil
+disk, no check is made that the disk is in fact
+a
+.I kfs
+disk.
+The args are passed to
+.IR kfs (4).
+.IP
+For the
+.B tcp
+method,
+the address must be a numeric IP address.
+If no address is specified,
+a file server address will be found from another
+system on the network using the BOOTP protocol and
+the Plan 9 vendor-specific fields.
+.SH EXAMPLES
+On PCs, the default arguments to boot are constructed using
+the
+.B bootargs
+variable in
+.IR plan9.ini (8).
+.PP
+Start
+.IR kfs (4)
+with extra disk buffers:
+.IP
+.EX
+bootargs=local!#S/sdC0/fs -B 4096
+.EE
+.LP
+Use an IP stack on an alternate ethernet interface
+with a static address and fixed file server and authentication
+server addresses.
+.IP
+.EX
+fs=192.168.0.2
+auth=192.168.0.3
+bootargs=tcp -g 192.168.0.1 ether /net/ether1 \e
+    192.168.0.50 255.255.255.0
+.EE
+.LP
+(The
+.B bootargs
+line is split only for presentation; it is one line in the file.)
+.SH FILES
+.B #s/boot
+.br
+.B #//boot/boot
+.SH SOURCE
+.B /sys/src/9/boot
+.SH "SEE ALSO"
+.IR root (3),
+.IR factotum (4),
+.IR dhcpd (8),
+.IR plan9rc (8)
+.SH BUGS
+The use of
+.B bootargs
+in general is odd.
+The configuration specification
+for fossil and venti servers
+is particularly odd, but it does
+cover the common cases well.

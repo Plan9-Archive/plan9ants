@@ -1,22 +1,49 @@
-The scripts foshalt, fossilize, fosreset, fossilstart are used to aid in preserving fossil root scores and resetting fossils to known states. foshalt is simply an equivalent to fshalt. fossilize retrieves the fossil/last information from the given fossil (default /dev/sdC0/fossil if unspecified) and stores the rootscore, fossil location, and venti variable appended to the file /n/9fat/rootscor. It also outputs this information in the form of parameters to the utility to be run on the TARGET fossil's machine. fosreset score [fossil] [venti] formats a fossil to the given rootscore. 
+The scripts foshalt, fossilize, fosreset, fossilstart are used to aid
+in preserving fossil root scores and resetting fossils to known
+states.  foshalt is simply an equivalent to fshalt.  fossilize
+retrieves the fossil/last information from the given fossil (default
+/dev/sdC0/fossil if unspecified) and stores the rootscore, fossil
+location, and venti variable appended to the file /n/9fat/rootscor.
+It also outputs this information in the form of parameters to the
+utility to be run on the TARGET fossil's machine.  fosreset score
+[fossil] [venti] formats a fossil to the given rootscore.
 
-fossilize may be run on a running fossil to preserve its last snapshot. To make the rootscore current, issue 'fsys main snap -a' to the console and allow that command to complete prior to fossilizing the root score.  
+fossilize may be run on a running fossil to preserve its last
+snapshot.  To make the rootscore current, issue 'fsys main snap -a' to
+the console and allow that command to complete prior to fossilizing
+the root score.
 
-ventiprog is used to assist in progressive backup between ventis using the wrarena command. It works by continuously updating a saved 'wrcmd' stored in the 9fat, initially created by the user. (see venti-backup (8)). Once the command is created, ventiprog can be given a list of ventis and it will duplicate the new data since the last time the command was run, store a record of this action in /n/9fat/rootscor, and update the saved wrcmd. An example wrcmd:
+ventiprog is used to assist in progressive backup between ventis using
+the wrarena command.  It works by continuously updating a saved
+'wrcmd' stored in the 9fat, initially created by the user.  (see
+venti-backup (8)).  Once the command is created, ventiprog can be
+given a list of ventis and it will duplicate the new data since the
+last time the command was run, store a record of this action in
+/n/9fat/rootscor, and update the saved wrcmd.  An example wrcmd:
 
-wrarena -h tcp!192.168.1.123!17034 -o 537665536 /dev/sdC0/arenas 0x14f55e1f
+wrarena -h tcp!192.168.1.123!17034 -o 537665536 /dev/sdC0/arenas
+0x14f55e1f
 
-Here is an example of how all these tools work together to easily backup your data and rootscores:
+Here is an example of how all these tools work together to easily
+backup your data and rootscores:
 
-[All of these commands executed from the venti server with all machines running the rootless namespace kit]
+[All of these commands executed from the venti server with all
+machines running the rootless namespace kit]
 
-rx gridfour echo fsys main snap -a '>>/srv/fscons' # gridfour is the main fossil server
-sleep 600 # give 10 minutes for the snapshot to complete, this is just a heuristic
-rx gridfour fossilize >>/n/9fat/rootscor # save the rootscore from gridfour both in its 9fat and the local 9fat of the venti server
-ventis=(192.168.1.123 155.122.20.145 198.168.1.128) # provide a list of target ventis
-ventiprog $ventis # backup all the new data since the last ventiprog command
-cp /n/9fat/rootscor /n/some/remote/backup
+rx gridfour echo fsys main snap -a '>>/srv/fscons' # gridfour is the
+main fossil server sleep 600 # give 10 minutes for the snapshot to
+complete, this is just a heuristic rx gridfour fossilize
+>>/n/9fat/rootscor # save the rootscore from gridfour both in its 9fat
+and the local 9fat of the venti server ventis=(192.168.1.123
+155.122.20.145 198.168.1.128) # provide a list of target ventis
+ventiprog $ventis # backup all the new data since the last ventiprog
+command cp /n/9fat/rootscor /n/some/remote/backup
 
-This workflow is suitable for a cron job and keeps your fossil rootscores available and venti data current so your environment can re-rooted to a new venti/new fossil and still keep working with your current active fs.
+This workflow is suitable for a cron job and keeps your fossil
+rootscores available and venti data current so your environment can
+re-rooted to a new venti/new fossil and still keep working with your
+current active fs.
 
-The fossilconf and venticonf scripts are slightly modified versions of fossil/conf and venti/conf with less error checking to avoid dependency on awk and cmp.
+The fossilconf and venticonf scripts are slightly modified versions of
+fossil/conf and venti/conf with less error checking to avoid
+dependency on awk and cmp.

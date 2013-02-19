@@ -1,6 +1,7 @@
 #!/bin/rc
 # build script for advanced namespace tools/rootless boot kernel
-# build clean, build patched, build tools, build extras, build bootpaq, build ramfs / build
+# build clean, build patched, build tools, build extras, build bootpaq, build docs
+# build ramfs / build
 
 if(! test -e bootdir.extras){
 	echo this build script MUST be run only from the base rootless directory
@@ -17,6 +18,21 @@ bind -b $builddir/src.9.pc /sys/src/9/pc
 bind -b $builddir/scripts /bin
 bind $builddir /n/rootless
 bind -bc $builddir/compiletemp /sys/src/9/pc
+
+if(~ $1 docs){
+	echo building docs
+	cd doc
+	cp man.cpns $builddir/sys/man/1/cpns
+	cp man.rerootwin $builddir/sys/man/1/rerootwin
+	cp man.addwrroot $builddir/sys/man/1/addwrroot
+	cp man.ventiprog $builddir/sys/man/ventiprog
+	cp man.plan9rc $builddir/sys/man/plan9rc
+	cp modified.manpages/proc.man $builddir/sys/man/3/proc
+	cp modified.manpages/boot.man $builddir/sys/man/8/boot
+	troff -ms antspaper.ms >ants.ps
+	cd $builddir
+	exit ''
+}
 
 if(~ $1 everything){
 	echo building everything
