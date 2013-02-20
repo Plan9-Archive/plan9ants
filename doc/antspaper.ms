@@ -15,9 +15,9 @@ The Advanced Namespace ToolS are a collection of Plan 9 software designed for th
 
 2. Flexibility and Configurability - make it easy to change what role a system is playing in a grid, to add in new systems, and retire old ones, without disrupting the user environment.
 
-3. Multiplexing namespaces on one machine - the standard Plan 9 installer sets up a Plan 9 environment with a namespace organized to appear similar to a traditional unix environment, and all software on the machine operates within this namespace. This is purely conventional, and the Plan 9 kernel is happy to run multiple user environments with radically different namespaces on the same machine. One notable application of this is running both 9front userland and standard Bell Labs userland on the same box at the same time, one available via CPU(1) and one via the terminal's physical display and i/o.
+3. Multiplexing namespaces on one machine - the standard Plan 9 installer sets up a Plan 9 environment with a namespace organized to appear similar to a traditional unix userland, and all software on the machine operates within this namespace. This is purely conventional, and the Plan 9 kernel is happy to run multiple user environments with radically different namespaces on the same machine. One notable application of this is running both 9front userland and standard Bell Labs userland on the same box at the same time, one available via CPU(1) and one via the terminal's physical display and i/o.
 
-4. Ad-hoc namespaces built from multiple machines - The converse of the previous goal is the ability to easily create an envrionment built from diverse and distinct services on different machines. This is part of standard Plan 9 concepts but the existing tools and scripts don't provide much high-level semantics for en masse namespace operations.
+4. Ad-hoc namespaces built from multiple machines - The converse of the previous goal is the ability to easily create an environment built from diverse and distinct services on different machines. This is part of standard Plan 9 concepts but the existing tools and scripts don't provide much high-level semantics for en masse namespace operations.
 
 5. Data sharing and persistence - Multiple machines should be able to work easily with the same data, even dynamic, flowing data. Being able to study and replicate past data flows is useful.
 

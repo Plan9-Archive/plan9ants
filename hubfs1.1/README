@@ -5,8 +5,8 @@ STARTING AND CONNECTING WITH 'HUB' WRAPPER SCRIPT
 hub aug5 #starts and connects to a new hubfs and posts /srv/aug5
 hub aug5 #connects a new client to the rc shell started by the previous command
 hub aug5 rctwo #starts and connects to new rc named rctwo within the aug5 hubfs
-hub #starts a hubfs named hub.a with an rc named io
-hub #connects to the default hub.a io
+hub #starts a hubfs named hubfs with an rc named io
+hub #connects to the default hubfs io
 
 MAKING NEW SHELLS AND MOVING IN HUBSHELL:
 -all commands begin with '%' as first character-
