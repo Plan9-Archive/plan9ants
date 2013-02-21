@@ -50,10 +50,7 @@ venti/fossil servers. See
 .IR fossil (4)
 and
 .IR fossilcons (8)
-for an overview of the fossil system, 
-.B fossil/last 
-and 
-.B flfmt -v and
+for an overview of the fossil system, fossil/last, flfmt -v, and
 .IR venti (8)
 and
 .IR venti-backup (8)
@@ -120,7 +117,9 @@ will be used and if a partition is absent
 .I /dev/sdC0/fossil
 will be used as a default. The script first uses the simplified fossil-only
 .IR foshalt
-script to sync and halt the fossil, then kills all running fossil processes before issuing the flfmt -v command. 
+script to sync and halt the fossil, then kills all running fossil processes before issuing the 
+.IR flfmt -v 
+command. 
 .PP
 .IR cpsys
 automates replicating between the fossil of
@@ -153,7 +152,9 @@ is given, it will be used as a stem for the fossil file
 and also its 
 .IR fossilcons (8)
 .SH EXAMPLE
-These commands are issued from the service namespace of a venti server.
+These commands are issued from the service namespace of a 
+.IR venti (8)
+server.
 .IP
 .EX
 % rx fileserver echo fsys main snap -a '>>/srv/fscons' 
@@ -173,7 +174,9 @@ These commands are issued from the service namespace of a venti server.
 # reset the backup fossil to the rootscore of the snapshot
 .EE
 .PP
-After this seequence, the backupserver can choose to use one of the ventis which also contains the replicated rootscore. Usually this is done by changing the value of the venti variable in 
+After this seequence, the backup server can choose to use one of the ventis which also contains the replicated rootscore. Usually this is done by changing the value of the 
+.B $venti 
+variable in 
 .IR plan9.ini (8)
 .SH SOURCE
 .B sources/mycroftiv/rootlessnext/scripts
@@ -184,4 +187,4 @@ After this seequence, the backupserver can choose to use one of the ventis which
 .IR venti-backup (8)
 .SH BUGS
 .I ventiprog
-should automate the construction of the wrcmd from the venti http/index file
+should automate the construction of the wrcmd from the venti http/index file.

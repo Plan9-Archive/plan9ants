@@ -122,7 +122,7 @@ allows the user to specify a string which will be excluded from any of the perfo
 .I only
 allows the user to specify a string which all namespace operations must include.
 .PP
-Not all namespace commands can be copied literally between processes. It is expected to receive errors from some of the attempted ns operations and the final state of target's namespace may not precisely mirror the model. In general the error output simply means illegal operations were rejected and not attempted.
+Not all namespace commands can be copied literally between processes. It is expected to receive errors from some of the attempted ns operations and the final state of the target's namespace may not precisely mirror the model. In general the error output simply means illegal operations were rejected and not attempted.
 .PP
 The existing Plan 9 software does not expect processes' namespace to be modified without their knowledge during operation. Modifying namespace does not break connections to existing file descriptors so the modifications will not have a noticeable result until new fds are opened. Modifying namespace arbitrarily is powerful and flexible enough that it is impossible to sanity-check all potential operations. Just like 
 .IR cp (1)

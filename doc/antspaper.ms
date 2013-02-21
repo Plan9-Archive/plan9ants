@@ -44,7 +44,7 @@ The foundation of these namespace tools is a rewrite of the post kernel-load
 .CW boot
 and
 .CW init
-programs. The userspace is still created the same way, with a conventional root, but this namespace is launched separately from the core flow of control. The kernel is independent of any root and there is an always available service name\%space which exists beneath the conventional user-facing namespace. The service namespace is a comfortable working environment with all software needed to begin and administer the machine and the userspace it is hosting.
+programs. The userspace is still created the same way, with a conventional root, but this namespace is launched separately from the core flow of control. The kernel is independent of any root and there is an always available service name\%space which exists beneath the conventional user-facing namespace. The service name\%space is a comfortable working environment with all software needed to begin and administer the machine and the userspace it is hosting.
 .PP
 Creating multiple independent namespaces means the user needs to be able to move easily between them and modify namespace in an extensive fashion easily. Moving between namespaces and restructuring namespaces is enabled with scripted namespace operations such as
 .CW rerootwin
