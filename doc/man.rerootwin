@@ -29,39 +29,58 @@ creates a new namespace using
 but retains connection to the current interactive window
 by using
 .IR srvfs (4)
-to save the devices from /mnt/term and /mnt/wsys and
+to save the devices from 
+.I /mnt/term 
+and 
+.I /mnt/wsys 
+and
 remount them inside the new namespace.
 .PP
 .I newroot
 is expected to exist as 
-.I /srv/newroot
-or be a dialable IP or system name serving 9p on port 564 suitable for a root filesystem. The script attempts to check the current namespace and issue any preparatory binds necessary to make the devices available to /srv. 
+.B /srv/newroot
+or be a dialable IP or system name serving 9p on port 564 suitable for a root filesystem. The script attempts to check the current namespace and issue any preparatory binds necessary to make the devices available to 
+.I /srv. 
 .PP
 The file
 .I /lib/namespace.saveterm
 or
 .I /boot/namespace.saveterm
-must be available. By default the /net.alt directory is used as a
+must be available. By default the 
+.I /net.alt 
+directory is used as a
 pivot point for the remount of the user's devices. The
-.I -n
+.B -n
 and 
-.I -u
-flags change this pivot point to /n or /u respectively. (/u will only exist on systems running the rootless kernel.)
+.B -u
+flags change this pivot point to 
+.I /n 
+or 
+.I /u 
+respectively. (
+.I /u 
+will only exist on systems running the rootless kernel.)
 .I authagent
-is set to factotum by default. Another value can be chosen
-if the user is running a personal factotum in /srv under a different name
+is set to "factotum" by default. Another value can be chosen if the user is running a personal factotum in 
+.I /srv 
+under a different name
 .PP
 .I getdevs
 and
 .I savedevs
 make use of the same device-saving
 .IR srvfs (4)
-but do not enter an entirely new namespace. savedevs saves the current
+but do not enter an entirely new namespace. 
+.IR savedevs 
+saves the current
 console and window system devices under a given
 .I srvname
-or under a pid identity if no name is provided. getdevs
+or under a pid identity if no name is provided. 
+.IR getdevs
 .I srvname
-issues mount and bind commands to reattach to the saved devices.
+issues mount and 
+.IR bind (1)
+commands to reattach to the saved devices.
 .SH EXAMPLES
 To enter a fossil-root namespace from within a rootless service namespace:
 .IP

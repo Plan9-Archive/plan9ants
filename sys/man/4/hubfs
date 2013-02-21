@@ -38,15 +38,15 @@ The base behavior of
 .IR hub (1)
 .I srvname
 is bimodal, and will function as either a client or server depending on whether 
-.B /srv/srvname
+.I /srv/srvname
 exists. If no name is provided, 
-.I hub
+.IR hub
 will create or attach to a 
-.B /srv
+.I /srv
 named 
-.B /srv/hubfs
+.I /srv/hubfs
 containing a persistent 
-.I rc
+.IR rc (1)
 session. Thus, the simplest possible model of use is:
 .IP
 .EX
@@ -54,24 +54,27 @@ hub
 .EE
 .PP
 to start a backgrounded 
-.I hubfs 
-hosted persistent rc shell, and then 
+.IR hubfs 
+hosted persistent 
+.IR rc (1)
+shell, and then 
 .IP
 .EX
 hub
 .EE
 .PP
 from any window with access to that 
-.B /srv
+.I /srv
 to connect to it. The
 .B -b
 flag to 
-.I hub
+.IR hub
 backgrounds the initially created 
-.I rc
+.IR rc (1)
 instead of attaching to it.
 .PP
-Hubfs can be used to provide general purpose pipes locally or across a network, with some special features. Most notably, echoing
+.IR Hubfs 
+can be used to provide general purpose pipes locally or across a network, with some special features. Most notably, echoing
 .I freeze
 to the
 .B ctl
@@ -82,9 +85,9 @@ to
 will restore pipe-like behavior and resume the normal flow of data.
 .PP
 While connected via a
-.I hubshell
+.IR hubshell
 input beginning with a %symbol will be checked for matching command strings. These commands are used to create new subshells within the
-.I hubfs
+.IR hubfs
 session and move between them. A distinctive feature is the ability for remote clients to share a local shell with other clients of the hubfs. The
 .B %local NAME
 command does this. The more traditional mode of starting new shells on the remote host is done with the
@@ -92,12 +95,12 @@ command does this. The more traditional mode of starting new shells on the remot
 command. Note that 'remote' is the machine hosting the shell you are connected to currently.
 .B %detach
 terminates the 
-.I hubshell
+.IR hubshell
 and returns control to the user's original shell.
 .PP
 .SH EXAMPLES
 .Starting and connecting with the 
-.I hub
+.IR hub
 wrapper script:
 .PP
 start and connect to a new hubfs and post /srv/aug5
@@ -159,7 +162,9 @@ Making new shells and moving in hubshell:
 %list #lc of connected hubfs hubs
 .EE
 .PP
-Controlling hubfs via the ctl file:
+Controlling 
+.IR hubfs 
+via the ctl file:
 .PP
 -reading from ctl file returns status-
 .PP

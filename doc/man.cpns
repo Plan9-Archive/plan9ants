@@ -56,15 +56,30 @@ cpns, addns, subns \- process namespace manipulation
 .I model
 .I target
 .SH DESCRIPTION
-These scripts require the writable /proc/*/ns kernel mod. They provide
+These scripts require the writable 
+.I /proc/*/ns 
+kernel mod. They provide
 a scripted interface for namespace operations between processes owned
-by the user visible at /proc. Both local and remote processes may be targeted
+by the user visible at 
+.I /proc. 
+Both local and remote processes may be targeted
 if the target system is running the correct kernel.
 See 
 .IR proc (3)
-for details on ns operations via /proc.
+for details on ns operations via 
+.I /proc.
 .PP
-All commands take two numeric process IDs as their parameters. They compare the /proc/pid/ns files of model and target and generate operations to be written back to the ns file to modify the ns of the target process.
+All commands take two numeric process IDs as their parameters. They compare the 
+.I /proc/pid/ns 
+files of 
+.I model 
+and 
+.I target 
+processes and generate operations to be written back to the 
+.I /proc/pid/ns
+file to modify the namespace of the 
+.I target 
+process.
 .PP
 .I cpns
 copies the namespace of the 
@@ -83,7 +98,7 @@ and adds those mounts and binds to the namespace of
 process.
 .PP
 .I subns
-performs the reverse operation; it searches the ns of
+performs the reverse operation; it searches the namespace of
 .I target
 for mounts and binds that do not exist in 
 .I model
@@ -92,18 +107,30 @@ and then removes them from the
 process.
 .PP
 All scripts share identical flags.
-.I -t
+.B -t
 causes the scripts to run in test mode and print the commands they would issue while taking no other action.
-.I -r
-attempts to make the namespace operations safe for processes making use of rio. It filters out operations which contain the strings /mnt/term, /dev/cons, or /rio.
-.I -x exclude
+.B -r
+attempts to make the namespace operations safe for processes making use of rio. It filters out operations which contain the strings 
+.I /mnt/term
+.I /dev/cons
+or 
+.I /rio.
+.B -x 
+.I exclude
 allows the user to specify a string which will be excluded from any of the performed operations. 
-.I -o only
-allows the user to specify a string which all ns operations must include.
+.B -o 
+.I only
+allows the user to specify a string which all namespace operations must include.
 .PP
 Not all namespace commands can be copied literally between processes. It is expected to receive errors from some of the attempted ns operations and the final state of target's namespace may not precisely mirror the model. In general the error output simply means illegal operations were rejected and not attempted.
 .PP
-The existing Plan 9 software does not expect processes' namespace to be modified without their knowledge during operation. Modifying namespace does not break connections to existing file descriptors so the modifications will not have a noticeable result until new fds are opened. Modifying namespace arbitrarily is powerful and flexible enough that it is impossible to sanity-check all potential operations. Just like cp of files, cpns will allow you to shoot yourself in the foot. Use of the -t flag is recommended until you are confident you understand the results of a given operation.
+The existing Plan 9 software does not expect processes' namespace to be modified without their knowledge during operation. Modifying namespace does not break connections to existing file descriptors so the modifications will not have a noticeable result until new fds are opened. Modifying namespace arbitrarily is powerful and flexible enough that it is impossible to sanity-check all potential operations. Just like 
+.IR cp (1)
+of files, 
+.IR cpns 
+will allow you to shoot yourself in the foot. Use of the 
+.B -t 
+flag is recommended until you are confident you understand the results of a given operation.
 .SH SOURCE
 .B sources/contrib/mycroftiv/rootlessnext/scripts
 .SH SEE ALSO
@@ -113,7 +140,9 @@ The existing Plan 9 software does not expect processes' namespace to be modified
 .IR proc (3),
 .IR namespace (4)
 .SH BUGS
-These scripts operate using simple comparison via grep of matching lines.
+These scripts operate using simple comparison via 
+.IR grep (1)
+ of matching lines.
 Namespace structures are more complicated than this because the meaning of
 later binds depends on previous mounts and binds. Better tools should be
 written which understand the graph/tree structure of a namespace and how

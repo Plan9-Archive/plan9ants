@@ -181,7 +181,7 @@ and the optional
 .CW tools.tgz
 contained in 
 .CW 9fat
-which may also be added to the ramdisk, this environment, while slightly spartan (no manpages, only 1 or 2 fonts 9 in 
+which may also be added to the ramdisk, this environment, while slightly spartan (no manpages, only 1 or 2 fonts in 
 .CW /lib
 ) is in fact sufficient for many tasks. Furthermore, since the user is
 .CW cpu
@@ -340,7 +340,9 @@ blocks is important, and
 .CW venti 
 and it's administrative tools have been reliable in this author's experience.
 .PP
-The early boot environment runs an rx listener to allow the data replication and other administrative tools to be executed easily from other nodes or via 
+The early boot environment runs an 
+.CW rx 
+listener to allow the data replication and other administrative tools to be executed easily from other nodes or via 
 .CW cron. 
 Testing revealed an issue which compromised reliability in the case of failure: 
 .CW factotum 
@@ -622,7 +624,9 @@ opened by
 , allowing each cpu node to provide access to a common set of hubs. Each machine exports a shell to the hubserver
 so I can sweep open a new Hub window and easily switch to a persistent shell on any node. A separate 
 .CW hubfs 
-is run by the hostowner as part of the standard initskel script.  
+is run by the hostowner as part of the standard 
+.CW initskel 
+script.  
 .CW Hubfs 
 is also used to hold the 
 .CW emu 
@@ -632,7 +636,9 @@ or for
 .CW irc7
 and general inter-machine datasharing when needed.
 .PP
-The user terminal is a native 9front machine, but the user environment is always built from grid services with the terminal functioning as just that. The main resources in the namespace are the 2 local CPU servers, which act as the central junctions by running applications, mounting fileservers, and hosting hubfs. The native cpu's 
+The user terminal is a native 9front machine, but the user environment is always built from grid services with the terminal functioning as just that. The main resources in the namespace are the two local CPU servers, which act as the central junctions by running applications, mounting fileservers, and hosting 
+.CW hubfs. 
+The native cpu's 
 .CW /srv 
 acts as the primary focal point for integrating and accessing grid services. All grid nodes except 
 .CW venti 
@@ -673,13 +679,19 @@ Appendix I: The pieces of the toolkit and how they serve the design goals:
 bootup kernel mods, plan9rc, initskel, bootpaq, tools.tgz
 .NL
 .PP
-These create a more flexible platform namespace operations, and remove the dependency of the kernel on external services. They create a functional environment that acts as a minimal cpu server, and also are able to launch standard environments with normal cpurc or termrc. The bootup process may be left almost unchanged in terms of user visible interaction, but the pre-existing installation now co-exists with the new boot "service/namespace hypervisor" layer.
+These create a more flexible platform for namespace operations, and remove the dependency of the kernel on external services. They create a functional environment that acts as a minimal cpu server, and also can launch standard environments with a normal 
+.CW cpurc 
+or 
+.CW termrc. 
+The bootup process may be left almost unchanged in terms of user visible interaction, but the pre-existing installation now co-exists with the new boot "service/namespace hypervisor" layer.
 .PP
 .LG
 rerootwin, addwrroot, hubfs, savedevs/getdevs:
 .NL
 .PP
-These allow the user to navigate namespaces easily, to attach to new roots, to "save" namespaces and shells for later use in hubfs, and to keep control of their current devices and window system while doing so. They are necessary to get the best use from the rootless environment, but they are not dependent on it. These namespaces control tools may be useful even without any changes to the kernel or boot process.
+These allow the user to navigate namespaces easily, to attach to new roots, to "save" namespaces and shells for later use in 
+.CW hubfs
+, and to keep control of their current devices and window system while doing so. They are necessary to get the best use from the rootless environment, but they are not dependent on it. These namespaces control tools may be useful even without any changes to the kernel or boot process.
 .PP
 .LG
 writable proc/*/ns, cpns, addns, subns:
@@ -687,7 +699,11 @@ writable proc/*/ns, cpns, addns, subns:
 .PP
 This kernel mod extends the power of 
 .CW /proc 
-to modify the namespace of any processes owned by the user, on local or remote machines, simply by writing the same text string to the ns file of the proc that would be written in a shell. This mod is very general and powerful, but only cpns and its related scripts directly depend on it. I believe being able to do these namespace operations is a good part of Plan 9 design, but the other pieces of the toolkit are not written requiring this mod. The bootup sequence and plan9rc mod is separable.
+to modify the namespace of any processes owned by the user, on local or remote machines, simply by writing the same text string to the ns file of the proc that would be written in a shell. This mod is very general and powerful, but only 
+.CW cpns 
+and its related scripts directly depend on it. I believe being able to do these namespace operations is a good part of Plan 9 design, but the other pieces of the toolkit are not written requiring this mod. The bootup sequence and 
+.CW plan9rc 
+modifications are separable.
 .PP
 .LG
 ventiprog, cpsys, fossilize, /n/9fat/rootscor:
@@ -748,8 +764,8 @@ Appendix II: Implementation details:
 Boot mods: the goal is to create a working environment with only kernel resources, roughly speaking. This is pretty established territory, the main thing I have done differently than some other developers is to parameterize as much as possible and just not get the root fs! 
 .CW Boot/init 
 are combined into a single program and most of their functionality is shifted to the 
-.CW plan9rc script
-, supported by a compiled in 
+.CW plan9rc
+script, supported by a compiled in 
 .CW bootpaq. 
 The 
 .CW plan9rc
@@ -771,13 +787,15 @@ where it becomes a working environment without taking over the flow of control i
 .PP
 Writable 
 .CW proc/*/ns
-: this was implemented by more or less 'cloning' the entire code path that happens for mounts and binds and adding a new parameter for process id. All of the existing routines use "up" to figure out what namespace is being modified and what the chans are - by copying all of the routines and adding a new parameter, I allow the 
+: this was implemented by more or less 'cloning' the entire code path within the kernel that happens for mounts and binds and adding a new parameter for process id. All of the existing routines use "up" to figure out what namespace is being modified and what the chans are - by copying all of the routines and adding a new parameter, I allow the 
 .CW /proc 
 file system to perform 
 .CW mount
 s and 
 .CW bind
-s on behal" of a process, acccording to the string written to that processes ns file. I made the mechanism use a copy of all the original routines with a new parameter because I didn't want my modifications to affect the existing code paths - especially because some sanity checks don't make sense if the context is not 
+s on behal" of a process, acccording to the string written to that process's 
+.CW ns 
+file. I made the mechanism use a copy of all the original routines with a new parameter because I didn't want my modifications to affect the existing code paths - especially because some sanity checks don't make sense if the context is not 
 .CW up 
 and removing kernel sanity checks is scary. I have tested this mod extensively and I believe it is not inherently destablizing but it may pose unanalyzed security risks if abused by malicious users. 
 .PP
@@ -799,7 +817,11 @@ is a 9p filesystem which implements a new abstraction which is similar to a pipe
 .CW rc 
 shells to hub files. The 
 .CW hubfs 
-filesystem simply provides the pipe/hub files, the job of managing connections is done by the hubshell program, which knows how to start and attach rc to hubfiles, launch new connected rcs on either the local or remote machine, and then move between the active shells.
+filesystem simply provides the pipe/hub files, the job of managing connections is done by the hubshell program, which knows how to start and attach 
+.CW rc 
+to hubfiles, launch new connected 
+.CW rc
+shells on either the local or remote machine, and then move between the active shells.
 .PP
 Rerootwin: the 
 .CW rerootwin
@@ -833,7 +855,9 @@ The hardware infrastructure is two native pentium IV for the main
 .CW venti 
 and 
 .CW fossil 
-server and a pentium III for the main tcp cput. The user terminal is a modern desktop with an intel i7 running the 9front distribution. An amd ph II debian box provides p9p and qemu hosting for the backup leg of services. Remote nodes are hosted on 9cloud with one Bell Labs and one 9front install. A linode running p9p provides a final fallback venti store.
+server and a pentium III for the main tcp cpu. The user terminal is a modern desktop with an intel i7 running the 9front distribution. An amd ph II debian box provides p9p and qemu hosting for the backup leg of services. Remote nodes are hosted on 9cloud with one Bell Labs and one 9front install. A linode running p9p provides a final fallback 
+.CW venti 
+store.
 .SH 
 Appendix III: Origins of the tools
 .PP
@@ -845,7 +869,17 @@ My experience as a home user building on top of older hardware mixed with virtua
 .CW fossil 
 often corrupted their filesystem when crashing badly. 
 .PP
-It seemed to me that a grid of multiple machines should create the property of being more reliable and resilient than any of the components, and I was experiencing more of a "one fall, they all fall" dynamic. The more tightly I tried to bind my machines together by importing services from each other, the more fragile everything became. I wanted the cpurc on the machines to acquire services from the other machines on the grid, to put those "underneath" the user namespace so that when I cpu'd in, a multiple machine namespace would be built and waiting. Doing this kind of service acquisition from the main flow of control in cpurc though created system wide dependencies on those resources, and my user environment would freeze up if a read from a network mount didn't return. I tried using aan and recover, but those tools are for dealing with network-level disruptions, not a machine that dies and has to reboot.
+It seemed to me that a grid of multiple machines should create the property of being more reliable and resilient than any of the components, and I was experiencing more of a "one fall, they all fall" dynamic. The more tightly I tried to bind my machines together by importing services from each other, the more fragile everything became. I wanted the 
+.CW cpurc 
+on the machines to acquire services from the other machines on the grid, to put those "underneath" the user namespace so that when I 
+.CW cpu
+in, a multiple machine namespace would be built and waiting. Doing this kind of service acquisition from the main flow of control in 
+.CW cpurc 
+though created system wide dependencies on those resources, and my user environment would freeze up if a read from a network mount didn't return. I tried using 
+.CW aan 
+and 
+.CW recover
+, but those tools are for dealing with network-level disruptions, not a machine that dies and has to reboot.
 .PP
 Another issue I experienced working with my grid was the lack of higher-level tools for dealing with namespaces, and a general focus on creating a namespace which roughly mirrored conventional unix. It felt to me that the mechanism of namespaces was so brilliant and so flexible and open-ended that there was much more that could be done with manipulating namespaces and network transparency to build interesting environments. What I wanted was a way to "weave" a complicated namespace that unified different machines, but was also resilient to their failure and would replicate and secure my data without extra work. 
 .PP

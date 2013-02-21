@@ -28,11 +28,11 @@ to set defaults, then proceeds as an
 script to bring the system up. It first uses
 .IR paqfs (4)
 to mount 
-.B /boot/bootpaq 
+.I /boot/bootpaq 
 behind both 
-.B /bin 
+.I /bin 
 and 
-.B /boot 
+.I /boot 
 to access additional programs.
 .PP
 .IR plan9rc 
@@ -44,12 +44,13 @@ and
 starts a 
 .IR ramfs (4)
 and loads in the 
-.B skel.tar 
-stored in the bootpaq, and optionally loads an additional user-specified .tgz from 9fat to the 
+.I skel.tar 
+stored in the bootpaq, and optionally loads an additional user-specified .tgz from 
+.i /n/9fat to the 
 .IR ramfs (4)
 also.
 A default 
-.B tools.tgz 
+.I tools.tgz 
 is provided by the author and recommended as a good default set of additional programs to have available.
 .PP
 .IR Initskel
@@ -94,9 +95,9 @@ if so
 .TP
 .B doramsetup
 is done from 
-.B /boot/skel.tar 
+.I /boot/skel.tar 
 and may also make use of 
-.B /n/9fat/tools.tgz
+.I /n/9fat/tools.tgz
 .TP 
 .B dochecksys
 is made to verify that a user/hostowner and system name are in place
@@ -130,7 +131,7 @@ to create a normal user environment independent of the namespace of
 .TP
 .B staylocal
 allows the user to retain access if desired to the programs in the bootpaq and/or 
-.B tools.tgz, 
+.I tools.tgz, 
 or choose no to drop down to kernel-device only namespace.
 .SH VARIABLES
 The plan9rc script makes use of standard variables from
@@ -142,7 +143,7 @@ determines the mode of operation for plan9rc. By default, or if set to "traditio
 .TP
 .B bootargs
 determines the method for connecting to a root fs. tcp [internet config parameters] or local![path to disk root fs] are the standard values here. The new option srv implies the user will arrange to have a file in 
-.B /srv
+.I /srv
 suitable for use as a root file system.
 .TP
 .B ipparams
@@ -157,19 +158,25 @@ type of
 [cpu terminal debug]
 .TP
 .B sysname
-standard sysname definition
+standard 
+.B $sysname 
+definition
 .TP
 .B fs
-standard fs address from 
+standard 
+.B $fs 
+address from 
 .IR plan9.ini (8)
 needed for tcp booting
 .TP
 .B auth
-standard auth address for tcp booting
+standard 
+.B $auth 
+address for tcp booting
 .TP
 .B venti
 standard 
-.IR venti (8) 
+.B $venti 
 address variable from 
 .IR plan9.ini (8)
 .TP
@@ -242,7 +249,7 @@ Variables for the other two scripts used by rootless bootup are also described h
 .TP
 .BR tgzfs
 name of optional .tgz to load into the ramdisk. I provide a recommended 
-.B tools.tgz 
+.I tools.tgz 
 but this value is not set by default. This value is used by 
 .IR ramskel 
 while the rest are all for 
@@ -303,7 +310,7 @@ by default the ramroot environment does not provide auth services. Set no to sta
 and 
 .Ir authsrv (6)
 using 
-.B 9fat/adm.
+.I /n/9fat/adm.
 .SH FILES
 .TF /boot/plan9rc
 .TP
@@ -314,11 +321,11 @@ bootup and namespace launching control script
 sets up 
 .B /boot/skel.tar 
 as a ramfs skeleton along with an optional 
-.B tools.tgz 
+.I tools.tgz 
 from 
-.B 9fat
+.I /n/9fat
 .TP
-.B /boot/initskel
+.I /boot/initskel
 .IR cpurc (8)
 analog script for access to the rootless environment
 .SH SOURCE
