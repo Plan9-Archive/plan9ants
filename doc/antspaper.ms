@@ -15,7 +15,7 @@ The Advanced Namespace ToolS are a collection of Plan 9 software designed for th
 
 2. Flexibility and Configurability - make it easy to change what role a system is playing in a grid, to add in new systems, and retire old ones, without disrupting the user environment.
 
-3. Multiplexing namespaces on one machine - the standard Plan 9 installer sets up a Plan 9 environment with a namespace organized to appear similar to a traditional unix userland, and all software on the machine operates within this namespace. This is convention, not necessity, and the Plan 9 kernel can run multiple user environments with radically different namespaces on the same machine. One notable application of this is running both 9front userland and standard Bell Labs userland on the same box at the same time, one available via 
+3. Multiplexing namespaces on one machine - the standard Plan 9 installer sets up a Plan 9 environment with a namespace organized to appear similar to a traditional unix userland, and all software on the machine operates within this namespace. This is convention, not necessity, and the Plan 9 kernel can run multiple user environments with radically different namespaces on the same machine. One notable application of this is running both 9Front userland and standard Bell Labs userland on the same box at the same time, one available via 
 .CW cpu 
 and one via the terminal's physical display and i/o.
 
@@ -44,7 +44,7 @@ The foundation of these namespace tools is a rewrite of the post kernel-load
 .CW boot
 and
 .CW init
-programs. The userspace is still created the same way, with a conventional root, but this namespace is launched separately from the core flow of control. The kernel is independent of any root and there is an always available service namespace which exists beneath the conventional user-facing namespace. The service namespace is a comfortable working environment with all software needed to begin and administer the machine and the userspace it is hosting.
+programs. The userspace is still created the same way, with a conventional root, but this namespace is launched separately from the core flow of control. The kernel is independent of any root and there is an always available service name\%space which exists beneath the conventional user-facing namespace. The service namespace is a comfortable working environment with all software needed to begin and administer the machine and the userspace it is hosting.
 .PP
 Creating multiple independent namespaces means the user needs to be able to move easily between them and modify namespace in an extensive fashion easily. Moving between namespaces and restructuring namespaces is enabled with scripted namespace operations such as
 .CW rerootwin
@@ -70,7 +70,7 @@ The combination of these Advanced Namespace ToolS creates a user environment whe
 .SH
 II. The boot namespace and later namespaces
 .PP
-Here is the namespace of the "master process" on a rootless box:
+Here is the namespace of the master process on a rootless box:
 .DS
 bind #c /dev
 bind #ec /dev
@@ -92,7 +92,11 @@ cd /
 .PP
 Nothing can kill this shell except the failure of the kernel itself. The tools compiled into 
 .CW /boot 
-allow it to fork off new environments rooted to disk or network resources without connecting to it itself. This master process can be thought of as a "namespace hypervisor" which stays behind the scenes creating different namespace environments. We arrange for this master process to exist by rewriting boot and init into a single program which sets up the kernel-only environment. Once this is done, the script 
+allow it to fork off new environments rooted to disk or network resources without connecting to it itself. This master process can be thought of as a "namespace hypervisor" which stays behind the scenes creating different namespace environments. The namespace of this master process is create by a rewritten and combined 
+.CW boot 
+and 
+.CW init 
+which sets up the kernel-only environment. Once this is done, the script 
 .CW plan9rc
 is forked off to take control of setting up a user environment of services on top of the kernel, but leaving the main flow of control unattached to those resources.
 .PP
@@ -101,12 +105,12 @@ is a script which acts as a general purpose launcher script for self-contained P
 .CW cpurc
 or 
 .CW termrc. 
-It also provides an optional interactive mode which has offers complete user control of all bootup parameters. Once an environment has been "launched" it saves the parameters used to its local ramdisk, allowing the same environment to be spawned again non-interactively. 
+It also provides an optional interactive mode which has offers complete user control of all bootup parameters. Once an environment has been launched it saves the parameters used to its local ramdisk, allowing the same environment to be spawned again non-interactively. 
 .PP
 .CW plan9rc 
 is written to be compatible with existing installations and 
 .CW plan9.ini
-values to a great extent. It is focused on pc bootup and handles tcp booting, 
+values as much as possible. It is focused on pc bootup and handles tcp booting, 
 .CW fossil, 
 .CW venti, 
 .CW kfs, 
@@ -466,11 +470,20 @@ The generality of this mechanism allows it to be used as the foundation for anot
 .CW subns
 , and 
 .CW cpns 
-scripts perform simple comparisons on the contents of process namespaces and make modifications accordingly. It should be noted that the scripts in their current state do not parse and understand the full 'graph/tree' structure of namespaces so their modifcations are somewhat naive. This is not a limit of the writable ns modification, more sophisticated tools should be able to do perfect rewrites of the namespace of the target process, but doing this requires understanding the dependencies of later binds on previous operations. The current scripts simply compare the ns files for matching and non-matching lines and use this to generate a list of actions. In practice, this mechanism is usually adequate to perform even dramatic namespace modifications, and the user can always make additional changes or modify the actions of the script by using the 
+scripts perform simple comparisons on the contents of process namespaces and make modifications accordingly. It should be noted that the scripts in their current state do not parse and understand the full 'graph/tree' structure of namespaces so their modifcations are somewhat naive. This is not a limit of the writable ns modification, more sophisticated tools should be able to do perfect rewrites of the namespace of the target process, but doing this requires understanding the dependencies of later binds on previous operations. The current scripts simply compare the ns files for matching and non-matching lines and use this to generate a list of actions. In practice, this mechanism is capable of performing even dramatic namespace modifications, and the user can always make additional changes or modify the actions of the script by using the 
 .CW -t 
-flag to print actions without executing them.
+flag to print actions without executing them. During testing, it was possible transform a running 9Front userland into a Bell Labs userland by repeated
+.CW cpns
+.CW -r
+between processes that had been launched on different roots and by the respective 
+.CW cpurc
+of each distribution. The namespaces of
+.CW rio
+and the running shells and applications were all remotely rewritten via the 
+.CW /proc
+interface to use a different root fs and to bring their namespace into conformance withe Bell Labs namespace contentions.
 .PP
-At the risk of jargonizing, it seems accurate to describe the modified boot system with ram/paq namespace and the plan9rc script as a "namespace hypervisor" because it can and does support multiple independent namespaces and allow travel between them. The writable ns mod enables fine grained control over the namespace of every process owned by a user on an entire grid of machines. 
+Tt seems accurate to describe the modified boot system with ram/paq namespace and the plan9rc script as a "namespace hypervisor" because it supports multiple independent namespaces and allow travel between them. The writable ns mod enables fine grained control over the namespace of every process owned by a user on an entire grid of machines. 
 .PP
 The final component used to bind the diverse namespaces together into a controllable and usable environment is the persistence and multiplexing layer provided by hubfs and integration into a modified 
 .CW rio 
@@ -751,7 +764,7 @@ also lets the user 'organize' their namespaces by sub-rios with different colors
 .PP
 These components are all separable, but I believe the whole is greater than the sum of the parts and so created the giant ANTS packages. It is possible to use 
 .CW hubfs+grio 
-without changing bootup or namespaces, or possible to create a more reliable bootup and independent early namespace without using 
+without changing bootup or name\%spaces, or possible to create a more reliable bootup and independent early namespace without using 
 .CW hubfs 
 or 
 .CW grio
@@ -871,9 +884,9 @@ often corrupted their filesystem when crashing badly.
 .PP
 It seemed to me that a grid of multiple machines should create the property of being more reliable and resilient than any of the components, and I was experiencing more of a "one fall, they all fall" dynamic. The more tightly I tried to bind my machines together by importing services from each other, the more fragile everything became. I wanted the 
 .CW cpurc 
-on the machines to acquire services from the other machines on the grid, to put those "underneath" the user namespace so that when I 
+on the machines to acquire services from the other machines on the grid, to put those "underneath" the user name\%space so that when I 
 .CW cpu
-in, a multiple machine namespace would be built and waiting. Doing this kind of service acquisition from the main flow of control in 
+in, a multiple machine name\%space would be built and waiting. Doing this kind of service acquisition from the main flow of control in 
 .CW cpurc 
 though created system wide dependencies on those resources, and my user environment would freeze up if a read from a network mount didn't return. I tried using 
 .CW aan 

@@ -38,7 +38,7 @@ remount them inside the new namespace.
 .PP
 .I newroot
 is expected to exist as 
-.B /srv/newroot
+.I /srv/newroot
 or be a dialable IP or system name serving 9p on port 564 suitable for a root filesystem. The script attempts to check the current namespace and issue any preparatory binds necessary to make the devices available to 
 .I /srv. 
 .PP
