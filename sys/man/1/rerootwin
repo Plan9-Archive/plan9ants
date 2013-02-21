@@ -79,7 +79,7 @@ or under a pid identity if no name is provided.
 .IR getdevs
 .I srvname
 issues mount and 
-bind (1)
+.IR bind (1)
 commands to reattach to the saved devices.
 .SH EXAMPLES
 To enter a fossil-root namespace from within a rootless service namespace:

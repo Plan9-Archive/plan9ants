@@ -139,7 +139,11 @@ The plan9rc script makes use of standard variables from
 and also new variables. Both types of variables, and their default behaviors, are listed.
 .TP 8
 .BR interactive
-determines the mode of operation for plan9rc. By default, or if set to "traditional", it will behave towards the user almost identically to the original plan9 bootup, but will still set up the rootless environment. If set to "yes" then the user will be prompted interactively through the boot process and given the option to alter any and all plan9.ini variable settings. If set to "no" the user will not be prompted at all and the boot process proceeds in automated fashion according to the environment variables.
+determines the mode of operation for 
+.IR plan9rc. 
+By default, or if set to "traditional", it will behave towards the user almost identically to the original plan9 bootup, but will still set up the rootless environment. If set to "yes" then the user will be prompted interactively through the boot process and given the option to alter any and all 
+.IR plan9.ini (8)
+variable settings. If set to "no" the user will not be prompted at all and the boot process proceeds in automated fashion according to the environment variables.
 .TP
 .B bootargs
 determines the method for connecting to a root fs. tcp [internet config parameters] or local![path to disk root fs] are the standard values here. The new option srv implies the user will arrange to have a file in 
@@ -213,7 +217,7 @@ should be started from the local disk.
 this is usually a derivative variable determined by the attachment to a root fileserver. If the user chooses "srv" as their boot method 
 .IR plan9rc 
 will use an existing file in 
-.B /srv 
+.I /srv 
 for the root. This mode is used mostly if 
 .IR plan9rc 
 is launching a new namespace subsequent to the initial boot up.

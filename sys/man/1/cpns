@@ -77,7 +77,9 @@ and
 .I target 
 processes and generate operations to be written back to the 
 .I /proc/pid/ns
-file to modify the namespace of the target process.
+file to modify the namespace of the 
+.I target 
+process.
 .PP
 .I cpns
 copies the namespace of the 
@@ -108,17 +110,27 @@ All scripts share identical flags.
 .B -t
 causes the scripts to run in test mode and print the commands they would issue while taking no other action.
 .B -r
-attempts to make the namespace operations safe for processes making use of rio. It filters out operations which contain the strings /mnt/term, /dev/cons, or /rio.
+attempts to make the namespace operations safe for processes making use of rio. It filters out operations which contain the strings 
+.I /mnt/term
+.I /dev/cons
+or 
+.I /rio.
 .B -x 
 .I exclude
 allows the user to specify a string which will be excluded from any of the performed operations. 
 .B -o 
-.Ionly
-allows the user to specify a string which all ns operations must include.
+.I only
+allows the user to specify a string which all namespace operations must include.
 .PP
 Not all namespace commands can be copied literally between processes. It is expected to receive errors from some of the attempted ns operations and the final state of target's namespace may not precisely mirror the model. In general the error output simply means illegal operations were rejected and not attempted.
 .PP
-The existing Plan 9 software does not expect processes' namespace to be modified without their knowledge during operation. Modifying namespace does not break connections to existing file descriptors so the modifications will not have a noticeable result until new fds are opened. Modifying namespace arbitrarily is powerful and flexible enough that it is impossible to sanity-check all potential operations. Just like cp of files, cpns will allow you to shoot yourself in the foot. Use of the -t flag is recommended until you are confident you understand the results of a given operation.
+The existing Plan 9 software does not expect processes' namespace to be modified without their knowledge during operation. Modifying namespace does not break connections to existing file descriptors so the modifications will not have a noticeable result until new fds are opened. Modifying namespace arbitrarily is powerful and flexible enough that it is impossible to sanity-check all potential operations. Just like 
+.IR cp (1)
+of files, 
+.IR cpns 
+will allow you to shoot yourself in the foot. Use of the 
+.B -t 
+flag is recommended until you are confident you understand the results of a given operation.
 .SH SOURCE
 .B sources/contrib/mycroftiv/rootlessnext/scripts
 .SH SEE ALSO
@@ -128,7 +140,9 @@ The existing Plan 9 software does not expect processes' namespace to be modified
 .IR proc (3),
 .IR namespace (4)
 .SH BUGS
-These scripts operate using simple comparison via grep of matching lines.
+These scripts operate using simple comparison via 
+.IR grep (1)
+ of matching lines.
 Namespace structures are more complicated than this because the meaning of
 later binds depends on previous mounts and binds. Better tools should be
 written which understand the graph/tree structure of a namespace and how

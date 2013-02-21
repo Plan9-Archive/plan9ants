@@ -25,7 +25,9 @@ before making use of the network. After attaching to the fs
 a series of 
 .IR bind (1)
 commands is performed to make use of the target's
-binaries, library files, and $home if available.
+binaries, library files, and 
+.B $home 
+if available.
 .PP
 The "add" versions of the scripts dial port 564 for standard 9p file service after checking 
 .I /srv.

@@ -36,7 +36,7 @@ if(~ $1 docs){
 	cp man.hubfs $builddir/sys/man/4/hubfs
 	cp modified.manpages/proc.man $builddir/sys/man/3/proc
 	cp modified.manpages/boot.man $builddir/sys/man/8/boot
-	troff -ms antspaper.ms >ants.ps
+	troff -ms antspaper.ms | dpost >ants.ps
 	cd $builddir
 	exit ''
 }
