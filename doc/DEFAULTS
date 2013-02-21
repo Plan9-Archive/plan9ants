@@ -1,55 +1,106 @@
 plan9rc vars, defaults, and actions
 
-GENERAL NOTE: most plan9.ini variables should produce the same behavior and the new features are active by default. Existing plan9.ini configurations should work as before with little modifications while automatically creating the 'service' environment. 
+GENERAL NOTE: most plan9.ini variables should produce the same
+behavior and the new features are active by default.  Existing
+plan9.ini configurations should work as before with little
+modifications while automatically creating the 'service' environment.
 
-bootargs follows the normal plan 9 conventions. choose tcp or local, with the local specifier providing a path for finding a root file system from disk, and additional tcp parameters being given to ipconfig. local!#S/sdC0/fossil is the default if none is provided.
+bootargs follows the normal plan 9 conventions.  choose tcp or local,
+with the local specifier providing a path for finding a root file
+system from disk, and additional tcp parameters being given to
+ipconfig.  local!#S/sdC0/fossil is the default if none is provided.
 
-venti is the same as standard plan9.ini for establishing a connection to a venti server if needed by a local fossil.
+venti is the same as standard plan9.ini for establishing a connection
+to a venti server if needed by a local fossil.
 
-fs and auth are the ip of file auth servers as in standard boot and plan9.ini
+fs and auth are the ip of file auth servers as in standard boot and
+plan9.ini
 
-cfs is the pathname of a cfs partition to be used for caching when tcp booting, if desired
+cfs is the pathname of a cfs partition to be used for caching when tcp
+booting, if desired
 
 fossil and kfs may be set to specify a given partition
 
-interactive controls whether or not the user will be prompted through the boot process and given the option to modify any parameters provided by plan9.ini. It will default to traditional mode behavior, set interactive=yes to enable interactive boot or interactive=no for automatic bootup. If no bootargs are found, interactive mode is turned on also. interactive=traditional emulates the prompts of the traditional bootup but still follows the plan9rc startup according to the variables given in plan9.ini. It prompts for local vs tcp and tcp root and auth ips if needed only. 
+interactive controls whether or not the user will be prompted through
+the boot process and given the option to modify any parameters
+provided by plan9.ini.  It will default to traditional mode behavior,
+set interactive=yes to enable interactive boot or interactive=no for
+automatic bootup.  If no bootargs are found, interactive mode is
+turned on also.  interactive=traditional emulates the prompts of the
+traditional bootup but still follows the plan9rc startup according to
+the variables given in plan9.ini.  It prompts for local vs tcp and tcp
+root and auth ips if needed only.
 
-startventi is a new variable which allows you to start a venti server even if this venti is not required for a local fossil. It defaults to not starting but it will automatically be changed to yes if the venti variable begins with # indicating it should be started for a local fossil.
+startventi is a new variable which allows you to start a venti server
+even if this venti is not required for a local fossil.  It defaults to
+not starting but it will automatically be changed to yes if the venti
+variable begins with # indicating it should be started for a local
+fossil.
 
-ramsetup and initscript are new vars that default to =ramskel and =initskel if not set in plan9.ini. The ramskel is important to provide a skeleton fs for basic functionality and shouldn't be changed unless you have provided a substitude skel.tar in /boot. The initskel is optional and acts as a 'cpurc' style init for the independent service namespace. Full details on its configuration follow after the plan9rc vars.
+ramsetup and initscript are new vars that default to =ramskel and
+=initskel if not set in plan9.ini.  The ramskel is important to
+provide a skeleton fs for basic functionality and shouldn't be changed
+unless you have provided a substitude skel.tar in /boot.  The initskel
+is optional and acts as a 'cpurc' style init for the independent
+service namespace.  Full details on its configuration follow after the
+plan9rc vars.
 
-tgzfs is an optional additional set of utilities that can be loaded from disk into ram. An example is the tools.tgz which contains a set of utilities crafted to complement the compiled-in /boot. If the 9fat partition is not located at /dev/sdC0/9fat, the fatpath= variable must be set to tell dossrv the correct pathname of a 9fat partition if a tgzfs is to be used.
+tgzfs is an optional additional set of utilities that can be loaded
+from disk into ram.  An example is the tools.tgz which contains a set
+of utilities crafted to complement the compiled-in /boot.  If the 9fat
+partition is not located at /dev/sdC0/9fat, the fatpath= variable must
+be set to tell dossrv the correct pathname of a 9fat partition if a
+tgzfs is to be used.
 
-factotum and rootstart default to the value of /env/service if not set in plan9.ini. They determine whether factotum will be started in terminal or cpu mode and whether the cpurc or termrc will be launched. These behaviors can now be controlled independently of the compiled in cpu vs. terminal kernel distinction.
+factotum and rootstart default to the value of /env/service if not set
+in plan9.ini.  They determine whether factotum will be started in
+terminal or cpu mode and whether the cpurc or termrc will be launched.
+These behaviors can now be controlled independently of the compiled in
+cpu vs.  terminal kernel distinction.
 
-namespace is set by default to 'namespace' and determines the namespace entered into by the initscript. The provided namespace is rooted on the /srv/ramboot fs. This does not affect the namespace of "hosted" systems with their own root fs. You probably don't want to change this.
+namespace is set by default to 'namespace' and determines the
+namespace entered into by the initscript.  The provided namespace is
+rooted on the /srv/ramboot fs.  This does not affect the namespace of
+"hosted" systems with their own root fs.  You probably don't want to
+change this.
 
-ipparams is a variable for setting ipconfig parameters. It allows these parameters to be set regardless of whether tcp boot is being used or a venti is being dialed. The ipconfig command will not be issued until necessary or until the initskel initscript.
+ipparams is a variable for setting ipconfig parameters.  It allows
+these parameters to be set regardless of whether tcp boot is being
+used or a venti is being dialed.  The ipconfig command will not be
+issued until necessary or until the initskel initscript.
 
-staylocal is a variable to determine the behavior of the console following the completion of plan9rc. The default is to remain in the namespace used by the script. Setting staylocal=no causes plan9rc to fully terminate and return to the environment with only kernel devices and no ramfs mounted.
+staylocal is a variable to determine the behavior of the console
+following the completion of plan9rc.  The default is to remain in the
+namespace used by the script.  Setting staylocal=no causes plan9rc to
+fully terminate and return to the environment with only kernel devices
+and no ramfs mounted.
 
-tryusb defaults to checking for the possibility of usb boot and examining partitions found. set tryusb=no to not run partfs regardless of whether usb storage is present.
+tryusb defaults to checking for the possibility of usb boot and
+examining partitions found.  set tryusb=no to not run partfs
+regardless of whether usb storage is present.
 
-afterfact and afterroot provide a mechanism for additional user customization. If these values are given in plan9.ini, the executables found at the given path will be executed at that point in the boot process. 
+afterfact and afterroot provide a mechanism for additional user
+customization.  If these values are given in plan9.ini, the
+executables found at the given path will be executed at that point in
+the boot process.
 
----------------------------------------
-Initskel vars, defaults, and actions
+---Initskel vars, defaults, andactions ---
 
-binddevs defaults to binding in f t m v L P u U '$' Σ κ
-=no turns off 
+binddevs defaults to binding in f t m v L P u U '$' Σ κ =no turns off
 
-hostfactotum defaults to relying on the main system factotum
-=no starts a new private factotum -x and prompts for password/dom/auth
+hostfactotum defaults to relying on the main system factotum =no
+starts a new private factotum -x and prompts for password/dom/auth
 
-netsvc defaults to starting ipconfig if it has not been previously done
-=no turns off
+netsvc defaults to starting ipconfig if it has not been previously
+done =no turns off
 
-hostcsdns defaults to relying on the cs and dns started elsewhere
-=no starts cs and dns locally
+hostcsdns defaults to relying on the cs and dns started elsewhere =no
+starts cs and dns locally
 
-hubsvc defaults to starting a /srv/hubfs to provide persistent rc in the independent namespace
-=no turns off
+hubsvc defaults to starting a /srv/hubfs to provide persistent rc in
+the independent namespace =no turns off
 
-unprivileged defaults to leaving this environment as a standard unprileged node
-=no starts authsrv and keyfs and copies a keyfile from /adm/keys in the 9fat
+unprivileged defaults to leaving this environment as a standard
+unprileged node =no starts authsrv and keyfs and copies a keyfile from
+/adm/keys in the 9fat
 
