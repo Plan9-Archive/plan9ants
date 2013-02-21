@@ -855,4 +855,4 @@ As I experimented with different partial solutions (just running 3 copies of eve
 Mycroftiv, plan9grid@9gridchan.org
 
 .I
-Draft version  2 Feb 20 2013
+Draft version 2, Feb 20 2013
