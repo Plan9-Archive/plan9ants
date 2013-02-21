@@ -8,15 +8,22 @@
 The Giant ANTS for Plan 9 are a collection of software for making Plan 9 systems more
 reliable and flexible by leveraging the power of namespaces.
 <p>
-The main component is a modified kernel which needs no root fs at boot and creates an
+The main component is a modified kernel which needs no root fs at boot. It creates an
 always available ram/paq rooted namespace accessible by cpu(1) 
-from which the user may launch conventional namespaces.
+from which the user may launch conventional namespaces. 
+Additional tools allow the user to reroot quickly to different namespaces 
+and create hubs of persistent rc shells shared between all machines on a grid.
 <p>
-ANTS is compatible with existing x86 Plan 9 installations. The ANTS kernel and tool modifies
-startup and creates new capabilities, but does not change the standard user environment.
+ANTS is compatible with existing x86 Plan 9 installations. The ANTS kernel and tools modify
+startup and create new capabilities, but do not change the standard user environment.
 You can install the ANTS kernel and tools directly to a fresh install from the Bell Labs .iso, just 
 add the 9pcram.gz kernel as an option to your plan9.ini menu.
-An optional tools.tgz and a working example PLAN9.INI can also be installed.
+An optional tools.tgz and a working example PLAN9.INI is also provided.
+<p>
+ANTS is a modular toolkit. Many of the namespace modifying scripts, 
+the hubfs shell multiplexer, and the rio variant "grio", do not depend on the kernel modifications.
+The kernel modifications for bootup and for writable /proc/*/ns are independent from each other.
+ANTS can be used as a self-sufficient micro-distribution of Plan 9 around 6mb in size.
 <p>
 <h2>Documentation</h2>
 <p>
@@ -42,13 +49,15 @@ An optional tools.tgz and a working example PLAN9.INI can also be installed.
 <p>
 <a href="doc/PLAN9.INI">reference PLAN9.INI</a>
 <p>
-<h2>Full install documentation, README, and all source code</h2>
+<h2>Full install documentation, README, and source code</h2>
 <p>
 <b>Please browse <a href="magic/webls?dir=/">the full ANTS directory</a>.</b>
 </p>
 <h2>Demonstration micro-cpu server VM image</h2>
-You can check out how ANTS works in a VM image which includes only a small bootable
-9fat partition. The 6mb download expands to a 50mb disk image which 
+You can check out how ANTS works in a VM image which includes only a small bootable 9fat partition. 
+It was creaed with Qemu and intended for use in that vm 
+although the .raw image may work in other vms also.
+The 6mb download expands to a 50mb disk image which 
 starts a working cpu server environment with local vga, rio,
 cpu access, acme, and many other tools. It can tcp root to another root fs to function as
 a standard cpu server if desired.
@@ -58,6 +67,10 @@ a standard cpu server if desired.
 The ANTS include code from Plan 9 from Bell Labs. Original portions are copyright Mycroftiv.
 <p>
 Licensed under the Lucent Public License.
+<p>
+9gridchan.org recommends the updated Mothra browser for viewing this website.
+<p>
+The ANTS software has been evaluated as "mostly harmless" by the interstellar cat -v patrol force.
 </body>
 </html>
 
