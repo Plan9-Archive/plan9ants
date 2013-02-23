@@ -15,7 +15,7 @@ The Advanced Namespace ToolS are a collection of Plan 9 software designed for th
 
 2. Flexibility and Configurability - make it easy to change what role a system is playing in a grid, to add in new systems, and retire old ones, without disrupting the user environment.
 
-3. Multiplexing namespaces on one machine - the standard Plan 9 installer sets up a Plan 9 environment with a namespace organized to appear similar to a traditional unix userland, and all software on the machine operates within this namespace. This is convention, not necessity, and the Plan 9 kernel can run multiple user environments with radically different namespaces on the same machine. One notable application of this is running both 9Front userland and standard Bell Labs userland on the same box at the same time, one available via 
+3. Multiplexing namespaces on one machine - the standard Plan 9 installer sets up a Plan 9 environment with a namespace organized to appear similar to a traditional unix userland, and all software on the machine operates within this namespace. This is convention, not necessity, and the Plan 9 kernel can run multiple user environments with radically different namespaces on the same machine. One notable application of this is running both 9front userland and standard Bell Labs userland on the same box at the same time, one available via 
 .CW cpu 
 and one via the terminal's physical display and i/o.
 
@@ -439,7 +439,7 @@ into the terminal namespace, because that is what is located at
 .PP
 To demonstrate that these principles work for even more strongly diverging namespaces, a test of using 
 .CW plan9rc 
-to launch both 9Front and Bell Labs user environments simultaneously was conducted. Both can coexist on the same machine as normal self sufficient environments without competing and the user can even create a mixed namespace that has elements of each.
+to launch both 9front and Bell Labs user environments simultaneously was conducted. Both can coexist on the same machine as normal self sufficient environments without competing and the user can even create a mixed namespace that has elements of each.
 .PP
 This points to the next component of the toolkit for working in and controlling divergent namespaces - the writable 
 .CW /proc/*/ns 
@@ -472,7 +472,7 @@ The generality of this mechanism allows it to be used as the foundation for anot
 .CW cpns 
 scripts perform simple comparisons on the contents of process namespaces and make modifications accordingly. It should be noted that the scripts in their current state do not parse and understand the full 'graph/tree' structure of namespaces so their modifcations are somewhat naive. This is not a limit of the writable ns modification, more sophisticated tools should be able to do perfect rewrites of the namespace of the target process, but doing this requires understanding the dependencies of later binds on previous operations. The current scripts simply compare the ns files for matching and non-matching lines and use this to generate a list of actions. In practice, this mechanism is capable of performing even dramatic namespace modifications, and the user can always make additional changes or modify the actions of the script by using the 
 .CW -t 
-flag to print actions without executing them. During testing, it was possible transform a running 9Front userland into a Bell Labs userland by repeated
+flag to print actions without executing them. During testing, it was possible transform a running 9front userland into a Bell Labs userland by repeated
 .CW cpns
 .CW -r
 between processes that had been launched on different roots and by the respective 
@@ -481,7 +481,7 @@ of each distribution. The namespaces of
 .CW rio
 and the running shells and applications were all remotely rewritten via the 
 .CW /proc
-interface to use a different root fs and to bring their namespace into conformance withe Bell Labs namespace contentions.
+interface to use a different root fs and to bring their namespace into conformance with Bell Labs namespace conventions.
 .PP
 Tt seems accurate to describe the modified boot system with ram/paq namespace and the plan9rc script as a "namespace hypervisor" because it supports multiple independent namespaces and allow travel between them. The writable ns mod enables fine grained control over the namespace of every process owned by a user on an entire grid of machines. 
 .PP

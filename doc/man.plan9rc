@@ -134,7 +134,9 @@ allows the user to retain access if desired to the programs in the bootpaq and/o
 .I tools.tgz, 
 or choose no to drop down to kernel-device only namespace.
 .SH VARIABLES
-The plan9rc script makes use of standard variables from
+The 
+.IR plan9rc
+script makes use of standard variables from
 .IR plan9.ini (8)
 and also new variables. Both types of variables, and their default behaviors, are listed.
 .TP 8
@@ -312,7 +314,7 @@ server is started and an rc connected to it. Set no to disable this.
 by default the ramroot environment does not provide auth services. Set no to start a 
 .IR keyfs (4)
 and 
-.Ir authsrv (6)
+.IR authsrv (6)
 using 
 .I /n/9fat/adm.
 .SH FILES
