@@ -142,8 +142,4 @@ flag is recommended until you are confident you understand the results of a give
 .SH BUGS
 These scripts operate using simple comparison via 
 .IR grep (1)
- of matching lines.
-Namespace structures are more complicated than this because the meaning of
-later binds depends on previous mounts and binds. Better tools should be
-written which understand the graph/tree structure of a namespace and how
-to correctly build and dissassemble them in full generality.
+ of matching lines. Namespace structures are more complicated than this because the meaning of later binds depends on previous mounts and binds. Better tools should be written which understand the graph/tree structure of a namespace and how to correctly build and dissassemble them in full generality.

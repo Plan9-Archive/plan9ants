@@ -90,7 +90,9 @@ rerootwin boot
 grio
 .EE
 .PP
-To let a shell within hubfs correctly track window size and run gui programs:
+To let a shell within 
+.IR hubfs (4)
+correctly track window size and run gui programs:
 .IP
 .EX
 savedevs prehub

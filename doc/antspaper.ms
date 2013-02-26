@@ -48,13 +48,13 @@ programs. The userspace is still created the same way, with a conventional root,
 .PP
 Creating multiple independent namespaces means the user needs to be able to move easily between them and modify namespace in an extensive fashion easily. Moving between namespaces and restructuring namespaces is enabled with scripted namespace operations such as
 .CW rerootwin
-to reroot a window without losing the connection to keyboard, mouse, and window system, and a kernel modification to make 
+to reroot a window without losing the connection to keyboard, mouse, and window system. Another kernel modification makes
 .CW /proc/*/ns
-writable. This allows scripted namespace operations at a higher level of abstraction such as
+writable to control the namespace of any owned process. This allows scripted namespace operations at a higher level of abstraction such as
 .CW cpns
 to make the namespace of one process a copy of another. 
 .PP
-The user has controls persistent interactive shells in any namespace on any machine using 
+The user has control of persistent interactive shells in any namespace on any machine using 
 .CW hubfs
 and can pipe data freely between shells on different nodes. Access to these persistent shells is integrated into
 .CW grio
@@ -483,7 +483,7 @@ and the running shells and applications were all remotely rewritten via the
 .CW /proc
 interface to use a different root fs and to bring their namespace into conformance with Bell Labs namespace conventions.
 .PP
-Tt seems accurate to describe the modified boot system with ram/paq namespace and the plan9rc script as a "namespace hypervisor" because it supports multiple independent namespaces and allow travel between them. The writable ns mod enables fine grained control over the namespace of every process owned by a user on an entire grid of machines. 
+It seems accurate to describe the modified boot system with ram/paq namespace and the plan9rc script as a "namespace hypervisor" because it supports multiple independent namespaces and allow travel between them. The writable ns mod enables fine grained control over the namespace of every process owned by a user on an entire grid of machines. 
 .PP
 The final component used to bind the diverse namespaces together into a controllable and usable environment is the persistence and multiplexing layer provided by hubfs and integration into a modified 
 .CW rio 
