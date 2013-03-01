@@ -483,7 +483,7 @@ and the running shells and applications were all remotely rewritten via the
 .CW /proc
 interface to use a different root fs and to bring their namespace into conformance with Bell Labs namespace conventions.
 .PP
-It seems accurate to describe the modified boot system with ram/paq namespace and the plan9rc script as a "namespace hypervisor" because it supports multiple independent namespaces and allow travel between them. The writable ns mod enables fine grained control over the namespace of every process owned by a user on an entire grid of machines. 
+It seems accurate to describe the modified boot system with ram/paq namespace and the plan9rc script as a "namespace hypervisor" because it supports multiple independent namespaces and allows travel between them. The writable ns mod enables fine grained control over the namespace of every process owned by a user on an entire grid of machines. 
 .PP
 The final component used to bind the diverse namespaces together into a controllable and usable environment is the persistence and multiplexing layer provided by hubfs and integration into a modified 
 .CW rio 
@@ -518,7 +518,7 @@ To make this environment available to the user by default, a few commands can be
 .CW cpurc 
 and the user profile. One machine within a grid will probably act as a primary "hubserver" and begin a hubfs for the user at its startup. Other machines will 'export' shells to that machine, using a command such as
 .DS
-	cpu -h gridserver -c hub -b srvname rc.remotesys
+	cpu -h gridserver -c hub -b srvname remotesys
 .DE
 .PP
 The user adds a statement to profile such as:

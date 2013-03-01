@@ -1189,11 +1189,12 @@ mntscan(Mntwalk *mw, Proc *p)
 static long
 procwrite(Chan *c, void *va, long n, vlong off)
 {
-	int id, m;
+	int id, m, nsop;
 	Proc *p, *t, *et;
 	char *a, *arg, buf[ERRMAX];
 	ulong offset = off;
 
+	nsop = 0;
 	a = va;
 	if(c->qid.type & QTDIR)
 		error(Eisdir);
@@ -1296,7 +1297,11 @@ procwrite(Chan *c, void *va, long n, vlong off)
 		break;
 	case Qns:
 //		print("procnsreq on p, %s, %ld\n", a, n);
+		nsop = 1;
+		qunlock(&p->debug);
+		qlock(&p->procmount);
 		procnsreq(p, va, n);
+		qunlock(&p->procmount);
 		break;
 
 	default:
@@ -1304,7 +1309,8 @@ procwrite(Chan *c, void *va, long n, vlong off)
 		error(Egreg);
 	}
 	poperror();
-	qunlock(&p->debug);
+	if(nsop == 0)
+		qunlock(&p->debug);
 	return n;
 }
 
