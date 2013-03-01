@@ -1802,11 +1802,11 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 			error(Enoattach);
 
 		if(waserror()) {
-			print("nsmod locked on process %uld\n"), targp->pid);
+			print("nsmod /proc mounts locked on process %uld\n", targp->pid);
 			nexterror();
 		}
 		if(canqlock(&targp->procmount) == 0){
-			error("new mount on process %uld locked out: previous failure\n", targp->pid);
+			error("mounts on this process via /proc locked by previous error");
 			poperror();
 			return -1;
 		}
