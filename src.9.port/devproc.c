@@ -1189,12 +1189,11 @@ mntscan(Mntwalk *mw, Proc *p)
 static long
 procwrite(Chan *c, void *va, long n, vlong off)
 {
-	int id, m, nsop;
+	int id, m;
 	Proc *p, *t, *et;
 	char *a, *arg, buf[ERRMAX];
 	ulong offset = off;
 
-	nsop = 0;
 	a = va;
 	if(c->qid.type & QTDIR)
 		error(Eisdir);
@@ -1211,7 +1210,8 @@ procwrite(Chan *c, void *va, long n, vlong off)
 
 	qlock(&p->debug);
 	if(waserror()){
-		qunlock(&p->debug);
+		if(p->debug.locked == 1)
+			qunlock(&p->debug);
 		nexterror();
 	}
 	if(p->pid != PID(c->qid))
@@ -1297,11 +1297,9 @@ procwrite(Chan *c, void *va, long n, vlong off)
 		break;
 	case Qns:
 //		print("procnsreq on p, %s, %ld\n", a, n);
-		nsop = 1;
-		qunlock(&p->debug);
-		qlock(&p->procmount);
+		if(p->debug.locked == 1)
+			qunlock(&p->debug);
 		procnsreq(p, va, n);
-		qunlock(&p->procmount);
 		break;
 
 	default:
@@ -1309,7 +1307,7 @@ procwrite(Chan *c, void *va, long n, vlong off)
 		error(Egreg);
 	}
 	poperror();
-	if(nsop == 0)
+	if(p->debug.locked == 1)
 		qunlock(&p->debug);
 	return n;
 }
@@ -1803,6 +1801,17 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		if(targp->pgrp->noattach)
 			error(Enoattach);
 
+		if(waserror()) {
+			print("nsmod locked on process %uld\n"), targp->pid);
+			nexterror();
+		}
+		if(canqlock(&targp->procmount) == 0){
+			error("new mount on process %uld locked out: previous failure\n", targp->pid);
+			poperror();
+			return -1;
+		}
+		poperror();
+			
 		ac = nil;
 		bc = pfdtochan(fd, ORDWR, 0, 1, targp);
 		if(waserror()) {
@@ -1831,7 +1840,8 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 
 		ret = devno('M', 0);
 		c0 = devtab[ret]->attach((char*)&bogus);
-		print("c0 devtab attach assigned\n");
+		qunlock(&targp->procmount);
+//		print("c0 devtab attach assigned\n");
 
 		poperror();	/* spec */
 		free(spec);
@@ -1929,21 +1939,17 @@ procnsreq(Proc *p, char *va, int n)
 	if(waserror()){
 		free(cbf);
 		nexterror();
-		poperror();
-		return;
 	}
 
 //	print("cbf->nf=%d\n", cbf->nf);
 	if((cbf->nf < 2) || (cbf->nf > 5)){
 		error(Ebadarg);
 		poperror();
-		free(cbf);
 		return;
 	} else if(cbf->nf == 2){
 		if(strcmp(cbf->f[0], "unmount") != 0){
 			error(Ebadarg);
 			poperror();
-			free(cbf);
 			return;		
 		}
 		new = nil;
@@ -1951,13 +1957,11 @@ procnsreq(Proc *p, char *va, int n)
 		if(strncmp(old, "#|", 2)==0){
 			error(Ebadsharp);
 			poperror();
-			free(cbf);
 			return;
 		}
 //		print("procunmount(everything from %s on %uld)\n", old, p->pid);
 		procunmount(new, old, p);
 		poperror();
-		free(cbf);
 		return;		
 	} else if(cbf->nf == 3){
 		new = cbf->f[1];
@@ -1990,7 +1994,6 @@ procnsreq(Proc *p, char *va, int n)
 		if((strncmp(new, "#|", 2)==0) || (strncmp(old, "#|", 2)==0)){
 			error(Ebadsharp);
 			poperror();
-			free(cbf);
 			return;
 		}
 //		print("psysopen(%s, ORDWRP, targp)\n", new);
@@ -1998,16 +2001,14 @@ procnsreq(Proc *p, char *va, int n)
 		if(fd < 0){
 			error(Ebadfd);
 			poperror();
-			free(cbf);
 			return;
 		}
-		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
+//		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
 		procbindmount(1, fd, -1, nil, old, flags, spec, p);
 	} else if (strcmp(cbf->f[0], "unmount")==0){
 		if((strncmp(new, "#|/", 3)==0) || (strncmp(old, "#|", 2)==0)){
 			error(Ebadsharp);
 			poperror();
-			free(cbf);
 			return;
 		}
 //		print("procunmount(%s from %s on %uld)\n", new, old, p->pid);
