@@ -2,7 +2,9 @@
 #include <libc.h>
 #include <ctype.h>
 
-#define SMBUF 777
+enum smallbuffer{
+	SMBUF = 777,
+};
 
 /* hubshell is the client for hubfs, usually started by the hub wrapper script */
 

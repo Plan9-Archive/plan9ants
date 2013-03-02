@@ -5,6 +5,8 @@
 #include	"fns.h"
 #include	"../port/error.h"
 
+/* modified to add /x and /u stems for convenient extra mount points */
+
 enum
 {
 	Qdir = 0,

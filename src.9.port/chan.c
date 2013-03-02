@@ -5,6 +5,9 @@
 #include	"fns.h"
 #include	"../port/error.h"
 
+/* This version of chan.c includes modified duplicates of many functions */
+/* They exist to enable to modified /proc device to manipulate target process ns */
+
 int chandebug=0;		/* toggled by sysr1 */
 #define DBG if(chandebug)iprint
 
@@ -742,6 +745,10 @@ cmount(Chan **newp, Chan *old, int flag, char *spec)
 	poperror();
 	return nm->mountid;
 }
+
+/* This and the other modified copies of existing functions use p- as a prefix */
+/* They are mostly identical but take an additional parameter */
+/* The additional parameter is a pointer to the process to be modified */
 
 int
 pcmount(Chan **newp, Chan *old, int flag, char *spec, Proc *targp)

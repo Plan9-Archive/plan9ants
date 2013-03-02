@@ -9,6 +9,8 @@
 #include	"ureg.h"
 #include	"edf.h"
 
+/* modified to allow namespace operations to be written to /proc/pid/ns */
+
 enum
 {
 	Qdir,
@@ -161,6 +163,9 @@ static int tproduced, tconsumed;
 void (*proctrace)(Proc*, int, vlong);
 
 extern int unfair;
+
+
+/* The first set of functions is copied from sysfile.c for use from procnsreq */
 
 static void
 profclock(Ureg *ur, Timer *)
@@ -350,7 +355,7 @@ pfdclose(int fd, int flag, Proc *targp)
 	unlock(f);
 	cclose(c);
 }
-
+/* End borrowed functions from sysfile.c */
 
 static int
 procgen(Chan *c, char *name, Dirtab *tab, int, int s, Dir *dp)
@@ -1780,6 +1785,8 @@ data2txt(Segment *s)
 	return ps;
 }
 
+/* modified version of bindmount from sysfile.c. This operates on a target process */
+
 long
 procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, char* spec, Proc* targp)
 {
@@ -1920,6 +1927,9 @@ procunmount(char *new, char *old, Proc *targp)
 	poperror();
 	return 0;
 }
+
+/* parses writes on the ns file converts to namespace operations */
+/* the completed command is sent to procbindmount or procunmount */
 
 void
 procnsreq(Proc *p, char *va, int n)

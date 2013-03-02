@@ -5,6 +5,7 @@
 #include	"fns.h"
 #include	"../port/error.h"
 
+/* modified to allow hostowner to remove /srv/boot */
 
 typedef struct Srv Srv;
 struct Srv
