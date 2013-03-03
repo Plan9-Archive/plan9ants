@@ -29,8 +29,8 @@ char *syssigname[] = {
 	"term",
 	0
 };
-char Rcmain[]="/boot/rcmain";
-char Fdprefix[]="/fd/";
+char *Rcmain ="/boot/rcmain";
+char *Fdprefix ="/fd/";
 void execfinit(void);
 void execbind(void);
 void execmount(void);
