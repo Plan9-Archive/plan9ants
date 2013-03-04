@@ -57,15 +57,16 @@ cp /bin/vacfs .
 cp /bin/netssh .
 cp /bin/ssh .
 cp /bin/scp .
+cp /bin/telnet .
+cp /bin/ip/telnetd .
 cp /bin/vncs .
 cp /bin/vncv .
 #cp /bin/ip/ftpd .
-#cp /bin/ip/telnetd .
 #cp /bin/aquarela .
+#cp /bin/ip/httpd .
 #cp /bin/nfs .
 #cp /bin/ftpfs .
 #cp /bin/cifs .
-#cp /bin/telnet .
 #cp /bin/aux/nfsserver .
 #cp /bin/tlsclient .
 #cp /bin/tlsclienttunnel .
@@ -115,6 +116,8 @@ cp /bin/vt .
 #cp /bin/db .
 #cp /bin/plumb .
 #cp /bin/plumber .
+#cp /bin/sam .
+#cp /bin/samterm .
 #cp /bin/faces .
 #cp /bin/togif .
 

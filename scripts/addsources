@@ -8,7 +8,8 @@ mount -n /srv/sources /n/sources
 bind -a /n/sources/plan9 /
 bind -b /$cputype/bin /bin
 bind -b /rc/bin /bin
-bind -b /n/sources/plan9/lib/font /lib/font
 bind -a /n/sources/plan9/sys /sys
+bind -a /n/sources/plan9/lib /lib
+bind -b /n/sources/plan9/lib/font /lib/font
 mount -a /srv/factotum /mnt
 exit ''

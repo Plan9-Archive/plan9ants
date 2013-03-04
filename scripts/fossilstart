@@ -15,9 +15,13 @@ if(~ $1 '')
 if(! ~ $2 ''){
 	foscons=fscons.$2
 	fossrv=$2
-}	
+}
 
-fossil -c 'srv -p '$foscons
+fossilcmd=fossil
+if(test -d /bin/fossil)
+	fossilcmd=/bin/fossil/fossil
+	
+$fossilcmd -c 'srv -p '$foscons
 echo 'fsys main config '$fospart >>/srv/fscons
 echo 'fsys main open  -c 9000' >>/srv/fscons
 echo 'fsys main snaptime -s 60 -a 0500 -t 2880' >>/srv/$foscons
