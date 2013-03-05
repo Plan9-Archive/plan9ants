@@ -24,6 +24,8 @@ struct Shell {
 
 char initname[SMBUF];
 char srvname[SMBUF];
+int fortunate;
+int echoes;
 
 Shell* setupshell(char *name);
 void startshell(Shell *s);
@@ -203,7 +205,10 @@ parsebuf(Shell *s, char *buf, int outfd)
 	if(strncmp(buf, "detach", 6) == 0){
 		fprint(2, "hubshell detaching\n");
 		s->shellctl = 'q';
-		write(outfd, "fortune\n", 8);
+		if(fortunate)
+			write(outfd, "fortune\n", 8);
+		if(echoes)
+			write(outfd, "echo\n", 5);
 		sleep(1000);
 		closefds(s);
 		exits(nil);
@@ -238,7 +243,10 @@ parsebuf(Shell *s, char *buf, int outfd)
 			return;
 		}
 		s->shellctl = 'q';
-		write(outfd, "fortune\n", 8);
+		if(fortunate)
+			write(outfd, "fortune\n", 8);
+		if(echoes)
+			write(outfd, "echo\n", 5);
 		sleep(700);
 		closefds(s);
 		startshell(newshell);
@@ -254,7 +262,10 @@ parsebuf(Shell *s, char *buf, int outfd)
 		strncpy(tmpstr, buf + 6, strcspn(buf + 6, "\n"));
 		fprint(2, "creating new local shell using hub %s %s\n", srvname, tmpstr);
 		s->shellctl = 'q';
-		write(outfd, "fortune\n", 8);
+		if(fortunate)
+			write(outfd, "fortune\n", 8);
+		if(echoes)
+			write(outfd, "echo\n", 5);
 		sleep(1000);
 		closefds(s);
 		execl("/bin/hub", "hub", srvname, tmpstr, 0);
@@ -276,7 +287,11 @@ parsebuf(Shell *s, char *buf, int outfd)
 			return;
 		}
 		s->shellctl = 'q';
-		write(outfd, "fortune\n", 8);
+		if(fortunate)
+			write(outfd, "fortune\n", 8);
+		if(echoes)
+			write(outfd, "echo\n", 5);
+		
 		sleep(1000);
 		closefds(s);
 		startshell(newshell);
@@ -315,6 +330,10 @@ parsebuf(Shell *s, char *buf, int outfd)
 	if(strncmp(buf, "status", 6) == 0){
 		print("\tHubshell status: attached to mounted %s of /srv/%s\n", s->basename, srvname);
 		print("\tfdzero delay: %d  fdone delay: %d  fdtwo delay: %d\n", s->fdzerodelay, s->fdonedelay, s->fdtwodelay);
+		if(fortunate)
+			print("\tfortune fd flush active\n");
+		if(echoes)
+			print("\techo fd flush active\n");
 		fprint(2, "io: ");
 		return;
 	}
@@ -327,6 +346,29 @@ parsebuf(Shell *s, char *buf, int outfd)
 		}
 		sleep(1500);
 		fprint(2, "io: ");
+		return;
+	}
+	if(strncmp(buf, "fortun", 6) == 0){
+		print("fortunes active\n");
+		fortunate = 1;
+		fprint(2, "io: ");
+		return;
+	}
+	if(strncmp(buf, "unfort", 6) == 0){
+		print("fortunes deactivated\n");
+		fortunate = 0;
+		fprint(2, "io: ");
+		return;
+	}
+	if(strncmp(buf, "echoes", 6) == 0){
+		print("echoes active\n");
+		echoes = 1;
+		fprint(2, "io: ");
+		return;
+	}
+	if(strncmp(buf, "unecho", 6) == 0){
+		print("echoes deactivated\n");
+		echoes = 0;
 		return;
 	}
 
@@ -343,6 +385,9 @@ main(int argc, char *argv[])
 		fprint(2, "usage: hubshell hubsname - and probably you want the hub wrapper script instead.");
 		sysfatal("usage\n");
 	}
+
+	fortunate = 0;
+	echoes = 1;
 	strncpy(initname, argv[1], SMBUF);
 	strncat(srvname, initname+3, SMBUF);
 	sprint(srvname + strcspn(srvname, "/"), "\0");

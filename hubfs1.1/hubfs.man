@@ -129,38 +129,50 @@ Making new shells and moving in hubshell:
 .PP
 .IP
 .EX
-%detach  #disconnect from attached shell
+%detach  # disconnect from attached shell
 .EE
 .PP
 .IP
 .EX
-%remote NAME #start shell on remote machine
+%remote NAME # start shell on remote machine
 .EE
 .PP
 .IP
 .EX
-%local NAME #start shell on local machine shared to hubfs
+%local NAME # start shell on local machine shared to hubfs
 .EE
 .PP
 .IP
 .EX
-%attach NAME #move to an existing hubfs shell
+%attach NAME # move to an existing hubfs shell
 .EE
 .PP
 .IP
 .EX
-%err TIME, %in TIME, %out TIME #time in ms for delay loop
+%err TIME, %in TIME, %out TIME # time in ms for delay loop
 .EE
 .PP
 .IP
 .EX
-%status #basic hubfs connection info
+%status # basic hubfs connection info
 .EE
 .PP
 .IP
 .EX
-%list #lc of connected hubfs hubs
+%list # lc of connected hubfs hubs
 .EE
+.PP
+.IP
+.EX
+%unecho # turn off echo flush when moving between shells
+.EE
+.PP
+.IP
+.EX
+%fortun # turn on fortune flush when moving between shells
+.EE
+.PP
+.IP
 .PP
 Controlling 
 .IR hubfs 
@@ -180,7 +192,8 @@ echo melt >/n/hubsrv/ctl #resume normal flow of data
 .PP
 .IP
 .EX
-echo fear >/n/hubsrv/ctl #activate paranoid(safe) mode - writers wait for readers
+echo fear >/n/hubsrv/ctl #activate paranoid(safe) mode
+# - writers wait for readers
 .EE
 .PP
 .IP
