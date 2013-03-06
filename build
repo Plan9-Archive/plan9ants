@@ -24,23 +24,6 @@ bind -b $builddir/scripts /bin
 bind $builddir /n/rootless
 bind -bc $builddir/compiletemp /sys/src/9/pc
 
-if(~ $1 docs){
-	echo building docs
-	cp hubfs1.1/hubfs.man doc/man.hubfs
-	cd doc
-	cp man.cpns $builddir/sys/man/1/cpns
-	cp man.rerootwin $builddir/sys/man/1/rerootwin
-	cp man.addwrroot $builddir/sys/man/1/addwrroot
-	cp man.ventiprog $builddir/sys/man/8/ventiprog
-	cp man.plan9rc $builddir/sys/man/8/plan9rc
-	cp man.hubfs $builddir/sys/man/4/hubfs
-	cp modified.manpages/proc.man $builddir/sys/man/3/proc
-	cp modified.manpages/boot.man $builddir/sys/man/8/boot
-	troff -ms antspaper.ms | dpost >ants.ps
-	cd $builddir
-	exit ''
-}
-
 if(~ $1 tiny){
 	if(! ~ $user `{cat /dev/hostowner}){
 		echo only hostowner can build tiny
@@ -69,6 +52,9 @@ if(~ $1 install){
 		echo only hostowner can build install
 		exit no.hostowner
 	}
+	echo WARNING changes your plan9.ini
+	echo use build everything to build with no system changes
+	sleep 5
 	echo installing hubfs and grio and scripts
 	cd hubfs1.1
 	mk install
@@ -100,6 +86,23 @@ if(~ $1 install){
 	cp doc/modified.manpages/proc.man /sys/man/3/proc
 	cp doc/modified.manpages/boot.man /sys/man/8/boot
 	echo install complete
+	exit ''
+}
+
+if(~ $1 docs){
+	echo building docs
+	cp hubfs1.1/hubfs.man doc/man.hubfs
+	cd doc
+	cp man.cpns $builddir/sys/man/1/cpns
+	cp man.rerootwin $builddir/sys/man/1/rerootwin
+	cp man.addwrroot $builddir/sys/man/1/addwrroot
+	cp man.ventiprog $builddir/sys/man/8/ventiprog
+	cp man.plan9rc $builddir/sys/man/8/plan9rc
+	cp man.hubfs $builddir/sys/man/4/hubfs
+	cp modified.manpages/proc.man $builddir/sys/man/3/proc
+	cp modified.manpages/boot.man $builddir/sys/man/8/boot
+	troff -ms antspaper.ms | dpost >ants.ps
+	cd $builddir
 	exit ''
 }
 
@@ -148,8 +151,8 @@ if(~ $1 patched){
 	mk 8.factotum
 	cp 8.factotum $builddir/bootdir.extras/factotum
 	cd $builddir
-	strip bootdir.extras/rc
-	strip bootdir.extras/factotum
+	strip bootdir.extras/rc >/dev/null >[2=1]
+	strip bootdir.extras/factotum >/dev/null >[2=1]
 	rm -rf /tmp/rc
 	rm -rf /tmp/factotum
 	exit ''
@@ -168,9 +171,9 @@ if(~ $1 extras){
 	cp 8.hubshell ../bootdir.extras/hubshell
 	cp hub ../bootdir.extras
 	cd $builddir
-	strip bootdir.extras/grio
-	strip bootdir.extras/hubfs
-	strip bootdir.extras/hubshell
+	strip bootdir.extras/grio >/dev/null >[2=1]
+	strip bootdir.extras/hubfs >/dev/null >[2=1]
+	strip bootdir.extras/hubshell >/dev/null >[2=1]
 	exit ''
 }
 
@@ -186,7 +189,7 @@ if(~ $1 bootpaq){
 	cd root/bin
 	. _mkpaq
 	cd $builddir
-	strip root/bin/*
+	strip root/bin/* >/dev/null >[2=1]
 	mkpaqfs -b 8192 -o bootdir.extras/bootpaq root/bin
 	sha1sum bootdir.extras/bootpaq >>build.hashes
 	exit ''
@@ -199,7 +202,7 @@ if(~ $1 tools){
 	cd root/bin
 	. _toolcopy
 	cd $builddir
-	strip root/bin/*
+	strip root/bin/* >/dev/null >[2=1]
 	ramfs -m /tmp
 	tar cf /tmp/tools.tar root
 	gzip -9 -c /tmp/tools.tar >tools.tgz
@@ -220,7 +223,7 @@ cp /bin/read root/bin
 cp /bin/cat root/bin
 cp /bin/echo root/bin
 cp /bin/test root/bin
-strip root/bin/*
+strip root/bin/* >/dev/null >[2=1]
 if(~ $1 ramfs){
 	echo building kernel in tmp
 	ramfs -m /tmp

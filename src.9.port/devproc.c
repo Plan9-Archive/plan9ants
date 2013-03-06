@@ -311,7 +311,7 @@ long
 psysopen(char *filename, ulong flags, Proc *targp)
 {
 	int fd;
-	Chan *c = 0;
+	Chan *c;
 
 	openmode(flags);	/* error check only */
 //	validaddr(arg[0], 1, 0);
@@ -1940,7 +1940,6 @@ procnsreq(Proc *p, char *va, int n)
 	int fd;
 	int countnf;
 
-	fd=-1;
 	flags=MREPL;
 	countnf=1;
 	spec = "";

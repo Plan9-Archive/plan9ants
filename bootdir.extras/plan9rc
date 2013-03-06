@@ -200,6 +200,8 @@ fn dogetrootfs{
 			fs=`{getans fs $fs}
 		if(~ $auth '')
 			auth=$fs
+#		## HACK: start new factotum that knows where to dial ##
+		factotum -a $auth
 		if(~ $cfs ''){
 			echo srv $fs to /srv/boot...
 			if(~ $fs tcp*)

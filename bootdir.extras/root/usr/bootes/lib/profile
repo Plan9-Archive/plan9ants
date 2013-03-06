@@ -2,7 +2,6 @@ bind -a $home/bin/rc /bin
 bind -a $home/bin/$cputype /bin
 bind -c $home/tmp /tmp
 font = /lib/font/bit/lucm/unicode.9.font
-stamp=`{date |tr -d 'A-Za-z: '}
 switch($service){
 case terminal
 #	plumber

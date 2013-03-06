@@ -4,7 +4,7 @@
 cp /bin/auth/authsrv .
 cp /bin/auth/as .
 cp /bin/auth/changeuser .
-cp /bin/auth/debug .
+cp /bin/auth/debug authdebug
 cp /bin/auth/keyfs .
 cp /bin/auth/secstore .
 #cp /bin/auth/aescbc .
@@ -33,7 +33,7 @@ cp /bin/disk/prep .
 cp /bin/fossil/flfmt .
 cp /bin/fossil/last fossilast
 cp /bin/venti/rdarena .
-cp /bin/venti/sync .
+cp /bin/venti/sync ventisync
 cp /bin/venti/syncindex .
 cp /bin/venti/wrarena .
 #cp /bin/venti/checkarenas .
@@ -66,6 +66,7 @@ cp /bin/vncv .
 #cp /bin/ip/ftpd .
 #cp /bin/aquarela .
 #cp /bin/ip/httpd .
+#cp /bin/ip/httpfile .
 #cp /bin/nfs .
 #cp /bin/ftpfs .
 #cp /bin/cifs .
@@ -74,6 +75,7 @@ cp /bin/vncv .
 #cp /bin/tlsclienttunnel .
 #cp /bin/tlssrv .
 #cp /bin/tlssrvtunnel .
+#cp /bin/unvac . #unneeded with vacfs
 
 ## shell tools
 cp /bin/date .
@@ -107,6 +109,7 @@ cp /bin/Kill .
 cp /bin/slay .
 cp /bin/reboot .
 cp /bin/window .
+cp /bin/yesterday .
 
 ## acme and others
 cp /bin/acme .
