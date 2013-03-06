@@ -7,6 +7,7 @@ cp /bin/auth/changeuser .
 cp /bin/auth/debug .
 cp /bin/auth/keyfs .
 cp /bin/auth/secstore .
+#cp /bin/auth/aescbc .
 #cp /bin/auth/secstored .
 #cp /bin/auth/secuser .
 #cp /bin/auth/cron .
@@ -37,6 +38,7 @@ cp /bin/venti/syncindex .
 cp /bin/venti/wrarena .
 #cp /bin/venti/checkarenas .
 #cp /bin/venti/checkindex .
+#cp /bin/mkext .
 
 ## networking tools
 cp /bin/netstat .
@@ -90,6 +92,7 @@ cp /bin/unmount .
 cp /bin/xd .
 #cp /bin/awk .
 #cp /bin/chgrp .
+#cp /bin/du .
 #cp /bin/tail .
 #cp /bin/tee .
 #cp /bin/unzip .
@@ -109,6 +112,7 @@ cp /bin/window .
 cp /bin/acme .
 cp /bin/con .
 cp /bin/fortune .
+cp /bin/htmlfmt .
 cp /bin/sha1sum .
 cp /bin/syscall .
 cp /bin/topng .

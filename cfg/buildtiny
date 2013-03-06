@@ -1,0 +1,16 @@
+#!/bin/rc
+# make p9tiny image
+
+disk/mbr -m /386/mbr /dev/sdC1/data
+disk/fdisk -baw /dev/sdC1/data
+disk/prep -bw -a^(9fat nvram) /dev/sdC1/plan9
+disk/format -b /386/pbslba -d -r 2 /dev/sdC1/9fat /386/9load /usr/mycroftiv/sourcesdir/rootlessnext/9pcram.gz /usr/mycroftiv/sourcesdir/rootlessnext/tools.tgz $home/p9tiny/plan9.ini
+dossrv -f /dev/sdC1/9fat c1fat
+mount -c /srv/c1fat /n/c1fat
+mkdir /n/c1fat/adm
+dircp $home/p9tiny/adm /n/c1fat/adm
+unmount /n/c1fat
+rm /srv/c1fat
+cp $home/p9tiny/nvram /dev/sdC1/nvram
+
+# gzip -9 -c /dev/sdC1 >p9tiny.raw.gz

@@ -41,6 +41,29 @@ if(~ $1 docs){
 	exit ''
 }
 
+if(~ $1 tiny){
+	if(! ~ $user `{cat /dev/hostowner}){
+		echo only hostowner can build tiny
+		exit no.hostowner
+	}
+	echo WARNING FORMATS DRIVE SDC!
+	sleep 10
+	echo building tiny sdC1
+	disk/mbr -m /386/mbr /dev/sdC1/data
+	disk/fdisk -baw /dev/sdC1/data
+	disk/prep -bw -a^(9fat nvram) /dev/sdC1/plan9
+	disk/format -b /386/pbslba -d -r 2 /dev/sdC1/9fat /386/9load $builddir/9pcram.gz $builddir/tools.tgz $builddir/cfg/plan9.ini
+	dossrv -f /dev/sdC1/9fat c1fat
+	mount -c /srv/c1fat /n/c1fat
+	mkdir /n/c1fat/adm
+	dircp $builddir/cfg/adm /n/c1fat/adm
+	unmount /n/c1fat
+	rm /srv/c1fat
+	cp $builddir/cfg/nvram /dev/sdC1/nvram
+	chmod 640 /dev/sdC1/nvram
+	exit ''
+}
+
 if(~ $1 install){
 	if(! ~ $user `{cat /dev/hostowner}){
 		echo only hostowner can build install
