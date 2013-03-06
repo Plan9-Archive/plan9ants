@@ -1,0 +1,26 @@
+#!/bin/rc
+# mod a stock install
+
+echo SCRIPT FOR MODDING STOCK INSTALLS ONLY THIS NUKES YOUR CONFIGS AND NVRAM
+sleep 10
+echo HERE WE GOOOOOOOoooooooooooooo
+mv /rc/bin/termrc /rc/bin/termrc.old
+mv /rc/bin/cpurc /rc/bin/cpurc.old
+cp stocktermrc /rc/bin/termrc
+cp stockcpurc /rc/bin/cpurc
+mv /usr/glenda/lib/profile /usr/glenda/lib/profile.old
+cp stockprofile /usr/glenda/lib/profile
+mkdir /rc/bin/service/unused
+mv /rc/bin/service/* /rc/bin/service/unused
+mv /rc/bin/service/unused/tcp17007 /rc/bin/service
+mv /rc/bin/service/unused/tcp17010 /rc/bin/service
+#mv /rc/bin/service/unused/tcp21 /rc/bin/service
+#mv /rc/bin/service/unused/tcp23 /rc/bin/service
+fossil/conf /dev/sdC0/fossil >/tmp/fossilconf
+echo listen tcp!*!564 >>/tmp/fossilconf
+fossil/conf -w /dev/sdC0/fossil </tmp/fossilconf
+cp nvram /dev/sdC0/nvram
+9fat:
+mkdir /n/9fat/adm
+dircp adm /n/9fat/adm
+echo brain transplant complete
