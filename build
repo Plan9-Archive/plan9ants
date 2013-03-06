@@ -41,6 +41,42 @@ if(~ $1 docs){
 	exit ''
 }
 
+if(~ $1 install){
+	if(! ~ $user `{cat /dev/hostowner}){
+		echo only hostowner can build install
+		exit no.hostowner
+	}
+	echo installing hubfs and grio and scripts
+	cd hubfs1.1
+	mk install
+	cd $builddir
+	cd grio
+	mk install
+	cd $builddir
+	cp scripts/* /rc/bin
+	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	echo installing 9pcram kernel and tools.tgz and plan9.ini
+	9fat:
+	kernel=9pcram.gz
+	if(test -e compiletemp/9pcram.gz)
+		kernel=compiletemp/9pcram.gz
+	cp $kernel /n/9fat/9pcram.gz
+	cp tools.tgz /n/9fat/tools.tgz
+	cp doc/PLAN9.INI /n/9fat/plan9.ini
+	echo installing manpages 
+	cp man.cpns /sys/man/1/cpns
+	cp man.rerootwin /sys/man/1/rerootwin
+	cp man.addwrroot /sys/man/1/addwrroot
+	cp man.ventiprog /sys/man/8/ventiprog
+	cp man.plan9rc /sys/man/8/plan9rc
+	mv /sys/man/3/proc /sys/man/3/oldproc
+	mv /sys/man/3/boot /sys/man/3/oldboot
+	cp modified.manpages/proc.man /sys/man/3/proc
+	cp modified.manpages/boot.man /sys/man/8/boot
+	echo install complete
+	exit '
+}
+
 if(~ $1 everything){
 	echo building everything
 	build clean

@@ -1,0 +1,12 @@
+rfork efns
+unmount '#P' /dev
+unmount '#S' /dev
+unmount '#¤' /dev 
+unmount '#k' /dev
+unmount '#u' /dev
+unmount /srv/factotum /mnt
+unmount /srv/slashn /n
+mount -c /srv/escape /net.alt
+unmount /srv
+unmount /net
+rfork m
