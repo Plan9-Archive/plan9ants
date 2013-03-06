@@ -62,19 +62,22 @@ if(~ $1 install){
 		kernel=compiletemp/9pcram.gz
 	cp $kernel /n/9fat/9pcram.gz
 	cp tools.tgz /n/9fat/tools.tgz
+	mv /n/9fat/plan9.ini /n/9fat/p9ini.old
 	cp doc/PLAN9.INI /n/9fat/plan9.ini
 	echo installing manpages 
-	cp man.cpns /sys/man/1/cpns
-	cp man.rerootwin /sys/man/1/rerootwin
-	cp man.addwrroot /sys/man/1/addwrroot
-	cp man.ventiprog /sys/man/8/ventiprog
-	cp man.plan9rc /sys/man/8/plan9rc
+	cp doc/man.cpns /sys/man/1/cpns
+	cp doc/man.rerootwin /sys/man/1/rerootwin
+	cp doc/man.addwrroot /sys/man/1/addwrroot
+	cp doc/man.ventiprog /sys/man/8/ventiprog
+	cp doc/man.plan9rc /sys/man/8/plan9rc
+	cp doc/antspaper.ms /sys/doc/ants.ms
+	cp doc/ants.ps /sys/doc/ants.ps
 	mv /sys/man/3/proc /sys/man/3/oldproc
-	mv /sys/man/3/boot /sys/man/3/oldboot
-	cp modified.manpages/proc.man /sys/man/3/proc
-	cp modified.manpages/boot.man /sys/man/8/boot
+	mv /sys/man/8/boot /sys/man/8/oldboot
+	cp doc/modified.manpages/proc.man /sys/man/3/proc
+	cp doc/modified.manpages/boot.man /sys/man/8/boot
 	echo install complete
-	exit '
+	exit ''
 }
 
 if(~ $1 everything){
