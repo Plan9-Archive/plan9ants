@@ -24,14 +24,14 @@ bind -b $builddir/scripts /bin
 bind $builddir /n/rootless
 bind -bc $builddir/compiletemp /sys/src/9/pc
 
-if(~ $1 tiny){
+if(~ $1 worker){
 	if(! ~ $user `{cat /dev/hostowner}){
-		echo only hostowner can build tiny
+		echo only hostowner can build a worker
 		exit no.hostowner
 	}
 	echo WARNING FORMATS DRIVE SDC1
 	sleep 10
-	echo building tiny sdC1
+	echo building worker sdC1
 	disk/mbr -m /386/mbr /dev/sdC1/data
 	disk/fdisk -baw /dev/sdC1/data
 	disk/prep -bw -a^(9fat nvram) /dev/sdC1/plan9
