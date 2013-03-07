@@ -9,3 +9,10 @@ color of active windows, -z the border color of backgrounded windows.
 The width of borders can be set with an integer parameter for -b.
 
 Example: grio -x /bin/stats -a -elm -c 0xaabbccff -y 0x11111111 -b 2
+
+Note: before using the %remote command in an attached hub it is
+necessary to
+
+bind -c /n/riohubfs.$user /n/hubfs
+
+in the initial hubfs shell

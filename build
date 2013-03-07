@@ -29,7 +29,7 @@ if(~ $1 tiny){
 		echo only hostowner can build tiny
 		exit no.hostowner
 	}
-	echo WARNING FORMATS DRIVE SDC!
+	echo WARNING FORMATS DRIVE SDC1
 	sleep 10
 	echo building tiny sdC1
 	disk/mbr -m /386/mbr /dev/sdC1/data
@@ -47,9 +47,9 @@ if(~ $1 tiny){
 	exit ''
 }
 
-if(~ $1 install){
+if(~ $1 isoinstall){
 	if(! ~ $user `{cat /dev/hostowner}){
-		echo only hostowner can build install
+		echo only hostowner can build isoinstall
 		exit no.hostowner
 	}
 	echo WARNING changes your plan9.ini
