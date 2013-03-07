@@ -1,0 +1,65 @@
+# rerootwin namespace file 9front variant
+# kernel devices
+bind #c /dev
+bind #d /fd
+bind -c #e /env
+bind #p /proc
+bind -c #s /srv
+bind -q #σ /shr
+bind -a #¤ /dev
+bind -a #l /net
+bind -a #I /net
+
+# mount points
+mount -a /srv/slashn $pivot
+
+#devices from previous ns
+mount -c /srv/$oldterm $pivot/$oldterm
+mount -c /srv/$oldwsys $pivot/$oldwsys
+bind $pivot/$oldterm/dev/cons /dev/cons
+bind $pivot/$oldterm/dev/consctl /dev/consctl
+bind -a $pivot/$oldterm/dev /dev
+bind -b $pivot/$oldwsys /dev
+
+# authentication
+mount -b /srv/factotum /mnt
+
+# root
+mount -aC #s/boot /root $rootspec
+bind -a $rootdir /
+mount -a #s/bootpaq /boot
+
+# mount points
+mount -a /srv/slashn /n
+mount -a /srv/slashmnt /mnt
+mount -a /srv/mntexport /mnt/exportfs
+
+# standard bin
+bind -a /boot /bin
+bind -b /root/bin /bin
+bind -b /$cputype/bin /bin
+bind -a /rc/bin /bin
+
+# internal networks
+# mount -a /srv/ip /net
+
+mount -a /srv/cs /net
+mount -a /srv/dns /net
+mount -a /srv/net /net
+
+mount -qC /srv/cwfs /n/other other
+bind -qc /n/other/usr/$user/tmp /usr/$user/tmp
+bind -qc /n/other/dist /dist
+
+mount -c /srv/hubfs /n/hubfs
+
+# put /mnt/term and wsys back 
+bind -bc $pivot/$oldterm /mnt/term
+bind -bc $pivot/$oldwsys /mnt/wsys
+
+bind -c /usr/$user/tmp /tmp
+cd /usr/$user
+
+. /lib/namespace.local
+. /lib/namespace.$sysname
+. /cfg/$sysname/namespace

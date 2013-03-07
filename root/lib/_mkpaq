@@ -17,6 +17,7 @@ cp /n/rootless/bootdir.extras/factotum .
 cp /n/rootless/bootdir.extras/namespace .
 cp /n/rootless/bootdir.extras/namespace.standard .
 cp /n/rootless/bootdir.extras/namespace.saveterm .
+cp /n/rootless/bootdir.extras/namespace.save9front .
 cp /n/rootless/bootdir.extras/ramskel .
 cp /n/rootless/bootdir.extras/initskel .
 cp /n/rootless/bootdir.extras/save9cfg .
