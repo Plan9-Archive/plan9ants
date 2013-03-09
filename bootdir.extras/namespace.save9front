@@ -25,7 +25,7 @@ bind -b $pivot/$oldwsys /dev
 mount -b /srv/factotum /mnt
 
 # root
-mount -aC #s/boot /root $rootspec
+mount -ac #s/$nsroot /root $rootspec
 bind -a $rootdir /
 mount -a #s/bootpaq /boot
 

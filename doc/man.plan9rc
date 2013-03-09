@@ -341,3 +341,9 @@ analog script for access to the rootless environment
 .IR namespace (6),
 .IR boot (8),
 .IR listen (8)
+.SH BUGS
+The Plan 9 kernel handles variables in
+.I #ec
+and
+.I #e
+differently. This may cause unexpected results if variables set in plan9.ini are manipulated and control passes to subscripts.

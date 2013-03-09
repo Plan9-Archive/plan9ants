@@ -54,7 +54,7 @@ if(! test -e /tmp/chnsuniq){
 	exit no.binds
 }
 
-sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/mount/unmount/g' | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' |sed 's/  / /g' |sed '/\#\|\/data/d' |sed '/\#D\/ssl/d' >/tmp/chnscom
+sed 's/^/echo ⊞/g' /tmp/chnsuniq |sed 's/$/⊞ >\/proc\/'$2'\/ns/g'| tr ⊞ '''' |sed '/echo .cd/d' |sed 's/mount/unmount/g' | sed 's/bind/unmount/g' | sed 's/-. //g' |sed 's/-.. //g' |sed 's/  / /g' |sed '/\#\|\/data/d' |sed '/\#D\/ssl/d' |sed '1!G;h;$!d' >/tmp/chnscom
 
 if(~ $riosafe yes){
 	cat /tmp/chnscom |sed '/\/mnt\/wsys/d' | sed '/\/mnt\/term/d' |sed '/\/dev\/cons/d' |sed '/rio/d' >/tmp/chnssafe
