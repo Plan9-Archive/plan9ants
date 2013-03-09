@@ -138,4 +138,4 @@ This environment with two machines is also good for testing rerootwin, cpns of r
 
 ## Complex ANTS usage demo: 2 nodes, 5 namespaces
 
-This example will make use of the previously configured two nodes, and then the Bell Labs and the 9front live cds. We will make namespaces available rooted to disk and both cds as well as the service namespaces on each node, then we will connect shells from each namespace to a shared hubfs available in each environment.
+This example makes use of the previously configured two nodes, and then the Bell Labs and the 9front live cds. We will make namespaces available rooted to disk and both cds as well as the service namespaces on each node, then we will connect shells from each namespace to a shared hubfs available in each environment. It will also show rewriting of the namespace of remote processes and rerooting to namespaces on remote hosts. Learn more about the colony in [tutorial2](tutorial2).
