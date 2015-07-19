@@ -11,3 +11,6 @@
 # 
 hostid=bootes
 	uid=!sys uid=!adm uid=*
+
+hostid=glenda
+	uid=!sys uid=!adm uid=*

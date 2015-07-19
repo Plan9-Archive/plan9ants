@@ -21,6 +21,7 @@ int	printcol;
 int	mflag;
 int	fflag;
 int	kflag;
+int	debugboot;
 
 char *rdparts;
 char	*bargv[Nbarg];

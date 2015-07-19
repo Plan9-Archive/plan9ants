@@ -13,7 +13,7 @@ cp /386/bin/gunzip .
 cp /386/bin/sed .
 cp /386/bin/rm .
 #	other bootscripts, namespace files, factotum -x
-cp /n/rootless/bootdir.extras/factotum .
+# cp /n/rootless/bootdir.extras/factotum .
 cp /n/rootless/bootdir.extras/namespace .
 cp /n/rootless/bootdir.extras/namespace.standard .
 cp /n/rootless/bootdir.extras/namespace.saveterm .

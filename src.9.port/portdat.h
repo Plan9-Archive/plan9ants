@@ -9,6 +9,7 @@ typedef struct Dirtab	Dirtab;
 typedef struct Edf	Edf;
 typedef struct Egrp	Egrp;
 typedef struct Evalue	Evalue;
+typedef struct Execvals	Execvals;
 typedef struct Fgrp	Fgrp;
 typedef struct DevConf	DevConf;
 typedef struct Image	Image;
@@ -47,6 +48,7 @@ typedef struct Uart	Uart;
 typedef struct Waitq	Waitq;
 typedef struct Walkqid	Walkqid;
 typedef struct Watchdog	Watchdog;
+typedef struct Watermark	Watermark;
 typedef int    Devgen(Chan*, char*, Dirtab*, int, int, Dir*);
 
 #pragma incomplete DevConf
@@ -89,6 +91,9 @@ typedef int    Devgen(Chan*, char*, Dirtab*, int, int, Dir*);
 #ifndef STAGESIZE
 #define STAGESIZE 64
 #endif
+#ifndef MAXBY2PG
+#define MAXBY2PG BY2PG		/* rounding for UTZERO in executables */
+#endif
 
 struct Ref
 {
@@ -108,6 +113,7 @@ struct QLock
 	Proc	*head;		/* next process waiting for object */
 	Proc	*tail;		/* last process waiting for object */
 	int	locked;		/* flag */
+	uintptr	qpc;		/* pc of the holder */
 };
 
 struct RWlock
@@ -177,6 +183,7 @@ struct Block
 	void	(*free)(Block*);
 	ushort	flag;
 	ushort	checksum;		/* IP checksum of complete packet (minus media header) */
+	ulong	magic;
 };
 
 #define BLEN(s)	((s)->wp - (s)->rp)
@@ -795,6 +802,12 @@ enum
 	READSTR =	4000,		/* temporary buffer size for device reads */
 };
 
+struct Execvals {
+	uvlong	entry;
+	ulong	textsize;
+	ulong	datasize;
+};
+
 extern	Conf	conf;
 extern	char*	conffile;
 extern	int	cpuserver;
@@ -808,6 +821,7 @@ extern	Queue*	kprintoq;
 extern 	Ref	noteidalloc;
 extern	int	nsyscall;
 extern	Palloc	palloc;
+	int	(*parseboothdr)(Chan *, ulong, Execvals *);
 extern	Queue*	serialoq;
 extern	char*	statename[];
 extern	Image	swapimage;
@@ -957,6 +971,8 @@ struct Uart
 
 extern	Uart*	consuart;
 
+void (*lprint)(char *, int);
+
 /*
  *  performance timers, all units in perfticks
  */
@@ -979,6 +995,15 @@ struct Watchdog
 	void	(*stat)(char*, char*);	/* watchdog statistics */
 };
 
+struct Watermark
+{
+	int	highwater;
+	int	curr;
+	int	max;
+	int	hitmax;		/* count: how many times hit max? */
+	char	*name;
+};
+
 
 /* queue state bits,  Qmsg, Qcoalesce, and Qkick can be set in qopen */
 enum
@@ -988,7 +1013,7 @@ enum
 	Qmsg		= (1<<1),	/* message stream */
 	Qclosed		= (1<<2),	/* queue has been closed/hungup */
 	Qflow		= (1<<3),	/* producer flow controlled */
-	Qcoalesce	= (1<<4),	/* coallesce packets on read */
+	Qcoalesce	= (1<<4),	/* coalesce packets on read */
 	Qkick		= (1<<5),	/* always call the kick routine after qwrite */
 };
 

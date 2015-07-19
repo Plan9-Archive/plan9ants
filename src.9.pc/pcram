@@ -134,6 +134,7 @@ bootdir
 	/n/rootless/root/bin/cat
 	/n/rootless/root/bin/echo
 	/n/rootless/root/bin/test
+	/n/rootless/bootdir.extras/factotum
 	/n/rootless/bootdir.extras/rc
 	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/plan9rc
