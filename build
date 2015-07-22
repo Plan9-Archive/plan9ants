@@ -17,6 +17,17 @@ if(~ `{pwd} /tmp*){
 
 rfork ne
 builddir=`{pwd}
+if(! test -d compiletemp){
+	mkdir compiletemp
+}
+if(! test -d bootdir.extras/root/adm){
+	cd bootdir.extras
+	tar xf skel.tar
+	cd $builddir
+}
+if(! test -d root/bin){
+	tar xzf tools.tgz
+}
 bind -b $builddir/src.9.boot /sys/src/9/boot
 bind -b $builddir/src.9.port /sys/src/9/port
 bind -b $builddir/src.9.pc /sys/src/9/pc
