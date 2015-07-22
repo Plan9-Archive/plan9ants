@@ -18,14 +18,17 @@ if(~ `{pwd} /tmp*){
 rfork ne
 builddir=`{pwd}
 if(! test -d compiletemp){
+	echo 'mkdir compiletemp'	
 	mkdir compiletemp
 }
 if(! test -d bootdir.extras/root/adm){
+	echo 'creating bootdir.extras/root skeleton'
 	cd bootdir.extras
 	tar xf skel.tar
 	cd $builddir
 }
 if(! test -d root/bin){
+	echo 'creating root tools skeleton'
 	tar xzf root.targz
 }
 bind -b $builddir/src.9.boot /sys/src/9/boot
@@ -209,6 +212,7 @@ if(~ $1 bootpaq){
 if(~ $1 tools){
 	echo building tools
 	rm root/bin/* >/dev/null >[2=1]
+	tar czf root.targz root
 	cp root/lib/_toolcopy root/bin
 	cd root/bin
 	. _toolcopy
