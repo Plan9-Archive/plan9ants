@@ -11,7 +11,7 @@ plan9rc, ramskel, initskel \- rootless boot scripts
 After the kernel boots, it execs
 .B /boot
 (see
-.IR root (3)),
+.IR boot (8)),
 which in turn execs
 .BR plan9rc .
 .IR plan9rc (8)

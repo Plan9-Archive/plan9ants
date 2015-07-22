@@ -6,8 +6,9 @@
 #           that host ID may speak for.  A uid value of * means the
 #           host ID may speak for all users.  A uid value of !user means
 #           the host ID may not speak for user.  For example:
-#           hostid=bootes
-#                uid=!sys uid=!adm uid=*
-# 
-	hostid=glenda
-		uid=!sys uid=!adm uid=*
+           hostid=bootes
+                uid=!sys uid=!adm uid=*
+
+           hostid=glenda
+                uid=!sys uid=!adm uid=*
+

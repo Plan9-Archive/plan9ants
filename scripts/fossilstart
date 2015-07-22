@@ -23,7 +23,7 @@ if(test -d /bin/fossil)
 	
 $fossilcmd -c 'srv -p '$foscons
 echo 'fsys main config '$fospart >>/srv/fscons
-echo 'fsys main open  -c 9000' >>/srv/fscons
+echo 'fsys main open -c 9000' >>/srv/fscons
 echo 'fsys main snaptime -s 60 -a 0500 -t 2880' >>/srv/$foscons
 echo 'srv -A '$fossrv >>/srv/$foscons
 echo 'listen tcp!*!564' >>/srv/$foscons
