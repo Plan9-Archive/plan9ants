@@ -26,7 +26,7 @@ if(! test -d bootdir.extras/root/adm){
 	cd $builddir
 }
 if(! test -d root/bin){
-	tar xzf tools.tgz
+	tar xzf root.targz
 }
 bind -b $builddir/src.9.boot /sys/src/9/boot
 bind -b $builddir/src.9.port /sys/src/9/port
