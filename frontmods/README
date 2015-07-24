@@ -6,20 +6,16 @@ cp plan9.ini /n/9fat/plan9.ini
 
 cd ..
 
-bind -b frontmods/grio grio
-bind -b frontmods/patched patched
-
-#cp /sys/src/9/boot/bootrc /sys/src/9/boot/bootrc.orig
-#cp /sys/src/9/port/bootfs.proto /sys/src/9/boot/bootfs.proto.orig
-#cp /sys/src/9/pc/pcf /sys/src/9/pc/pcf.orig
-
-bind frontmods/boot /sys/src/9/boot
-bind frontmods/port /sys/src/9/port
-bind frontmods/pc /sys/src/9/pc
+bind -bc frontmods/grio grio
+bind -bc frontmods/patched patched
 
 build extras
 build patched
 build bootpaq
+
+bind -bc frontmods/boot /sys/src/9/boot
+bind -bc frontmods/port /sys/src/9/port
+bind -bc frontmods/pc /sys/src/9/pc
 
 bind . /n/rootless
 
