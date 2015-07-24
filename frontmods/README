@@ -5,22 +5,23 @@ cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
 cp plan9.ini /n/9fat/plan9.ini
 
 cd ..
-cp frontmods/grio.dat.h grio/dat.h
-cp frontmods/rc.plan9.c patched/rc.plan9.c
 
-cp /sys/src/9/boot/bootrc /sys/src/9/boot/bootrc.orig
-cp /sys/src/9/port/bootfs.proto /sys/src/9/boot/bootfs.proto.orig
-cp /sys/src/9/pc/pcf /sys/src/9/pc/pcf.orig
+bind -b frontmods/grio grio
+bind -b frontmods/patched patched
 
-cp frontmods/boot.bootrc /sys/src/9/boot/bootrc
-cp frontmods/port.bootfs.proto /sys/src/9/port/bootfs.proto
-cp frontmods/pc.pcf /sys/src/9/pc/pcf
+#cp /sys/src/9/boot/bootrc /sys/src/9/boot/bootrc.orig
+#cp /sys/src/9/port/bootfs.proto /sys/src/9/boot/bootfs.proto.orig
+#cp /sys/src/9/pc/pcf /sys/src/9/pc/pcf.orig
+
+bind frontmods/boot /sys/src/9/boot
+bind frontmods/port /sys/src/9/port
+bind frontmods/pc /sys/src/9/pc
 
 build extras
 build patched
 build bootpaq
 
-cd /sys/src/cmd/9/pc
+cd /sys/src/9/pc
 mk install
 
 cp /n/9fat/9pcf /n/9fat/9old
