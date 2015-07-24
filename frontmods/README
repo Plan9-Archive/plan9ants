@@ -11,6 +11,7 @@ cd ..
 
 bind -bc frontmods/grio grio
 bind -bc frontmods/patched patched
+bind -bc frontmods/bootdir bootdir.extras
 
 build extras
 build patched

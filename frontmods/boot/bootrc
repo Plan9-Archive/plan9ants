@@ -142,53 +142,8 @@ fn main{
 		must $x
 	}
 
-	# config method
-	$mp(1) $ma
-
-	# load keys from secstore
-	if(~ $#auth 1 && test -x /bin/auth/secstore && test -f /mnt/factotum/ctl){
-		x=(auth/secstore -G factotum -s $auth)
-		if(~ $service cpu)
-			$x -n >/mnt/factotum/ctl
-		if(~ $status *readnvram* || ! ~ $service cpu)
-			$x >/mnt/factotum/ctl
-	}
-
-	# connect method
-	$mp(2) $ma
-
-	# insert cfs in the pipeline
-	if(test -x /bin/cfs){
-		if(~ $#bootdisk 1 && ~ $#cfs 0)
-			cfs=$bootdisk/cache
-		if(~ $#cfs 1 && ! ~ $cfs off && test -f $cfs){
-			x=(/bin/cfs -s -f $cfs)
-			if(~ -f $ff)
-				x=($x -r)
-			{$x </srv/boot &} | echo 0 >/srv/cfs
-			rm /srv/boot
-			mv /srv/cfs /srv/boot
-		}
-	}
-
-	# mount and change root in new enviroment and namespace
-	rfork ne
-
-	# mount root filesystem
-	if(~ $#rootdir 0)
-		rootdir=/root
-	must mount -c /srv/boot $rootdir
-
-	# compile init command
-	if(~ $#init 0){
-		init=/$cputype/init
-		if(~ $service cpu)
-			init=($init -c)
-		if not
-			init=($init -t)
-		if(~ -m $ff)
-			init=($init -m)
-	}
+if(~ $#rootdir 0)
+	rootdir=/root
 
 ##	begin ANTS startup
 
@@ -259,23 +214,69 @@ fn main{
 	echo 'partial root built starting services'
 	newns -n /boot/namespace initskel
 	echo 'key proto=p9sk1 dom=front user=glenda !password=rootless' >/mnt/factotum/ctl
-	echo exec $init
 
 ##	end of ANTS setup
 
-# remove enviroment variables
+	# config method
+	$mp(1) $ma
+
+	# load keys from secstore
+	if(~ $#auth 1 && test -x /bin/auth/secstore && test -f /mnt/factotum/ctl){
+		x=(auth/secstore -G factotum -s $auth)
+		if(~ $service cpu)
+			$x -n >/mnt/factotum/ctl
+		if(~ $status *readnvram* || ! ~ $service cpu)
+			$x >/mnt/factotum/ctl
+	}
+
+	# connect method
+	$mp(2) $ma
+
+	# insert cfs in the pipeline
+	if(test -x /bin/cfs){
+		if(~ $#bootdisk 1 && ~ $#cfs 0)
+			cfs=$bootdisk/cache
+		if(~ $#cfs 1 && ! ~ $cfs off && test -f $cfs){
+			x=(/bin/cfs -s -f $cfs)
+			if(~ -f $ff)
+				x=($x -r)
+			{$x </srv/boot &} | echo 0 >/srv/cfs
+			rm /srv/boot
+			mv /srv/cfs /srv/boot
+		}
+	}
+
+	# mount and change root in new enviroment and namespace
+	rfork ne
+
+	# mount root filesystem
+
+	must mount -c /srv/boot $rootdir
+
+	# compile init command
+	if(~ $#init 0){
+		init=/$cputype/init
+		if(~ $service cpu)
+			init=($init -c)
+		if not
+			init=($init -t)
+		if(~ -m $ff)
+			init=($init -m)
+	}
+
+	# remove enviroment variables
 	rm -f /env/^$mt /env/? /env/?? '/env/fn#'* 
 
-# remove part of our temporary root
+	# remove part of our temporary root
 	/mnt/broot/$cputype/bin/unmount /$cputype/bin /bin
 	/mnt/broot/$cputype/bin/unmount /rc/bin /bin
 	/mnt/broot/$cputype/bin/unmount /
 
-# create the name space, mount the root fs
+	# create the name space, mount the root fs
 	/mnt/broot/$cputype/bin/bind / /
 	/mnt/broot/$cputype/bin/mount -ac '#s/boot' /
 
-# remove the remaining temporary root
+	# remove the remaining temporary root
 	/mnt/broot/$cputype/bin/unmount /mnt/broot
 
 	exec $init

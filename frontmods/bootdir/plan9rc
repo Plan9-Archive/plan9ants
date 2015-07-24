@@ -1,0 +1,529 @@
+#!/boot/rc
+# rootless environment startup and launcher script by mycroftiv
+
+##	UTILITY FUNCTIONS ##
+
+fn shifter{
+	shift
+	echo $*
+}
+
+fn errorshell{
+	echo subshell output on stderr >>/fd/2
+	rc -i >>/fd/2
+	echo exiting rc >>/fd/2
+}
+
+fn getans{
+	query=$1
+	value=`{shifter $*}
+#	echo '* '$"query' = '$"value' : accept, new value, '''clear'''', or '''rc''' : >>/fd/2
+#	answer=`{read}
+	answer=`{dd -bs 64 -count 1 >[2]/dev/null}
+	switch($answer){
+	case rc
+		errorshell
+		getans $query $value
+	case clear
+		echo ''
+	case ?*
+		echo $answer
+	case ''
+		echo $value
+	}
+}
+
+##	ENVIRONMENT CHECKING FUNCTIONS ##
+
+fn findpart{
+	if((test -e /boot/sed) || (test -e /bin/sed)){
+		if(~ $bootparse(1) *dev*){
+			echo $bootparse(1) |sed 's/^local!//'
+		}
+		if not{
+			echo $bootparse(1) |sed 's/^local!#./\/dev/'
+		}
+	}
+	if not {
+		if(~ $bootparse(1) *sdC0/$1)
+			echo /dev/sdC0/$1
+		if(~ $bootparse(1) *sdC1/$1)
+			echo /dev/sdC1/$1
+		if(~ $bootparse(1) *sdD0/$1)
+			echo /dev/sdD0/$1
+		if(~ $bootparse(1) *sdD1/$1)
+			echo /dev/sdD1/$1
+		if(~ $bootparse(1) *sdXX/$1)
+			echo /dev/sdXX/$1
+	}
+}
+
+fn hostcheck{
+	hosttest=`{cat /dev/hostowner}
+	if(~ $hosttest ''){
+		if(~ $user ''){
+			user=bootes
+		}
+		echo 'no hostowner found: setting to '$user
+		echo -n $user >'/dev/hostowner'
+	}
+	if(~ $user ''){
+		user=`{cat /dev/hostowner}
+	}
+}
+
+fn dochecksys{
+	systest=`{cat /dev/sysname}
+	switch($sysname){
+	case ?*
+		if(~ $systest ''){
+			echo setting /dev/sysname to $sysname
+			echo -n $sysname >/dev/sysname
+			systest=`{cat /dev/sysname}
+		}
+		if(! ~ $systest $sysname){
+			echo warning sysname mismatch between dev and env
+		}
+	case ''
+		if(~ $systest ''){
+			if(~ $service cpu){
+				sysname=helix
+			} 
+			if(~ $service terminal){
+				sysname=gnot
+			}
+			if(~ $sysname ''){
+				sysname=mutant
+			}
+			echo no sysname found in dev or env setting to $sysname
+			echo -n $sysname >/dev/sysname
+		}
+		if not{
+			echo setting sysname var to $systest from /dev/sysname
+			sysname = $systest
+		}
+	}
+}
+
+##	STARTUP ACTION FUNCTIONS ##
+
+fn doramsetup{
+	switch($ramsetup){
+	case ''
+		echo no ramsetup
+	case ?*
+		hostcheck
+		echo 'ramsetup '^$ramsetup^'...'
+		rc -c $ramsetup
+	}
+}
+
+fn dofactotum{
+	if(~ $interactive yes)
+		spc=()
+	switch($factotum){
+	case ''
+		echo no factotum
+	case cpu
+		echo $spc cpu factotum...
+		factotum $factotumopts -S -s factotum
+	case terminal
+		echo $spc terminal factotum...
+		factotum $factotumopts -u -s factotum
+	case debug
+		hostcheck
+		echo $spc debug factotum...
+		factotum $factotumopts -d -s factotum
+	}
+}
+
+fn dotryusb{
+	if(! ~ $tryusb no){
+		if (test -e /dev/usb/ctl) {
+#			usbd /srv/usb
+#			sleep 3
+			if(test -e /dev/sdU0.0){
+				if(! ~ $sdB0part ''){
+					echo usb disk partfs -p $sdB0part -s partfs.sdXX /dev/sdU0.0
+					partfs -p $sdB0part -s partfs.sdXX /dev/sdU0.0
+					chmod 666 /srv/partfs.sdXX
+				}
+				if not
+					echo /dev/sdU0.0 exists but no bootpartition information found
+			}
+		}
+	}
+}
+
+fn ipsetup{
+	if(! test -e /net/ipifc/0/ctl){
+		if(~ $gateway ?*){
+			ipparams=( -g $gateway ether /net/ether0 $ipaddress $ipmask )
+		}
+		echo ipconfig $ipparams
+		ipconfig $ipparams
+		ipconfig loopback /dev/null 127.1
+	}
+	ipdone=yes
+}
+
+fn doafterfact{
+	switch($afterfact){
+	case ?*
+		echo after factotum command $afterfact
+		rc -c $afterfact
+	case ''
+		echo -n ''
+	}
+}
+
+fn dostartventi{
+	switch($startventi){
+	case yes
+		echo starting venti
+		if(! ~ $ipdone yes){
+			ipsetup
+		}
+		venti -c $venticonf -a $ventilisten -h $vhttplisten
+		venti=tcp!127.1!17034
+	case later
+		echo ok you can start venti later that is fine
+	}
+}
+
+fn dogetrootfs{
+	switch($getrootfs){
+	case tcp
+		if(! ~ $ipdone yes){
+			ipsetup
+		}
+		if(~ $fs '')
+			fs=`{getans fs $fs}
+		if(~ $auth '')
+			auth=$fs
+## HACK: on terminals start new factotum that knows where to dial
+		if(~ $factotum terminal)
+			factotum -a $auth
+		if(~ $cfs ''){
+			echo srv $fs to /srv/boot...
+			if(~ $fs tcp*)
+				srv $fs boot
+			if not
+				srv tcp!$fs!564 boot
+			bootsrv=/srv/boot
+		}
+		if not{
+			echo starting cfs $cfs dialing $fs and serving root to /srv/boot...
+			if(~ $fs tcp*)
+				cfs -a $fs -f $cfs -z boot
+			if not
+				cfs -a tcp!$fs!564 -f $cfs -z boot
+			bootsrv=/srv/boot
+		}
+	case local
+		if(~ $kfs ''){
+			if(! ~ $fossil ?*){
+				bootpartition=`{findpart fossil}
+				if(~ $interactive yes){
+					echo 'parsed fossil bootpartition as ' $bootpartition ' enter new value if this is incorrect'
+					bootpartition=`{getans bootpartition $bootpartition}
+				}
+				if not if(~ $bootpartition ''){
+					echo 'no bootpartition found, trying /dev/sdC0/fossil as default'
+					bootpartition=/dev/sdC0/fossil
+				}
+				fossil=$bootpartition
+			}
+			if(! ~ $venti ''){
+				if(! ~ $ipdone yes){
+					ipsetup
+				}
+			}
+			echo starting fossil from $fossil...
+			fossil -f $fossil -c 'srv -p fscons'
+			echo 'srv -A boot' >>/srv/fscons
+			bootsrv=/srv/boot
+			bootpartition=$fossil
+		}
+		if not{
+			if(~ $interactive yes){
+				echo 'kfs parsed as ' $kfs ' enter new value if this is incorrect'
+				kfs=`{getans kfs $kfs}
+			}
+			if(! ~ $bootparse(2) '')
+				kfsparams=`{shifter $bootparse}
+			echo kfs -f $kfs -n boot $kfsparams
+			kfs -f $kfs -n boot $kfsparams
+			bootsrv=/srv/kfs.boot
+			bootpartition=$kfs
+		}
+	case srv
+		if(~ $interactive yes){
+			echo 'enter full path to target srv'
+			bootsrv=`{getans bootsrv $bootsrv}
+		}
+	case ''
+		echo no standard root fs attached
+	}
+}
+
+fn doafterroot{
+	switch($afterroot){
+	case ?*
+		echo afterroot command $afterroot
+		rc -c $afterroot
+	case ''
+		echo -n ''
+	}
+}
+
+fn doinitscript{
+	switch($initscript){
+	case ?*
+		newns -n /boot/$namespace $initscript
+	case easteregg
+		echo guess i should make an easter egg here
+	}
+}
+
+fn dorootstart{
+	switch($rootstart){
+	case cpu
+		service=cpu
+		echo mounting $bootsrv to /root and starting cpurc
+		mount $bootsrv /root
+		if(test -e /root/rc/bin/cpurc)
+			newns -n /root/lib/namespace /root/rc/bin/cpurc
+		if not
+			echo ERROR no cpurc found
+	case terminal
+		service=terminal
+		echo mounting $bootsrv to /root and starting termrc
+		mount $bootsrv /root
+		if(~ $user ''){
+			user=`{cat /dev/hostowner}
+		}
+		home=/usr/$user
+		if(test -e /root/rc/bin/termrc){
+			newns -n /root/lib/namespace /root/rc/bin/termrc
+			newns -n /root/lib/namespace rc -c 'cd; . $home/lib/profile'
+		}
+		if not
+			echo ERROR no termrc found
+	case ''
+		echo not starting externally rooted startup scripts
+	}
+}
+
+############# End of fn definitions #################
+############# Begin script execution ###############
+
+echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
+
+#cat '#r/rtc' > '#c/time'
+
+##	if we have a paqfs set it up in both boot and bin
+
+if(test -e /boot/bootpaq){
+	echo -n paqfs...
+	paqfs -s -S bootpaq -c 256 /boot/bootpaq
+	mount -a /srv/bootpaq /boot
+	bind -a /boot /bin
+}
+
+##	Parse plan9.ini options and trying to set sane defaults ##
+
+if(! ~ $1 '')
+	. $1
+if(~ $bootargs ''){
+	bootargs='local!#S/sdC0/fossil'
+	interactive=yes
+	echo 'no bootargs found using '$bootargs' and setting interactive=yes'
+}
+bootparse=`{echo $bootargs}
+if(~ $bootparse(1) local*)
+	getrootfs=local
+if(~ $bootparse(1) tcp*){
+	getrootfs=tcp
+	if(! ~ $bootparse(2) '')
+		ipparams=`{shifter $bootparse}
+}
+if(~ $bootparse(1) srv*)
+	getrootfs=srv
+if(~ $bootparse(1) *fs){
+	if(~ $kfs ''){
+		kfs=`{findpart fs}
+	}
+}
+if(~ $ramsetup '')
+	ramsetup=ramskel
+if(~ $initscript '')
+	initscript=initskel
+#if(~ $tgzfs '')
+#	tgzfs=tools.tgz
+if(~ $namespace '')
+	namespace=namespace
+if(~ $factotum '')
+	factotum=`{cat '/env/service'}
+if(~ $rootstart '')
+	rootstart=`{cat '/env/service'}
+ventiparse=`{echo $venti}
+venticonf=$ventiparse(1)
+ventilisten=$ventiparse(2)
+vhttplisten=$ventiparse(3)
+if(~ $venticonf '#'*)
+	startventi=yes
+if(~ $venticonf '')
+	venticonf=/dev/sdC0/arenas
+if(~ $ventilisten '')
+	ventilisten=tcp!*!17034
+if(~ $vhttplisten '')
+	vhttplisten=tcp!127.1!8000
+if(~ $interactive '')
+	interactive=traditional
+
+##	INTERACTIVE STARTUP PROMPTS AND ACTIONS ##
+
+if(~ $interactive yes){
+	echo Interactive Startup - enter to continue to options or type rc for a shell
+	answer=`{read}
+	if(~ $answer rc){
+		echo dropping to rc shell with limited commands
+		rc -i
+	}
+	echo 'Internet config DHCP by default. Enter ipconfig parameters if needed'
+	ipparams = `{getans ipparams $ipparams}
+	echo 'Choose factotum mode - cpu terminal or debug.'
+	factotum = `{getans factotum $factotum}
+	dofactotum
+	dotryusb
+	sysname = `{getans sysname $sysname}
+	echo 'Skeleton fs required for mountpoints. Default ramskel recommended.'
+	ramsetup = `{getans ramsetup $ramsetup}
+	echo 'Load optional tools from 9fat? Enter tools.tgz or other if desired'
+	tgzfs = `{getans tgzfs $tgzfs}
+	doramsetup
+	hostcheck
+	dochecksys
+	echo 'Start local Venti? Enter yes if so.'
+	startventi = `{getans startventi $startventi}
+	if(~ $startventi yes){
+		ventilisten = `{getans ventilisten $ventilisten}
+		vhttplisten = `{getans vhttplisten $vhttplisten}
+	}
+	dostartventi
+	echo 'Attach to a file server? Choose local or tcp or leave blank for none.'
+	getrootfs = `{getans getrootfs $getrootfs}
+	if(~ $getrootfs tcp){
+		fs = `{getans fs $fs}
+		auth = `{getans auth $auth}
+		cfs = `{getans cfs $cfs}
+	}
+	if(~ $getrootfs local){
+		echo 'Dial a venti server? Enter a dialstring or ip if so.'
+		venti = `{getans venti $venti}
+		if(! ~ $venti ''){
+			if(! ~ $venti tcp*)
+				venti=tcp!^$venti^!17034
+		}
+		if(~ ! venti ''){
+			ipsetup
+		}
+	}
+	dogetrootfs
+	echo 'Create cpu server namespace on a port of your choice? Initskel if so.'
+	initscript = `{getans initscript $initscript}
+	doinitscript
+	echo 'Start cpurc termrc from the file server? Enter cpu or terminal if so.'
+	rootstart = `{getans rootstart $rootstart}
+	dorootstart
+	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	echo 'Keep console in ramboot namespace? yes if so.'
+	staylocal = `{getans staylocal $staylocal}
+	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
+	save9cfg
+	if(! ~ $staylocal no){
+		echo starting mntgen and shell in current namespace
+		home=/usr/$user
+		mntgen
+		rc -i
+	}
+}
+
+##	TRADITIONAL STARTUP PROMPTS AND ACTIONS ##
+
+if not if(~ $interactive traditional){
+	dofactotum
+	dotryusb
+	doramsetup
+	hostcheck
+	dochecksys
+	doafterfact
+	echo -n 'root is from (tcp,local)['$bootargs']: '
+	bootanswer=`{read}
+	if(~ $bootanswer rc){
+		errorshell
+	}
+	if not if(! ~ $bootanswer ''){
+		bootparse=`{echo $bootanswer}
+	}
+	if not{
+		bootparse=`{echo $bootargs}
+	}
+	if(~ $bootparse(1) local*)
+		getrootfs=local
+	if(~ $bootparse(1) tcp*)
+		getrootfs=tcp
+	if(~ $bootparse(1) srv*)
+		getrootfs=srv
+	if(! ~ $bootparse(2) '')
+		ipparams=`{shifter $bootparse}
+	if(~ $getrootfs tcp){
+		fs = `{getans fs $fs}
+		auth = `{getans auth $auth}
+	}
+	dostartventi
+	interactive=yes
+	dogetrootfs
+	interactive=traditional
+	doafterroot
+	doinitscript
+	dorootstart
+#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
+	save9cfg
+	if(! ~ $staylocal no){
+		echo starting mntgen and shell in current namespace
+		home=/usr/$user
+		mntgen
+		rc -i
+	}
+}
+
+##	NON-INTERACTIVE STARTUP ACTIONS ##
+
+if not {
+	dofactotum
+	dotryusb
+	doramsetup
+	hostcheck
+	dochecksys
+	doafterfact
+	dostartventi
+	dogetrootfs
+	doafterroot
+	doinitscript
+	dorootstart
+#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
+	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
+	save9cfg
+	if(! ~ $staylocal no){
+		echo starting mntgen and shell in current namespace
+		home=/usr/$user
+		mntgen
+		rc -i
+	}
+}
+
+exit ''
+

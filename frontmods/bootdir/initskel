@@ -1,0 +1,166 @@
+#!/boot/rc
+# ramroot startup after newns
+
+##	utility fns duplicated from plan9rc, initskel might be used independently
+
+fn shifter{
+	shift
+	echo $*
+}
+
+fn errorshell{
+	echo subshell output on stderr >>/fd/2
+	rc -i >>/fd/2
+	echo exiting rc >>/fd/2
+}
+
+fn getans{
+	query=$1
+	value=`{shifter $*}
+	echo '* '$"query' = '$"value' : accept, '''no'''' to change, or '''rc''' : >>/fd/2
+	answer=`{read}
+	switch($answer){
+	case rc
+		errorshell
+		getans $query $value
+	case clear
+		echo ''
+	case ?*
+		echo $answer
+	case ''
+		echo $value
+	}
+}
+
+##	set vars and quiz user if interactive=yes
+
+keyowner=`{cat /dev/hostowner}
+if (! ~ $keyowner ?*){
+	echo please set hostowner
+	exit no.hostowner
+}
+usercheck=`{cat /dev/user}
+if (! ~ $usercheck $keyowner){
+	echo current user is not hostowner
+	exit no.hostowner
+}
+if(~ $cpuport '')
+	cpuport=17020
+
+echo 'INITSKEL minimal setup for rootless plan 9 environment'
+if(~ $interactive yes){
+	echo 'For configuration questions, answer no to disable default behaviors'
+	echo 'bind all known hardware devices?'
+	binddevs=`{read}
+	echo 'rely on main factotum for this environment?'
+	hostfactotum =`{read}
+	if(! test -e /net/ipifc/0/ctl){
+		echo 'no internet found, issue ipconfig?'
+		netsvc=`{read}
+	}
+	if((test -e /bin/cpu) || (test -e /boot/cpu)){
+		echo 'start cpu rx exportfs listeners?'
+		cpusvc=`{read}
+	}
+	if(! ~ $cpusvc no){
+		echo 'port for cpu listener?'
+		cpuport=`{read}
+	}
+	if((test -e /bin/hub) || (test -e /boot/hub)){
+		echo 'start persistent rc hub?'
+		hubsvc=`{read}
+	}
+	if((test -e /bin/cs) || (test -e /boot/cs)){
+		echo 'rely on launched systems for cs and dns?'
+		hostcsdns=`{read}
+	}
+	if((test -e /bin/authsrv) || (test -e /boot/authsrv)){
+		echo 'operate without auth privileges?'
+		unprivileged=`{read}
+	}
+}
+
+## ACTIONS BEGIN HERE ##
+
+if(! ~ $binddevs no){
+	echo -n 'binddevs...'
+	for(i in f t m v L P u U '$' Σ κ)
+		bind -a '#'^$i /dev >/dev/null >[2=1]
+}
+
+echo -n 'mntgen...'
+if(! test -e /srv/slashn)
+	mntgen -s slashn && chmod 666 /srv/slashn
+if not
+	mntgen
+
+if(~ $hostfactotum no){
+	authip=$auth
+	echo getting private factotum info
+	echo password
+	privpassword=`{read}
+	echo authdom
+	passdom=`{read}
+	echo auth ip
+	authip=`{read}
+	factotum -x -a $authip -s hostfactotum
+	echo private hostfactotum started
+	mount -b /srv/hostfactotum /mnt
+	if(! ~ $privpassword ''){
+		echo 'setting '$keyowner' factotum key'
+		echo 'key proto=p9sk1 dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
+		rm /env/privpassword
+		rm /env/passdom
+		rm /env/keyowner
+		rm /env/authip
+	}
+}
+
+if(! ~ $netsvc no){
+	if(! test -e /net/ipifc/0/ctl){
+		echo -n 'ipconfig ' $ipparams '...'
+		ipconfig $ipparams
+		ipconfig loopback /dev/null 127.1
+	}
+}
+
+if(~ $hostcsdns no){
+	echo -n 'cs and dns -r...'
+	cs
+	dns -r
+}
+
+if(! ~ $hubsvc no){
+	echo -n 'hubfs...'
+	hub -b hubfs
+}
+
+if(! ~ $cpusvc no){
+	echo 'listen1 '$cpuport' cpu 17027 exportfs rexexec...'
+	listen1 -t tcp!*!$cpuport /boot/cpu -R &
+	listen1 -t tcp!*!17027 /bin/exportfs -a &
+	listen1 -t tcp!*!17009 /boot/rexexec &
+}
+
+if(~ $unprivileged no){
+	if(! test -e /x/adm/keys){
+		echo -n das doskeys...
+		if(! test -e /srv/dos)
+			dossrv
+		mount /srv/dos /x /dev/sdC0/9fat	
+	}
+	cat /x/adm/keys >/adm/keys
+	echo -n keyfs...
+	keyfs -wp -m /mnt/keys /adm/keys
+#	echo cron...
+#	cron >>/sys/log/cron >[2=1] &
+	echo -n authsrv...
+	listen1 -tv tcp!*!567 authsrv -d &
+}
+
+if(~ $font ''){
+	font=/lib/font/bit/lucm/latin1.9.font
+}
+
+save9cfg init
+exit ''
