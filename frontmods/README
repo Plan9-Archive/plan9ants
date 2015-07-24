@@ -1,0 +1,27 @@
+# very rough initial version not production ready use at risk of the unexpected
+
+9fs 9fat
+cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
+cp plan9.ini /n/9fat/plan9.ini
+
+cd ..
+cp frontmods/grio.dat.h grio/dat.h
+cp frontmods/rc.plan9.c patched/rc.plan9.c
+
+cp /sys/src/9/boot/bootrc /sys/src/9/boot/bootrc.orig
+cp /sys/src/9/port/bootfs.proto /sys/src/9/boot/bootfs.proto.orig
+cp /sys/src/9/pc/pcf /sys/src/9/pc/pcf.orig
+
+cp frontmods/boot.bootrc /sys/src/9/boot/bootrc
+cp frontmods/port.bootfs.proto /sys/src/9/port/bootfs.proto
+cp frontmods/pc.pcf /sys/src/9/pc/pcf
+
+build extras
+build patched
+build bootpaq
+
+cd /sys/src/cmd/9/pc
+mk install
+
+cp /n/9fat/9pcf /n/9fat/9old
+cp 9pcf /n/9fat/9pcf
