@@ -21,6 +21,8 @@ build extras
 build patched
 build bootpaq
 
+bind . /n/rootless
+
 cd /sys/src/9/pc
 mk install
 

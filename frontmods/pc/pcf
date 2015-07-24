@@ -157,7 +157,7 @@ bootdir
 	/bin/cat
 	/bin/echo
 	/bin/test
-	/usr/glenda/ants2015/bootdir.extras/rc
-	/usr/glenda/ants2015/bootdir.extras/rcmain
-	/usr/glenda/ants2015/bootdir.extras/bootpaq
+	/n/rootless/bootdir.extras/rc
+	/n/rootless/bootdir.extras/rcmain
+	/n/rootless/bootdir.extras/bootpaq
 
