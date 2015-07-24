@@ -1,10 +1,15 @@
-## INSTALL
+## INSTALL (BELL LABS)
 
 9fat:
 cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
 cp 9pcram.gz /n/9fat/9pcram.gz
 cp tools.tgz /n/9fat/tools.tgz
 cp doc/PLAN9.INI /n/9fat/PLAN9.INI
+
+## experimental 9front full install
+
+cd frontmods
+. README
 
 ## documentation
 

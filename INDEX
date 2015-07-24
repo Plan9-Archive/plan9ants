@@ -62,6 +62,8 @@ tools, plan9.ini/plan9rc/initskel variables
 	stock fossil install of the bell labs .iso and the 9pcram.gz
 	kernel
 
+frontmods/ - experimental 9front patches and install
+
 patched/ - contains the source code for modifications of standard
 plan9 programs adapted to the rootless environment
 

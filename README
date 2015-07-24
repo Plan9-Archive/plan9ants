@@ -88,6 +88,10 @@ the cpns, addns, subns process namespace manipulation scripts.
 
 Please view doc/ants.ps for the full Giants ANTS paper.
 
+9front experimental partial support builds and installs differently.
+Many tools and options are not present yet, and is intended for 
+developer experimentation only at this point.
+
 This kernel version and software originally based on the Plan 9 source
 tree from December of 2009.  Development resumed with updated plan 9
 sources in January 2013. Updated in July 2015.
