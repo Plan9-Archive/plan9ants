@@ -1,4 +1,5 @@
 # very rough initial version not production ready use at risk of the unexpected
+# at startup enter bootfile=9pcf then type boot, use 9old if the new kernel fails
 
 9fs 9fat
 cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
@@ -12,6 +13,13 @@ bind -bc frontmods/patched patched
 build extras
 build patched
 build bootpaq
+build tools
+
+cp tools.tgz /n/9fat/tools.tgz
+cd hubfs1.1
+mk install
+cd ..
+cp bootdir.extras/grio /386/bin/grio
 
 bind -bc frontmods/boot /sys/src/9/boot
 bind -bc frontmods/port /sys/src/9/port
