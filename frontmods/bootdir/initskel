@@ -9,16 +9,17 @@ fn shifter{
 }
 
 fn errorshell{
-	echo subshell output on stderr >>/fd/2
-	rc -i >>/fd/2
-	echo exiting rc >>/fd/2
+#	echo subshell output on stderr >>/fd/2
+#	rc -i >>/fd/2
+#	echo exiting rc >>/fd/2
+	rc
 }
 
 fn getans{
 	query=$1
 	value=`{shifter $*}
-	echo '* '$"query' = '$"value' : accept, '''no'''' to change, or '''rc''' : >>/fd/2
-	answer=`{read}
+#	echo '* '$"query' = '$"value' : accept, '''no'''' to change, or '''rc''' : >>/fd/2
+	answer=`{dd -bs 64 -count 1 >[2]/dev/null}
 	switch($answer){
 	case rc
 		errorshell

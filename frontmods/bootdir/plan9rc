@@ -9,9 +9,10 @@ fn shifter{
 }
 
 fn errorshell{
-	echo subshell output on stderr >>/fd/2
-	rc -i >>/fd/2
-	echo exiting rc >>/fd/2
+#	echo subshell output on stderr >>/fd/2
+#	rc -i >>/fd/2
+#	echo exiting rc >>/fd/2
+	rc
 }
 
 fn getans{

@@ -160,4 +160,5 @@ bootdir
 	/n/rootless/bootdir.extras/rc
 	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/bootpaq
+	/n/rootless/bootdir.extras/plan9rc
 
