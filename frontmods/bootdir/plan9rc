@@ -403,7 +403,7 @@ if(~ $interactive '')
 
 ##	INTERACTIVE STARTUP PROMPTS AND ACTIONS ##
 
-if(~ $interactive yes){
+fn startinter{
 	echo Interactive Startup - enter to continue to options or type rc for a shell
 	answer=`{read}
 	if(~ $answer rc){
@@ -469,9 +469,13 @@ if(~ $interactive yes){
 	}
 }
 
+if(~ $interactive yes){
+	@{startinter}
+} </dev/cons
+
 ##	TRADITIONAL STARTUP PROMPTS AND ACTIONS ##
 
-if not if(~ $interactive traditional){
+fn starttrad{
 	dofactotum
 	dotryusb
 	doramsetup
@@ -518,10 +522,13 @@ if not if(~ $interactive traditional){
 		rc -i
 	}
 }
+if not if(~ $interactive traditional){
+	@{starttrad}
+} </dev/cons
 
 ##	NON-INTERACTIVE STARTUP ACTIONS ##
 
-if not {
+fn startnonint{
 	dofactotum
 	dotryusb
 	doramsetup
@@ -543,6 +550,9 @@ if not {
 		rc -i
 	}
 }
+if not {
+	@{startnonint}
+} </dev/cons
 
 exit ''
 
