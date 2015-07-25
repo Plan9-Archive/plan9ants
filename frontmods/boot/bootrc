@@ -1,5 +1,9 @@
 #!/bin/rc
 
+if(~ $#rootdir 0)
+	rootdir=/root
+objtype=`{cat /env/cputype}
+
 mntgen -s slash /mnt
 bind /root /mnt/broot
 unmount /root
@@ -142,9 +146,6 @@ fn main{
 		must $x
 	}
 
-if(~ $#rootdir 0)
-	rootdir=/root
-
 ##	begin ANTS startup
 
 #	tgzfs=tools.tgz
@@ -196,6 +197,8 @@ if(~ $#rootdir 0)
 		if not
 			echo 'tgz not found continuing with only /boot'
 	}
+
+	timezone=`{cat /adm/timezone/local}
 
 ##	if we aren't bootes we need to have a $home
 
