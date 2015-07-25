@@ -361,6 +361,8 @@ if(test -e /boot/bootpaq){
 	bind -a /boot /bin
 }
 
+diskparts
+
 ##	Parse plan9.ini options and trying to set sane defaults ##
 
 if(! ~ $1 '')
@@ -504,6 +506,8 @@ fn starttrad{
 	}
 	if(~ $bootparse(1) local*)
 		getrootfs=local
+	if(~ $bootparse(1) *fscache)
+		getrootfs=cwfs
 	if(~ $bootparse(1) tcp*)
 		getrootfs=tcp
 	if(~ $bootparse(1) srv*)
