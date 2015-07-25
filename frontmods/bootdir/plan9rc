@@ -178,7 +178,8 @@ fn doafterfact{
 		echo after factotum command $afterfact
 		rc -c $afterfact
 	case ''
-		echo -n ''
+		echo adding key to factotum
+		echo 'key proto=p9sk1 dom=9front user=glenda !password=rootless' >/mnt/factotum/ctl
 	}
 }
 

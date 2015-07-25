@@ -1,5 +1,6 @@
 # very rough initial version not production ready use at risk of the unexpected
-# at startup enter bootfile=9pcf then type boot, use 9old if the new kernel fails
+# at startup enter bootfile=9ants then type boot, use 9pcf if the new kernel fails
+# use bootcmd=plan9rc for extra-experimental boot scripting
 # listens on port 17060 with user glenda password rootless
 # do not use default configuration on a public unsecured network
 
@@ -33,5 +34,5 @@ bind . /n/rootless
 cd /sys/src/9/pc
 mk install
 
-cp /n/9fat/9pcf /n/9fat/9old
-cp 9pcf /n/9fat/9pcf
+cp 9pcf /n/9fat/9ants
+echo 'home=/usr/$user; cd; . $home/lib/profile' >>/rc/bin/termrc
