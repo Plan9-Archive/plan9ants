@@ -469,10 +469,6 @@ fn startinter{
 	}
 }
 
-if(~ $interactive yes){
-	@{startinter}
-} </dev/cons
-
 ##	TRADITIONAL STARTUP PROMPTS AND ACTIONS ##
 
 fn starttrad{
@@ -522,9 +518,6 @@ fn starttrad{
 		rc -i
 	}
 }
-if not if(~ $interactive traditional){
-	@{starttrad}
-} </dev/cons
 
 ##	NON-INTERACTIVE STARTUP ACTIONS ##
 
@@ -550,6 +543,14 @@ fn startnonint{
 		rc -i
 	}
 }
+
+
+if(~ $interactive yes){
+	@{startinter}
+} </dev/cons
+if not if(~ $interactive traditional){
+	@{starttrad}
+} </dev/cons
 if not {
 	@{startnonint}
 } </dev/cons
