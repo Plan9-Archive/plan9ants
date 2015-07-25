@@ -1,6 +1,10 @@
 #!/boot/rc
 # rootless environment startup and launcher script by mycroftiv
 
+if(~ $#rootdir 0)
+	rootdir=/root
+objtype=`{cat /env/cputype}
+
 ##	UTILITY FUNCTIONS ##
 
 fn shifter{
@@ -194,6 +198,11 @@ fn dostartventi{
 
 fn dogetrootfs{
 	switch($getrootfs){
+	case cwfs
+###		{$1 -s -f $*(2-) &} <[0=1] | echo 0 >/srv/boot
+		echo '{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot'
+		{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot
+		bootsrv=/srv/boot
 	case tcp
 		if(! ~ $ipdone yes){
 			ipsetup
@@ -322,6 +331,15 @@ fn dorootstart{
 echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
 
 #cat '#r/rtc' > '#c/time'
+
+# keyboard and serial console
+if(test -x /bin/aux/kbdfs){
+	a=$console(1)
+	if(! ~ $#a 0)
+		a=/dev/eia^$a
+	aux/kbdfs -q -s cons $a
+}
+
 
 ##	if we have a paqfs set it up in both boot and bin
 
