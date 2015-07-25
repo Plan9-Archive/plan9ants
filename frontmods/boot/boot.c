@@ -9,6 +9,7 @@ boot(int argc, char *argv[])
 {
 	char cputype[64];
 	char buf[32];
+	char bootcmd[64];
 
 	fmtinstall('r', errfmt);
 
@@ -36,6 +37,7 @@ boot(int argc, char *argv[])
 	USED(argc);
 
 	readfile("#e/cputype", cputype, sizeof(cputype));
+	readfile("#e/bootcmd", bootcmd, sizeof(bootcmd));
 	setenv("bootdisk", bootdisk, 0);
 
 	/* setup the boot namespace */
@@ -45,5 +47,7 @@ boot(int argc, char *argv[])
 	snprint(buf, sizeof(buf), "/%s/bin", cputype);
 	bind(buf, "/bin", MAFTER);
 	bind("/rc/bin", "/bin", MAFTER);
-	exec("/boot/plan9rc", argv);
+	if(strcmp(bootcmd, "plan9rc")==0)
+		exec("/boot/plan9rc", argv);
+	exec("/bin/bootrc", argv);
 }
