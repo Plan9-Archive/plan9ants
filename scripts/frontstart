@@ -1,0 +1,7 @@
+#!/bin/rc
+
+service=con
+. $home/lib/profile
+plumber
+webfs
+grio

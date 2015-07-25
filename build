@@ -21,7 +21,7 @@ if(! test -d compiletemp){
 	echo 'mkdir compiletemp'	
 	mkdir compiletemp
 }
-if(! test -d bootdir.extras/root/adm){
+if(! test -d bootdir.extras/root/n){
 	echo 'creating bootdir.extras/root skeleton'
 	cd bootdir.extras
 	tar xf skel.tar
