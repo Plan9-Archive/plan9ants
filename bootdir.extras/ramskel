@@ -29,6 +29,8 @@ if(~ $tgzfs *.tgz){
 	dossrv
 	if(~ $fatpath '')
 		fatpath=/dev/sdC0/9fat
+	if(! test -d /x)
+		mkdir /root/x
 	mount /srv/dos /x $fatpath
 	if(test -e /x/$tgzfs){
 		echo -n tar xzf $tgzfs^...

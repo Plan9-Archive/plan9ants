@@ -221,6 +221,7 @@ fn main{
 ##	end of ANTS setup
 
 	# config method
+	echo $mp(1) $ma
 	$mp(1) $ma
 
 	# load keys from secstore
@@ -233,6 +234,7 @@ fn main{
 	}
 
 	# connect method
+	echo $mp(2) $ma
 	$mp(2) $ma
 
 	# insert cfs in the pipeline
