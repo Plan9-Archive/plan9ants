@@ -201,8 +201,19 @@ fn dogetrootfs{
 	switch($getrootfs){
 	case cwfs
 ###		{$1 -s -f $*(2-) &} <[0=1] | echo 0 >/srv/boot
-		echo '{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot'
-		{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot
+#		echo '{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot'
+#		{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot
+		bootpartition=`{findpart fscache}
+		if(~ $interactive yes){
+			echo 'parsed cwfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
+			bootpartition=`{getans bootpartition $bootpartition}
+		}
+		if not if(~ $bootpartition ''){
+			echo 'no bootpartition found, trying /dev/sdC0/fscache as default'
+			bootpartition=/dev/sdC0/fscache
+		}
+		cwfs=$bootpartition
+		{cwfs64x -s -f $bootpartition &} | echo 0 >/srv/boot
 		bootsrv=/srv/boot
 	case tcp
 		if(! ~ $ipdone yes){
