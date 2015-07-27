@@ -1,38 +1,11 @@
-# very rough initial version not production ready use at risk of the unexpected
-# at startup enter bootfile=9ants then type boot, use 9pcf if the new kernel fails
-# use bootcmd=plan9rc for extra-experimental boot scripting
-# listens on port 17060 with user glenda password rootless
-# do not use default configuration on a public unsecured network
+at startup enter bootfile=9ants then type boot, use 9pcf if the new kernel fails
+use bootcmd=plan9rc for configurable bootup
+listens on port 17060 with password rootless by default
+do not use default configuration on a public unsecured network
 
-9fs 9fat
-cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
-cp plan9.ini /n/9fat/plan9.ini
+to enter the 9front userland open a window and
 
-cd ..
-
-bind -bc frontmods/grio grio
-bind -bc frontmods/patched patched
-bind -bc frontmods/bootdir bootdir.extras
-
-build extras
-build patched
-build bootpaq
-build tools
-
-cp tools.tgz /n/9fat/tools.tgz
-cd hubfs1.1
-mk install
-cd ..
-cp bootdir.extras/grio /386/bin/grio
-
-bind -bc frontmods/boot /sys/src/9/boot
-bind -bc frontmods/port /sys/src/9/port
-bind -bc frontmods/pc /sys/src/9/pc
-
-bind . /n/rootless
-
-cd /sys/src/9/pc
-mk install
-
-cp 9pcf /n/9fat/9ants
-echo 'home=/usr/$user; cd; . $home/lib/profile' >>/rc/bin/termrc
+rerootwin -f boot
+service=con
+. $home/lib/profile
+grio

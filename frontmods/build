@@ -1,6 +1,7 @@
 #!/bin/rc
 
 cd ..
+builddir=`{pwd}
 
 bind -bc frontmods/grio grio
 bind -bc frontmods/patched patched
@@ -19,5 +20,6 @@ bind . /n/rootless
 
 cd /sys/src/9/pc
 mk
+cd $builddir
 cp compiletemp/9pcf 9ants
 cd frontmods

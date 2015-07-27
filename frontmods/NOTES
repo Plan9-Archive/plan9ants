@@ -1,8 +1,0 @@
-Drawterm in to port 17060 with user glenda and password rootless
-
-to enter the 9front userland open a window and
-
-rerootwin -f boot
-service=con
-. $home/lib/profile
-grio
