@@ -38,6 +38,62 @@ bind -b $builddir/scripts /bin
 bind $builddir /n/rootless
 bind -bc $builddir/compiletemp /sys/src/9/pc
 
+if(~ $1 9front){
+	bind -bc frontmods/grio grio
+	bind -bc frontmods/patched patched
+	bind -bc frontmods/bootdir bootdir.extras
+	build extras
+	build patched
+	build bootpaq
+	build tools
+	bind -bc frontmods/boot /sys/src/9/boot
+	bind -bc frontmods/port /sys/src/9/port
+	bind -bc frontmods/pc /sys/src/9/pc
+	bind -bc compiletemp /sys/src/9/pc
+	bind . /n/rootless
+	cd /sys/src/9/pc
+	mk
+	cd $builddir
+	cp compiletemp/9pcf 9ants
+	echo 9ants kernel built
+	exit
+}
+
+if(~ $1 9frontinstall){
+	if (! test -e ../9ants){
+		echo no 9ants kernel found, use build 9front first
+		exit
+	}
+	echo 'WARNING MODIFIES PLAN9.INI AND BOOTUP'
+	echo 'enter bootfile=9ants at bootup for new kernel'
+	echo 'use bootfile=9pcf for previous kernel'
+	sleep 5
+	cd ..
+	cd hubfs1.1
+	mk install
+	cd ..
+	cd grio
+	mk install
+	cd ..
+	cp scripts/* /rc/bin
+	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	9fs 9fat
+	cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
+	cp frontmods/plan9.ini /n/9fat/plan9.ini
+	cp tools.tgz /n/9fat/tools.tgz
+	cp 9ants /n/9fat/9ants
+	echo 'home=/usr/$user; cd; . $home/lib/profile' >>/rc/bin/termrc
+	cp doc/man.cpns /sys/man/1/cpns
+	cp doc/man.rerootwin /sys/man/1/rerootwin
+	cp doc/man.addwrroot /sys/man/1/addwrroot
+	cp doc/man.plan9rc /sys/man/8/plan9rc
+	cp doc/antspaper.ms /sys/doc/ants.ms
+	cp doc/ants.ps /sys/doc/ants.ps
+	mv /sys/man/3/proc /sys/man/3/oldproc
+	cp doc/modified.manpages/proc.man /sys/man/3/proc
+	exit
+}
+
 if(~ $1 worker){
 	if(! ~ $user `{cat /dev/hostowner}){
 		echo only hostowner can build a worker

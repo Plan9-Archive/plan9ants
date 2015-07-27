@@ -4,16 +4,16 @@ if (! test -e ../9ants){
 	echo no 9ants kernel found, use build first
 	exit
 }
-echo WARNING MODIFIES PLAN9.INI AND BOOTUP
-echo at boot, specify bootfile=9ants for new kernel
-echo bootfile=9pcf for standard
+echo 'WARNING MODIFIES PLAN9.INI AND BOOTUP'
+echo 'enter bootfile=9ants at bootup for new kernel'
+echo 'use bootfile=9pcf for previous kernel'
 sleep 5
 
 cd ..
 cd hubfs1.1
 mk install
 cd ..
-cp grio
+cd grio
 mk install
 cd ..
 cp scripts/* /rc/bin
