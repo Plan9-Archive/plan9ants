@@ -9,15 +9,18 @@ hardware as needed to the PLAN9.INI file.  It may also be useful to
 install hubfs and grio and the scripts and namespace files also to the
 host system, but this is not required.
 
-Very experimental 9front build and install added July 2015. Not for
-production use, insecure default config, missing many pieces.
+9front is supported with the 9ants kernel built by build 9front
 
 You may also build everything locally.  The build script uses binds to
 work only within the rootless directory and leave all existing system
 src unmodified.  It has the following modes:
 
 build - with no arguments, this builds a 9pcram.gz kernel with the
-kernel and its compilation files located in compiletemp.
+kernel and its compilation files located in compiletemp. Requires 
+build extras build patched build bootpaq be run first.
+
+build 9front - this builds a 9ants kernel and copies it to the root of
+the ants directory
 
 build ramfs - this uses a ramfs for the compile and copies only the
 9pcram.gz kernel to compiletemp.
@@ -38,6 +41,11 @@ clear out the compiletemp folder
 
 build everything - runs build clean build patched build tools build
 extras build bootpaq build
+
+build isoinstall - can be run after build everything to modify a Bell
+Labs default install fresh from the .iso
+
+build 9frontinstall - installs to a clean 9front install after build 9front
 
 The 9pcram.gz kernel and optional .tgz are placed in the conventional
 9fat partition.  Conventional plan9.ini variiables are mostly

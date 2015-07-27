@@ -31,12 +31,6 @@ if(! test -d root/bin){
 	echo 'creating root tools skeleton'
 	tar xzf root.targz
 }
-bind -b $builddir/src.9.boot /sys/src/9/boot
-bind -b $builddir/src.9.port /sys/src/9/port
-bind -b $builddir/src.9.pc /sys/src/9/pc
-bind -b $builddir/scripts /bin
-bind $builddir /n/rootless
-bind -bc $builddir/compiletemp /sys/src/9/pc
 
 if(~ $1 9front){
 	bind -bc frontmods/grio grio
@@ -55,12 +49,13 @@ if(~ $1 9front){
 	mk
 	cd $builddir
 	cp compiletemp/9pcf 9ants
+	sha1sum 9ants >>build.hashes
 	echo 9ants kernel built
 	exit
 }
 
 if(~ $1 9frontinstall){
-	if (! test -e ../9ants){
+	if (! test -e 9ants){
 		echo no 9ants kernel found, use build 9front first
 		exit
 	}
@@ -68,13 +63,10 @@ if(~ $1 9frontinstall){
 	echo 'enter bootfile=9ants at bootup for new kernel'
 	echo 'use bootfile=9pcf for previous kernel'
 	sleep 5
-	cd ..
 	cd hubfs1.1
 	mk install
 	cd ..
-	cd grio
-	mk install
-	cd ..
+	cp frontmods/bootdir/grio /$objtype/bin
 	cp scripts/* /rc/bin
 	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
 	9fs 9fat
@@ -93,6 +85,13 @@ if(~ $1 9frontinstall){
 	cp doc/modified.manpages/proc.man /sys/man/3/proc
 	exit
 }
+
+bind -b $builddir/src.9.boot /sys/src/9/boot
+bind -b $builddir/src.9.port /sys/src/9/port
+bind -b $builddir/src.9.pc /sys/src/9/pc
+bind -b $builddir/scripts /bin
+bind $builddir /n/rootless
+bind -bc $builddir/compiletemp /sys/src/9/pc
 
 if(~ $1 worker){
 	if(! ~ $user `{cat /dev/hostowner}){

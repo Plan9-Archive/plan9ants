@@ -6,10 +6,10 @@ cp 9pcram.gz /n/9fat/9pcram.gz
 cp tools.tgz /n/9fat/tools.tgz
 cp doc/PLAN9.INI /n/9fat/PLAN9.INI
 
-## experimental 9front full install
+## 9front build kernel and install to fresh iso install
 
-cd frontmods
-. README
+build 9front
+build 9frontinstall
 
 ## documentation
 
