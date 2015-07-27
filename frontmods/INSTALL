@@ -1,0 +1,18 @@
+#!/bin/rc
+
+if (! test -e ../9ants){
+	echo no 9ants kernel found, use build first
+	exit
+}
+cd ..
+cd hubfs1.1
+mk install
+cd ..
+cp bootdir.extras/grio /386/bin/grio
+9fs 9fat
+cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
+cp frontmods/plan9.ini /n/9fat/plan9.ini
+cp tools.tgz /n/9fat/tools.tgz
+cp 9ants /n/9fat/9ants
+echo 'home=/usr/$user; cd; . $home/lib/profile' >>/rc/bin/termrc
+cd frontmods

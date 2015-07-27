@@ -1,0 +1,23 @@
+#!/bin/rc
+
+cd ..
+
+bind -bc frontmods/grio grio
+bind -bc frontmods/patched patched
+bind -bc frontmods/bootdir bootdir.extras
+
+build extras
+build patched
+build bootpaq
+build tools
+
+bind -bc frontmods/boot /sys/src/9/boot
+bind -bc frontmods/port /sys/src/9/port
+bind -bc frontmods/pc /sys/src/9/pc
+bind -bc compiletemp /sys/src/9/pc
+bind . /n/rootless
+
+cd /sys/src/9/pc
+mk
+cp compiletemp/9pcf 9ants
+cd frontmods
