@@ -180,7 +180,13 @@ fn doafterfact{
 		rc -c $afterfact
 	case ''
 		echo adding key to factotum
-		echo 'key proto=p9sk1 dom=9front user=glenda !password=rootless' >/mnt/factotum/ctl
+	if(~ $passdom '')
+		passdom=9front
+	if(~ $keyowner '')
+		keyowner=$user
+	if(~ $privpassword '')
+		privpassword=rootless
+	echo 'key proto=p9sk1 dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
 	}
 }
 
