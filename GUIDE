@@ -10,7 +10,7 @@ cp doc/PLAN9.INI /n/9fat/PLAN9.INI
 
 build 9front
 build 9frontinstall
-/n/9fat/plan9.ini 	# edit and change privpassword=
+/n/9fat/plan9.ini 	# change password and adjust config
 
 ## documentation
 

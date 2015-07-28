@@ -18,3 +18,9 @@ rerootwin -f boot
 service=con
 . $home/lib/profile
 grio
+
+note for terminal users: it is important to modify the termrc file to include this series of commands:
+
+home=/usr/$user; cd; . $home/lib/profile
+
+this is necessary to make sure the user on the terminal stays in the namespace created by the termrc on top of the ants service namespace accessible via cpu or through the hubfs,
