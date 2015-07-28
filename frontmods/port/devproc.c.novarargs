@@ -309,16 +309,11 @@ pnewfd(Chan *c, Proc *targp)
 	return fd;
 }
 
-uintptr
-psysopen(Proc *targp, va_list list)
+long
+psysopen(char *filename, ulong flags, Proc *targp)
 {
 	int fd;
 	Chan *c;
-	char *filename;
-	ulong flags;
-
-	filename = va_arg(list, char*);
-	flags = va_arg(list, ulong);
 
 	openmode(flags);	/* error check only */
 //	validaddr(arg[0], 1, 0);
@@ -331,7 +326,7 @@ psysopen(Proc *targp, va_list list)
 	if(fd < 0)
 		error(Enofd);
 	poperror();
-	return (uintptr)fd;
+	return fd;
 }
 
 void
@@ -1984,17 +1979,6 @@ procunmount(char *new, char *old, Proc *targp)
 	return 0;
 }
 
-int
-psysopenwrap(Proc *p, int nargs, ...)
-{
-	int fd;
-	va_list args;
-	va_start(args,nargs);
-	fd=psysopen(p, args);
-	va_end(args);
-	return fd;
-}
-
 /* parses writes on the ns file converts to namespace operations */
 /* the completed command is sent to procbindmount or procunmount */
 
@@ -2072,8 +2056,8 @@ procnsreq(Proc *p, char *va, int n)
 			poperror();
 			return;
 		}
-//		print("psysopenwrap(targp, 2, %s, ORDWR)\n", new);
-		fd=psysopenwrap(p, 2, new, ORDWR);
+//		print("psysopen(%s, ORDWRP, targp)\n", new);
+		fd=psysopen(new, ORDWR, p);
 		if(fd < 0){
 			error(Ebadfd);
 			poperror();
@@ -2094,3 +2078,4 @@ procnsreq(Proc *p, char *va, int n)
 	poperror();
 	free(cbf);
 }
+

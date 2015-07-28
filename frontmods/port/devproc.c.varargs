@@ -317,25 +317,17 @@ psysopen(Proc *targp, va_list list)
 	char *filename;
 	ulong flags;
 
-	print("starting psysopen\n");
 	filename = va_arg(list, char*);
-	print("filename=0x%lx\n", (uintptr)filename);
-	print("flags=0x%lx\n", &flags);
-	print("read filename %s\n", filename);
 	flags = va_arg(list, ulong);
-	print("read flags %uld\n", flags);
 
 	openmode(flags);	/* error check only */
-	print("openmode complete\n");
 //	validaddr(arg[0], 1, 0);
 	c = pnamec(filename, Aopen, flags, 0, targp);
-	print("pnamec completed\n");
 	if(waserror()){
 		cclose(c);
 		nexterror();
 	}
 	fd = pnewfd(c, targp);
-	print("pnewfd completed");
 	if(fd < 0)
 		error(Enofd);
 	poperror();
@@ -1997,13 +1989,9 @@ psysopenwrap(Proc *p, int nargs, ...)
 {
 	int fd;
 	va_list args;
-	print("WITH INT NARGS BUILD starting psysopenwrap\n");
 	va_start(args,nargs);
-	print("va_start completed\n");
 	fd=psysopen(p, args);
-	print("psysopen completed\n");
 	va_end(args);
-	print("va_end(args) complete\n");
 	return fd;
 }
 
@@ -2028,8 +2016,6 @@ procnsreq(Proc *p, char *va, int n)
 		free(cbf);
 		nexterror();
 	}
-
-//	va_list sysopenargs;
 
 //	print("cbf->nf=%d\n", cbf->nf);
 	if((cbf->nf < 2) || (cbf->nf > 5)){
@@ -2086,9 +2072,8 @@ procnsreq(Proc *p, char *va, int n)
 			poperror();
 			return;
 		}
-//		print("psysopenwrap(ORDWR, %s, targp)\n", new);
+//		print("psysopenwrap(targp, 2, %s, ORDWR)\n", new);
 		fd=psysopenwrap(p, 2, new, ORDWR);
-//		fd=psysopen(new, ORDWR, p);
 		if(fd < 0){
 			error(Ebadfd);
 			poperror();
