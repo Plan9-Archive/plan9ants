@@ -9,7 +9,7 @@ hardware as needed to the PLAN9.INI file.  It may also be useful to
 install hubfs and grio and the scripts and namespace files also to the
 host system, but this is not required.
 
-9front is supported with the 9ants kernel built by build 9front
+9front is supported with the 9ants kernel built by build 9front.
 
 You may also build everything locally.  The build script uses binds to
 work only within the rootless directory and leave all existing system
@@ -46,6 +46,7 @@ build isoinstall - can be run after build everything to modify a Bell
 Labs default install fresh from the .iso
 
 build 9frontinstall - installs to a clean 9front install after build 9front
+change the default privpassword=rootless in plan9.ini
 
 The 9pcram.gz kernel and optional .tgz are placed in the conventional
 9fat partition.  Conventional plan9.ini variiables are mostly

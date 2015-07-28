@@ -1,9 +1,18 @@
+from the base ants directory:
+
+build 9front  ## makes a 9ants kernel in root of ants directories
+
+build 9frontinstall  ## installs and modifies the system
+
+install designed for use on fresh install from .iso to a qemu vm, please examine
+and modify before using on your local system
+
 at startup enter bootfile=9ants then type boot, use 9pcf if the new kernel fails
 use bootcmd=plan9rc for configurable bootup
 listens on port 17060 with password rootless by default
-do not use default configuration on a public unsecured network
+change privpassword= in plan9.ini to change password, leave blank for none
 
-to enter the 9front userland open a window and
+enter 9front userland from cpu/drawterm in to port 17060: open a window and
 
 rerootwin -f boot
 service=con

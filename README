@@ -9,7 +9,7 @@ current toolkit is focused on standard pc bootup sequences.  Fossil,
 Venti, kfs, cfs and booting from USB are all supported.  Test coverage
 has been focused on fossil and venti based environments using standard
 pc desktop hardware. 9front support added July 2015 but is not fully
-documented or tested.
+documented.
 
 To use the precompiled kernel, just boot it and it will provide an
 interactive environment for starting and attaching to bootup services,

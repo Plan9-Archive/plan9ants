@@ -62,7 +62,13 @@ tools, plan9.ini/plan9rc/initskel variables
 	stock fossil install of the bell labs .iso and the 9pcram.gz
 	kernel
 
-frontmods/ - experimental 9front patches and install
+frontmods/ - 9front patches and modifications. Subdirs get bound over
+	base directories during build 9front
+
+grio/ - modified rio with hubfs integration and other features
+
+hubfs1.1/ - a 'screen' replacement as a 9p fs, also general purpose
+	network transparent pipe muxing for grids
 
 patched/ - contains the source code for modifications of standard
 plan9 programs adapted to the rootless environment
@@ -72,6 +78,8 @@ information used to provide a slightly richer plan 9 environment.
 
 	lib/ - contains the _mkpaq and _toolcopy scripts which can be
 	used to customize the contents of the early boot namespace
+
+root.targz - used by build script to create empty dirs after mercurial clone.
 
 scripts/ - contains the non-bootup related namespace manipulation and
 fossil/venti maintenance scripts.
