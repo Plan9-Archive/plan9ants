@@ -50,7 +50,8 @@ if(~ $1 9front){
 	cd $builddir
 	cp compiletemp/9pcf 9ants
 	sha1sum 9ants >>build.hashes
-	echo 9ants kernel built
+	if(test -e 9ants)
+		echo 9ants kernel built
 	exit
 }
 
