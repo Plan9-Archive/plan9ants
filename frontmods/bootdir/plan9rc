@@ -189,7 +189,6 @@ fn doafterfact{
 			rm /env/privpassword
 			rm /env/passdom
 			rm /env/keyowner
-			rm /env/authip
 		}
 	}
 }
