@@ -70,7 +70,9 @@ link
 	etheryuk	pci
 	etherwavelan	wavelan devi82365 cis pci
 	etheriwl	pci wifi
+	etherwpi	pci wifi
 	etherrt2860	pci wifi
+	ethervirtio	pci
 	ethermedium
 	pcmciamodem
 	netdevmedium
@@ -84,7 +86,7 @@ link
 	audiohda
 
 misc
-	archacpi	mp apic squidboy
+	archacpi	mp apic squidboy ec
 	archmp		mp apic squidboy
 	mtrr
 
@@ -113,6 +115,7 @@ misc
 	vgageode	+cur
 	vgahiqvideo	+cur
 	vgai81x		+cur
+	vgaigfx		+cur
 	vgamach64xx	+cur
 	vgamga2164w	+cur
 	vgamga4xx	+cur
@@ -142,15 +145,11 @@ ip
 port
 	int cpuserver = 0;
 
-boot boot
-	tcp
-	local
-
 bootdir
-	boot$CONF.out	boot
 	/$objtype/bin/paqfs
 	/$objtype/bin/auth/factotum
 	bootfs.paq
+	boot
 	/bin/bind
 	/bin/mount
 	/bin/read
@@ -161,4 +160,3 @@ bootdir
 	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/bootpaq
 	/n/rootless/bootdir.extras/plan9rc
-

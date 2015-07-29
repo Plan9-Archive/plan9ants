@@ -96,25 +96,27 @@ isdotdot(char *p)
 long
 incref(Ref *r)
 {
-	long x;
+	long old, new;
 
-	lock(r);
-	x = ++r->ref;
-	unlock(r);
-	return x;
+	do {
+		old = r->ref;
+		new = old+1;
+	} while(!cmpswap(&r->ref, old, new));
+	return new;
 }
 
 long
 decref(Ref *r)
 {
-	long x;
+	long old, new;
 
-	lock(r);
-	x = --r->ref;
-	unlock(r);
-	if(x < 0)
-		panic("decref pc=%#p", getcallerpc(&r));
-	return x;
+	do {
+		old = r->ref;
+		if(old <= 0)
+			panic("decref pc=%#p", getcallerpc(&r));
+		new = old-1;
+	} while(!cmpswap(&r->ref, old, new));
+	return new;
 }
 
 /*
@@ -225,20 +227,19 @@ newchan(void)
 
 	lock(&chanalloc);
 	c = chanalloc.free;
-	if(c != 0){
+	if(c != nil){
 		chanalloc.free = c->next;
-		c->next = 0;
-	}
-	unlock(&chanalloc);
-
-	if(c == nil){
+		c->next = nil;
+	} else {
+		unlock(&chanalloc);
 		c = smalloc(sizeof(Chan));
 		lock(&chanalloc);
-		c->fid = ++chanalloc.fid;
 		c->link = chanalloc.list;
 		chanalloc.list = c;
-		unlock(&chanalloc);
 	}
+	if(c->fid == 0)
+		c->fid = ++chanalloc.fid;
+	unlock(&chanalloc);
 
 	/* if you get an error before associating with a dev,
 	   close calls rootclose, a nop */
@@ -249,16 +250,20 @@ newchan(void)
 	c->offset = 0;
 	c->devoffset = 0;
 	c->iounit = 0;
-	c->umh = 0;
+	c->umh = nil;
+	c->umc = nil;
 	c->uri = 0;
 	c->dri = 0;
-	c->aux = 0;
-	c->mchan = 0;
-	c->mcp = 0;
-	c->mux = 0;
-	memset(&c->mqid, 0, sizeof(c->mqid));
-	c->path = 0;
+	c->dirrock = nil;
+	c->nrock = 0;
+	c->mrock = 0;
 	c->ismtpt = 0;
+	c->mcp = nil;
+	c->mux = nil;
+	c->aux = nil;
+	c->mchan = nil;
+	memset(&c->mqid, 0, sizeof(c->mqid));
+	c->path = nil;
 	
 	return c;
 }
@@ -285,7 +290,7 @@ newpath(char *s)
 	 * array will not be populated correctly.  The names #/ and / are
 	 * allowed, but other names with / in them draw warnings.
 	 */
-	if(strchr(s, '/') && strcmp(s, "#/") != 0 && strcmp(s, "/") != 0)
+	if(strchr(s, '/') != nil && strcmp(s, "#/") != 0 && strcmp(s, "/") != 0)
 		print("newpath: %s from %#p\n", s, getcallerpc(&s));
 
 	p->mlen = 1;
@@ -315,7 +320,7 @@ copypath(Path *p)
 	pp->mtpt = smalloc(p->malen*sizeof pp->mtpt[0]);
 	for(i=0; i<pp->mlen; i++){
 		pp->mtpt[i] = p->mtpt[i];
-		if(pp->mtpt[i])
+		if(pp->mtpt[i] != nil)
 			incref(pp->mtpt[i]);
 	}
 
@@ -340,7 +345,7 @@ pathclose(Path *p)
 	decref(&npath);
 	free(p->s);
 	for(i=0; i<p->mlen; i++)
-		if(p->mtpt[i])
+		if(p->mtpt[i] != nil)
 			cclose(p->mtpt[i]);
 	free(p->mtpt);
 	free(p);
@@ -416,7 +421,7 @@ addelem(Path *p, char *s, Chan *from)
 	if(isdotdot(s)){
 		fixdotdotname(p);
 		DBG("addelem %s .. => rm %p\n", p->s, p->mtpt[p->mlen-1]);
-		if(p->mlen>1 && (c = p->mtpt[--p->mlen])){
+		if(p->mlen > 1 && (c = p->mtpt[--p->mlen]) != nil){
 			p->mtpt[p->mlen] = nil;
 			cclose(c);
 		}
@@ -430,7 +435,7 @@ addelem(Path *p, char *s, Chan *from)
 		}
 		DBG("addelem %s %s => add %p\n", p->s, s, from);
 		p->mtpt[p->mlen++] = from;
-		if(from)
+		if(from != nil)
 			incref(from);
 	}
 	return p;
@@ -443,7 +448,7 @@ chanfree(Chan *c)
 
 	if(c->dirrock != nil){
 		free(c->dirrock);
-		c->dirrock = 0;
+		c->dirrock = nil;
 		c->nrock = 0;
 		c->mrock = 0;
 	}
@@ -903,7 +908,6 @@ pcmount(Chan **newp, Chan *old, int flag, char *spec, Proc *targp)
 	return nm->mountid;
 }
 
-
 void
 cunmount(Chan *mnt, Chan *mounted)
 {
@@ -1050,7 +1054,6 @@ pcunmount(Chan *mnt, Chan *mounted, Proc *targp)
 	error(Eunion);
 }
 
-
 Chan*
 cclone(Chan *c)
 {
@@ -1064,8 +1067,7 @@ cclone(Chan *c)
 		error("clone failed");
 	nc = wq->clone;
 	free(wq);
-	nc->path = c->path;
-	if(c->path)
+	if((nc->path = c->path) != nil)
 		incref(c->path);
 	return nc;
 }
@@ -1145,7 +1147,6 @@ pfindmount(Chan **cp, Mhead **mp, int type, int dev, Qid qid, Proc *targp)
 	return 0;
 }
 
-
 /*
  * Calls findmount but also updates path.
  */
@@ -1158,7 +1159,7 @@ domount(Chan **cp, Mhead **mp, Path **path)
 	if(findmount(cp, mp, (*cp)->type, (*cp)->dev, (*cp)->qid) == 0)
 		return 0;
 
-	if(path){
+	if(path != nil){
 		p = *path;
 		p = uniquepath(p);
 		if(p->mlen <= 0)
@@ -1167,7 +1168,7 @@ domount(Chan **cp, Mhead **mp, Path **path)
 			lc = &p->mtpt[p->mlen-1];
 DBG("domount %p %s => add %p (was %p)\n", p, p->s, (*mp)->from, p->mtpt[p->mlen-1]);
 			incref((*mp)->from);
-			if(*lc)
+			if(*lc != nil)
 				cclose(*lc);
 			*lc = (*mp)->from;
 		}
@@ -1185,7 +1186,7 @@ pdomount(Chan **cp, Mhead **mp, Path **path, Proc *targp)
 	if(pfindmount(cp, mp, (*cp)->type, (*cp)->dev, (*cp)->qid, targp) == 0)
 		return 0;
 
-	if(path){
+	if(path != nil){
 		p = *path;
 		p = uniquepath(p);
 		if(p->mlen <= 0)
@@ -1194,7 +1195,7 @@ pdomount(Chan **cp, Mhead **mp, Path **path, Proc *targp)
 			lc = &p->mtpt[p->mlen-1];
 DBG("domount %p %s => add %p (was %p)\n", p, p->s, (*mp)->from, p->mtpt[p->mlen-1]);
 			incref((*mp)->from);
-			if(*lc)
+			if(*lc != nil)
 				cclose(*lc);
 			*lc = (*mp)->from;
 		}
@@ -1202,7 +1203,6 @@ DBG("domount %p %s => add %p (was %p)\n", p, p->s, (*mp)->from, p->mtpt[p->mlen-
 	}
 	return 1;
 }
-
 
 /*
  * If c is the right-hand-side of a mount point, returns the left hand side.
@@ -1218,7 +1218,7 @@ undomount(Chan *c, Path *path)
 		print("undomount: path %s ref %ld mlen %d caller %#p\n",
 			path->s, path->ref, path->mlen, getcallerpc(&c));
 
-	if(path->mlen>0 && (nc=path->mtpt[path->mlen-1]) != nil){
+	if(path->mlen > 0 && (nc = path->mtpt[path->mlen-1]) != nil){
 DBG("undomount %p %s => remove %p\n", path, path->s, nc);
 		cclose(c);
 		path->mtpt[path->mlen-1] = nil;
@@ -1387,7 +1387,7 @@ walk(Chan **cp, char **names, int nnames, int nomount, int *nerror)
 			}
 			for(i=0; i<n; i++){
 				mtpt = nil;
-				if(i==n-1 && nmh)
+				if(i==n-1 && nmh!=nil)
 					mtpt = nmh->from;
 				path = addelem(path, names[nhave+i], mtpt);
 			}
@@ -1558,7 +1558,7 @@ pwalk(Chan **cp, char **names, int nnames, int nomount, int *nerror, Proc *targp
 			}
 			for(i=0; i<n; i++){
 				mtpt = nil;
-				if(i==n-1 && nmh)
+				if(i==n-1 && nmh!=nil)
 					mtpt = nmh->from;
 				path = addelem(path, names[nhave+i], mtpt);
 			}
@@ -1829,7 +1829,7 @@ namec(char *aname, int amode, int omode, ulong perm)
 		 */
 		n = chartorune(&r, up->genbuf+1)+1;
 		/* actually / is caught by parsing earlier */
-		if(utfrune("M", r))
+		if(utfrune("M", r) != nil)
 			error(Enoattach);
 		if(up->pgrp->noattach && utfrune("|decp", r)==nil)
 			error(Enoattach);
@@ -1958,7 +1958,7 @@ if(c->umh != nil){
 	c->umh = nil;
 }
 			/* only save the mount head if it's a multiple element union */
-			if(m && m->mount && m->mount->next)
+			if(m != nil && m->mount != nil && m->mount->next != nil)
 				c->umh = m;
 			else
 				putmhead(m);
@@ -2075,7 +2075,7 @@ if(c->umh != nil){
 				cnew->flag |= CCEXEC;
 			if(omode & ORCLOSE)
 				cnew->flag |= CRCLOSE;
-			if(m)
+			if(m != nil)
 				putmhead(m);
 			cclose(c);
 			c = cnew;
@@ -2085,7 +2085,7 @@ if(c->umh != nil){
 
 		/* create failed */
 		cclose(cnew);
-		if(m)
+		if(m != nil)
 			putmhead(m);
 		if(omode & OEXCL)
 			nexterror();
@@ -2591,7 +2591,7 @@ isdir(Chan *c)
 void
 putmhead(Mhead *m)
 {
-	if(m && decref(m) == 0){
+	if(m != nil && decref(m) == 0){
 		m->mount = (Mount*)0xCafeBeef;
 		free(m);
 	}

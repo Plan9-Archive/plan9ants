@@ -17,7 +17,6 @@ typedef struct Logflag	Logflag;
 typedef struct Mntcache Mntcache;
 typedef struct Mount	Mount;
 typedef struct Mntrpc	Mntrpc;
-typedef struct Mntwalk	Mntwalk;
 typedef struct Mnt	Mnt;
 typedef struct Mhead	Mhead;
 typedef struct Note	Note;
@@ -35,11 +34,13 @@ typedef struct QLock	QLock;
 typedef struct Queue	Queue;
 typedef struct Ref	Ref;
 typedef struct Rendez	Rendez;
+typedef struct Rendezq	Rendezq;
 typedef struct Rgrp	Rgrp;
 typedef struct RWlock	RWlock;
 typedef struct Sargs	Sargs;
 typedef struct Schedq	Schedq;
 typedef struct Segment	Segment;
+typedef struct Segio	Segio;
 typedef struct Sema	Sema;
 typedef struct Timer	Timer;
 typedef struct Timers	Timers;
@@ -60,7 +61,6 @@ typedef int    Devgen(Chan*, char*, Dirtab*, int, int, Dir*);
 
 struct Ref
 {
-	Lock;
 	long	ref;
 };
 
@@ -76,6 +76,12 @@ struct QLock
 	Proc	*head;		/* next process waiting for object */
 	Proc	*tail;		/* last process waiting for object */
 	int	locked;		/* flag */
+};
+
+struct Rendezq
+{
+	QLock;
+	Rendez;
 };
 
 struct RWlock
@@ -135,7 +141,6 @@ enum
 
 struct Block
 {
-	long	ref;
 	Block*	next;
 	Block*	list;
 	uchar*	rp;			/* first unconsumed byte */
@@ -152,7 +157,8 @@ struct Block
 
 struct Chan
 {
-	Ref;				/* the Lock in this Ref is also Chan's lock */
+	Ref;
+	Lock;
 	Chan*	next;			/* allocation */
 	Chan*	link;
 	vlong	offset;			/* in fd */
@@ -243,13 +249,6 @@ enum
 	NSCACHE	=	(1<<NSLOG),
 };
 
-struct Mntwalk				/* state for /proc/#/ns */
-{
-	int	cddone;
-	Mhead*	mh;
-	Mount*	cm;
-};
-
 struct Mount
 {
 	ulong	mountid;
@@ -301,30 +300,22 @@ struct Note
 
 enum
 {
-	PG_NOFLUSH	= 0,
-	PG_TXTFLUSH	= 1,		/* flush dcache and invalidate icache */
-	PG_DATFLUSH	= 2,		/* flush both i & d caches (UNUSED) */
-	PG_NEWCOL	= 3,		/* page has been recolored */
-
 	PG_MOD		= 0x01,		/* software modified bit */
 	PG_REF		= 0x02,		/* software referenced bit */
 };
 
 struct Page
 {
-	Lock;
+	Ref;
+	Page	*next;			/* Free list or Hash chains */
 	uintptr	pa;			/* Physical address in memory */
 	uintptr	va;			/* Virtual address for user */
 	uintptr	daddr;			/* Disc address on swap */
-	ulong	gen;			/* Generation counter for swap */
-	ushort	ref;			/* Reference count */
+	Image	*image;			/* Associated text or swap image */
+	ulong	txtflush;		/* Flush icache for putmmu */
+	ushort	refage;			/* Swap reference age */
 	char	modref;			/* Simulated modify/reference bits */
 	char	color;			/* Cache coloring */
-	char	cachectl[MAXMACH];	/* Cache flushing control for putmmu */
-	Image	*image;			/* Associated text or swap image */
-	Page	*next;			/* Lru free list */
-	Page	*prev;
-	Page	*hash;			/* Image hash chains */
 };
 
 struct Swapalloc
@@ -340,20 +331,6 @@ struct Swapalloc
 	ulong	headroom;		/* Space pager frees under highwater */
 	ulong	xref;			/* Ref count for all map refs >= 255 */
 }swapalloc;
-
-struct Image
-{
-	Ref;
-	long	pgref;			/* number of cached pages (pgref <= ref) */
-	Chan	*c;			/* channel to text file, nil when not used */
-	Qid 	qid;			/* Qid for page cache coherence */
-	ulong	dev;			/* Device id of owning channel */
-	ushort	type;			/* Device type of owning channel */
-	Segment *s;			/* TEXT segment for image if running */
-	Image	*hash;			/* Qid hash chains */
-	Image	*next;			/* Free list */
-	char	notext;			/* no file associated */
-};
 
 struct Pte
 {
@@ -372,6 +349,7 @@ enum
 	SG_STACK	= 03,
 	SG_SHARED	= 04,
 	SG_PHYSICAL	= 05,
+	SG_FIXED	= 06,
 
 	SG_RONLY	= 0040,		/* Segment is read only */
 	SG_CEXEC	= 0100,		/* Detach at exec */
@@ -390,8 +368,6 @@ struct Physseg
 	char	*name;			/* Attach name */
 	uintptr	pa;			/* Physical address */
 	uintptr	size;			/* Maximum segment size in bytes */
-	Page	*(*pgalloc)(Segment*, uintptr);	/* Allocation if we need it */
-	void	(*pgfree)(Page*);
 };
 
 struct Sema
@@ -406,9 +382,8 @@ struct Sema
 struct Segment
 {
 	Ref;
-	QLock	lk;
-	ushort	steal;		/* Page stealer lock */
-	ushort	type;		/* segment type */
+	QLock;
+	int	type;		/* segment type */
 	uintptr	base;		/* virtual base */
 	uintptr	top;		/* virtual top */
 	ulong	size;		/* size in pages */
@@ -425,6 +400,22 @@ struct Segment
 	ulong	mark;		/* portcountrefs */
 };
 
+struct Segio
+{
+	QLock;
+	Rendez	cmdwait;
+	Rendez	replywait;
+
+	Proc	*p;		/* segmentio kproc */
+	Segment	*s;
+
+	char	*data;
+	char	*addr;
+	int	dlen;
+	int	cmd;
+	char	*err;
+};
+
 enum
 {
 	RENDLOG	=	5,
@@ -437,10 +428,29 @@ enum
 };
 #define REND(p,s)	((p)->rendhash[(s)&((1<<RENDLOG)-1)])
 #define MOUNTH(p,qid)	((p)->mnthash[(qid).path&((1<<MNTLOG)-1)])
+#define PGHASH(i,daddr)	((i)->pghash[((daddr)>>PGSHIFT)&(PGHSIZE-1)])
+
+struct Image
+{
+	Ref;
+	Lock;
+	Chan	*c;			/* channel to text file, nil when not used */
+	Qid 	qid;			/* Qid for page cache coherence */
+	ulong	dev;			/* Device id of owning channel */
+	ushort	type;			/* Device type of owning channel */
+	char	notext;			/* no file associated */
+	Segment *s;			/* TEXT segment for image if running */
+	Image	*hash;			/* Qid hash chains */
+	Image	*next;			/* Free list */
+	long	pgref;			/* number of cached pages (pgref <= ref) */
+	Page	*pghash[PGHSIZE];	/* page cache */
+};
+
 
 struct Pgrp
 {
-	Ref;				/* also used as a lock when mounting */
+	Ref;
+	Lock;
 	int	noattach;
 	ulong	pgrpid;
 	QLock	debug;			/* single access via devproc.c */
@@ -450,7 +460,8 @@ struct Pgrp
 
 struct Rgrp
 {
-	Ref;				/* the Ref's lock is also the Rgrp's lock */
+	Ref;
+	Lock;
 	Proc	*rendhash[RENDHASH];	/* Rendezvous tag hash */
 };
 
@@ -477,6 +488,7 @@ struct Evalue
 struct Fgrp
 {
 	Ref;
+	Lock;
 	Chan	**fd;
 	int	nfd;			/* number allocated */
 	int	maxfd;			/* highest fd in use */
@@ -497,16 +509,12 @@ struct Pallocmem
 struct Palloc
 {
 	Lock;
-	Pallocmem	mem[4];
-	Page	*head;			/* most recently used */
-	Page	*tail;			/* least recently used */
+	Page	*head;			/* freelist head */
 	ulong	freecount;		/* how many pages on free list now */
 	Page	*pages;			/* array of all pages */
 	ulong	user;			/* how many user pages */
-	Page	*hash[PGHSIZE];
-	Lock	hashlock;
-	Rendez	r;			/* Sleep for free mem */
-	QLock	pwait;			/* Queue of procs waiting for memory */
+	Rendezq		pwait[2];	/* Queues of procs waiting for memory */
+	Pallocmem	mem[16];	/* physical user page banks */
 };
 
 struct Waitq
@@ -668,7 +676,7 @@ struct Proc
 	QLock	debug;		/* to access debugging elements of User */
 	Proc	*pdbg;		/* the debugging process */
 	ulong	procmode;	/* proc device default file mode */
-	ulong	privatemem;	/* proc does not let anyone read mem */
+	int	privatemem;	/* proc does not let anyone read mem */
 	int	hang;		/* hang at next exec for debug */
 	int	procctl;	/* Control for /proc debugging */
 	uintptr	pc;		/* DEBUG only */
@@ -720,7 +728,7 @@ struct Proc
 
 	Mach	*wired;
 	Mach	*mp;		/* machine this process last ran on */
-	Ref	nlocks;		/* number of locks held by proc */
+	int	nlocks;		/* number of locks held by proc */
 	ulong	delaysched;
 	ulong	priority;	/* priority level */
 	ulong	basepri;	/* base priority level */
@@ -749,7 +757,11 @@ struct Proc
 	 *  machine specific MMU
 	 */
 	PMMU;
+
 	char	*syscalltrace;	/* syscall trace */
+
+	void	*iocomarg;	/* I/O completion callback for pipelining */
+	void	(*iocomfun)(void*, int);
 };
 
 enum
@@ -775,6 +787,7 @@ extern	Palloc	palloc;
 extern	Queue*	serialoq;
 extern	char*	statename[];
 extern	Image	swapimage;
+extern	Image	fscache;
 extern	char*	sysname;
 extern	uint	qiomaxatomic;
 extern	char*	sysctab[];

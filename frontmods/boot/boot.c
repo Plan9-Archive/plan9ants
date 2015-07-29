@@ -5,7 +5,7 @@
 #include "../boot/boot.h"
 
 void
-boot(int argc, char *argv[])
+main(int argc, char *argv[])
 {
 	char cputype[64];
 	char buf[32];
@@ -13,7 +13,7 @@ boot(int argc, char *argv[])
 
 	fmtinstall('r', errfmt);
 
-	bind("#c", "/dev", MBEFORE);
+	bind("#c", "/dev", MREPL);
 	open("/dev/cons", OREAD);
 	open("/dev/cons", OWRITE);
 	open("/dev/cons", OWRITE);
@@ -38,11 +38,10 @@ boot(int argc, char *argv[])
 
 	readfile("#e/cputype", cputype, sizeof(cputype));
 	readfile("#e/bootcmd", bootcmd, sizeof(bootcmd));
-	setenv("bootdisk", bootdisk, 0);
 
 	/* setup the boot namespace */
 	bind("/boot", "/bin", MAFTER);
-	run("/bin/paqfs", "-q", "-c", "8", "-m" "/root", "/boot/bootfs.paq", nil);
+	run("/bin/paqfs", "-qa", "-c", "8", "-m" "/root", "/boot/bootfs.paq", nil);
 	bind("/root", "/", MAFTER);
 	snprint(buf, sizeof(buf), "/%s/bin", cputype);
 	bind(buf, "/bin", MAFTER);
