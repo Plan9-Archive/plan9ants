@@ -8,6 +8,7 @@ mntgen -s slash /mnt
 bind /root /mnt/broot
 unmount /root
 
+bind -q '#d' /fd
 bind -q '#p' /proc
 for(i in S f k æ t b m)
 	bind -qa '#'^$i /dev
@@ -108,49 +109,7 @@ fn dochecksys{
 	}
 }
 
-mt=()
-
-fn main{
-	mp=()
-	while(~ $#mp 0){
-		if(~ $#nobootprompt 0){
-			echo
-			showlocaldevs
-			ask bootargs ' is (tcp, il, local!device)' $"bootargs
-		}
-		if not bootargs=$nobootprompt
-		nobootprompt=()
-		mn=`{echo $bootargs | awk -F! '{print $1}'}
-		ma=`{echo $bootargs | sed 's/[^!]*!?//'}
-		switch(m$"mn){
-		case $mt
-			mp=m$mn
-			mp=$$mp
-		}
-	}
-
-	# authentication agent
-	if(! test -f /srv/factotum){
-		x=(/boot/factotum -n -sfactotum)
-		if(~ $service cpu){
-			x=($x -S)
-			if(~ -k $ff)
-				x=($x -k)
-		}
-		if not
-			x=($x -u)
-		if(! ~ $#auth 0)
-			x=($x -a $auth)
-		if(! ~ $#debugfactotum 0)
-			x=($x -p)
-		must $x
-	}
-
-##	begin ANTS startup
-
-#	tgzfs=tools.tgz
-#	cpuport=17060
-
+fn ants{
 	paqfs -s -S bootpaq /boot/bootpaq
 	mount -a /srv/bootpaq /boot
 	bind -a /boot /bin
@@ -218,17 +177,57 @@ fn main{
 		rm /env/privpassword
 		rm /env/passdom
 		rm /env/keyowner
-		}
+	}
+}
 
-##	end of ANTS setup
+mt=()
+
+fn main{
+	mp=()
+	while(~ $#mp 0){
+		if(~ $#nobootprompt 0){
+			echo
+			showlocaldevs
+			ask bootargs ' is (tcp, il, local!device)' $"bootargs
+		}
+		if not bootargs=$nobootprompt
+		nobootprompt=()
+		mn=`{echo $bootargs | sed 's,!, ,'}
+		ma=$mn(2-)
+		mn=$mn(1)
+		switch(m$"mn){
+		case $mt
+			mp=m$mn
+			mp=$$mp
+		}
+	}
+
+	# authentication agent
+	if(! test -f /srv/factotum){
+		x=(/boot/factotum -n -sfactotum)
+		if(~ $service cpu){
+			x=($x -S)
+			if(~ -k $ff)
+				x=($x -k)
+		}
+		if not
+			x=($x -u)
+		if(! ~ $#debugfactotum 0)
+			x=($x -p)
+		must $x
+	}
+
+	# setup low level namespace
+	ants
 
 	# config method
-	echo $mp(1) $ma
 	$mp(1) $ma
 
-	# load keys from secstore
-	if(~ $#auth 1 && test -x /bin/auth/secstore && test -f /mnt/factotum/ctl){
-		x=(auth/secstore -G factotum -s $auth)
+	# load keys from secstore if $auth or $secstore is not empty
+	x=secstore
+	if(~ $#$x 0) x=auth
+	if(! ~ $#$x 0 && test -x /bin/auth/secstore && test -f /mnt/factotum/ctl){
+		x=(auth/secstore -G factotum -s^$$x)
 		if(~ $service cpu)
 			$x -n >/mnt/factotum/ctl
 		if(~ $status *readnvram* || ! ~ $service cpu)
@@ -236,7 +235,6 @@ fn main{
 	}
 
 	# connect method
-	echo $mp(2) $ma
 	$mp(2) $ma
 
 	# insert cfs in the pipeline
@@ -257,7 +255,8 @@ fn main{
 	rfork ne
 
 	# mount root filesystem
-
+	if(~ $#rootdir 0)
+		rootdir=/root
 	must mount -c /srv/boot $rootdir
 
 	# compile init command
@@ -272,7 +271,7 @@ fn main{
 	}
 
 	# remove enviroment variables
-	rm -f /env/^$mt /env/? /env/?? '/env/fn#'* 
+	rm -f '#e/'^$mt '#e/'? '#e/'?? '#e/fn#'* 
 
 	# remove part of our temporary root
 	/mnt/broot/$cputype/bin/unmount /$cputype/bin /bin
@@ -287,7 +286,6 @@ fn main{
 	/mnt/broot/$cputype/bin/unmount /mnt/broot
 
 	exec $init
-
 }
 
 # keyboard and serial console
@@ -308,8 +306,12 @@ if(~ $#usbwait 1)
 if(~ $#usbwait 0)
 	sleep 2
 
-. /rc/lib/net.rc
-. /rc/lib/local.rc
+# load boot methods
+fn showlocaldevs {}
+fn configlocal {}
+for(i in /rc/lib/*.rc){
+	. $i
+}
 
 # add partitions and binds
 configlocal
