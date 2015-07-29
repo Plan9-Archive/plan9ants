@@ -1,7 +1,7 @@
 #include "dat.h"
 
 int		askforkeys = 1;
-char		*authaddr;
+char		*authaddr[8];
 int		debug;
 int		doprivate = 1;
 int		gflag;
@@ -32,6 +32,7 @@ prototab[] =
 	&cram,
 	&httpdigest,
 	&mschap,
+	&mschapv2,
 	&mschap2,
 	&p9any,
 	&p9cr,
@@ -50,7 +51,7 @@ prototab[] =
 void
 usage(void)
 {
-	fprint(2, "usage: %s [-DSdknpux] [-a authaddr] [-m mtpt] [-s service]\n",
+	fprint(2, "usage: %s [-DSdknpu] [-a authaddr] [-m mtpt] [-s service]\n",
 		argv0);
 	fprint(2, "or    %s -g 'params'\n", argv0);
 	exits("usage");
@@ -76,7 +77,9 @@ main(int argc, char **argv)
 		sflag = 1;
 		break;
 	case 'a':
-		authaddr = EARGF(usage());
+		for(i=0; i < nelem(authaddr)-2 && authaddr[i] != nil; i++)
+			;
+		authaddr[i] = EARGF(usage());
 		break;
 	case 'd':
 		debug = 1;
@@ -149,7 +152,7 @@ main(int argc, char **argv)
 	}
 
 	if(sflag){
-		s = getnvramkey(kflag ? NVwrite : NVwriteonerr, nil);
+		s = getnvramkey(kflag ? NVwrite : NVwriteonerr);
 		if(s == nil)
 			fprint(2, "factotum warning: cannot read nvram: %r\n");
 		else if(ctlwrite(s, 0) < 0)

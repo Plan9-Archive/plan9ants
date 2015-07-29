@@ -122,9 +122,7 @@ struct Proto
 	char *keyprompt;
 };
 
-extern char *invoker;
 extern char *owner;
-extern char *authdom;
 
 extern char Easproto[];
 extern char Ebadarg[];
@@ -144,7 +142,7 @@ int needkeyqueue(Req*, Fsstate*);
 
 /* fs.c */
 extern	int		askforkeys;
-extern	char		*authaddr;
+extern	char		*authaddr[8];	/* bootstrap auth servers */
 extern	int		*confirminuse;
 extern	int		debug;
 extern	int		gflag;
@@ -202,7 +200,7 @@ Keyinfo*	mkkeyinfo(Keyinfo*, Fsstate*, Attr*);
 int		findkey(Key**, Keyinfo*, char*, ...);
 int		findp9authkey(Key**, Fsstate*);
 Proto	*findproto(char*);
-char		*getnvramkey(int, char**);
+char		*getnvramkey(int);
 void		initcap(void);
 int		isclient(char*);
 int		matchattr(Attr*, Attr*, Attr*);
@@ -226,7 +224,7 @@ void		writehostowner(char*);
 /* protocols */
 extern Proto apop, cram;		/* apop.c */
 extern Proto p9any, p9sk1, p9sk2;	/* p9sk.c */
-extern Proto chap, mschap, mschap2;	/* chap.c */
+extern Proto chap, mschap, mschapv2, mschap2;	/* chap.c */
 extern Proto p9cr, vnc;			/* p9cr.c */
 extern Proto pass;			/* pass.c */
 extern Proto rsa;			/* rsa.c */
