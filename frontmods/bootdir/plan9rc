@@ -603,7 +603,7 @@ if not {
 	@{startnonint}
 } </dev/cons
 
-echo 'startup scripts exited!! starting recovery rc
+echo 'startup scripts exited!! starting recovery rc'
 while(){
 	@{rc}
 } </dev/cons

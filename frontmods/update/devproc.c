@@ -1224,7 +1224,8 @@ procwrite(Chan *c, void *va, long n, vlong off)
 
 	eqlock(&p->debug);
 	if(waserror()){
-		qunlock(&p->debug);
+		if(p->debug.locked == 1)
+			qunlock(&p->debug);
 		nexterror();
 	}
 	if(p->pid != PID(c->qid))
@@ -1324,7 +1325,8 @@ procwrite(Chan *c, void *va, long n, vlong off)
 		error(Egreg);
 	}
 	poperror();
-	qunlock(&p->debug);
+	if(p->debug.locked == 1)
+		qunlock(&p->debug);
 	return n;
 }
 
