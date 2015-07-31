@@ -1,26 +1,38 @@
 from the base ants directory:
 
-build 9front  ## makes a 9ants kernel in root of ants directories
+build 9front ## makes a 9ants kernel in root of ants directories
 
-build 9frontinstall  ## installs and modifies the system
+build 9frontinstall ## installs and modifies the system
 
-install designed for use on fresh install from .iso to a qemu vm, please examine
-and modify before using on your local system
+install designed for use on fresh install from .iso to a qemu vm,
+please examine and modify before using on your local system
 
-at startup enter bootfile=9ants then type boot, use 9pcf if the new kernel fails
-use bootcmd=plan9rc for configurable bootup
-listens on port 17060 with password rootless by default
-change privpassword= in plan9.ini to change password, leave blank for none
+at startup enter bootfile=9ants then type boot, use 9pcf if the new
+kernel fails
 
-enter 9front userland from cpu/drawterm in to port 17060: open a window and
+use bootcmd=plan9rc for configurable bootup as described in the
+documentation otherwise the standard bootrc script + a default ants
+namespace runs
 
-rerootwin -f boot
-service=con
-. $home/lib/profile
+listens on port 17060 with password rootless by default change
+privpassword= in plan9.ini to change password, leave blank for none
+
+enter 9front userland from cpu/drawterm in to port 17060: open a
+window and
+
+rerootwin -f boot 
+
+service=con 
+
+. $home/lib/profile 
+
 grio
 
-note for terminal users: it is important to modify the termrc file to include this series of commands:
+note for terminal users: it is important to modify the termrc file to
+include this series of commands:
 
 home=/usr/$user; cd; . $home/lib/profile
 
-this is necessary to make sure the user on the terminal stays in the namespace created by the termrc on top of the ants service namespace accessible via cpu or through the hubfs,
+this is necessary to make sure the user on the terminal stays in the
+namespace created by the termrc on top of the ants service namespace
+accessible via cpu or through the hubfs,
