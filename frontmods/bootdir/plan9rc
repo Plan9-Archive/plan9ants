@@ -229,8 +229,10 @@ fn dogetrootfs{
 		if(! ~ $ipdone yes){
 			ipsetup
 		}
-		if(~ $fs '')
+		if(~ $fs ''){
+			echo 'fs is [ ' $fs ' ]?'
 			fs=`{getans fs $fs}
+		}
 		if(~ $auth '')
 			auth=$fs
 ## HACK: on terminals start new factotum that knows where to dial
@@ -463,6 +465,7 @@ fn startinter{
 	factotum = `{getans factotum $factotum}
 	dofactotum
 	dotryusb
+	echo 'Enter sysname'
 	sysname = `{getans sysname $sysname}
 	echo 'Skeleton fs required for mountpoints. Default ramskel recommended.'
 	ramsetup = `{getans ramsetup $ramsetup}
@@ -474,15 +477,20 @@ fn startinter{
 	echo 'Start local Venti? Enter yes if so.'
 	startventi = `{getans startventi $startventi}
 	if(~ $startventi yes){
+		echo 'enter venti listen string'
 		ventilisten = `{getans ventilisten $ventilisten}
+		echo 'enter venti httplisten string'
 		vhttplisten = `{getans vhttplisten $vhttplisten}
 	}
 	dostartventi
 	echo 'Attach to a file server? Choose local or tcp or leave blank for none.'
 	getrootfs = `{getans getrootfs $getrootfs}
 	if(~ $getrootfs tcp){
+		echo 'fileserver is [ ' $fs ' ]?'
 		fs = `{getans fs $fs}
+		echo 'auth is [ ' $auth ' ]?'
 		auth = `{getans auth $auth}
+		echo 'cfs is [ ' $cfs ' ]?'
 		cfs = `{getans cfs $cfs}
 	}
 	if(~ $getrootfs local){
@@ -547,7 +555,9 @@ fn starttrad{
 	if(! ~ $bootparse(2) '')
 		ipparams=`{shifter $bootparse}
 	if(~ $getrootfs tcp){
+		echo 'fileserver is [ ' $fs ' ]?'
 		fs = `{getans fs $fs}
+		echo 'auth is [ ' $auth ' ]?'
 		auth = `{getans auth $auth}
 	}
 	dostartventi
