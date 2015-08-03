@@ -6,11 +6,13 @@ cp 9pcram.gz /n/9fat/9pcram.gz
 cp tools.tgz /n/9fat/tools.tgz
 cp doc/PLAN9.INI /n/9fat/PLAN9.INI
 
-## 9front build kernel and install to fresh iso install
+## 9front build kernel and install 
 
 build 9front
-build 9frontinstall
-/n/9fat/plan9.ini 	# change password and adjust config
+build portsinstall
+cp 9ants /n/9fat/9ants
+cp tools.tgz /n/9fat
+/n/9fat/plan9.ini 	# adjust config as needed
 
 ## documentation
 

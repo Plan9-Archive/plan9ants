@@ -69,7 +69,7 @@ if(~ $1 portsinstall){
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
 	mv /sys/man/3/proc /sys/man/3/oldproc
-	cp doc/modified.manpages/proc.man /sys/man/3/proc
+	cp doc/modified.manpages/proc.man /sys/man/3/procns
 	echo 'add the following to the end of /rc/bin/termrc'
 	echo 'home=/usr/$user; cd; . $home/lib/profile'
 	echo 'copy 9ants kernel to boot partition and edit plan9.ini'
@@ -86,7 +86,7 @@ if(~ $1 portsuninstall){
 	rm /sys/man/8/plan9rc
 	rm /sys/doc/ants.ms
 	rm /sys/doc/ants.ps
-	mv /sys/man/3/oldproc /sys/man/3/proc
+	rm /sys/man/3/procns
 	cp scripts/* /rc/bin
 	rm /rc/bin/addns
 	rm /rc/bin/addroroot
@@ -143,8 +143,7 @@ if(~ $1 9frontinstall){
 	cp doc/man.plan9rc /sys/man/8/plan9rc
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
-	mv /sys/man/3/proc /sys/man/3/oldproc
-	cp doc/modified.manpages/proc.man /sys/man/3/proc
+	cp doc/modified.manpages/proc.man /sys/man/3/procns
 	exit
 }
 

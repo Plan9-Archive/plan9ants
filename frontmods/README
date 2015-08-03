@@ -1,11 +1,20 @@
+ANTS has a custom kernel and userspace software. A full install
+includes the 9ants kernel, an optional tools.tgz in 9fat, and the
+userspace components. 
+
 from the base ants directory:
 
 build 9front ## makes a 9ants kernel in root of ants directories
 
-build 9frontinstall ## installs and modifies the system
+build portsinstall ## install userspace components without kernel
 
-install designed for use on fresh install from .iso to a qemu vm,
-please examine and modify before using on your local system
+At this point the user can copy the 9ants kernel to 9fat and modify
+the plan9.ini file as needed. ANTS has several additional boot options.
+
+build 9frontinstall ## converts a new stock installation to ANTS
+
+9frontinstall designed for use on fresh install from .iso to a qemu vm,
+using standard defaults, please examine and adapt for local system
 
 at startup enter bootfile=9ants then type boot, use 9pcf if the new
 kernel fails
