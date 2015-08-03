@@ -88,31 +88,32 @@ if(~ $1 portsuninstall){
 	rm /sys/doc/ants.ps
 	mv /sys/man/3/oldproc /sys/man/3/proc
 	cp scripts/* /rc/bin
-	rm /rc/bin/scripts/addns
-	rm /rc/bin/scripts/addroroot
-	rm /rc/bin/scripts/addsources
-	rm /rc/bin/scripts/addwrroot
-	rm /rc/bin/scripts/cpns
-	rm /rc/bin/scripts/cpsys
-	rm /rc/bin/scripts/foshalt
-	rm /rc/bin/scripts/fosreset
-	rm /rc/bin/scripts/fossilconf
-	rm /rc/bin/scripts/fossilize
-	rm /rc/bin/scripts/fossilstart
-	rm /rc/bin/scripts/frontstart
-	rm /rc/bin/scripts/getdevs
-	rm /rc/bin/scripts/gui
-	rm /rc/bin/scripts/importroroot
-	rm /rc/bin/scripts/importwrroot
-	rm /rc/bin/scripts/mountsrvfs
-	rm /rc/bin/scripts/rerootwin
-	rm /rc/bin/scripts/riobind
-	rm /rc/bin/scripts/riopush
-	rm /rc/bin/scripts/savedevs
-	rm /rc/bin/scripts/subns
-	rm /rc/bin/scripts/venticonf
-	rm /rc/bin/scripts/ventiprog
-	rm /rc/bin/scripts/winpush
+	rm /rc/bin/addns
+	rm /rc/bin/addroroot
+	rm /rc/bin/addsources
+	rm /rc/bin/addwrroot
+	rm /rc/bin/cpns
+	rm /rc/bin/cpsys
+	rm /rc/bin/foshalt
+	rm /rc/bin/fosreset
+	rm /rc/bin/fossilconf
+	rm /rc/bin/fossilize
+	rm /rc/bin/fossilstart
+	rm /rc/bin/frontstart
+	rm /rc/bin/getdevs
+	rm /rc/bin/gui
+	rm /rc/bin/importroroot
+	rm /rc/bin/importwrroot
+	rm /rc/bin/mountsrvfs
+	rm /rc/bin/rerootwin
+	rm /rc/bin/riobind
+	rm /rc/bin/riopush
+	rm /rc/bin/savedevs
+	rm /rc/bin/subns
+	rm /rc/bin/venticonf
+	rm /rc/bin/ventiprog
+	rm /rc/bin/winpush
+	exit
 }
 
 if(~ $1 9frontinstall){
