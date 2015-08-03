@@ -209,6 +209,19 @@ fn dostartventi{
 
 fn dogetrootfs{
 	switch($getrootfs){
+	case hjfs
+		bootpartition=`{findpart fs}
+		if(~ $interactive yes){
+			echo 'parsed hjfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
+			bootpartition=`{getans bootpartition $bootpartition}
+		}
+		if not if(~ $bootpartition ''){
+			echo 'no bootpartition found, trying /dev/sdC0/fs as default'
+			bootpartition=/dev/sdC0/fs
+		}
+		hjfs=$bootpartition
+		{hjfs -s -f $bootpartition &} | echo 0 >/srv/boot
+		bootsrv=/srv/boot		
 	case cwfs
 ###		{$1 -s -f $*(2-) &} <[0=1] | echo 0 >/srv/boot
 #		echo '{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot'
@@ -409,6 +422,8 @@ if(~ $bootargs ''){
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*)
 	getrootfs=local
+if(~ $bootparse(1) *fscache)
+	getrootfs=hjfs
 if(~ $bootparse(1) *fscache)
 	getrootfs=cwfs
 if(~ $bootparse(1) tcp*){
