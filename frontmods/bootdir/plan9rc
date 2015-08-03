@@ -422,7 +422,7 @@ if(~ $bootargs ''){
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*)
 	getrootfs=local
-if(~ $bootparse(1) *fscache)
+if(~ $bootparse(1) *fs)
 	getrootfs=hjfs
 if(~ $bootparse(1) *fscache)
 	getrootfs=cwfs
@@ -561,6 +561,8 @@ fn starttrad{
 	}
 	if(~ $bootparse(1) local*)
 		getrootfs=local
+	if(~ $bootparse(1) *fs)
+		getrootfs=hjfs
 	if(~ $bootparse(1) *fscache)
 		getrootfs=cwfs
 	if(~ $bootparse(1) tcp*)
