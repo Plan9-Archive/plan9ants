@@ -55,6 +55,66 @@ if(~ $1 9front){
 	exit
 }
 
+if(~ $1 portsinstall){
+	cd hubfs1.1
+	mk install
+	cd ..
+	cp frontmods/bootdir/grio /$objtype/bin
+	cp scripts/* /rc/bin
+	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	cp doc/man.cpns /sys/man/1/cpns
+	cp doc/man.rerootwin /sys/man/1/rerootwin
+	cp doc/man.addwrroot /sys/man/1/addwrroot
+	cp doc/man.plan9rc /sys/man/8/plan9rc
+	cp doc/antspaper.ms /sys/doc/ants.ms
+	cp doc/ants.ps /sys/doc/ants.ps
+	mv /sys/man/3/proc /sys/man/3/oldproc
+	cp doc/modified.manpages/proc.man /sys/man/3/proc
+	echo 'add the following to the end of /rc/bin/termrc'
+	echo 'home=/usr/$user; cd; . $home/lib/profile'
+	echo 'copy 9ants kernel to boot partition and edit plan9.ini'
+	echo 'enter bootfile=9ants at bootup for new kernel'
+	exit
+}
+
+if(~ $1 portsuninstall){
+	rm /$objtype/bin/grio
+	rm /lib/namespace.saveterm
+	rm /sys/man/1/cpns
+	rm /sys/man/1/rerootwin
+	rm /sys/man/1/addwrroot
+	rm /sys/man/8/plan9rc
+	rm /sys/doc/ants.ms
+	rm /sys/doc/ants.ps
+	mv /sys/man/3/oldproc /sys/man/3/proc
+	cp scripts/* /rc/bin
+	rm /rc/bin/scripts/addns
+	rm /rc/bin/scripts/addroroot
+	rm /rc/bin/scripts/addsources
+	rm /rc/bin/scripts/addwrroot
+	rm /rc/bin/scripts/cpns
+	rm /rc/bin/scripts/cpsys
+	rm /rc/bin/scripts/foshalt
+	rm /rc/bin/scripts/fosreset
+	rm /rc/bin/scripts/fossilconf
+	rm /rc/bin/scripts/fossilize
+	rm /rc/bin/scripts/fossilstart
+	rm /rc/bin/scripts/frontstart
+	rm /rc/bin/scripts/getdevs
+	rm /rc/bin/scripts/gui
+	rm /rc/bin/scripts/importroroot
+	rm /rc/bin/scripts/importwrroot
+	rm /rc/bin/scripts/mountsrvfs
+	rm /rc/bin/scripts/rerootwin
+	rm /rc/bin/scripts/riobind
+	rm /rc/bin/scripts/riopush
+	rm /rc/bin/scripts/savedevs
+	rm /rc/bin/scripts/subns
+	rm /rc/bin/scripts/venticonf
+	rm /rc/bin/scripts/ventiprog
+	rm /rc/bin/scripts/winpush
+}
+
 if(~ $1 9frontinstall){
 	if (! test -e 9ants){
 		echo no 9ants kernel found, use build 9front first

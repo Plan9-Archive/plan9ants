@@ -50,6 +50,11 @@ build 9frontinstall - installs to a clean 9front install after build 9front
 change the default privpassword=rootless in plan9.ini and other values
 as needed for local configuration
 
+build portsinstall - installs from 9front-ports tree without modifying
+9fat or system files
+
+build portsuninstall - uninstall components installed by portsinstall
+
 The 9pcram.gz kernel and optional .tgz are placed in the conventional
 9fat partition.  Conventional plan9.ini variiables are mostly
 supported, with many new optional additions.  The most important are:
