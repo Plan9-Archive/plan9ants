@@ -1745,22 +1745,11 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 {
 	int ret;
 	Chan *c0, *c1, *ac, *bc;
-//	struct{
-//		Chan	*chan;
-//		Chan	*authchan;
-//		char	*spec;
-//		int	flags;
-//	}bogus;
 
 	if((flag&~MMASK) || (flag&MORDER)==(MBEFORE|MAFTER))
 		error(Ebadarg);
 
-//	bogus.flags = flag & MCACHE;
-
 	if(ismount){
-		if(targp->pgrp->noattach)
-			error(Enoattach);
-
 		if(waserror()) {
 			print("nsmod /proc mounts locked on process %uld\n", targp->pid);
 			nexterror();
@@ -1771,7 +1760,17 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 			return -1;
 		}
 		poperror();
-			
+
+//		validaddr((ulong)spec, 1, 0);
+		spec = validnamedup(spec, 1);
+		if(waserror()){
+			free(spec);
+			nexterror();
+		}
+
+		if(targp->pgrp->noattach)
+			error(Enoattach);
+
 		ac = nil;
 		bc = pfdtochan(fd, ORDWR, 0, 1, targp);
 		if(waserror()) {
@@ -1784,37 +1783,19 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		if(afd >= 0)
 			ac = pfdtochan(afd, ORDWR, 0, 1, targp);
 
-//		bogus.chan = bc;
-//		bogus.authchan = ac;
-//		validaddr((ulong)spec, 1, 0);
-//		bogus.spec = spec;
-		if(waserror())
-			error(Ebadspec);
-		spec = validnamedup(spec, 1);
-		poperror();
-		
-		if(waserror()){
-			free(spec);
-			nexterror();
-		}
-
 //		ret = devno('M', 0);
 //		c0 = devtab[ret]->attach((char*)&bogus);
 		c0 = mntattach(bc, ac, spec, flag&MCACHE);
 		qunlock(&targp->procmount);
 //		print("c0 devtab attach assigned\n");
-
-//		poperror();	/* spec */
-//		free(spec);
 		poperror();	/* ac bc */
 		if(ac)
 			cclose(ac);
 		cclose(bc);
 	}else{
-//		bogus.spec = 0;
+		spec = nil;
 //		validaddr((ulong)arg0, 1, 0);
 //		print("c0 = pnamec(%s, Abind, 0, 0, targp)\n", arg0);
-		spec = nil;
 		c0 = pnamec(arg0, Abind, 0, 0, targp);
 	}
 
@@ -1830,7 +1811,6 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		nexterror();
 	}
 //	print("ret = pcmount(&c0, c1, flag, bogus.spec, targp)\n");
-//	ret = pcmount(&c0, c1, flag, bogus.spec, targp);
 	ret = pcmount(&c0, c1, flag, spec, targp);
 
 	poperror();
@@ -1839,8 +1819,8 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 	cclose(c0);
 	if(ismount){
 		pfdclose(fd, 0, targp);
-		poperror();
-		free(spec);
+		poperror();	/* spec */
+		free(spec);	
 	}
 	return ret;
 }
