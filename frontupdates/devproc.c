@@ -1745,17 +1745,17 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 {
 	int ret;
 	Chan *c0, *c1, *ac, *bc;
-	struct{
-		Chan	*chan;
-		Chan	*authchan;
-		char	*spec;
-		int	flags;
-	}bogus;
+//	struct{
+//		Chan	*chan;
+//		Chan	*authchan;
+//		char	*spec;
+//		int	flags;
+//	}bogus;
 
 	if((flag&~MMASK) || (flag&MORDER)==(MBEFORE|MAFTER))
 		error(Ebadarg);
 
-	bogus.flags = flag & MCACHE;
+//	bogus.flags = flag & MCACHE;
 
 	if(ismount){
 		if(targp->pgrp->noattach)
@@ -1784,10 +1784,10 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		if(afd >= 0)
 			ac = pfdtochan(afd, ORDWR, 0, 1, targp);
 
-		bogus.chan = bc;
-		bogus.authchan = ac;
+//		bogus.chan = bc;
+//		bogus.authchan = ac;
 //		validaddr((ulong)spec, 1, 0);
-		bogus.spec = spec;
+//		bogus.spec = spec;
 		if(waserror())
 			error(Ebadspec);
 		spec = validnamedup(spec, 1);
@@ -1798,21 +1798,23 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 			nexterror();
 		}
 
-		ret = devno('M', 0);
-		c0 = devtab[ret]->attach((char*)&bogus);
+//		ret = devno('M', 0);
+//		c0 = devtab[ret]->attach((char*)&bogus);
+		c0 = mntattach(bc, ac, spec, flag&MCACHE);
 		qunlock(&targp->procmount);
 //		print("c0 devtab attach assigned\n");
 
-		poperror();	/* spec */
-		free(spec);
+//		poperror();	/* spec */
+//		free(spec);
 		poperror();	/* ac bc */
 		if(ac)
 			cclose(ac);
 		cclose(bc);
 	}else{
-		bogus.spec = 0;
+//		bogus.spec = 0;
 //		validaddr((ulong)arg0, 1, 0);
 //		print("c0 = pnamec(%s, Abind, 0, 0, targp)\n", arg0);
+		spec = nil;
 		c0 = pnamec(arg0, Abind, 0, 0, targp);
 	}
 
@@ -1828,15 +1830,18 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		nexterror();
 	}
 //	print("ret = pcmount(&c0, c1, flag, bogus.spec, targp)\n");
-	ret = pcmount(&c0, c1, flag, bogus.spec, targp);
+//	ret = pcmount(&c0, c1, flag, bogus.spec, targp);
+	ret = pcmount(&c0, c1, flag, spec, targp);
 
 	poperror();
 	cclose(c1);
 	poperror();
 	cclose(c0);
-	if(ismount)
+	if(ismount){
 		pfdclose(fd, 0, targp);
-
+		poperror();
+		free(spec);
+	}
 	return ret;
 }
 
