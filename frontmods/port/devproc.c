@@ -1803,8 +1803,6 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		qunlock(&targp->procmount);
 //		print("c0 devtab attach assigned\n");
 
-		poperror();	/* spec */
-		free(spec);
 		poperror();	/* ac bc */
 		if(ac)
 			cclose(ac);
@@ -1834,9 +1832,11 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 	cclose(c1);
 	poperror();
 	cclose(c0);
-	if(ismount)
+	if(ismount){
 		pfdclose(fd, 0, targp);
-
+		poperror();	/* spec */
+		free(spec);
+	}
 	return ret;
 }
 
