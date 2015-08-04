@@ -1808,7 +1808,7 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 			cclose(ac);
 		cclose(bc);
 	}else{
-		bogus.spec = 0;
+		spec = 0;
 //		validaddr((ulong)arg0, 1, 0);
 //		print("c0 = pnamec(%s, Abind, 0, 0, targp)\n", arg0);
 		c0 = pnamec(arg0, Abind, 0, 0, targp);
@@ -1826,7 +1826,7 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		nexterror();
 	}
 //	print("ret = pcmount(&c0, c1, flag, bogus.spec, targp)\n");
-	ret = pcmount(&c0, c1, flag, bogus.spec, targp);
+	ret = pcmount(&c0, c1, flag, spec, targp);
 
 	poperror();
 	cclose(c1);
