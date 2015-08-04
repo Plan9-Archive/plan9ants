@@ -1802,12 +1802,7 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 	if((flag&~MMASK) || (flag&MORDER)==(MBEFORE|MAFTER))
 		error(Ebadarg);
 
-	bogus.flags = flag & MCACHE;
-
 	if(ismount){
-		if(targp->pgrp->noattach)
-			error(Enoattach);
-
 		if(waserror()) {
 			print("nsmod /proc mounts locked on process %uld\n", targp->pid);
 			nexterror();
@@ -1818,7 +1813,17 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 			return -1;
 		}
 		poperror();
-			
+
+//		validaddr((ulong)spec, 1, 0);
+		spec = validnamedup(spec, 1);
+		if(waserror()){
+			free(spec);
+			nexterror();
+		}
+
+		if(targp->pgrp->noattach)
+			error(Enoattach);
+
 		ac = nil;
 		bc = pfdtochan(fd, ORDWR, 0, 1, targp);
 		if(waserror()) {
@@ -1831,25 +1836,17 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		if(afd >= 0)
 			ac = pfdtochan(afd, ORDWR, 0, 1, targp);
 
+		bogus.flags = flag & MCACHE;
 		bogus.chan = bc;
 		bogus.authchan = ac;
-//		validaddr((ulong)spec, 1, 0);
 		bogus.spec = spec;
-		if(waserror())
-			error(Ebadspec);
-		spec = validnamedup(spec, 1);
-		poperror();
-		
-		if(waserror()){
-			free(spec);
-			nexterror();
-		}
-
+//		if(waserror())
+//			error(Ebadspec);	
+//		poperror();	
 		ret = devno('M', 0);
 		c0 = devtab[ret]->attach((char*)&bogus);
 		qunlock(&targp->procmount);
 //		print("c0 devtab attach assigned\n");
-
 		poperror();	/* ac bc */
 		if(ac)
 			cclose(ac);

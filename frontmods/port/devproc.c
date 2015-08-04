@@ -1787,10 +1787,11 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		bogus.chan = bc;
 		bogus.authchan = ac;
 //		validaddr((ulong)spec, 1, 0);
+		spec = validnamedup(spec, 1);
 		bogus.spec = spec;
 		if(waserror())
 			error(Ebadspec);
-		spec = validnamedup(spec, 1);
+
 		poperror();
 		
 		if(waserror()){
