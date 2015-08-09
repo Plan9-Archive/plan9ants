@@ -206,7 +206,7 @@ fn dogetrootfs{
 		bootpartition=`{findpart fs}
 		if(~ $interactive yes){
 			echo 'parsed hjfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
-			bootpartition=`{getans bootpartition $bootpartition}
+			getans bootpartition $bootpartition
 		}
 		if not if(~ $bootpartition ''){
 			echo 'no bootpartition found, trying /dev/sdC0/fs as default'
@@ -222,7 +222,7 @@ fn dogetrootfs{
 		bootpartition=`{findpart fscache}
 		if(~ $interactive yes){
 			echo 'parsed cwfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
-			bootpartition=`{getans bootpartition $bootpartition}
+			getans bootpartition $bootpartition
 		}
 		if not if(~ $bootpartition ''){
 			echo 'no bootpartition found, trying /dev/sdC0/fscache as default'
@@ -237,7 +237,7 @@ fn dogetrootfs{
 		}
 		if(~ $fs ''){
 			echo 'fs is [ ' $fs ' ]?'
-			fs=`{getans fs $fs}
+			getans fs $fs
 		}
 		if(~ $auth '')
 			auth=$fs
@@ -266,7 +266,7 @@ fn dogetrootfs{
 				bootpartition=`{findpart fossil}
 				if(~ $interactive yes){
 					echo 'parsed fossil bootpartition as ' $bootpartition ' enter new value if this is incorrect'
-					bootpartition=`{getans bootpartition $bootpartition}
+					getans bootpartition $bootpartition
 				}
 				if not if(~ $bootpartition ''){
 					echo 'no bootpartition found, trying /dev/sdC0/fossil as default'
@@ -288,7 +288,7 @@ fn dogetrootfs{
 		if not{
 			if(~ $interactive yes){
 				echo 'kfs parsed as ' $kfs ' enter new value if this is incorrect'
-				kfs=`{getans kfs $kfs}
+				getans kfs $kfs
 			}
 			if(! ~ $bootparse(2) '')
 				kfsparams=`{shifter $bootparse}
@@ -300,7 +300,7 @@ fn dogetrootfs{
 	case srv
 		if(~ $interactive yes){
 			echo 'enter full path to target srv'
-			bootsrv=`{getans bootsrv $bootsrv}
+			getans bootsrv $bootsrv
 		}
 	case ''
 		echo no standard root fs attached
@@ -468,42 +468,42 @@ fn startinter{
 		rc -i
 	}
 	echo 'Internet config DHCP by default. Enter ipconfig parameters if needed'
-	ipparams = `{getans ipparams $ipparams}
+	getans ipparams $ipparams
 	echo 'Choose factotum mode - cpu terminal or debug.'
-	factotum = `{getans factotum $factotum}
+	getans factotum $factotum
 	dofactotum
 	dotryusb
 	echo 'Enter sysname'
-	sysname = `{getans sysname $sysname}
+	getans sysname $sysname
 	echo 'Skeleton fs required for mountpoints. Default ramskel recommended.'
-	ramsetup = `{getans ramsetup $ramsetup}
+	getans ramsetup $ramsetup
 	echo 'Load optional tools from 9fat? Enter tools.tgz or other if desired'
-	tgzfs = `{getans tgzfs $tgzfs}
+	getans tgzfs $tgzfs
 	doramsetup
 	hostcheck
 	dochecksys
 	echo 'Start local Venti? Enter yes if so.'
-	startventi = `{getans startventi $startventi}
+	getans startventi $startventi
 	if(~ $startventi yes){
 		echo 'enter venti listen string'
-		ventilisten = `{getans ventilisten $ventilisten}
+		getans ventilisten $ventilisten
 		echo 'enter venti httplisten string'
-		vhttplisten = `{getans vhttplisten $vhttplisten}
+		getans vhttplisten $vhttplisten
 	}
 	dostartventi
 	echo 'Attach to a file server? Choose local or tcp or leave blank for none.'
-	getrootfs = `{getans getrootfs $getrootfs}
+	getans getrootfs $getrootfs
 	if(~ $getrootfs tcp){
 		echo 'fileserver is [ ' $fs ' ]?'
-		fs = `{getans fs $fs}
+		getans fs $fs
 		echo 'auth is [ ' $auth ' ]?'
-		auth = `{getans auth $auth}
+		getans auth $auth
 		echo 'cfs is [ ' $cfs ' ]?'
-		cfs = `{getans cfs $cfs}
+		getans cfs $cfs
 	}
 	if(~ $getrootfs local){
 		echo 'Dial a venti server? Enter a dialstring or ip if so.'
-		venti = `{getans venti $venti}
+		getans venti $venti
 		if(! ~ $venti ''){
 			if(! ~ $venti tcp*)
 				venti=tcp!^$venti^!17034
@@ -514,14 +514,14 @@ fn startinter{
 	}
 	dogetrootfs
 	echo 'Create cpu server namespace on a port of your choice? Initskel if so.'
-	initscript = `{getans initscript $initscript}
+	getans initscript $initscript
 	doinitscript
 	echo 'Start cpurc termrc from the file server? Enter cpu or terminal if so.'
-	rootstart = `{getans rootstart $rootstart}
+	getans rootstart $rootstart
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'Keep console in ramboot namespace? yes if so.'
-	staylocal = `{getans staylocal $staylocal}
+	getans staylocal $staylocal
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(! ~ $staylocal no){
@@ -566,9 +566,9 @@ fn starttrad{
 		ipparams=`{shifter $bootparse}
 	if(~ $getrootfs tcp){
 		echo 'fileserver is [ ' $fs ' ]?'
-		fs = `{getans fs $fs}
+		getans fs $fs
 		echo 'auth is [ ' $auth ' ]?'
-		auth = `{getans auth $auth}
+		getans auth $auth
 	}
 	dostartventi
 	interactive=yes
