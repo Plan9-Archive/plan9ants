@@ -13,29 +13,22 @@ fn shifter{
 	echo $*
 }
 
-fn errorshell{
-#	echo subshell output on stderr >>/fd/2
-#	rc -i >>/fd/2
-#	echo exiting rc >>/fd/2
-	rc
-}
-
 fn getans{
 	query=$1
 	value=`{shifter $*}
-#	echo '* '$"query' = '$"value' : accept, new value, '''clear'''', or '''rc''' : >>/fd/2
+	echo '* '$"query' = '$"value' : accept, new value, '''clear'''', or '''rc'''
 #	answer=`{read}
 	answer=`{dd -bs 64 -count 1 >[2]/dev/null}
 	switch($answer){
 	case rc
-		errorshell
+		rc -i
 		getans $query $value
 	case clear
-		echo ''
+		$query = ''
 	case ?*
-		echo $answer
+		$query = $answer
 	case ''
-		echo $value
+		$query = $value
 	}
 }
 
@@ -551,7 +544,7 @@ fn starttrad{
 	echo -n 'root is from (tcp,local)['$bootargs']: '
 	bootanswer=`{read}
 	if(~ $bootanswer rc){
-		errorshell
+		rc -i
 	}
 	if not if(! ~ $bootanswer ''){
 		bootparse=`{echo $bootanswer}
