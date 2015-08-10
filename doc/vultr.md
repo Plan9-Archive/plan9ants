@@ -44,3 +44,11 @@ Once the installs are completed (the vultrfossil script runs for a long time as 
 
 ## using the ANTS environment ##
 
+In addition to standard Plan 9, the ants namespace and tools are available. You can cpu or drawterm in to the boot namespace on port 17060. To move into the main environment from there,
+
+	rerootwin -f boot
+	service=con
+	. $home/lib/profile
+	webfs
+
+You can also access  the early namespace by attaching hub to /srv/hubfs. It can be convenient to import the early namespace exportfs listener (port 17027) from another machine also.

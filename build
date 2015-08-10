@@ -169,6 +169,7 @@ if(~ $1 vultr){
 if(~ $1 vultrfossil){
 	cd cfg
 	cat vultdisk |disk/prep /dev/sdF0/plan9
+	build portsinstall
 	hget http://45.63.71.38/fossil.tgz >>/root/386/bin/fossil.tgz
 	cd /root/386/bin
 	tar xzf fossil.tgz
