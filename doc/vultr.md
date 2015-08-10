@@ -7,21 +7,21 @@
 
 A working copy of a 9front iso can be found at http://9gridchan.org/9front.iso. Choose to enable a private ip. Make sure the size (smallest is good) and location are correct, and that the 9front iso is attached. Deploy!
 
+	MANAGE the vm, start if needed, and view the console
 	INSTALL through the console management interface on vultr
 
-Mostly you will be using the defaults. The general method of installation is covered well in the 9front.org fqa. You will be choosing to use hjfs instead of the default cwfs, and we recommend partitioning the hjfs partittion to be small.
+Mostly you will be using the defaults. The general method of installation is covered well in the 9front.org fqa. You hit enter a few times until the rio gui is started, then you can use the live cd and begin the install with inst/start when ready. You will be choosing to use hjfs instead of the default cwfs, and we recommend partitioning the hjfs partittion to be small. Here are the relevant inputs, with everything else being left as default.
 
 	inst/start
-	hjfs
-	sdF0
+	hjfs #configfs
+	sdF0 #partdisk
 	mbr
-	w #partdisk
+	w
 	q
 	d fs #prepdisk
 	a fs 204801 2200000
 	w
 	q
-	32 # mb cache
 	# enter a lot until copydist and you wait for a few minutes
 	# set timezone and system name and then say
 	yes yes # to the questions to make plan 9 mbr active
