@@ -1,19 +1,25 @@
-disk/prep -a fossil 2200000 10000000 -a arenas 10000000 30000000 -a isect 30000000 31455207 /dev/sdF0/plan9
-hget http://45.63.71.38/fossil.tgz >>/root/386/bin
+#disk/prep -a fossil 2200000 10000000 -a arenas 10000000 30000000 -a isect 30000000 31455207 /dev/sdF0/plan9
+cat vultdisk |disk/prep /dev/sdF0/plan9
+hget http://45.63.71.38/fossil.tgz >>/root/386/bin/fossil.tgz
 cd /root/386/bin
 tar xzf fossil.tgz
 mkdir /tmp/stub
 mount /srv/boot /n/dist
 fossil/flfmt /dev/sdF0/fossil
+fossil/conf -w /dev/sdF0/fossil initfossil.conf
 fossil/fossil -f /dev/sdF0/fossil
 mount -c /srv/fossil /n/fossil
-bind /tmp/stub /mail/box
+bind /tmp/stub /n/dist/mail
 disk/mkfs -U -z 8192 -s /n/dist -d /n/fossil /sys/lib/sysconfig/proto/allproto
 cd $builddir/cfg
 fossil/conf -w /dev/sdF0/fossil fossil.conf
-venti/fmtarenas /dev/sdF0/arenas
-venti/fmtisect /dev/sdF0/isect
+venti/fmtarenas arenas /dev/sdF0/arenas
+venti/fmtisect isect /dev/sdF0/isect
 venti/fmtindex venti.conf
 venti/conf -w /dev/sdF0/arenas venti.conf
 9fs 9fat
 cp vfosvenp9.ini /n/9fat/plan9.ini
+cd ..
+rm compiletemp/*
+build 9front
+cp 9ants /n/9fat/9ants
