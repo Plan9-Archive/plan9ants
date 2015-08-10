@@ -11,6 +11,7 @@ A working copy of a 9front iso can be found at http://9gridchan.org/9front.iso. 
 
 Mostly you will be using the defaults. The general method of installation is covered well in the 9front.org fqa. You will be choosing to use hjfs instead of the default cwfs, and we recommend partitioning the hjfs partittion to be small.
 
+	inst/start
 	hjfs
 	sdF0
 	mbr
