@@ -182,28 +182,28 @@ via the ctl file:
 .PP
 .IP
 .EX
-echo freeze >/n/hubsrv/ctl #freeze Hubs as static files
+echo freeze >/n/hubfs/ctl #freeze Hubs as static files
 .EE
 .PP
 .IP
 .EX
-echo melt >/n/hubsrv/ctl #resume normal flow of data
+echo melt >/n/hubfs/ctl #resume normal flow of data
 .EE
 .PP
 .IP
 .EX
-echo fear >/n/hubsrv/ctl #activate paranoid(safe) mode
+echo fear >/n/hubfs/ctl #activate paranoid(safe) mode
 # - writers wait for readers
 .EE
 .PP
 .IP
 .EX
-echo calm >/n/hubsrv/ctl #resume non-paranoid mode
+echo calm >/n/hubfs/ctl #resume non-paranoid mode
 .EE
 .PP
 .IP
 .EX
-echo quit >/n/hubsrv/ctl #kill the fs
+echo quit >/n/hubfs/ctl #kill the fs
 .EE
 .PP
 .SH SOURCE

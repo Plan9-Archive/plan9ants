@@ -62,10 +62,12 @@ if(~ $1 portsinstall){
 	cp frontmods/bootdir/grio /$objtype/bin
 	cp scripts/* /rc/bin
 	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	cp bootdir.extras/namespace.save9front /lib/namespace.save9front
 	cp doc/man.cpns /sys/man/1/cpns
 	cp doc/man.rerootwin /sys/man/1/rerootwin
 	cp doc/man.addwrroot /sys/man/1/addwrroot
 	cp doc/man.plan9rc /sys/man/8/plan9rc
+	cp doc/man.ventiprog /sys/man/8/ventiprog
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
 	mv /sys/man/3/proc /sys/man/3/oldproc
@@ -80,10 +82,12 @@ if(~ $1 portsinstall){
 if(~ $1 portsuninstall){
 	rm /$objtype/bin/grio
 	rm /lib/namespace.saveterm
+	rm /lib/namespace.save9front
 	rm /sys/man/1/cpns
 	rm /sys/man/1/rerootwin
 	rm /sys/man/1/addwrroot
 	rm /sys/man/8/plan9rc
+	rm /sys/man/8/ventiprog
 	rm /sys/doc/ants.ms
 	rm /sys/doc/ants.ps
 	rm /sys/man/3/procns
@@ -131,6 +135,7 @@ if(~ $1 9frontinstall){
 	cp frontmods/bootdir/grio /$objtype/bin
 	cp scripts/* /rc/bin
 	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	cp bootdir.extras/namespace.save9front /lib/namespace.save9front
 	9fs 9fat
 	cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
 	cp frontmods/plan9.ini /n/9fat/plan9.ini
@@ -141,6 +146,7 @@ if(~ $1 9frontinstall){
 	cp doc/man.rerootwin /sys/man/1/rerootwin
 	cp doc/man.addwrroot /sys/man/1/addwrroot
 	cp doc/man.plan9rc /sys/man/8/plan9rc
+	cp doc/man.ventiprog /sys/man/8/ventiprog
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
 	cp doc/modified.manpages/proc.man /sys/man/3/procns
@@ -194,6 +200,7 @@ if(~ $1 isoinstall){
 	cd $builddir
 	cp scripts/* /rc/bin
 	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	cp bootdir.extras/namespace.save9front /lib/namespace.save9front
 	echo installing 9pcram kernel and tools.tgz and plan9.ini
 	9fat:
 	kernel=9pcram.gz
