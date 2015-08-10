@@ -466,12 +466,13 @@ if not if(~ $interactive traditional){
 	}
 	if(~ $bootparse(1) local*)
 		getrootfs=local
-	if(~ $bootparse(1) tcp*)
+	if(~ $bootparse(1) tcp*){
 		getrootfs=tcp
+		if(! ~ $bootparse(2) '')
+			ipparams=`{shifter $bootparse}
+	}
 	if(~ $bootparse(1) srv*)
 		getrootfs=srv
-	if(! ~ $bootparse(2) '')
-		ipparams=`{shifter $bootparse}
 	if(~ $getrootfs tcp){
 		getans fs $fs
 		getans auth $auth

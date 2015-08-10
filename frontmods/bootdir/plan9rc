@@ -558,12 +558,13 @@ fn starttrad{
 		getrootfs=hjfs
 	if(~ $bootparse(1) *fscache)
 		getrootfs=cwfs
-	if(~ $bootparse(1) tcp*)
+	if(~ $bootparse(1) tcp*){
 		getrootfs=tcp
+		if(! ~ $bootparse(2) '')
+			ipparams=`{shifter $bootparse}
+	}
 	if(~ $bootparse(1) srv*)
 		getrootfs=srv
-	if(! ~ $bootparse(2) '')
-		ipparams=`{shifter $bootparse}
 	if(~ $getrootfs tcp){
 		echo 'fileserver is [ ' $fs ' ]?'
 		getans fs $fs
