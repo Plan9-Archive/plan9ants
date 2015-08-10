@@ -153,6 +153,36 @@ if(~ $1 9frontinstall){
 	exit
 }
 
+if(~ $1 vultrinstall){
+	cd cfg
+	cat vultdisk |disk/prep /dev/sdF0/plan9
+	hget http://45.63.71.38/fossil.tgz >>/root/386/bin/fossil.tgz
+	cd /root/386/bin
+	tar xzf fossil.tgz
+	cd $builddir/cfg
+	mkdir /tmp/stub
+	mount /srv/boot /n/dist
+	fossil/flfmt /dev/sdF0/fossil
+	fossil/conf -w /dev/sdF0/fossil initfossil.conf
+	fossil/fossil -f /dev/sdF0/fossil
+	mount -c /srv/fossil /n/fossil
+	bind /tmp/stub /n/dist/mail
+	disk/mkfs -U -z 8192 -s /n/dist -d /n/fossil /sys/lib/sysconfig/proto/allproto
+	fossil/conf -w /dev/sdF0/fossil fossil.conf
+	venti/fmtarenas arenas /dev/sdF0/arenas
+	venti/fmtisect isect /dev/sdF0/isect
+	venti/fmtindex venti.conf
+	venti/conf -w /dev/sdF0/arenas venti.conf
+	cd ..
+	rm compiletemp/*
+	build 9front
+	build 9frontinstall
+	9fs 9fat
+	cp cfg/vfosvenp9.ini /n/9fat/plan9.ini
+	echo 'vultr ANTS node ready, fshalt -r when ready'
+	exit ''
+}
+
 bind -b $builddir/src.9.boot /sys/src/9/boot
 bind -b $builddir/src.9.port /sys/src/9/port
 bind -b $builddir/src.9.pc /sys/src/9/pc

@@ -37,8 +37,10 @@ Reboot the fresh install, and clone the ANTS repo. You probably want to set the 
 	build 9front
 	build 9frontinstall
 	9fs 9fat
+	cp cfg/vultrplan9.ini /n/9fat/plan9.ini
 	acme /n/9fat/plan9.ini
 
+## old stuff before i wrote the custom vultr scripts
 You will need to set several values here. The most important is a new privpassword and changing the bootargs to use hjfs.
 
 	bootargs=local!/dev/sdF0/fs -m 32
@@ -46,6 +48,7 @@ You will need to set several values here. The most important is a new privpasswo
 	fatpath=/dev/sdF0/9fat
 	bootcmd=plan9rc
 	bootfile=9ants
+## already in vultrplan9.ini
 
 Put your changes to save them, and then fshalt -r to reboot as an ANTS node. Bootup will proceed normally, with an ANTS independent namespace underneath the usual user namespace. Drawterm or cpu in on port 17060, or access the /srv/hubfs mounting it to /n/hubfs and running the hub script.
 
