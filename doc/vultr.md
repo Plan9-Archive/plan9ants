@@ -1,5 +1,5 @@
 # Walkthrough for installing 9front-ANTS on Vultr
-### Walkthrough done with smallest image size
+### Walkthrough done with 768mb ram image size
 
 Createa Vultr account if you do not have one, and upload a copy of the current 9front iso. A working copy of a 9front iso can be found at http://9gridchan.org/9front.iso. Choose to enable a private ip. Make sure the size (smallest is good) and location are correct, and that the 9front iso is attached. Deploy!
 

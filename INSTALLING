@@ -50,12 +50,15 @@ build 9frontinstall - installs to a clean 9front install after build 9front
 change the default privpassword=rootless in plan9.ini and other values
 as needed for local configuration
 
-build vultrinstall - installs to a custom-partitioned 9front vultr install
-
 build portsinstall - installs from 9front-ports tree without modifying
 9fat or system files
 
 build portsuninstall - uninstall components installed by portsinstall
+
+build vultr - installs to a clean vultr install (hjfs recommended)
+
+build vultrfossil - installs to a custom-partitioned 9front vultr install
+changes system to use venti+fossil
 
 The 9pcram.gz kernel and optional .tgz are placed in the conventional
 9fat partition.  Conventional plan9.ini variiables are mostly

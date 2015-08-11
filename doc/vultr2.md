@@ -1,14 +1,14 @@
 # Setting up two ANTS nodes to work together on Vultr
-### Walkthrough done with a build vultrfossil install
+### Walkthrough done with an install created by build vultrfossil 
 
-This walkthrough shows how to use two ants nodes together to create a small grid with automatic data duplication. The starting point is completing the build vultrfossil install process described in the first vultr walkthrough.
+This walkthrough shows how to use two ants nodes together to create a small grid with automatic data replication. The starting point is completing the build vultrfossil install process described in the first vultr walkthrough.
 
 ## archive the fossil to venti, then snapshot the vm ##
 
 	con /srv/fscons
 	fsys main snap -a
 
-This command will take a long time to complete, because the fossil is dumping all its data to the venti server. Yes, its a third copy of the basic install data! You will know when it is done because it prints a line like: vac:442c3cd34570119fcf27fc753c2130bc2225def3
+This command will take a long time to complete, because the fossil is dumping all its data to the venti server. Yes, its a third copy of the basic install data! You will know when it is done because it prints a line like: vac:442c3cd34570119fcf27fc753c2130bc2225def3. ctrl-\ and then q leaves the fscons. Next we will find our current location in the venti arenas to set up the wrcmd.
 
 	bind -b '#S' /dev #if you are working via cpu or hubfs
 	fossilize /dev/sdF0/fossil
@@ -47,13 +47,13 @@ On both machines, look up the ips on the vultr control panel and add them to /li
 
 	sys=secondary ip=secondary.system.ip
 
-The blank lines in between system entries are important. You can reboot the secondary machine to start it without fossil+venti. First on secondary in the service namespace:
+The blank lines in between system entries are important. You can reboot the secondary machine to start it without fossil+venti. First on secondary in the service namespace, accessed via hubfs or cpu in to port 17060:
 
 	foshalt
 	kill venti |rc
 	echo reboot >/dev/reboot
 
-Now check in vultr to learn the assigned alternate ips. The information is located in the ip4 tab of server management page. In the secondary vm:
+Now check in vultr to learn the assigned alternate ips. The information is located in the ip4 tab of server management page. After the secondary vm reboots using hjfs again as its root fies system:
 
 	cd antsexperiments/cfg
 	startnetalt 10.99.0.11 (or whatever the ip is)
