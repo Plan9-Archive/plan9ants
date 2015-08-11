@@ -1,0 +1,10 @@
+#!/bin/rc
+
+if(~ $1 ''){
+	echo 'need to specify an alternate ip address'
+	exit no.ip
+}
+
+bind -b '#l1' /net.alt
+bind -b '#I1' /net.alt
+ip/ipconfig -x /net.alt ether /net.alt/ether1 $1 255.255.0.0
