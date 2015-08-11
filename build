@@ -191,6 +191,7 @@ if(~ $1 vultrfossil){
 	cd ..
 	build 9front
 	build 9frontinstall
+	cp /bin/grio /n/fossil/386/bin/grio
 	9fs 9fat
 	cp cfg/vfosvenp9.ini /n/9fat/plan9.ini
 	echo 'enter a password for remote access:'
