@@ -27,8 +27,9 @@ cp /n/rootless/bootdir.extras/skel.tar .
 cp /386/bin/dossrv .
 cp /386/bin/fossil/fossil .
 cp /386/bin/venti/venti .
-cp /386/bin/disk/kfs .
+#cp /386/bin/disk/kfs .
 cp /386/bin/cfs .
+cp /bin/9660srv .
 #	shell tools used by namespace scripts etc
 cp /386/bin/ls .
 cp /386/bin/cp .
