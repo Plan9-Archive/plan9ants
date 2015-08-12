@@ -8,7 +8,7 @@ This walkthrough shows how to use two ants nodes together to create a small grid
 	con /srv/fscons
 	fsys main snap -a
 
-This command will take a long time to complete, because the fossil is dumping all its data to the venti server. Yes, its a third copy of the basic install data! You will know when it is done because it prints a line like: vac:442c3cd34570119fcf27fc753c2130bc2225def3. ctrl-\ and then q leaves the fscons. Next we will find our current location in the venti arenas to set up the wrcmd.
+This command will take a long time to complete, because the fossil is dumping all its data to the venti server. Yes, its a third copy of the basic install data! You will know when it is done because it prints a line like: vac:442c3cd34570119fcf27fc753c2130bc2225def3. ctrl-\ and then q leaves the fscons. although this may not be transmitted properly via the vultr console. You can open a different window to work in. Next we will find our current location in the venti arenas to set up the wrcmd.
 
 	bind -b '#S' /dev #if you are working via cpu or hubfs
 	fossilize /dev/sdF0/fossil
@@ -17,6 +17,7 @@ This command will take a long time to complete, because the fossil is dumping al
 
 At this point you are ready to snapshot the vm and clone it in vultr. This can take a little while to complete. In the meantime, why not do something fun like installing the 9front-ports tree and using it to install go?
 
+	[optional]
 	cd
 	hg clone https://bitbucket.org/mveety/9front-ports
 	mkdir /sys/ports
@@ -40,14 +41,7 @@ Inside the new vm:
 	cp vultrplan9.ini /n/9fat/plan9.ini
 	echo 'privpassword=MYPASSWORD' >>/n/9fat/plan9.ini
 	
-On both machines, look up the ips on the vultr control panel and add them to /lib/ndb/local:
-
-	acme /lib/ndb/local
-	sys=primary ip=your.ip.here
-
-	sys=secondary ip=secondary.system.ip
-
-The blank lines in between system entries are important. You can reboot the secondary machine to start it without fossil+venti. First on secondary in the service namespace, accessed via hubfs or cpu in to port 17060:
+You can reboot the secondary machine to start it without fossil+venti. From the service namespace on secondary, accessed via hubfs or cpu in to port 17060:
 
 	foshalt
 	kill venti |rc
@@ -56,7 +50,7 @@ The blank lines in between system entries are important. You can reboot the seco
 Now check in vultr to learn the assigned alternate ips. The information is located in the ip4 tab of server management page. After the secondary vm reboots using hjfs again as its root fies system:
 
 	cd antsexperiments/cfg
-	startnetalt 10.99.0.11 (or whatever the ip is)
+	startnetalt 10.99.0.11 # or whatever the machine secondary ip is
 	venti/venti -c altventi.conf
 
 Now the venti server is serving on the private ip on the /net.alt interface. Back on the primary:
@@ -64,7 +58,6 @@ Now the venti server is serving on the private ip on the /net.alt interface. Bac
 	echo 'fsys main snap -a' >>/srv/fscons
 	cd antsexperiments/cfg
 	startnetalt 10.99.0.10
-	bind -b '#S' /dev
 	9fs 9fat
 	acme /n/9fat/wrcmd
 
@@ -81,7 +74,7 @@ After the archival snap completes (you can check fossil/last /dev/sdF0/fossil to
 Now use the vac score shown by fossilize to reset the fossil on the remote machine. on the secondary:
 
 	venti=/net.alt/tcp!10.99.0.11!17034
-	fossilize vac:74d419b929679c471cb86bc76a0872597cbf029b /dev/sdF0/fossil
+	fossreset vac:74d419b929679c471cb86bc76a0872597cbf029b /dev/sdF0/fossil
 	fossil/fossil -f /dev/sdF0/fossil
 
 ## explore the connected but independent namespaces ##

@@ -150,6 +150,11 @@ if(~ $1 9frontinstall){
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
 	cp doc/modified.manpages/proc.man /sys/man/3/procns
+	echo 'enter a password for remote access:'
+	setpasswd=`{read}
+	echo 'privpassword='$setpasswd >>/n/9fat/plan9.ini
+	rm /env/setpasswd
+	echo '9front-ANTS vultr node base install complete'
 	exit
 }
 
@@ -170,7 +175,7 @@ if(~ $1 vultrfossil){
 	build portsinstall
 	cd cfg
 	cat vultdisk |disk/prep /dev/sdF0/plan9
-	hget http://45.63.71.38/fossil.tgz >>/root/386/bin/fossil.tgz
+	hget http://them.9gridchan.org/fossil.tgz >>/root/386/bin/fossil.tgz
 	cd /root/386/bin
 	tar xzf fossil.tgz
 	cd $builddir/cfg
