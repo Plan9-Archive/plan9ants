@@ -199,6 +199,7 @@ if(~ $1 vultrfossil){
 	cp /bin/grio /n/fossil/386/bin/grio
 	9fs 9fat
 	cp cfg/vfosvenp9.ini /n/9fat/plan9.ini
+	echo 'venti/wrarena -h tcp!127.1!17034 -o 794624 /dev/sdF0/arenas 0x0' >/n/9fat/wrcmd
 	echo 'enter a password for remote access:'
 	setpasswd=`{read}
 	echo 'privpassword='$setpasswd >>/n/9fat/plan9.ini

@@ -12,7 +12,6 @@ This command will take a long time to complete, because the fossil is dumping al
 
 	bind -b '#S' /dev #if you are working via cpu or hubfs
 	fossilize /dev/sdF0/fossil
-	echo 'venti/wrarena -h tcp!127.1!17034 -o 794624 /dev/sdF0/arenas 0x0' >/n/9fat/wrcmd
 	ventiprog
 
 At this point you are ready to snapshot the vm and clone it in vultr. This can take a little while to complete. In the meantime, why not do something fun like installing the 9front-ports tree and using it to install go?
