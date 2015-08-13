@@ -1,0 +1,11 @@
+#!/bin/rc
+echo 'grid controlled cpurc'
+ndb/cs
+import -c $hubserver / /n/$hubserver
+mount -c /n/$hubserver/srv/gridhub /n/gridhub
+echo 'attaching to '$hubserver' gridhub'
+if(test -e /n/gridhub/clonecpu0){
+	echo 'attaching rc to existing clonecpu hubs'
+	rc -i </n/gridhub/clonecpu0 >>/n/gridhub/clonecpu1 >>[2]/n/gridhub/clonecpu2 &
+}
+hub gridhub clonecpu
