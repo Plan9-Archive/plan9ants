@@ -412,6 +412,7 @@ if(~ $bootargs ''){
 	interactive=yes
 	echo 'no bootargs found using '$bootargs' and setting interactive=yes'
 }
+factotumopts=`{echo $factotumopts}
 bootparse=`{echo $bootargs}
 if(~ $bootparse(1) local*)
 	getrootfs=local
