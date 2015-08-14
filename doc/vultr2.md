@@ -14,20 +14,7 @@ This command will take a long time to complete, because the fossil is dumping al
 	fossilize /dev/sdF0/fossil
 	ventiprog
 
-At this point you are ready to snapshot the vm and clone it in vultr. This can take a little while to complete. In the meantime, why not do something fun like installing the 9front-ports tree and using it to install go?
-
-	[optional]
-	cd
-	hg clone https://bitbucket.org/mveety/9front-ports
-	mkdir /sys/ports
-	bind -c 9front-ports /sys/ports
-	cd /sys/ports
-	touch Config/ports.db
-	cd dev-lang/go
-	webfs
-	mk all
-	bind -b $home/9front-ports/dev-lang/go/work/go/bin /bin
-	go run work/go/test/helloworld.go
+At this point you are ready to snapshot the vm and clone it in vultr. This can take a little while to complete. While doing so, install some additional software and explore the system.
 
 ## configure the new secondary machine to work with the primary ##
 
@@ -57,13 +44,6 @@ Now the venti server is serving on the private ip on the /net.alt interface. Bac
 	echo 'fsys main snap -a' >>/srv/fscons
 	cd antsexperiments/cfg
 	startnetalt 10.99.0.10
-	9fs 9fat
-	acme /n/9fat/wrcmd
-
-Change the wrcmd to target the other venti by changing it to use the /net.alt interface and the secondary server ip. example:
-
-	venti/wrarena -h /net.alt/tcp!10.99.0.11!17034 -o 794624 /dev/sdF0/arenas 0x107f510b
-
 
 After the archival snap completes (you can check fossil/last /dev/sdF0/fossil to see the current rootscore, it should be different than the first once the snapshot finishes) then we can update the secondary venti. On the primary machine:
 
@@ -85,4 +65,4 @@ Now the remote fossil has been updated to be a copy of the main. You can:
 	. $home/lib/profile
 	webfs
 
-And see that changes you made since the initial setup (such as the installation of go, above) are now present in your backup fossil.
+And see that changes you made since the initial setup are now present in your backup fossil.

@@ -23,8 +23,8 @@ use bootcmd=plan9rc for configurable bootup as described in the
 documentation otherwise the standard bootrc script + a default ants
 namespace runs
 
-listens on port 17060 with password rootless by default change
-privpassword= in plan9.ini to change password, leave blank for none
+listens on port 17060 for cpu connections by default, add
+privpassword=YOURPASS in plan9.ini to set password
 
 enter 9front userland from cpu/drawterm in to port 17060: open a
 window and
