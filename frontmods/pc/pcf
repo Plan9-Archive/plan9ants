@@ -147,7 +147,6 @@ port
 
 bootdir
 	/$objtype/bin/paqfs
-	/$objtype/bin/auth/factotum
 	bootfs.paq
 	boot
 	/bin/bind
@@ -158,5 +157,6 @@ bootdir
 	/bin/test
 	/n/rootless/bootdir.extras/rc
 	/n/rootless/bootdir.extras/rcmain
+	/n/rootless/bootdir.extras/factotum
 	/n/rootless/bootdir.extras/bootpaq
 	/n/rootless/bootdir.extras/plan9rc
