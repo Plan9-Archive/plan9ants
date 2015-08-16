@@ -1,0 +1,14 @@
+When trying to secure the service namespace against failures of the main environment, the mount of cs in the default /lib/namespace file is problematic. Even when using factotum -x, new processes started by cpu and import will try to mount /srv/cs and freeze. The /lib/namespace file used by the early environment is stored in ramdisk so removing the mount of cs (and dns?) will prevent frozen logins via cpu.
+
+the -m parameter is not passed to hjfs when plan9rc is the boot script
+
+the partition and filesystem detection logic in plan9rc should be improved
+
+------ non-ants specific random questions ------
+
+why does it work to communicate with venti on loopback through an import of /net for writes, but some reads are unreliable? (cant fortune)
+
+similarly, why are some binaries non-executable via vacfs? (both seem to be related to short reads, client not requesting more data?)
+
+what is needed to get any ssh client other than openssh working?
+
