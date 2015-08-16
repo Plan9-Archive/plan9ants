@@ -383,12 +383,12 @@ void
 doregister(char *announce)
 {
 	int regfd;
-	switch(rfork(RFNOTEG|RFPROC|RFFDG|RFNOWAIT|RFENVG|RFNAMEG)) {
+	switch(rfork(RFPROC|RFFDG)) {
 	case -1:
 		error("fork");
 	case 0:
 		regfd=open("/mnt/registry/new", OWRITE);
-		fprint(regfd, "tcp!%s!%s %s %s", getenv("myip"), announce+6, getenv("sysname"), getenv("user"));
+		fprint(regfd, "tcp!%s!%s sys %s user %s", getenv("myip"), announce+6, getenv("sysname"), getenv("user"));
 		for(;;)
 			sleep(1000);
 		break;
