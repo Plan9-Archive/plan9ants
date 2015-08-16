@@ -4,8 +4,8 @@ ndb/cs
 import -c $hubserver / /n/$hubserver
 mount -c /n/$hubserver/srv/gridhub /n/gridhub
 echo 'attaching to '$hubserver' gridhub'
-if(test -e /n/gridhub/clonecpu0){
+if(test -e /n/gridhub/^$sysname^0){
 	echo 'attaching rc to existing clonecpu hubs'
-	rc -i </n/gridhub/clonecpu0 >>/n/gridhub/clonecpu1 >>[2]/n/gridhub/clonecpu2 &
+	rc -i </n/gridhub/^$sysname^0 >>/n/gridhub/^$sysname^1 >>[2]/n/gridhub/^$sysname^2 &
 }
-hub gridhub clonecpu
+hub gridhub $sysname

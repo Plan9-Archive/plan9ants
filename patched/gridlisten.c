@@ -388,7 +388,7 @@ doregister(char *announce)
 		error("fork");
 	case 0:
 		regfd=open("/mnt/registry/new", OWRITE);
-		fprint(regfd, "tcp!%s!%s announcedby plan9", getenv("sysname"), announce+6);
+		fprint(regfd, "tcp!%s!%s %s %s", getenv("myip"), announce+6, getenv("sysname"), getenv("user"));
 		for(;;)
 			sleep(1000);
 		break;
