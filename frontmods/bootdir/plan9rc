@@ -328,6 +328,24 @@ fn doinitscript{
 
 fn dorootstart{
 	switch($rootstart){
+	case grid
+		service=cpu
+		echo grid service started mounting $bootsrv and starting hubrc
+		mount $bootsrv /root
+		if(test -e /root/rc/bin/hubrc)
+			newns -n /root/lib/namespace /root/rc/bin/hubrc
+		if not{
+			echo no hubrc found trying defaults
+			ndb/cs
+			import -c $hubserver / /n/$hubserver
+			mount -c /n/$hubserver/srv/gridhub /n/gridhub
+			echo 'attaching to '$hubserver' gridhub'
+			if(test -e /n/gridhub/^$sysname^0){
+				echo 'attaching rc to existing clonecpu hubs'
+				rc -i </n/gridhub/^$sysname^0 >>/n/gridhub/^$sysname^1 >>[2]/n/gridhub/^$sysname^2 &
+			}
+			hub gridhub $sysname
+		}
 	case cpu
 		service=cpu
 		echo mounting $bootsrv to /root and starting cpurc
