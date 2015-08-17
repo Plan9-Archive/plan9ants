@@ -336,7 +336,8 @@ fn dorootstart{
 			newns -n /root/lib/namespace /root/rc/bin/hubrc
 		if not{
 			echo no hubrc found trying defaults
-			ndb/cs
+			cs
+			mntgen /n
 			import -c $hubserver / /n/$hubserver
 			mount -c /n/$hubserver/srv/gridhub /n/gridhub
 			echo 'attaching to '$hubserver' gridhub'
