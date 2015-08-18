@@ -35,6 +35,8 @@ if(! test -d root/bin){
 if(~ $1 9front){
 	portversion=port
 	cd /dist/plan9front
+	if(~ $timezone '')
+		timezone=`{cat /adm/timezone/local}
 	9frontver=`{hg log -r tip}
 	if(~ $9frontver(2) 4661:a15f0069aa9d){
 		echo detected version 4661
@@ -113,7 +115,9 @@ if(~ $1 portsuninstall){
 	rm /rc/bin/fossilstart
 	rm /rc/bin/frontstart
 	rm /rc/bin/getdevs
+	rm /rc/bin/gridhubrc
 	rm /rc/bin/gui
+	rm /rc/bin/hubrc
 	rm /rc/bin/importroroot
 	rm /rc/bin/importwrroot
 	rm /rc/bin/mountsrvfs
