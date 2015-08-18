@@ -114,6 +114,8 @@ fn doramsetup{
 		hostcheck
 		echo 'ramsetup '^$ramsetup^'...'
 		rc -c $ramsetup
+		echo 'timezone...'
+		timezone=`{cat /adm/timezone/local}
 	}
 }
 

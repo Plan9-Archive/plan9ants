@@ -33,6 +33,11 @@ if(! test -d root/bin){
 }
 
 if(~ $1 9front){
+	portversion=port
+	cd /dist/plan9front
+	9frontver=`{hg log -r tip}
+	if(~ $9frontver(2) 4661:a15f0069aa9d)
+		portversion=port4661
 	bind -bc frontmods/grio grio
 	bind -bc frontmods/patched patched
 	bind -bc frontmods/bootdir bootdir.extras
@@ -41,7 +46,7 @@ if(~ $1 9front){
 	build bootpaq
 	build tools
 	bind -bc frontmods/boot /sys/src/9/boot
-	bind -bc frontmods/port /sys/src/9/port
+	bind -bc frontmods/$portversion /sys/src/9/port
 	bind -bc frontmods/pc /sys/src/9/pc
 	bind -bc compiletemp /sys/src/9/pc
 	bind . /n/rootless

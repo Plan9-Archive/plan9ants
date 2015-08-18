@@ -1745,12 +1745,6 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 {
 	int ret;
 	Chan *c0, *c1, *ac, *bc;
-	struct{
-		Chan	*chan;
-		Chan	*authchan;
-		char	*spec;
-		int	flags;
-	}bogus;
 
 	if((flag&~MMASK) || (flag&MORDER)==(MBEFORE|MAFTER))
 		error(Ebadarg);
@@ -1789,15 +1783,9 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 		if(afd >= 0)
 			ac = pfdtochan(afd, ORDWR, 0, 1, targp);
 
-		bogus.flags = flag & MCACHE;
-		bogus.chan = bc;
-		bogus.authchan = ac;
-		bogus.spec = spec;
-//		if(waserror())
-//			error(Ebadspec);	
-//		poperror();	
-		ret = devno('M', 0);
-		c0 = devtab[ret]->attach((char*)&bogus);
+//		ret = devno('M', 0);
+//		c0 = devtab[ret]->attach((char*)&bogus);
+		c0 = mntattach(bc, ac, spec, flag&MCACHE);
 		qunlock(&targp->procmount);
 //		print("c0 devtab attach assigned\n");
 		poperror();	/* ac bc */
@@ -1805,7 +1793,7 @@ procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, 
 			cclose(ac);
 		cclose(bc);
 	}else{
-		spec = 0;
+		spec = nil;
 //		validaddr((ulong)arg0, 1, 0);
 //		print("c0 = pnamec(%s, Abind, 0, 0, targp)\n", arg0);
 		c0 = pnamec(arg0, Abind, 0, 0, targp);

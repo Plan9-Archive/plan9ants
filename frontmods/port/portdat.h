@@ -16,7 +16,9 @@ typedef struct Log	Log;
 typedef struct Logflag	Logflag;
 typedef struct Mntcache Mntcache;
 typedef struct Mount	Mount;
+typedef struct Mntrah	Mntrah;
 typedef struct Mntrpc	Mntrpc;
+typedef struct Mntproc	Mntproc;
 typedef struct Mnt	Mnt;
 typedef struct Mhead	Mhead;
 typedef struct Note	Note;
@@ -270,6 +272,29 @@ struct Mhead
 	Mhead*	hash;			/* Hash chain */
 };
 
+struct Mntrah
+{
+	Rendez;
+
+	ulong	vers;
+
+	vlong	off;
+	vlong	seq;
+
+	uint	i;
+	Mntrpc	*r[8];
+};
+
+struct Mntproc
+{
+	Rendez;
+
+	Mnt	*m;
+	Mntrpc	*r;
+	void	*a;
+	void	(*f)(Mntrpc*, void*);
+};
+
 struct Mnt
 {
 	Lock;
@@ -277,6 +302,7 @@ struct Mnt
 	Chan	*c;		/* Channel to file service */
 	Proc	*rip;		/* Reader in progress */
 	Mntrpc	*queue;		/* Queue of pending requests on this channel */
+	Mntproc	defered[8];	/* Worker processes for defered RPCs (read ahead) */
 	ulong	id;		/* Multiplexer id for channel check */
 	Mnt	*list;		/* Free list */
 	int	flags;		/* cache */
@@ -469,7 +495,7 @@ struct Egrp
 {
 	Ref;
 	RWlock;
-	Evalue	**ent;
+	Evalue	*ent;
 	int	nent;
 	int	ment;
 	ulong	path;	/* qid.path of next Evalue to be allocated */
@@ -481,7 +507,6 @@ struct Evalue
 	char	*name;
 	char	*value;
 	int	len;
-	Evalue	*link;
 	Qid	qid;
 };
 
@@ -680,6 +705,7 @@ struct Proc
 	int	hang;		/* hang at next exec for debug */
 	int	procctl;	/* Control for /proc debugging */
 	uintptr	pc;		/* DEBUG only */
+	QLock	procmount;		/* lock for proc ns mounts */
 
 	Lock	rlock;		/* sync sleep/wakeup with postnote */
 	Rendez	*r;		/* rendezvous point slept on */
@@ -713,8 +739,6 @@ struct Proc
 	char	genbuf[128];	/* buffer used e.g. for last name element from namec */
 	Chan	*slash;
 	Chan	*dot;
-
- 	QLock	procmount;		/* lock for proc ns mounts */
 
 	Note	note[NNOTE];
 	short	nnote;
