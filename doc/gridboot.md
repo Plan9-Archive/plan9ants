@@ -7,6 +7,10 @@ You need a grid server which will serve hubfs via standard cpu export and option
 
 To start up a background hubfs process available at /srv/gridhub.
 
+Copy the hubrc file to /rc/bin
+
+	cp plan9ants/cfg/hubrc /rc/bin/hubrc
+
 In the client machine's plan9.ini add:
 
 	rootstart=grid

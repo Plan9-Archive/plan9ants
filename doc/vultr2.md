@@ -23,7 +23,8 @@ Back on the primary, make sure you have added some data to the filesystem since 
 
 After the archival snap completes (you can check fossil/last /dev/sdF0/fossil to see the current rootscore, it should be different than the first once the snapshot finishes) then we can update the secondary venti. On the primary machine:
 
-	import -c ip.of.secondary /net /net.alt
+	import -c tcp!secondary.ip!17027 /net /net.alt
+	9fs 9fat
 	ventiprog
 	fossilize /dev/sdF0/fossil
 
