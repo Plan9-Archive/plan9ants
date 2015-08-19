@@ -8,21 +8,7 @@ or "namespace hypervisor" for multiple other plan 9 environments.  The
 current toolkit is focused on standard pc bootup sequences.  Fossil,
 Venti, kfs, cfs and booting from USB are all supported.  Test coverage
 has been focused on fossil and venti based environments using standard
-pc desktop hardware. 9front support added July 2015 but is not fully
-documented.
-
-To use the precompiled kernel, just boot it and it will provide an
-interactive environment for starting and attaching to bootup services,
-or if you provide appropriate configuration variables via plan9.ini it
-will follow them with results that should be mostly identical to a
-standard kernel.  It provides many tools compiled into boot allowing
-the kernel to be self-sufficient in starting and attaching to
-services.  It is optional to provide an additional .tgz in the bootup
-partition which can allow for local customization of the early boot
-environment without recompiling the kernel.  There are already many
-useful tools compiled right into /boot of the kernel so it is not
-necessary to download the tools.tgz to use the precompiled kernel
-effectively.
+pc desktop hardware. 9front support added July 2015.
 
 The core kernel remains mostly unmodified, but the traditional boot
 and init programs have been combined into a single, smaller program
@@ -80,6 +66,19 @@ be used to rapidly shift your physical hardware dependency on a given
 fileserver while still maintaining access to data.  Another helper
 script assists with progressive backup of venti data.
 
+To use the precompiled kernel, just boot it and it will provide an
+interactive environment for starting and attaching to bootup services,
+or if you provide appropriate configuration variables via plan9.ini it
+will follow them with results that should be mostly identical to a
+standard kernel.  It provides many tools compiled into boot allowing
+the kernel to be self-sufficient in starting and attaching to
+services.  It is optional to provide an additional .tgz in the bootup
+partition which can allow for local customization of the early boot
+environment without recompiling the kernel.  There are already many
+useful tools compiled right into /boot of the kernel so it is not
+necessary to download the tools.tgz to use the precompiled kernel
+effectively.
+
 To install without recompiling, place the 9pcram.gz kernel in your
 9fat: partition and edit plan9.ini to use a boot menu to give you the
 option of using that kernel.  Some additional tweaking and studying of
@@ -95,7 +94,7 @@ developer experimentation only at this point.
 
 This kernel version and software originally based on the Plan 9 source
 tree from December of 2009.  Development resumed with updated plan 9
-sources in January 2013. Updated in July 2015.
+sources in January 2013. Development resumed in July 2015.
 
 These tools include code from the main Plan 9 distribution. Original portions
-copyright Mycroftiv. Licensed under the Lucent Public License.
+copyright Mycroftiv. Licensed under the Lucent Public License/ GPL2.

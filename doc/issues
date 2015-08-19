@@ -8,6 +8,10 @@ there is a namespace/file conflict between /lib of the 9front bootfs and /lib fr
 
 ventiprog should be more careful about not replacing the wrcmd with bad information
 
+hubshell should probably make %remote shells do rfork n to isolate their namespace
+
+when controlling linux machines via hubfs, it is necessary to use bash if you wish to use interactive tools like ed. using rc results in input being processed by the rc running underneath ed. why?
+
 ------ non-ants specific random questions ------
 
 How exactly does inferno achieve equivalent functionality to plan 9 /srv? chan seems the same but different...
