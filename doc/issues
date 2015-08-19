@@ -12,7 +12,20 @@ hubshell should probably make %remote shells do rfork n to isolate their namespa
 
 when controlling linux machines via hubfs, it is necessary to use bash if you wish to use interactive tools like ed. using rc results in input being processed by the rc running underneath ed. why?
 
+should add autosnapshotting to vultr fossil config
+
 ------ non-ants specific random questions ------
+
+The u9fs in the bell labs distribution needs two minor patches to build correctly. First is taken from https://code.google.com/p/plan9front/source/diff?spec=svn4be476d6a993298bb5a797a6f872212536c69541&r=4be476d6a993298bb5a797a6f872212536c69541&format=side&path=/sys/src/cmd/unix/u9fs/plan9.h&old_path=/sys/src/cmd/unix/u9fs/plan9.h&old=eaccc3e8d22668badfdfd7fa12c67f3fbb94c67d
+
+in file u9fs/plan9.h in the enum around line 100 specifying 
+
+	Runemax		= 0xFFFF,	/* 16 bit rune */
+
+is one, and the other is adding in u9fs/rune.c in the obvious spot at the top enum
+
+	Bit5 =2;
+
 
 How exactly does inferno achieve equivalent functionality to plan 9 /srv? chan seems the same but different...
 
