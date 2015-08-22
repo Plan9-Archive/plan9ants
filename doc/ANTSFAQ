@@ -1,9 +1,0 @@
-Q: Is ANTS tested on native Plan 9 hardware or just VMs?
-A: 3 native boxes have been running and testing the ANTS kernel and software at 9gridchan.
-
-Q: Is ANTS only for grids of machines?
-A: No, ANTS is useful on a single machine as well. In fact in some ways being able to create independent namespaces makes the biggest difference to one-machine setups. The dreaded "fshalt freeze" can be banished.
-
-Q: ANTS seems complicated. Is this mostly for research and grid computation?
-A: No, ANTS is intended as practical, everyday software to help Plan 9 be useful to individuals or groups. It sounds complicated to describe, but so do other things like hard disk RAID algorithms or the layers of tcp/ip networking. As a user, you don't need to worry about the RAID algorithms, you just know your storage is more reliable, and you don't need to track the status of tcp connections by hand. ANTS is the same way - it is intended as lower-level architecture, the userspace can be left unchanged and the user isn't required to learn new ways of working unless this is desired.
-
