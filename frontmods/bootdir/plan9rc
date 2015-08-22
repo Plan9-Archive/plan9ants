@@ -219,8 +219,6 @@ fn dogetrootfs{
 		bootsrv=/srv/boot		
 	case cwfs
 ###		{$1 -s -f $*(2-) &} <[0=1] | echo 0 >/srv/boot
-#		echo '{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot'
-#		{cwfs64x -s -f /dev/sdC0/fscache &} | echo 0 >/srv/boot
 		bootpartition=`{findpart fscache}
 		if(~ $interactive yes){
 			echo 'parsed cwfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
@@ -231,7 +229,7 @@ fn dogetrootfs{
 			bootpartition=/dev/sdC0/fscache
 		}
 		cwfs=$bootpartition
-		{cwfs64x -s -f $bootpartition &} | echo 0 >/srv/boot
+		{cwfs64x -s -f $bootpartition &} <[0=1] | echo 0 >/srv/boot
 		bootsrv=/srv/boot
 	case tcp
 		if(! ~ $ipdone yes){

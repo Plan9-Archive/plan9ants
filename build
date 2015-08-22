@@ -69,6 +69,11 @@ if(~ $1 portsinstall){
 	cd hubfs1.1
 	mk install
 	cd ..
+	cd patched
+	8c -FTVw gridlisten.c
+	8l -o gridlisten gridlisten.8
+	cp gridlisten /$objtype/bin
+	cd ..
 	cp frontmods/bootdir/grio /$objtype/bin
 	cp scripts/* /rc/bin
 	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
@@ -91,6 +96,7 @@ if(~ $1 portsinstall){
 
 if(~ $1 portsuninstall){
 	rm /$objtype/bin/grio
+	rm /$objtype/bin/gridlisten
 	rm /lib/namespace.saveterm
 	rm /lib/namespace.save9front
 	rm /sys/man/1/cpns
@@ -141,6 +147,11 @@ if(~ $1 9frontinstall){
 	echo 'enter bootfile=9ants at bootup for new kernel'
 	echo 'use bootfile=9pcf for previous kernel'
 	sleep 5
+	cd patched
+	8c -FTVw gridlisten.c
+	8l -o gridlisten gridlisten.8
+	cp gridlisten /$objtype/bin
+	cd ..
 	cd hubfs1.1
 	mk install
 	cd ..
@@ -260,6 +271,11 @@ if(~ $1 isoinstall){
 	echo use build everything to build with no system changes
 	sleep 5
 	echo installing hubfs and grio and scripts
+	cd patched
+	8c -FTVw gridlisten.c
+	8l -o gridlisten gridlisten.8
+	cp gridlisten /$objtype/bin
+	cd ..
 	cd hubfs1.1
 	mk install
 	cd $builddir
