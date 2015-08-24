@@ -65,6 +65,38 @@ if(~ $1 9front){
 	exit
 }
 
+if(~ $1 fronthost){
+	echo 'installing ANTS userspace tools'
+	bind -bc frontmods/grio grio
+	bind -bc frontmods/patched patched
+	bind -bc frontmods/bootdir bootdir.extras
+	build extras
+	cd hubfs1.1
+	mk install
+	cd ..
+	cd patched
+	8c -FTVw gridlisten.c
+	8l -o gridlisten gridlisten.8
+	cp gridlisten /$objtype/bin
+	cd ..
+	cp frontmods/bootdir/grio /$objtype/bin
+	cp scripts/* /rc/bin
+	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	cp bootdir.extras/namespace.save9front /lib/namespace.save9front
+	cp doc/man.cpns /sys/man/1/cpns
+	cp doc/man.rerootwin /sys/man/1/rerootwin
+	cp doc/man.addwrroot /sys/man/1/addwrroot
+	cp doc/man.plan9rc /sys/man/8/plan9rc
+	cp doc/man.ventiprog /sys/man/8/ventiprog
+	cp doc/antspaper.ms /sys/doc/ants.ms
+	cp doc/ants.ps /sys/doc/ants.ps
+	mv /sys/man/3/proc /sys/man/3/oldproc
+	cp doc/modified.manpages/proc.man /sys/man/3/procns
+	echo 'ANTS userspace installed, if using ANTS kernel add this to the end of /rc/bin/termrc:'
+	echo 'home=/usr/$user; cd; . $home/lib/profile'
+	exit
+}
+
 if(~ $1 portsinstall){
 	cd hubfs1.1
 	mk install
@@ -259,6 +291,39 @@ if(~ $1 worker){
 	rm /srv/c1fat
 	cp $builddir/cfg/nvram /dev/sdC1/nvram
 	chmod 640 /dev/sdC1/nvram
+	exit ''
+}
+
+if(~ $1 labshost){
+	build extras
+	cd patched
+	echo 'installing ANTS userspace tools to host'
+	8c -FTVw gridlisten.c
+	8l -o gridlisten gridlisten.8
+	cp gridlisten /$objtype/bin
+	cd ..
+	cd hubfs1.1
+	mk install
+	cd $builddir
+	cd grio
+	mk install
+	cd $builddir
+	cp scripts/* /rc/bin
+	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
+	cp bootdir.extras/namespace.save9front /lib/namespace.save9front
+	echo installing manpages 
+	cp doc/man.cpns /sys/man/1/cpns
+	cp doc/man.rerootwin /sys/man/1/rerootwin
+	cp doc/man.addwrroot /sys/man/1/addwrroot
+	cp doc/man.ventiprog /sys/man/8/ventiprog
+	cp doc/man.plan9rc /sys/man/8/plan9rc
+	cp doc/antspaper.ms /sys/doc/ants.ms
+	cp doc/ants.ps /sys/doc/ants.ps
+	mv /sys/man/3/proc /sys/man/3/oldproc
+	mv /sys/man/8/boot /sys/man/8/oldboot
+	cp doc/modified.manpages/proc.man /sys/man/3/proc
+	cp doc/modified.manpages/boot.man /sys/man/8/boot
+	echo 'userspace tools install complete'
 	exit ''
 }
 
