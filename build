@@ -521,4 +521,5 @@ mk 'CONF=pcram'
 gzip -9 -c 9pcram > $builddir/compiletemp/9pcram.gz
 cd $builddir
 sha1sum compiletemp/9pcram.gz >>build.hashes
+cp compiletemp/9pcram.gz 9pcram.gz
 exit ''
