@@ -203,7 +203,7 @@ it reroots to the cd namespace hosted on the other machine.
 Now we are inside the 9front cd namespace, served to us from the 'tcp
 cpu' and we have access to all the other namespaces via the Hub menu.
 
-## What else is part of the Advanced Namespaces ToolS?
+## What else is part of the Advanced Namespaces Tools?
 
 Many uses of ANTS are left out of these tutorials.  Most important for
 practical use are the venti and fossil tools.  In the author's usage,
@@ -230,7 +230,7 @@ attach to file or cpu servers to make use of their resources without
 rerooting fully.  Hubfs is general purpose network piping in addition
 to persistent shells and has several tricks of its own.
 
-The full Advanced Namespace ToolS website at
+The full Advanced Namespace Tools website at
 [http://ants.9gridchan.org](http://ants.9gridchan.org) (also available
 with 9fs ants.9gridchan.org or ftpfs ants.9gridchan.org) has the
 source code, compiled kernel and tools, and much more documentation

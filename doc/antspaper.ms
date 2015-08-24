@@ -2,14 +2,14 @@
 .LG
 Attack of the Giant ANTS!
 
-Advanced Namespace ToolS
+Advanced Namespace Tools
 
 .SM
 for Plan 9 from Bell Labs
 .AU
 Ben Kidwell, "mycroftiv" 
 .AB
-The Advanced Namespace ToolS are a collection of Plan 9 software designed for the following goals:
+The Advanced Namespace Tools are a collection of Plan 9 software designed for the following goals:
 
 1. Reliability, Resiliency, Recoverability - make grids of Plan 9 machines tolerant to hardware and software failures.
 
@@ -66,7 +66,7 @@ of the root filesystem of one
 .CW fossil
 fileserver to another.
 .PP
-The combination of these Advanced Namespace ToolS creates a user environment where multiple machines behave as a tightly integrated unit, but experience only minimal disruption when other nodes need to leave the grid. The user can keep working with their current data from whatever nodes are available as other nodes plug in or leave the grid. Current backups are always available on demand and the user can re-root to a new root on the fly. Persistent shells and text applications on any node are available from every other node. A detailed investigation of the components of the toolkit follows, beginning with the boot/service namespace.
+The combination of these Advanced Namespace Tools creates a user environment where multiple machines behave as a tightly integrated unit, but experience only minimal disruption when other nodes need to leave the grid. The user can keep working with their current data from whatever nodes are available as other nodes plug in or leave the grid. Current backups are always available on demand and the user can re-root to a new root on the fly. Persistent shells and text applications on any node are available from every other node. A detailed investigation of the components of the toolkit follows, beginning with the boot/service namespace.
 .SH
 II. The boot namespace and later namespaces
 .PP

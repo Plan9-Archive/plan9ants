@@ -205,6 +205,7 @@ echo calm >/n/hubfs/ctl #resume non-paranoid mode
 .EX
 echo quit >/n/hubfs/ctl #kill the fs
 .EE
+
 .PP
 .SH SOURCE
 .B /n/sources/contrib/mycroftiv/hubfs.tgz

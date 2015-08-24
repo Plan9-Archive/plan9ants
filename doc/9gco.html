@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>PLAN 9 BITES BACK!</title>
+<title>Plan 9 ANTS</title>
 <style type="text/css" media="screen">
 body { background: #e7e7e7; font-family: Verdana, sans-serif; font-size: 12pt; }
 #page { background: #ffffff; margin: 50px; border: 2px solid #c0c0c0; padding: 10px; }
-#header { background: #4b6983; border: 2px solid #7590ae; text-align: center; padding: 10px; color: #ffffff; }
+#header { background: #444444; border: 2px solid #7590ae; text-align: center; padding: 1px; color: #ffffff; }
 #header h1 { color: #ffffff; }
 #body { padding: 50px; }
 span.tt { font-family: monospace; }
@@ -17,11 +17,51 @@ a:hover { text-decoration: none; color: #C00; background: #FC0; }
 <body>
 <div id="page">
  <div id="header">
-<h1> Attack of the Giant ANTS! </h1>
+<h1> Advanced Namespace Tools for Plan 9 </h1>
 <p>
-<h2> Advanced Namespace ToolS for Plan 9 </h2>
+<h2> v2.1 for Bell Labs and 9front </h2>
  </div>
  <div id="body">
+<h3>Download and documentation links</h3>
+ANTS is a set of tools to structure and manage Plan 9 namespaces to make systems and grids more flexible, reliable, and easy to administer. It supports both the Bell Labs and 9front distributions of Plan 9. ANTS is well suited to cloud based hosting and scripts for use with vultr.com are provided. 
+<p>
+Current ANTS 2.1 release .tgz with source code and compiled kernels:
+<p><a href="http://9gridchan.org/ants2015.tgz">ants2015.tgz</a><p>
+Documentation is included. A quick start guide is found later on this page, and walkthrough and tutorial resources are available. Code, manpages, and the description paper:
+<p><a href="http://ants.9gridchan.org">ants.9gridchan.org</a><p>
+Walkthroughs for setting up a full ANTS grid with examples and support scripts for vultr.com hosting:
+<p><a href="http://them.9gridchan.org">them.9gridchan.org</a><p>
+Tutorials for using ANTS features done with the QEMU vm images from 2013:
+<p><a href="http://antfarm.9gridchan.org/tutorial">antfarm.9gridchan.org</a><p>
+The current release source code repo is:
+<p><a href="https://bitbucket.org/mycroftiv/plan9ants">bitbucket.org/mycroftiv/plan9ants</a><p>
+Ongoing development code is located at:
+<p><a href="https://bitbucket.org/mycroftiv/antsexperiments">bitbucket.org/mycroftiv/antsexperiments</a><p>
+Qemu vm images of an older (2013) version of ANTS are available. There is a tiny image with only the ANTS kernel and tools for the administrative namespace:
+<p><a href="9worker.gz">9worker.gz</a><p>
+Here is a fully installed system image:
+<p><a href="http://sphericalharmony.com/plan9/9queen.gz">9queen.gz</a><p>
+ANTS is a modular toolkit. The components can be used separately:
+<ul>
+<li>New boot script which creates a separate administrative namespace independent of the root fs
+<li>Modified /proc which allows processes to modify each other's namespace via /proc/pid/ns
+<li>Hubfs i/o muxer for persistent shared shells and general purpose network piping
+<li>Namespace modification scripts like rerootwin, a chroot utility that is compatible with remote rio use
+<li>Progressive venti data replication and fossil cloning scripts to keep multiple roots available
+<li>Grio modified rio with hubfs integration, colors, and customizable command menu
+</ul>
+<h2>Brief Guide to Installing</h2>
+<h3>Installing pre-built kernel and tools from ants2.1.tgz</h3>
+<h4>Bell Labs</h4>
+The name of the Bell Labs kernel is 9pcram. A precompiled x86 9pcram.gz is located in the base ants2.1 directory. Copy that kernel to your 9fat partition. You probably also want to copy the tools.tgz to 9fat as well. Modify your plan9.ini to use the new kernel. Setting up a boot menu is recommended. An example configuration is located at doc/PLAN9.INI. Once correct plan9.ini variables are set, your system can be rebooted with the new kernel. Assuming proper configuration, there should be no disruption of your userland and the new ANTS namespace will be accessible via cpu or hubfs. To install the userspace components to the main system cd to the base ants2.1 directory and 'build hostinstall'.
+<h4>9front</h4>
+The name of the 9front kernel is 9ants. A precompiled x86 9ants is located in the base ants2.1 directory. Copy that kernel to your 9fat partition. You probably also want to copy the tools.tgz to 9fat as well. Modify your plan9.ini to use the new kernel. An example for 9front is located at frontmods/plan9.ini. You may wish to leave bootfile= blank in plan9.ini and choose to use the 9ants or older 9pcf kernel by typing in 'bootfile=9ants' and 'boot' manually. If you are booting to gui, it is necessary to add the following line to the end of your /rc/bin/termrc:
+<p>home=/usr/$user; cd; . $home/lib/profile<p>
+Once correct plan9.ini variables are set, your system can be rebooted with the new kernel. Assuming proper configuration, there should be no disruption of your userland and the new ANTS namespace will be accessible via cpu or hubfs. To install the userspace components to the main system cd to the base ants2.1 directory and 'build hostinstall'.
+<h3>Installing from source (.tgz or hg clone)</h3>
+<h4>Bell Labs</h4>
+
+--------------------------------------------------------------
 Update July 2015<p>
 I have prepared a new version of ANTS which is compatible with Bell Labs sources as of July 2015. It also includes 9front support.
 <p><a href="http://9gridchan.org/ants2015.tgz">ants2015.tgz</a><p>
@@ -31,7 +71,7 @@ The old images still work but have not been updated. There are currently no 9p o
 <p>
 ----------------------------------------------------
 <p>
-The Advanced Namespace ToolS are now available for Plan 9 From Bell Labs. 
+The Advanced Namespace Tools are now available for Plan 9 From Bell Labs. 
 <!---
 The website <a href="http://ants.9gridchan.org">ants.9gridchan.org</a> has a current copy of the tools, 
 compiled kernel for x86 and tools.tgz. 
@@ -55,7 +95,7 @@ A fully installed Plan 9 image with all the ANTS tools ready for use in the tuto
 <p>
 864b0379423d8bc7381ceb2375294e292bca3f50  9queen.gz (sha1sum)
 <p>
-The Advanced Namespace ToolS and other Plan 9 related software
+The Advanced Namespace Tools and other Plan 9 related software
 are licensed under the Lucent Public License
 <p>
 Copyright 2013 by Mycroftiv
