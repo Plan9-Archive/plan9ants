@@ -209,7 +209,7 @@ if(~ $1 9frontinstall){
 	setpasswd=`{read}
 	echo 'privpassword='$setpasswd >>/n/9fat/plan9.ini
 	rm /env/setpasswd
-	echo '9front-ANTS vultr node base install complete'
+	echo '9front-ANTS base install complete'
 	exit
 }
 

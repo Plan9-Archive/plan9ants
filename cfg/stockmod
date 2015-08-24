@@ -1,9 +1,9 @@
 #!/bin/rc
 # mod a stock install
 
-echo SCRIPT FOR MODDING STOCK INSTALLS ONLY THIS NUKES YOUR CONFIGS AND NVRAM
+echo 'Script for modding default Bell Labs installs only, changes configs and NVRAM'
 sleep 10
-echo HERE WE GOOOOOOOoooooooooooooo
+echo 'starting...'
 mv /rc/bin/termrc /rc/bin/termrc.old
 mv /rc/bin/cpurc /rc/bin/cpurc.old
 cp stocktermrc /rc/bin/termrc
@@ -26,4 +26,5 @@ chmod 640 /dev/sdC0/nvram
 9fat:
 mkdir /n/9fat/adm
 dircp adm /n/9fat/adm
-echo brain transplant complete
+echo 'stockmod complete'
+
