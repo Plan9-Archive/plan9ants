@@ -1,0 +1,345 @@
+diff -r 01665ab22684 appl/cmd/auth/factotum/authio.m
+--- a/appl/cmd/auth/factotum/authio.m	Sat Sep 07 11:32:50 2013 +0100
++++ b/appl/cmd/auth/factotum/authio.m	Mon Nov 11 23:36:06 2013 +0000
+@@ -46,8 +46,8 @@
+ 		f:	ref Fid;
+ 		rpc:	ref Rpc;
+ 
+-		findkey:	fn(io: self ref IO, attrs: list of ref Attr, extra: string): (ref Key, string);
+-		findkeys:	fn(io: self ref IO, attrs: list of ref Attr, extra: string): (list of ref Key, string);
++		findkey:	fn(io: self ref IO, attrs: list of ref Attr, extra: string, need: int): (ref Key, string);
++		findkeys:	fn(io: self ref IO, attrs: list of ref Attr, extra: string, need: int): (list of ref Key, string);
+ 		needkey:	fn(io: self ref IO, attrs: list of ref Attr, extra: string): (ref Key, string);
+ 		read:	fn(io: self ref IO): array of byte;
+ 		readn:	fn(io: self ref IO, n: int): array of byte;
+diff -r 01665ab22684 appl/cmd/auth/factotum/factotum.b
+--- a/appl/cmd/auth/factotum/factotum.b	Sat Sep 07 11:32:50 2013 +0100
++++ b/appl/cmd/auth/factotum/factotum.b	Mon Nov 11 23:36:06 2013 +0000
+@@ -290,7 +290,10 @@
+ 		if(kl != nil){
+ 			kc <-= (kl, nil);
+ 			break;
+-		}else if(!required || needfid == -1){
++		}else if(!required){
++			kc <-= (nil, nil);
++			break;
++		}else if(needfid == -1){
+ 			kc <-= (nil, "needkey "+attrtext(attrs));
+ 			break;
+ 		}
+@@ -781,9 +784,11 @@
+ {
+ 	if(debug)
+ 		sys->print("findkey %q\n", attrtext(attrs));
+-	for(i := 0; i < len keys; i++)
+-		if((k := keys[i]) != nil && matchattrs(k.attrs, k.secrets, attrs))
++	for(i := 0; i < len keys; i++) {
++		if((k := keys[i]) != nil && matchattrs(k.attrs, k.secrets, attrs)
++		&& lookattr(k.attrs, "disabled") == nil )
+ 			return k;
++	}
+ 	return nil;
+ }
+ 
+@@ -792,9 +797,11 @@
+ 	if(debug)
+ 		sys->print("findkey %q\n", attrtext(attrs));
+ 	kl: list of ref Key;
+-	for(i := 0; i < len keys; i++)
+-		if((k := keys[i]) != nil && matchattrs(k.attrs, k.secrets, attrs))
++	for(i := 0; i < len keys; i++) {
++		if((k := keys[i]) != nil && matchattrs(k.attrs, k.secrets, attrs)
++		&& lookattr(k.attrs, "disabled") == nil )
+ 			kl = k :: kl;
++	}
+ 	return reverse(kl);
+ }
+ 
+@@ -869,21 +876,21 @@
+ 	return 0;
+ }
+ 
+-IO.findkey(io: self ref IO, attrs: list of ref Attr, extra: string): (ref Key, string)
++IO.findkey(io: self ref IO, attrs: list of ref Attr, extra: string, need: int): (ref Key, string)
+ {
+-	(kl, err) := io.findkeys(attrs, extra);
++	(kl, err) := io.findkeys(attrs, extra, need);
+ 	if(kl != nil)
+ 		return (hd kl, err);
+ 	return (nil, err);
+ }
+ 
+-IO.findkeys(nil: self ref IO, attrs: list of ref Attr, extra: string): (list of ref Key, string)
++IO.findkeys(nil: self ref IO, attrs: list of ref Attr, extra: string, need: int): (list of ref Key, string)
+ {
+ 	ea := parseline(extra);
+ 	for(; ea != nil; ea = tl ea)
+ 		attrs = hd ea :: attrs;
+ 	kc := chan of (list of ref Key, string);
+-	keymanc <-= (attrs, 1, kc);	# TO DO: 1 => 0 for not needed
++	keymanc <-= (attrs, need, kc);
+ 	return <-kc;
+ }
+ 
+diff -r 01665ab22684 appl/cmd/auth/factotum/proto/p9any.b
+--- a/appl/cmd/auth/factotum/proto/p9any.b	Sat Sep 07 11:32:50 2013 +0100
++++ b/appl/cmd/auth/factotum/proto/p9any.b	Mon Nov 11 23:36:06 2013 +0000
+@@ -8,6 +8,9 @@
+ 
+ include "draw.m";
+ 
++include "lists.m";
++	lists: Lists;
++
+ include "keyring.m";
+ 	kr: Keyring;
+ 
+@@ -26,6 +29,7 @@
+ include "encoding.m";
+ 	base16: Encoding;
+ 
++negotiable := array[] of { "p9sk1" };
+ Debug: con 0;
+ 
+ # init, addkey, closekey, write, read, close, keyprompt
+@@ -34,6 +38,7 @@
+ {
+ 	authio = f;
+ 	sys = load Sys Sys->PATH;
++	lists = load Lists Lists->PATH;
+ 	kr = load Keyring Keyring->PATH;
+ 	auth9 = load Auth9 Auth9->PATH;
+ 	auth9->init();
+@@ -45,9 +50,187 @@
+ 
+ interaction(attrs: list of ref Attr, io: ref IO): string
+ {
++	if(authio->lookattrval(attrs, "role") == "server")
++		return p9anyserver(attrs, io);
+ 	return p9any(io);
+ }
+ 
++delproto(attrs: list of ref Attr): list of ref Attr
++{
++	acc: list of ref Attr;
++	for(; attrs != nil; attrs = tl attrs) {
++		attr := hd attrs;
++		if(attr.name == "proto")
++			continue;
++		acc = attr :: acc;
++	}
++	return lists->reverse(acc);
++}
++
++uniq(ps: list of string): list of string
++{
++	return _uniq(ps, nil);
++}
++
++_uniq(ps, acc: list of string): list of string
++{
++	if(ps == nil)
++		return acc;
++	p := hd ps;
++	for(qs := acc; qs != nil; qs = tl qs) {
++		q := hd qs;
++		if(p == q)
++			return _uniq(tl ps, acc);
++	}
++	return _uniq(tl ps, p :: acc);
++}
++
++contains(s, cs: string): int
++{
++	for(i := 0; i < len s; i++) {
++		for(j := 0; j < len cs; j++) {
++			if(s[i] == cs[j])
++				return 1;
++		}
++	}
++	return 0;
++}
++
++p9anyserver(attrs: list of ref Attr, io: ref IO): string
++{
++	#	S->C:	v.2 proto@authdom proto@authdom ...
++	s := "v.2";
++	pairs: list of string;
++	for(i := 0; i < len negotiable; i++) {
++		(keys, err) := io.findkeys(delproto(attrs), sys->sprint("proto=%q dom?", negotiable[i]), 0);
++		if(err != nil)
++			return sys->sprint("findkey %s: %s", negotiable[i], err);
++		for(; keys != nil; keys = tl keys) {
++			key := hd keys;
++			if((role := authio->lookattrval(key.attrs, "role")) != nil && role != "server")
++				continue;
++			proto := authio->lookattrval(key.attrs, "proto");
++			dom := authio->lookattrval(key.attrs, "dom");
++			pairs = sys->sprint("%q@%q", proto, dom) :: pairs;
++		}
++	}
++	if(len pairs == 0)
++		return "p9any: no negotiable keys";
++	pairs = uniq(pairs);
++	for(; pairs != nil; pairs = tl pairs)
++		s += " " + hd pairs;
++	s += "\0";
++	if(Debug)
++		sys->print("S→C: %s\n", s);
++	buf := array of byte s;
++	if(io.write(buf, len buf) != len buf)
++		return sys->sprint("p9any: write list: %r");
++
++	#	C->S:	proto dom
++	while((buf = io.read()) == nil || len buf == 0 || buf[len buf - 1] != byte 0)
++		io.toosmall(2048);
++	s = string buf[:len buf - 1];
++	if(Debug)
++		sys->print("C→S: %s\n", s);
++	(nil, toks) := sys->tokenize(s, " \t");
++	if(len toks != 2)
++		return "p9any: gibberish";
++	protostr := hd toks;
++	dom := hd tl toks;
++	if(contains(protostr, "./"))
++		return "p9any: link typecheck Authproto->init() 27df5a2e/eb7f1d5f";
++#	proto := load Authproto "/dis/auth/proto/" + protostr + ".dis";
++#	if(proto == nil)
++#		return sys->sprint("p9any: load %s: %r", protostr);
++#	err: string;
++#	{	err = proto->init(io);
++#	} exception e {
++#	"*" =>
++#		err = e;
++#	}
++#	if(err != nil)
++#		return sys->sprint("p9any: %s init: %s", protostr, err);
++	if(protostr != "p9sk1")
++		return "p9any: todo";
++
++	#	S->C:	OK
++	buf = array of byte "OK\0";
++	if(io.write(buf, len buf) != len buf)
++		return sys->sprint("p9any: write ok: %r");
++
++	return p9sk1server(io, dom);
++}
++
++getsecret(io: ref IO, dom: string, role: string): (ref Key, array of byte, string)
++{
++	(keys, err) := io.findkeys(nil, sys->sprint("proto=p9sk1 dom=%q user? !hex?", dom), 0);
++	for(; err == nil && keys != nil; keys = tl keys) {
++		key := hd keys;
++		if((r := authio->lookattrval(key.attrs, "role")) != nil && r != role)
++			continue;
++		if(len (secret := base16->dec(authio->lookattrval(key.secrets, "!hex"))) != DESKEYLEN)
++			return (nil, nil, "p9sk1: invalid !hex key");
++		return (key, secret, nil);
++	}
++
++	(keys, err) = io.findkeys(nil, sys->sprint("proto=p9sk1 dom=%q user? !password?", dom), 1);
++	for(; err == nil && keys != nil; keys = tl keys) {
++		key := hd keys;
++		if((r := authio->lookattrval(key.attrs, "role")) != nil && r != role)
++			continue;
++		secret := auth9->passtokey(authio->lookattrval(key.secrets, "!password"));
++		return (key, secret, nil);
++	}
++
++	return (nil, nil, err);
++}
++
++p9sk1server(io: ref IO, dom: string): string
++{
++	(key, skey, err) := getsecret(io, dom, "server");
++	if(err != nil)
++		return "p9sk1: getsecret: " + err;
++
++	#	C->S:	CHc
++	while(len (buf := io.read()) < Auth9->CHALLEN)
++		io.toosmall(Auth9->CHALLEN);
++	cchal := buf[:Auth9->CHALLEN];
++
++	#	S->C:	AuthTreq, IDs, DN, CHs, -, -
++	tr := ref Auth9->Ticketreq;
++	tr.rtype = Auth9->AuthTreq;
++	tr.authid = authio->lookattrval(key.attrs, "user");
++	tr.authdom = authio->lookattrval(key.attrs, "dom");
++	tr.chal = array[Auth9->CHALLEN] of byte;
++	memrandom(tr.chal, len tr.chal);
++	buf = tr.pack();
++	if(io.write(buf, len buf) != len buf)
++		return sys->sprint("p9sk1: write tr: %r");
++
++	#	C->S:	Ks{AuthTs, CHs, IDc, IDr, Kn}, Kn{AuthAc, CHs}
++	while(len (buf = io.read()) < Auth9->TICKETLEN + Auth9->AUTHENTLEN)
++		io.toosmall(Auth9->TICKETLEN + Auth9->AUTHENTLEN);
++	(nil, tick) := Ticket.unpack(buf, skey);
++	if(tick.num != Auth9->AuthTs || !eqbytes(tick.chal, tr.chal))
++		return "invalid ticket from client";
++	(nil, ar) := Authenticator.unpack(buf[Auth9->TICKETLEN:], tick.key);
++	if(ar.num != Auth9->AuthAc || !eqbytes(ar.chal, tr.chal) || ar.id != 0)
++		return "invalid authenticator from client";
++
++	#	S->C:	Kn{AuthAs, CHc}
++	ar.num = Auth9->AuthAs;
++	ar.chal = cchal;
++	ar.id = 0;
++	buf = ar.pack(tick.key);
++	if(io.write(buf, len buf) != len buf)
++		return sys->sprint("p9sk1: write ar: %r");
++
++	ai := ref Authinfo(tick.cuid, tick.suid, nil, auth9->des56to64(tick.key));
++	io.done(ai);
++
++	return nil;
++}
++
+ p9any(io: ref IO): string
+ {
+ 	while((buf := io.read()) == nil || (n := len buf) == 0 || buf[n-1] != byte 0)
+@@ -123,18 +306,9 @@
+ 		sys->print("ticketreq: type=%d authid=%q authdom=%q chal= hostid=%q uid=%q\n",
+ 			tr.rtype, tr.authid, tr.authdom, tr.hostid, tr.uid);
+ 
+-	(mykey, diag) := io.findkey(nil, sys->sprint("dom=%q proto=p9sk1 user? !password?", udom));
+-	if(mykey == nil)
++	(mykey, ukey, diag) := getsecret(io, udom, "client");
++	if(diag != nil)
+ 		return "can't find key: "+diag;
+-	ukey: array of byte;
+-	if((a := authio->lookattrval(mykey.secrets, "!hex")) != nil){
+-		ukey = base16->dec(a);
+-		if(len ukey != DESKEYLEN)
+-			return "p9sk1: invalid !hex key";
+-	}else	if((a = authio->lookattrval(mykey.secrets, "!password")) != nil)
+-		ukey = auth9->passtokey(a);
+-	else
+-		return "no !password (or !hex) in key";
+ 
+ 	#	A->C:	Kc{nonce-S, uid-C, uid-S, Kn}, Ks{nonce-S, uid-C, uid-S, K-n}
+ 	user := authio->lookattrval(mykey.attrs, "user");
+diff -r 01665ab22684 appl/cmd/auth/factotum/proto/pass.b
+--- a/appl/cmd/auth/factotum/proto/pass.b	Sat Sep 07 11:32:50 2013 +0100
++++ b/appl/cmd/auth/factotum/proto/pass.b	Mon Nov 11 23:36:06 2013 +0000
+@@ -16,7 +16,7 @@
+ 
+ interaction(attrs: list of ref Attr, io: ref Authio->IO): string
+ {
+-	(key, err) := io.findkey(attrs, "user? !password?");
++	(key, err) := io.findkey(attrs, "user? !password?", 1);
+ 	if(key == nil)
+ 		return err;
+ 	user := authio->lookattrval(key.attrs, "user");
+diff -r 01665ab22684 appl/cmd/auth/factotum/proto/rsa.b
+--- a/appl/cmd/auth/factotum/proto/rsa.b	Sat Sep 07 11:32:50 2013 +0100
++++ b/appl/cmd/auth/factotum/proto/rsa.b	Mon Nov 11 23:36:06 2013 +0000
+@@ -49,7 +49,7 @@
+ 	err: string;
+ 	for(;;){
+ 		waitread(io);
+-		(keys, err) = io.findkeys(attrs, "");
++		(keys, err) = io.findkeys(attrs, "", 1);
+ 		if(keys != nil)
+ 			break;
+ 		io.error(err);
