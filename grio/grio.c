@@ -192,25 +192,25 @@ threadmain(int argc, char *argv[])
 		usercol = ARGF();
 		if (usercol == nil)
  			usage();
-		bgtrans = atoi(usercol);
+		bgtrans = strtol(usercol,0,0);
 		break;
 	case 'b':
 		borderwidth = ARGF();
 		if (borderwidth == nil)
  			usage();
-		Selborder = atoi(borderwidth);
+		Selborder = strtol(borderwidth,0,0);
 		break;
 	case 'y':
 		bacolor = ARGF();
 		if (bacolor == nil)
 			usage();
-		borderactivecolor = atoi(bacolor);
+		borderactivecolor = strtol(bacolor,0,0);
 		break;
 	case 'z':
 		bbcolor = ARGF();
 		if (bbcolor == nil)
 			usage();
-		borderbgcolor = atoi(bbcolor);
+		borderbgcolor = strtol(bbcolor,0,0);
 		break;
 	case 's':
 		scrolling = TRUE;

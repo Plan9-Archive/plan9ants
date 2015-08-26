@@ -4,6 +4,8 @@ the -m parameter is not passed to hjfs when plan9rc is the boot script
 
 the partition and filesystem detection logic in plan9rc should be improved
 
+similarly the install scripts should autodetect partition locations and edit plan9.ini files accordingly
+
 there is a namespace/file conflict between /lib of the 9front bootfs and /lib from the ramfs skeleton. trying to run cs in the early 9front environment will complain that /lib/ndb/local does not exist.
 
 ventiprog should be more careful about not replacing the wrcmd with bad information

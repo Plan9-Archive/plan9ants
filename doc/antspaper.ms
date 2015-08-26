@@ -567,7 +567,7 @@ Machine B then both mounted the fs and attached to it, and began running
 auth/aescbc -e </n/aes/encin >>/n/aes/encout
 .DE
 .PP
-Machine B mounted the hubfs, attached a local shell, and began running 
+Machine C mounted the hubfs, attached a local shell, and began running 
 .DS
 auth/aescbc -d </n/aes/encout >>/n/aes/decout
 .DE
