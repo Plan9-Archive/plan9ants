@@ -1,0 +1,9 @@
+body { background-color: #FFFFF7; } 
+.midHeader { background-color: #FFFFE9; }
+side-bar { background-color: #EFFFEF; }
+side-bar a { color: #black; } 
+side-bar a:hover {
+  color: white!important;
+  background-color: #428a42;
+}
+
