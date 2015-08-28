@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Advanced Namespace Tools</title>
+</head>
+<body>
+<h1><center>Advanced Namespace Tools for Plan 9</center></h1>
+<p>
+The Giant ANTS for Plan 9 are a collection of software for making Plan 9 systems more
+flexible and reliable by leveraging the power of namespaces.
+<p>
+The main component is a modified kernel which needs no root fs at boot. It creates an
+always available ram/paq rooted namespace accessible by cpu(1) 
+from which the user may launch conventional namespaces. 
+Additional tools allow the user to reroot quickly to different namespaces 
+and create hubs of persistent rc shells shared between all machines on a grid.
+<p>
+ANTS is compatible with existing x86 Plan 9 installations. The ANTS kernel and tools modify
+startup and create new capabilities, but do not change the standard user environment.
+You can install the ANTS kernel and tools directly to a fresh install from the Bell Labs .iso, just 
+add the 9pcram.gz kernel as an option to your plan9.ini menu.
+An optional tools.tgz and a working example PLAN9.INI is also provided.
+<p>
+ANTS is a modular toolkit. Many of the namespace modifying scripts, 
+the hubfs shell multiplexer, and the rio variant "grio", do not depend on the kernel modifications.
+The kernel modifications for bootup and for writable /proc/*/ns are independent from each other.
+ANTS can be used as a self-sufficient micro-distribution of Plan 9 around 6mb in size.
+<p>
+<h2>Documentation</h2>
+<p>
+<a href="magic/man2html/1/rerootwin">rerootwin</a>
+<p>
+<a href="magic/man2html/1/cpns">cpns</a>
+<p>
+<a href="magic/man2html/1/addwrroot">addwrroot</a>
+<p>
+<a href="magic/man2html/8/plan9rc">plan9rc</a>
+<p>
+<a href="magic/man2html/8/ventiprog">ventiprog</a>
+<p>
+<a href="magic/man2html/4/hubfs">hubfs</a>
+<p>
+<a href="doc/ants.ps">The full Attack of the Giant ANTS paper in postscript form</a>
+<p>
+<h2>Install components</h2>
+<p>
+<a href="9pcram.gz">9pcram.gz kernel compiled for x86</a>
+<p>
+<a href="tools.tgz">optional tools.tgz for additional utilities</a>
+<p>
+<a href="doc/PLAN9.INI">reference PLAN9.INI</a>
+<p>
+<h2>Full install documentation, README, and source code</h2>
+<p>
+<b>Please browse <a href="magic/webls?dir=/">the full ANTS directory</a>.</b>
+</p>
+<h2>Demonstration micro-cpu server VM image</h2>
+You can check out how ANTS works in a VM image which includes only a small bootable 9fat partition. 
+It was creaed with Qemu and intended for use in that vm 
+although the .raw image may work in other vms also.
+The 6mb download expands to a 16mb disk image which 
+starts a working cpu server environment with local vga, rio,
+cpu access, acme, and many other tools. It can tcp root to another root fs to function as
+a standard cpu server if desired.
+<p>
+<a href="http://files.9gridchan.org/9worker.gz">9worker.gz</a>
+<p>
+After bootup reaches the shell prompt, type "gui" to start rio on the local display. cpu (1) service
+is also available on port 17060 as user glenda with default password "rootless".
+If a cdrom is attached, the cd bootup option will use the cd termrc as well as providing an independent namespace available via cpu. 
+<p> This image may be
+a slightly older version of ANTS than the source code on this website.
+<p>
+This site is focused on the core ANTS software. For additional VM images, tutorials and screenshots,
+older projects, and other Plan 9 related info, head back to the
+<a href="http://9gridchan.org">9gridchan.org</a>
+base url. 
+<p>
+The ANTS include code from Plan 9 from Bell Labs. Original portions are copyright Mycroftiv.
+<p>
+Licensed under the Lucent Public License.
+<p>
+9gridchan.org recommends the updated Mothra browser for viewing this website.
+<p>
+The ANTS software has been evaluated as "mostly harmless" by the interstellar cat -v patrol force.
+</body>
+</html>
+
