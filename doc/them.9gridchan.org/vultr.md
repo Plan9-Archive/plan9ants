@@ -26,8 +26,8 @@ The general method of installation is covered in the 9front.org fqa. Hit enter a
 
 Remove the iso from the virtual machine, reboot the fresh install, and clone the ANTS repo:
 
-	hg clone https://bitbucket.org/mycroftiv/antsexperiments
-	cd antsexperiments
+	hg clone https://bitbucket.org/mycroftiv/plan9ants
+	cd plan9ants
 
 You probably want to set the rio window to 'scroll' mode. Now we will install ANTS. The command depends on whether you chose to make a small hjfs partition to allow room for fossil+venti, or will be using hjfs only. For a fossil+venti full ANTS system:
 

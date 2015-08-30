@@ -343,3 +343,15 @@ diff -r 01665ab22684 appl/cmd/auth/factotum/proto/rsa.b
  		if(keys != nil)
  			break;
  		io.error(err);
+diff -Naur 9export.orig.b appl/cmd/9export.b
+--- a/appl/cmd/9export.b	2015-08-30 18:19:01.452694768 -0500
++++ b/appl/cmd/9export.b	2015-08-30 18:20:52.072957626 -0500
+@@ -121,7 +121,7 @@
+ 		ns := len secret;
+ 		if(ns > 8)
+ 			ns = 8;
+-		key[12:] = secret[0:ns];
++		key[4:] = secret[0:ns];
+ 		if(sys->write(fd, key[12:], 4) != 4)
+ 			fail("import", sys->sprint("can't write key to remote: %r"));
+ 		if(sys->readn(fd, key, 4) != 4)
