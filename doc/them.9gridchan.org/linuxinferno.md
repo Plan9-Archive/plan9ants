@@ -13,7 +13,7 @@ For simplicity of administration, we are going to patch our Inferno system to le
 	cd appl
 	mk install
 
-Now we need to set up an auth server for inferno to talk to. Many of the other pages walkthroughs use plan 9 factotum to factotum authentication, which works without an auth server as long as there is a shared key. There are standard guides to setting up an auth server in the 9front FQA and bell labs wiki. The simplest way is to issue these commands:
+Now we need to set up an auth server for inferno to talk to. Many of the other pages walkthroughs use plan 9 factotum to factotum authentication, which works without an auth server as long as there is a shared key. There are standard guides to setting up an auth server in the 9front FQA and bell labs wiki. This guide assumes that you will set up on the authserver on the Plan 9 system acting as the hubfs server. The simplest way is to issue these commands:
 
 	auth/keyfs
 	auth/changeuser glenda
@@ -21,8 +21,8 @@ Now we need to set up an auth server for inferno to talk to. Many of the other p
 
 You may wish to verify your auth server is working correctly. Now, edit the file inferno/lib/ndb/local to tell it how to authdial your server. Add a blank line and lines in the following format:
 	
-	sys=sysname ip=ip.of.hubserver
-		dom=keydomain auth=sysname
+	sys=hubservername ip=ip.of.hubserver
+		dom=keydomain auth=hubservername
 
 ## Controlling linux nodes with hubfs
 

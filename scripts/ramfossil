@@ -1,0 +1,16 @@
+#!/bin/rc
+# creates a small fossil in ram and initializes it with the provided score
+
+echo 'fsys main config /n/ramdisk/fossil
+fsys main open -c 3000
+srv -p ramfscons
+srv -A ramfossil
+' >/tmp/ramfosconf
+
+ramfs -S ramdisk
+mount -c /srv/ramdisk /n/ramdisk
+touch /n/ramdisk/fossil
+dd -if /dev/zero -of /n/ramdisk/fossil -count 200000
+fossil/conf -w /n/ramdisk/fossil /tmp/ramfosconf
+fossil/flfmt -y -v $1 /n/ramdisk/fossil
+fossil/fossil -f /n/ramdisk/fossil
