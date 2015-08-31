@@ -968,47 +968,44 @@ pcunmount(Chan *mnt, Chan *mounted, Proc *targp)
 	wlock(&pg->ns);
 
 	l = &MOUNTH(pg, mnt->qid);
-	for(m = *l; m; m = m->hash){
+	for(m = *l; m != nil; m = m->hash){
 		if(eqchan(m->from, mnt, 1))
 			break;
 		l = &m->hash;
 	}
 
-	if(m == 0){
+	if(m == nil){
 		wunlock(&pg->ns);
 		error(Eunmount);
 	}
 
 	wlock(&m->lock);
-	if(mounted == 0){
+	f = m->mount;
+	if(mounted == nil){
 		*l = m->hash;
-		wunlock(&pg->ns);
-		mountfree(m->mount);
 		m->mount = nil;
-		cclose(m->from);
 		wunlock(&m->lock);
+		wunlock(&pg->ns);
+		mountfree(f);
 		putmhead(m);
 		return;
 	}
-
-	p = &m->mount;
-	for(f = *p; f; f = f->next){
-		/* BUG: Needs to be 2 pass */
+	for(p = &m->mount; f != nil; f = f->next){
 		if(eqchan(f->to, mounted, 1) ||
-		  (f->to->mchan && eqchan(f->to->mchan, mounted, 1))){
+		  (f->to->mchan != nil && eqchan(f->to->mchan, mounted, 1))){
 			*p = f->next;
-			f->next = 0;
-			mountfree(f);
+			f->next = nil;
 			if(m->mount == nil){
 				*l = m->hash;
-				cclose(m->from);
 				wunlock(&m->lock);
 				wunlock(&pg->ns);
+				mountfree(f);
 				putmhead(m);
 				return;
 			}
 			wunlock(&m->lock);
 			wunlock(&pg->ns);
+			mountfree(f);
 			return;
 		}
 		p = &f->next;
