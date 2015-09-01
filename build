@@ -56,6 +56,7 @@ if(~ $1 9front){
 	bind -bc frontmods/pc /sys/src/9/pc
 	bind -bc frontmods/pc64 /sys/src/9/pc64
 	bind -bc compiletemp /sys/src/9/pc
+	bind -bc compiletemp /sys/src/9/pc64
 	bind . /n/rootless
 	cd /sys/src/9/pc
 	if(~ $objtype amd64)
