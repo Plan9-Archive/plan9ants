@@ -52,7 +52,7 @@ cp /amd64/bin/ndb/dns .
 #cp /amd64/bin/snoopy .
 
 ## clients and servers
-cp /amd64/bin/hget .
+cp /rc/bin/hget .
 cp /amd64/bin/import .
 cp /amd64/bin/vac .
 cp /amd64/bin/vacfs .
@@ -81,7 +81,7 @@ cp /amd64/bin/vncv .
 cp /amd64/bin/date .
 cp /amd64/bin/dd .
 cp /amd64/bin/diff .
-cp /amd64/bin/dircp .
+cp /rc/bin/dircp .
 cp /amd64/bin/grep .
 cp /amd64/bin/hoc .
 cp /amd64/bin/mv .
@@ -102,14 +102,13 @@ cp /amd64/bin/xd .
 #cp /amd64/bin/zip .
 
 ## scripts
-cp /amd64/bin/9fat: .
-cp /amd64/bin/9fs .
-cp /amd64/bin/kill .
-cp /amd64/bin/Kill .
-cp /amd64/bin/slay .
-cp /amd64/bin/reboot .
-cp /amd64/bin/window .
-cp /amd64/bin/yesterday .
+cp /rc/bin/9fs .
+cp /rc/bin/kill .
+cp /rc/bin/Kill .
+cp /rc/bin/slay .
+cp /rc/bin/reboot .
+cp /rc/bin/window .
+cp /rc/bin/yesterday .
 
 ## acme and others
 cp /amd64/bin/acme .
