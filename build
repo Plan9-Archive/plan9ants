@@ -16,6 +16,7 @@ if(~ `{pwd} /tmp*){
 ##	set up namespace so we keep everything we do contained
 
 rfork ne
+. /$objtype/mkfile
 builddir=`{pwd}
 if(! test -d compiletemp){
 	echo 'mkdir compiletemp'	
@@ -53,15 +54,24 @@ if(~ $1 9front){
 	bind -bc frontmods/boot /sys/src/9/boot
 	bind -bc frontmods/$portversion /sys/src/9/port
 	bind -bc frontmods/pc /sys/src/9/pc
+	bind -bc frontmods/pc64 /sys/src/9/pc64
 	bind -bc compiletemp /sys/src/9/pc
 	bind . /n/rootless
 	cd /sys/src/9/pc
+	if(~ $objtype amd64)
+		cd ../pc64
 	mk
 	cd $builddir
-	cp compiletemp/9pcf 9ants
-	sha1sum 9ants >>build.hashes
-	if(test -e 9ants)
+	if(test -e compiletemp/9pcf){
+		cp compiletemp/9pcf 9ants
+		sha1sum 9ants >>build.hashes
 		echo 9ants kernel built
+	}
+	if(test -e compiletemp/9pc64){
+		cp compiletemp/9pc64 9ants64
+		sha1sum 9ants64 >>build.hashes
+		echo 9ants64 kernel built
+	}
 	exit
 }
 
@@ -75,8 +85,8 @@ if(~ $1 fronthost){
 	mk install
 	cd ..
 	cd patched
-	8c -FTVw gridlisten.c
-	8l -o gridlisten gridlisten.8
+	$CC -FTVw gridlisten.c
+	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
 	cp frontmods/bootdir/grio /$objtype/bin
@@ -432,10 +442,10 @@ if(~ $1 patched){
 	cp patched/factotumutil.c /tmp/factotum/util.c
 	cd /tmp/rc
 	mk
-	cp 8.out $builddir/bootdir.extras/rc
+	cp $O.out $builddir/bootdir.extras/rc
 	cd /tmp/factotum
-	mk 8.factotum
-	cp 8.factotum $builddir/bootdir.extras/factotum
+	mk $O.factotum
+	cp $O.factotum $builddir/bootdir.extras/factotum
 	cd $builddir
 	strip bootdir.extras/rc >/dev/null >[2=1]
 	strip bootdir.extras/factotum >/dev/null >[2=1]
@@ -449,12 +459,12 @@ if(~ $1 extras){
 	cd grio
 	mk clean
 	mk
-	cp 8.out ../bootdir.extras/grio
+	cp $O.out ../bootdir.extras/grio
 	cd ../hubfs1.1
 	mk clean
 	mk all
-	cp 8.hubfs ../bootdir.extras/hubfs
-	cp 8.hubshell ../bootdir.extras/hubshell
+	cp $O.hubfs ../bootdir.extras/hubfs
+	cp $O.hubshell ../bootdir.extras/hubshell
 	cp hub ../bootdir.extras
 	cd $builddir
 	strip bootdir.extras/grio >/dev/null >[2=1]
@@ -472,6 +482,8 @@ if(~ $1 bootpaq){
 	cd $builddir
 	rm root/bin/* >/dev/null >[2=1]
 	cp root/lib/_mkpaq root/bin
+	if(~ $objtype amd64)
+		cp root/lib/_mkpaq64 root/bin/_mkpaq
 	cd root/bin
 	. _mkpaq
 	cd $builddir
@@ -486,6 +498,8 @@ if(~ $1 tools){
 	rm root/bin/* >/dev/null >[2=1]
 	tar czf root.targz root
 	cp root/lib/_toolcopy root/bin
+	if(~ $objtype amd64)
+		cp root/lib/_toolcopy64 root/bin_toolcopy
 	cd root/bin
 	. _toolcopy
 	cd $builddir
