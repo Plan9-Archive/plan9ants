@@ -503,7 +503,7 @@ if(~ $1 tools){
 	tar czf root.targz root
 	cp root/lib/_toolcopy root/bin
 	if(~ $objtype amd64)
-		cp root/lib/_toolcopy64 root/bin_toolcopy
+		cp root/lib/_toolcopy64 root/bin/_toolcopy
 	cd root/bin
 	. _toolcopy
 	cd $builddir
