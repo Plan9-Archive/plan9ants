@@ -6,7 +6,7 @@ if (! ~ $1 ?*){
 	exit usage
 }
 
-import -c $1 / /n/$1
+import -E ssl -c $1 / /n/$1
 bind -a /n/$1/ /
 bind -b /$cputype/bin /bin
 bind -b /rc/bin /bin
