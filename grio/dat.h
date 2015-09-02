@@ -172,9 +172,9 @@ struct Window
 };
 
 int		Selborder;
-int		bgtrans;
-int		borderactivecolor;
-int		borderbgcolor;
+ulong		bgtrans;
+ulong		borderactivecolor;
+ulong		borderbgcolor;
 int		winborder(Window*, Point);
 void		winctl(void*);
 void		winshell(void*);
