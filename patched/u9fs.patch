@@ -1,0 +1,24 @@
+diff -Naur /sys/src/cmd/unix/u9fs/plan9.h u9fs/plan9.h
+--- /sys/src/cmd/unix/u9fs/plan9.h	Mon Sep 17 21:23:57 2012
++++ u9fs/plan9.h	Fri Aug 21 02:00:18 2015
+@@ -99,7 +99,8 @@
+ 	UTFmax		= 3,		/* maximum bytes per rune */
+ 	Runesync	= 0x80,		/* cannot represent part of a UTF sequence (<) */
+ 	Runeself	= 0x80,		/* rune and UTF sequences are the same (<) */
+-	Runeerror	= 0x80		/* decoding error in UTF */
++	Runeerror	= 0x80,		/* decoding error in UTF */
++	Runemax = 0xFFFF
+ };
+ 
+ extern	int	runetochar(char*, Rune*);
+diff -Naur /sys/src/cmd/unix/u9fs/rune.c u9fs/rune.c
+--- /sys/src/cmd/unix/u9fs/rune.c	Tue Apr 23 23:14:53 2013
++++ u9fs/rune.c	Fri Aug 21 01:56:55 2015
+@@ -8,6 +8,7 @@
+ 	Bit2	= 5,
+ 	Bit3	= 4,
+ 	Bit4	= 3,
++	Bit5 = 2,
+ 
+ 	T1	= ((1<<(Bit1+1))-1) ^ 0xFF,	/* 0000 0000 */
+ 	Tx	= ((1<<(Bitx+1))-1) ^ 0xFF,	/* 1000 0000 */
