@@ -105,7 +105,7 @@ if(~ $1 fronthost){
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
 	mv /sys/man/3/proc /sys/man/3/oldproc
-	cp doc/modified.manpages/proc.man /sys/man/3/procns
+	cp doc/modified.manpages/proc.man /sys/man/3/proc
 	echo 'ANTS userspace installed, if using ANTS kernel add this to the end of /rc/bin/termrc:'
 	echo 'home=/usr/$user; cd; . $home/lib/profile'
 	exit
@@ -131,7 +131,6 @@ if(~ $1 portsinstall){
 	cp doc/man.ventiprog /sys/man/8/ventiprog
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
-	mv /sys/man/3/proc /sys/man/3/oldproc
 	cp doc/modified.manpages/proc.man /sys/man/3/procns
 	echo 'add the following to the end of /rc/bin/termrc'
 	echo 'home=/usr/$user; cd; . $home/lib/profile'
@@ -218,7 +217,7 @@ if(~ $1 9frontinstall){
 	cp doc/man.ventiprog /sys/man/8/ventiprog
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
-	cp doc/modified.manpages/proc.man /sys/man/3/procns
+	cp doc/modified.manpages/proc.man /sys/man/3/proc
 	echo 'enter a password for remote access:'
 	setpasswd=`{read}
 	echo 'privpassword='$setpasswd >>/n/9fat/plan9.ini
