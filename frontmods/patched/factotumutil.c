@@ -1,6 +1,7 @@
 #include "dat.h"
 
 static char secstore[100];   /* server name */
+static uchar zeros[16];
 
 /* bind in the default network and cs */
 static int
@@ -10,9 +11,8 @@ bindnetcs(void)
 
 	if(access("/net/tcp", AEXIST) < 0)
 		bind("#I", "/net", MBEFORE);
-
 	if(nomntcs)
-		return-1;
+		return -1;
 
 	if(access("/net/cs", AEXIST) < 0){
 		if((srvfd = open("#s/cs", ORDWR)) >= 0){
@@ -75,14 +75,13 @@ netndbauthaddr(void)
 }
 
 int
-_authdial(char *net, char *authdom)
+_authdial(char *authdom)
 {
-	int i, fd, vanilla;
+	int i, fd;
 
 	alarm(30*1000);
-	vanilla = net==nil || strcmp(net, "/net")==0;
-	if(!vanilla || bindnetcs()>=0)
-		fd = authdial(net, authdom);
+	if(bindnetcs()>=0)
+		fd = authdial(nil, authdom);
 	else {
 		/*
 		 * If we failed to mount /srv/cs, assume that
@@ -104,6 +103,31 @@ _authdial(char *net, char *authdom)
 			if(fd < 0)
 				fd = dial(netmkaddr(authaddr[i], "il", "566"), 0, 0, 0);
 		}
+	}
+	alarm(0);
+	return fd;
+}
+
+int
+_authreq(Ticketreq *tr, Authkey *k)
+{
+	int fd;
+
+	fd = _authdial(tr->authdom);
+	if(fd < 0)
+		return -1;
+	alarm(30*1000);
+	if(tsmemcmp(k->aes, zeros, AESKEYLEN) != 0){
+		if(_asgetpakkey(fd, tr, k) < 0){
+			alarm(0);
+			close(fd);
+			return -1;
+		}
+	}
+	if(_asrequest(fd, tr) < 0){
+		alarm(0);
+		close(fd);
+		return -1;
 	}
 	alarm(0);
 	return fd;
@@ -203,8 +227,8 @@ canusekey(Fsstate *fss, Key *k)
 				return fss->conf[i].canuse;
 		if(fss->nconf%16 == 0)
 			fss->conf = erealloc(fss->conf, (fss->nconf+16)*(sizeof(fss->conf[0])));
+		incref(k);
 		fss->conf[fss->nconf].key = k;
-		k->ref++;
 		fss->conf[fss->nconf].canuse = -1;
 		fss->conf[fss->nconf].tag = conftaggen++;
 		fss->nconf++;
@@ -219,7 +243,7 @@ closekey(Key *k)
 {
 	if(k == nil)
 		return;
-	if(--k->ref != 0)
+	if(decref(k))
 		return;
 	if(k->proto && k->proto->closekey)
 		(*k->proto->closekey)(k);
@@ -380,6 +404,7 @@ findkey(Key **ret, Keyinfo *ki, char *fmt, ...)
 		return failure(ki->fss, nil);
 	}
 
+	qlock(ring);
 	nmatch = 0; 
 	for(i=0; i<ring->nkey; i++){
 		k = ring->key[i];
@@ -394,6 +419,7 @@ findkey(Key **ret, Keyinfo *ki, char *fmt, ...)
 			if(!ki->noconf){
 				switch(canusekey(ki->fss, k)){
 				case -1:
+					qunlock(ring);
 					_freeattr(attr1);
 					return RpcConfirm;
 				case 0:
@@ -405,11 +431,13 @@ findkey(Key **ret, Keyinfo *ki, char *fmt, ...)
 			_freeattr(attr1);
 			_freeattr(attr2);
 			_freeattr(attr3);
-			k->ref++;
+			incref(k);
 			*ret = k;
+			qunlock(ring);
 			return RpcOk;
 		}
 	}
+	qunlock(ring);
 	flog("%d: no key matches %A %A %A %A", ki->fss->seqnum, attr0, attr1, attr2, attr3);
 	werrstr("no key matches %A %A", attr0, attr1);
 	_freeattr(attr2);
@@ -449,6 +477,7 @@ findp9authkey(Key **k, Fsstate *fss)
 {
 	char *dom;
 	Keyinfo ki;
+	int rv;
 
 	/*
 	 * We don't use fss->attr here because we don't
@@ -457,10 +486,18 @@ findp9authkey(Key **k, Fsstate *fss)
 	mkkeyinfo(&ki, fss, nil);
 	ki.attr = nil;
 	ki.user = nil;
-	if(dom = _strfindattr(fss->attr, "dom"))
-		return findkey(k, &ki, "proto=p9sk1 dom=%q role=server user?", dom);
+	dom = _strfindattr(fss->attr, "dom");
+	if(dom != nil)
+		rv = findkey(k, &ki, "proto=dp9ik dom=%q role=server user?", dom);
 	else
-		return findkey(k, &ki, "proto=p9sk1 role=server dom? user?");
+		rv = findkey(k, &ki, "proto=dp9ik role=server dom? user?");
+	if(rv != RpcOk){
+		if(dom != nil)
+			rv = findkey(k, &ki, "proto=p9sk1 dom=%q role=server user?", dom);
+		else
+			rv = findkey(k, &ki, "proto=p9sk1 role=server dom? user?");
+	}
+	return rv;
 }
 
 Proto*
@@ -474,12 +511,11 @@ findproto(char *name)
 	return nil;
 }
 
-char*
+int
 getnvramkey(int flag)
 {
 	Nvrsafe safe;
 	char *s;
-	int i;
 
 	memset(&safe, 0, sizeof safe);
 	/*
@@ -487,24 +523,30 @@ getnvramkey(int flag)
 	 * but safe still holds good data.
 	 */
 	if(readnvram(&safe, flag)<0 && safe.authid[0]==0) 
-		return nil;
+		return -1;
 
-	/*
-	 *  only use nvram key if it is non-zero
-	 */
-	for(i = 0; i < DESKEYLEN; i++)
-		if(safe.machkey[i] != 0)
-			break;
-	if(i == DESKEYLEN)
-		return nil;
-
-	fmtinstall('H', encodefmt);
-	s = smprint("key proto=p9sk1 user=%q dom=%q !hex=%.*H !password=______", 
-		safe.authid, safe.authdom, DESKEYLEN, safe.machkey);
+	if(tsmemcmp(safe.machkey, zeros, DESKEYLEN) != 0){
+		s = smprint("key proto=p9sk1 user=%q dom=%q !hex=%.*H !password=______", 
+			safe.authid, safe.authdom, DESKEYLEN, safe.machkey);
+		if(s != nil){
+			ctlwrite(s, 0);
+			memset(s, 0, strlen(s));
+			free(s);
+		}
+	}
+	if(tsmemcmp(safe.aesmachkey, zeros, AESKEYLEN) != 0){
+		s = smprint("key proto=dp9ik user=%q dom=%q !hex=%.*H !password=______", 
+			safe.authid, safe.authdom, AESKEYLEN, safe.aesmachkey);
+		if(s != nil){
+			ctlwrite(s, 0);
+			memset(s, 0, strlen(s));
+			free(s);
+		}
+	}
 	writehostowner(safe.authid);
 	memset(&safe, 0, sizeof safe);
 
-	return s;
+	return 0;
 }
 
 int
@@ -569,15 +611,6 @@ matchattr(Attr *pat, Attr *a0, Attr *a1)
 	return 1;		
 }
 
-void
-memrandom(void *p, int n)
-{
-	uchar *cp;
-
-	for(cp = (uchar*)p; n > 0; n--)
-		*cp++ = fastrand();
-}
-
 /*
  *  keep caphash fd open since opens of it could be disabled
  */
@@ -611,7 +644,7 @@ mkcap(char *from, char *to)
 	nfrom = strlen(from);
 	cap = emalloc(nfrom+1+nto+1+sizeof(rand)*3+1);
 	sprint(cap, "%s@%s", from, to);
-	memrandom(rand, sizeof(rand));
+	genrandom(rand, sizeof(rand));
 	key = cap+nfrom+1+nto+1;
 	enc64(key, sizeof(rand)*3, rand, sizeof(rand));
 
@@ -793,24 +826,26 @@ replacekey(Key *kn, int before)
 	int i;
 	Key *k;
 
+	qlock(ring);
+	incref(kn);
 	for(i=0; i<ring->nkey; i++){
 		k = ring->key[i];
 		if(matchattr(kn->attr, k->attr, nil) && matchattr(k->attr, kn->attr, nil)){
-			closekey(k);
-			kn->ref++;
 			ring->key[i] = kn;
+			qunlock(ring);
+			closekey(k);
 			return 0;
 		}
 	}
 	if(ring->nkey%16 == 0)
 		ring->key = erealloc(ring->key, (ring->nkey+16)*sizeof(ring->key[0]));
-	kn->ref++;
 	if(before){
 		memmove(ring->key+1, ring->key, ring->nkey*sizeof ring->key[0]);
 		ring->key[0] = kn;
 		ring->nkey++;
 	}else
 		ring->key[ring->nkey++] = kn;
+	qunlock(ring);
 	return 0;
 }
 

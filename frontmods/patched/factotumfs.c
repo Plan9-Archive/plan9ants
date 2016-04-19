@@ -37,7 +37,7 @@ prototab[] =
 	&p9any,
 	&p9cr,
 	&p9sk1,
-	&p9sk2,
+	&dp9ik,
 	&pass,
 /*	&srs, */
 	&rsa,
@@ -108,7 +108,6 @@ main(int argc, char **argv)
 		break;
 	case 'x':
 		nomntcs = 1;
-		break;
 	default:
 		usage();
 	}ARGEND
@@ -152,15 +151,8 @@ main(int argc, char **argv)
 	}
 
 	if(sflag){
-		s = getnvramkey(kflag ? NVwrite : NVwriteonerr);
-		if(s == nil)
+		if(getnvramkey(kflag ? NVwrite : NVwriteonerr) < 0)
 			fprint(2, "factotum warning: cannot read nvram: %r\n");
-		else if(ctlwrite(s, 0) < 0)
-			fprint(2, "factotum warning: cannot add nvram key: %r\n");
-		if (s != nil) {
-			memset(s, 0, strlen(s));
-			free(s);
-		}
 	} else if(uflag)
 		promptforhostowner();
 	owner = getuser();
@@ -422,9 +414,11 @@ fsdestroyfid(Fid *fid)
 	fss = fid->aux;
 	if(fss == nil)
 		return;
+	qlock(fss);
 	if(fss->ps)
 		(*fss->proto->close)(fss);
 	_freeattr(fss->attr);
+	qunlock(fss);
 	free(fss);
 }
 
@@ -456,14 +450,14 @@ keylist(int i, char *a, uint n, Fsstate *fss)
 	int wb;
 	Keyinfo ki;
 	Key *k;
-	static char zero[Nearend];
 
 	k = nil;
 	mkkeyinfo(&ki, fss, nil);
 	ki.attr = nil;
+	ki.noconf = 1;
 	ki.skip = i;
 	ki.usedisabled = 1;
-	if(findkey(&k, &ki, "") != RpcOk)
+	if(findkey(&k, &ki, nil) != RpcOk)
 		return 0;
 
 	memset(a + n - Nearend, 0, Nearend);
@@ -493,6 +487,24 @@ protolist(int i, char *a, uint n, Fsstate *fss)
 }
 
 static void
+fsrpcio(Req *r)
+{
+	Fsstate *fss;
+	Srv *srv;
+
+	fss = r->fid->aux;
+	srv = r->srv;
+	srvrelease(srv);
+	qlock(fss);
+	if(r->ifcall.type == Tread)
+		rpcread(r);
+	else
+		rpcwrite(r);
+	qunlock(fss);
+	srvacquire(srv);
+}
+
+static void
 fsread(Req *r)
 {
 	Fsstate *s;
@@ -511,7 +523,7 @@ fsread(Req *r)
 		respond(r, nil);
 		break;
 	case Qrpc:
-		rpcread(r);
+		fsrpcio(r);
 		break;
 	case Qneedkey:
 		needkeyread(r);
@@ -544,7 +556,7 @@ fswrite(Req *r)
 		respond(r, "bug in fswrite");
 		break;
 	case Qrpc:
-		rpcwrite(r);
+		fsrpcio(r);
 		break;
 	case Qneedkey:
 	case Qconfirm:
@@ -556,10 +568,10 @@ fswrite(Req *r)
 		default:
 			abort();
 		case Qneedkey:
-			ret = needkeywrite(s);
+			ret = needkeywrite(r->srv, s);
 			break;
 		case Qconfirm:
-			ret = confirmwrite(s);
+			ret = confirmwrite(r->srv, s);
 			break;
 		case Qctl:
 			ret = ctlwrite(s, 0);

@@ -244,23 +244,14 @@ struct Walkqid
 	Qid	qid[1];
 };
 
-enum
-{
-	NSMAX	=	1000,
-	NSLOG	=	7,
-	NSCACHE	=	(1<<NSLOG),
-};
-
 struct Mount
 {
 	ulong	mountid;
+	int	mflag;
 	Mount*	next;
-	Mhead*	head;
-	Mount*	copy;
 	Mount*	order;
 	Chan*	to;			/* channel replacing channel */
-	int	mflag;
-	char	*spec;
+	char*	spec;
 };
 
 struct Mhead
@@ -379,6 +370,7 @@ enum
 
 	SG_RONLY	= 0040,		/* Segment is read only */
 	SG_CEXEC	= 0100,		/* Detach at exec */
+	SG_FAULT	= 0200,		/* Fault on access */
 };
 
 #define PG_ONSWAP	1
@@ -390,7 +382,7 @@ enum
 
 struct Physseg
 {
-	ulong	attr;			/* Segment attributes */
+	int	attr;			/* Segment attributes */
 	char	*name;			/* Attach name */
 	uintptr	pa;			/* Physical address */
 	uintptr	size;			/* Maximum segment size in bytes */
@@ -476,11 +468,9 @@ struct Image
 struct Pgrp
 {
 	Ref;
-	Lock;
+	RWlock	ns;			/* Namespace n read/one write lock */
 	int	noattach;
 	ulong	pgrpid;
-	QLock	debug;			/* single access via devproc.c */
-	RWlock	ns;			/* Namespace n read/one write lock */
 	Mhead	*mnthash[MNTHASH];
 };
 
@@ -655,6 +645,7 @@ struct Proc
 	char	*user;
 	char	*args;
 	int	nargs;		/* number of bytes of args */
+	int	setargs;	/* process changed its args */
 	Proc	*rnext;		/* next process in run queue */
 	Proc	*qnext;		/* next process on queue for a QLock */
 	QLock	*qlock;		/* addr of qlock being queued for DEBUG */
@@ -705,7 +696,6 @@ struct Proc
 	int	hang;		/* hang at next exec for debug */
 	int	procctl;	/* Control for /proc debugging */
 	uintptr	pc;		/* DEBUG only */
-	QLock	procmount;		/* lock for proc ns mounts */
 
 	Lock	rlock;		/* sync sleep/wakeup with postnote */
 	Rendez	*r;		/* rendezvous point slept on */
@@ -771,8 +761,6 @@ struct Proc
 	uintptr	qpc;		/* pc calling last blocking qlock */
 	QLock	*eql;		/* interruptable eqlock */
 
-	int	setargs;	/* process changed its args */
-
 	void	*ureg;		/* User registers for notes */
 	void	*dbgreg;	/* User registers for devproc */
 	Notsave;
@@ -783,15 +771,13 @@ struct Proc
 	PMMU;
 
 	char	*syscalltrace;	/* syscall trace */
+	QLock	procmount;		/* lock for proc ns mounts */
 
-	void	*iocomarg;	/* I/O completion callback for pipelining */
-	void	(*iocomfun)(void*, int);
 };
 
 enum
 {
 	PRINTSIZE =	256,
-	MAXCRYPT = 	127,
 	NUMSIZE	=	12,		/* size of formatted number */
 	MB =		(1024*1024),
 	/* READSTR was 1000, which is way too small for usb's ctl file */
