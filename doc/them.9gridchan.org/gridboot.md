@@ -21,6 +21,6 @@ This will cause the node to use /rc/bin/hubrc instead of the usual cpurc or term
 
 	import -a hubserver /srv #if not on the hubserver itself
 	mount -c /srv/gridhub /n/hubfs
-	cat antsdir/cfg/gridcpurc >>/n/hubfs/remotesysname0
+	cat antsdir/scripts/gridcpurc >>/n/hubfs/remotesysname0
 
 The node will follow the instructions in the gridcpurc and will also announce its services to the inferno registry.
