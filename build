@@ -484,9 +484,9 @@ if(~ $1 bootpaq){
 	tar cf skel.tar root
 	cd $builddir
 	rm root/bin/* >/dev/null >[2=1]
-	cp root/lib/_mkpaq root/bin
+	cp cfg/mkpaq root/bin/_mkpaq
 	if(~ $objtype amd64)
-		cp root/lib/_mkpaq64 root/bin/_mkpaq
+		cp cfg/mkpaq64 root/bin/_mkpaq
 	cd root/bin
 	. _mkpaq
 	cd $builddir
@@ -500,9 +500,9 @@ if(~ $1 tools){
 	echo building tools
 	rm root/bin/* >/dev/null >[2=1]
 	tar czf root.targz root
-	cp root/lib/_toolcopy root/bin
+	cp cfg/toolcopy root/bin/_toolcopy
 	if(~ $objtype amd64)
-		cp root/lib/_toolcopy64 root/bin/_toolcopy
+		cp cfg/toolcopy64 root/bin/_toolcopy
 	cd root/bin
 	. _toolcopy
 	cd $builddir

@@ -1,0 +1,57 @@
+# 	mkpaq dotscript for paqsfs needed for rootless boot namespaces
+
+#	minimal tools for plan9rc script
+cp /amd64/bin/ip/ipconfig .
+cp /amd64/bin/ramfs .
+cp /amd64/bin/auth/newns .
+cp /amd64/bin/mntgen .
+cp /amd64/bin/srv .
+cp /amd64/bin/tar .
+cp /amd64/bin/chmod .
+cp /amd64/bin/mkdir .
+cp /amd64/bin/gunzip .
+cp /amd64/bin/sed .
+cp /amd64/bin/rm .
+#	other bootscripts, namespace files, factotum -x
+# cp /n/rootless/bootdir.extras/factotum .
+cp /n/rootless/bootdir.extras/namespace .
+cp /n/rootless/bootdir.extras/namespace.standard .
+cp /n/rootless/bootdir.extras/namespace.saveterm .
+cp /n/rootless/bootdir.extras/namespace.save9front .
+cp /n/rootless/bootdir.extras/ramskel .
+cp /n/rootless/bootdir.extras/initskel .
+cp /n/rootless/bootdir.extras/save9cfg .
+cp /n/rootless/bootdir.extras/skel.tar .
+#	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE .
+#	fileserver options
+cp /amd64/bin/dossrv .
+cp /amd64/bin/fossil/fossil .
+cp /amd64/bin/venti/venti .
+cp /amd64/bin/disk/kfs .
+cp /amd64/bin/cfs .
+#	shell tools used by namespace scripts etc
+cp /amd64/bin/ls .
+cp /amd64/bin/cp .
+cp /amd64/bin/ed .
+cp /amd64/bin/tr .
+cp /amd64/bin/wc .
+#	remote access
+cp /amd64/bin/aux/listen1 .
+cp /amd64/bin/exportfs .
+cp /amd64/bin/cpu .
+cp /amd64/bin/srvfs .
+cp /amd64/bin/ip/rexexec .
+cp /amd64/bin/rx .
+cp /rc/bin/rcpu .
+cp /rc/bin/rimport .
+cp /rc/bin/rexport .
+cp /rc/bin/rconnect .
+cp /amd64/bin/tlssrv .
+cp /amd64/bin/tlsclient .
+#	hubfs and support
+cp /n/rootless/bootdir.extras/grio .
+cp /n/rootless/bootdir.extras/hubfs .
+cp /n/rootless/bootdir.extras/hubshell .
+cp /n/rootless/bootdir.extras/hub .
+cp /amd64/bin/sleep .
+cp /amd64/bin/touch .
