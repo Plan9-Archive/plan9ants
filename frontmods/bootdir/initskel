@@ -1,6 +1,8 @@
 #!/boot/rc
 # ramroot startup after newns
 
+fn server { . <{n=`{read} && ! ~ $#n 0 && read -c $n} >[2=1] }
+
 ##	utility fns duplicated from plan9rc, initskel might be used independently
 
 fn shifter{
@@ -108,7 +110,7 @@ if(~ $hostfactotum no){
 	mount -b /srv/hostfactotum /mnt
 	if(! ~ $privpassword ''){
 		echo 'setting '$keyowner' factotum key'
-		echo 'key proto=p9sk1 dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
+		echo 'key proto=dp9ik dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
 		rm /env/privpassword
 		rm /env/passdom
 		rm /env/keyowner
@@ -138,9 +140,9 @@ if(! ~ $hubsvc no){
 if(! ~ $cpusvc no){
 	if(~ $cpuport '')
 		cpuport=17020
-	echo 'listen1 '$cpuport' cpu 17027 exportfs rexexec...'
-	listen1 -t tcp!*!$cpuport /boot/cpu -R &
-	listen1 -t tcp!*!17027 /bin/exportfs -a &
+	echo 'listen1 '$cpuport' rcpu 17027 rexexec...'
+	listen1 -t tcp!*!$cpuport tlssrv -a /boot/rc -c server &
+#	listen1 -t tcp!*!17027 /bin/exportfs -a &
 	listen1 -t tcp!*!17009 /boot/rexexec &
 }
 
