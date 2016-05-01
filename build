@@ -44,7 +44,7 @@ if(~ $1 9front){
 		portversion=port4661
 	}
 	cd $builddir
-	bind -bc frontmods/grio grio
+	bind -c frontmods/grio grio
 	bind -bc frontmods/patched patched
 	bind -bc frontmods/bootdir bootdir.extras
 	build extras

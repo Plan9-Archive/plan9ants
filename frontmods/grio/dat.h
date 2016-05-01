@@ -7,8 +7,8 @@ enum
 	Qwdir,
 	Qwinid,
 	Qwinname,
-	Qkbdin,
 	Qlabel,
+	Qkbd,
 	Qmouse,
 	Qnew,
 	Qscreen,
@@ -21,17 +21,13 @@ enum
 
 	QMAX,
 };
-/*
-enum
-{
-	Kscrolloneup = KF|0x20,
-	Kscrollonedown = KF|0x21,
-};
-*/
+
 #define	STACK	8192
+#define	MAXSNARF	100*1024
 
 typedef	struct	Consreadmesg Consreadmesg;
 typedef	struct	Conswritemesg Conswritemesg;
+typedef struct	Kbdreadmesg Kbdreadmesg;
 typedef	struct	Stringpair Stringpair;
 typedef	struct	Dirtab Dirtab;
 typedef	struct	Fid Fid;
@@ -47,6 +43,7 @@ typedef	struct	Xfid Xfid;
 
 enum
 {
+//	Selborder		= 4,		/* border of selected window */
 	Unselborder	= 1,		/* border of unselected window */
 	Scrollwid 		= 12,		/* width of scroll bar */
 	Scrollgap 		= 4,		/* gap right of scroll bar */
@@ -63,7 +60,8 @@ enum	/* control messages */
 {
 	Wakeup,
 	Reshaped,
-	Moved,
+	Topped,
+	Repaint,
 	Refresh,
 	Movemouse,
 	Rawon,
@@ -78,7 +76,7 @@ struct Wctlmesg
 {
 	int		type;
 	Rectangle	r;
-	Image	*image;
+	void		*p;
 };
 
 struct Conswritemesg
@@ -125,15 +123,18 @@ struct Window
 	Ref;
 	QLock;
 	Frame;
-	Image		*i;
-	Mousectl		mc;
+	Image		*i;		/* window image, nil when deleted */
+	Mousectl	mc;
 	Mouseinfo	mouse;
-	Channel		*ck;			/* chan(Rune[10]) */
-	Channel		*cctl;		/* chan(Wctlmesg)[20] */
+	Channel		*ck;		/* chan(char*) */
+	Channel		*cctl;		/* chan(Wctlmesg)[4] */
 	Channel		*conswrite;	/* chan(Conswritemesg) */
 	Channel		*consread;	/* chan(Consreadmesg) */
 	Channel		*mouseread;	/* chan(Mousereadmesg) */
-	Channel		*wctlread;		/* chan(Consreadmesg) */
+	Channel		*wctlread;	/* chan(Consreadmesg) */
+	Channel		*kbdread;	/* chan(Consreadmesg) */
+	Channel		*complete;	/* chan(Completion*) */
+	Channel		*gone;		/* chan(char*) */
 	uint			nr;			/* number of runes in window */
 	uint			maxr;		/* number of runes allocated in r */
 	Rune			*r;
@@ -166,8 +167,8 @@ struct Window
 	uchar		wctlopen;
 	uchar		deleted;
 	uchar		mouseopen;
+	uchar		kbdopen;
 	char			*label;
-	int			pid;
 	char			*dir;
 };
 
@@ -178,7 +179,6 @@ ulong	borderbgcolor;
 int		winborder(Window*, Point);
 void		winctl(void*);
 void		winshell(void*);
-void		hubshell(void*);
 Window*	wlookid(int);
 Window*	wmk(Image*, Mousectl*, Channel*, Channel*, int);
 Window*	wpointto(Point);
@@ -189,12 +189,12 @@ char*	wcontents(Window*, int*);
 int		wbswidth(Window*, Rune);
 int		wclickmatch(Window*, int, int, int, uint*);
 int		wclose(Window*);
-int		wctlmesg(Window*, int, Rectangle, Image*);
-int		wctlmesg(Window*, int, Rectangle, Image*);
+int		wctlmesg(Window*, int, Rectangle, void*);
 uint		wbacknl(Window*, uint, uint);
 uint		winsert(Window*, Rune*, int, uint);
 void		waddraw(Window*, Rune*, int);
 void		wborder(Window*, int);
+void		wclunk(Window*);
 void		wclosewin(Window*);
 void		wcurrent(Window*);
 void		wcut(Window*);
@@ -207,13 +207,14 @@ void		wmousectl(Window*);
 void		wmovemouse(Window*, Point);
 void		wpaste(Window*);
 void		wplumb(Window*);
-void		wrefresh(Window*, Rectangle);
+void		wlook(Window*);
+void		wrefresh(Window*);
 void		wrepaint(Window*);
-void		wresize(Window*, Image*, int);
+void		wresize(Window*, Image*);
 void		wscrdraw(Window*);
 void		wscroll(Window*, int);
 void		wselect(Window*);
-void		wsendctlmesg(Window*, int, Rectangle, Image*);
+void		wsendctlmesg(Window*, int, Rectangle, void*);
 void		wsetcursor(Window*, int);
 void		wsetname(Window*);
 void		wsetorigin(Window*, uint, int);
@@ -222,7 +223,7 @@ void		wsetselect(Window*, uint, uint);
 void		wshow(Window*, uint);
 void		wsnarf(Window*);
 void 		wscrsleep(Window*, uint);
-void		wsetcols(Window*);
+void		wsetcols(Window*, int);
 
 struct Dirtab
 {
@@ -256,8 +257,6 @@ struct Xfid
 		Fid		*f;
 		uchar	*buf;
 		Filsys	*fs;
-		QLock	active;
-		int		flushing;	/* another Xfid is trying to flush us */
 		int		flushtag;	/* our tag, so flush can find us */
 		Channel	*flushc;	/* channel(int) to notify us we're being flushed */
 };
@@ -283,6 +282,7 @@ struct Filsys
 		int		pid;
 		char		*user;
 		Channel	*cxfidalloc;	/* chan(Xfid*) */
+		Channel	*csyncflush;	/* chan(int) */
 		Fid		*fids[Nhash];
 };
 
@@ -307,7 +307,6 @@ struct Timer
 Font		*font;
 Mousectl	*mousectl;
 Mouse	*mouse;
-Keyboardctl	*keyboardctl;
 Display	*display;
 Image	*view;
 Screen	*wscreen;
@@ -317,13 +316,25 @@ Cursor	sightcursor;
 Cursor	whitearrow;
 Cursor	query;
 Cursor	*corners[9];
+
 Image	*background;
-Image	*lightgrey;
-Image	*red;
+Image	*cols[NCOL];
+Image	*titlecol;
+Image	*lighttitlecol;
+Image	*dholdcol;
+Image	*holdcol;
+Image	*lightholdcol;
+Image	*paleholdcol;
+Image	*paletextcol;
+Image	*sizecol;
+int	reverse;	/* there are no pastel paints in the dungeons and dragons world -- rob pike */
+
 Window	**window;
 Window	*wkeyboard;	/* window of simulated keyboard */
 int		nwindow;
 int		snarffd;
+int		gotscreen;
+int		servekbd;
 Window	*input;
 QLock	all;			/* BUG */
 Filsys	*filsys;
@@ -344,3 +355,5 @@ int		errorshouldabort;
 int		menuing;		/* menu action is pending; waiting for window to be indicated */
 int		snarfversion;	/* updated each time it is written */
 int		messagesize;		/* negotiated in 9P version setup */
+int		shiftdown;
+int		debug;
