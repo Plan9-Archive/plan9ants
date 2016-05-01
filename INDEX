@@ -41,6 +41,10 @@ bootdir.extras/ - central point for main rootless boot tools
 	early boot environment.  it contains mostly empty directories
 	and a /usr/bootes template user directory.
 
+cfg/ - contains configuration files and utility scripts, as well as
+the mkpaq and toolcopy scripts which can be used to customize the
+contents of the early boot namespace
+
 compiletemp/ - used by the build script to compile things in, after
 running build the new 9pcram.gz kernel will be found here
 
@@ -75,9 +79,6 @@ plan9 programs adapted to the rootless environment
 
 root/ - used to build the tools.tgz.  It contains additional chunks of
 information used to provide a slightly richer plan 9 environment.
-
-	lib/ - contains the _mkpaq and _toolcopy scripts which can be
-	used to customize the contents of the early boot namespace
 
 root.targz - used by build script to create empty dirs after mercurial clone.
 

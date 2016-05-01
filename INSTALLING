@@ -29,7 +29,7 @@ build ramfs - this uses a ramfs for the compile and copies only the
 build bootpaq - builds the bootpaq which is compiled into the kernel
 
 build tools - this creates a tools.tgz using the list of tools in
-root/lib/_toolcopy
+cfg/toolcopy
 
 build patched - this compiles the slightly modified versions of rc and
 factotum adapted to the early namespace

@@ -28,8 +28,8 @@ nroff -man doc/man.addwrroot
 ##
 ## customize these files if desired
 
-root/lib/_toolcopy
-root/lib/_mkpaq
+cfg/toolcopy
+cfg/mkpaq
 
 ## compiling locally
 
