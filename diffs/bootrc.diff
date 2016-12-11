@@ -1,0 +1,172 @@
+--- /sys/src/9/boot/bootrc	Sun Feb 28 22:48:50 2016
++++ bootrc	Thu Apr 28 17:41:09 2016
+@@ -1,10 +1,10 @@
+ #!/bin/rc
+ 
+-# mount points
+-mntgen -s slashn /n && chmod 666 /srv/slashn
+-mntgen -s slashmnt /mnt && chmod 666 /srv/slashmnt
+-mntgen -s mntexport /mnt/exportfs && chmod 666 /srv/mntexport
++if(~ $#rootdir 0)
++	rootdir=/root
++objtype=`{cat /env/cputype}
+ 
++mntgen -s slash /mnt
+ bind /root /mnt/broot
+ unmount /root
+ 
+@@ -62,6 +62,124 @@
+ 		ask $*
+ }
+ 
++fn hostcheck{
++	hosttest=`{cat /dev/hostowner}
++	if(~ $hosttest ''){
++		if(~ $user ''){
++			user=glenda
++		}
++		echo 'no hostowner found: setting to '$user
++		echo -n $user >'/dev/hostowner'
++	}
++	if(~ $user ''){
++		user=`{cat /dev/hostowner}
++	}
++}
++
++fn dochecksys{
++	systest=`{cat /dev/sysname}
++	switch($sysname){
++	case ?*
++		if(~ $systest ''){
++			echo setting /dev/sysname to $sysname
++			echo -n $sysname >/dev/sysname
++			systest=`{cat /dev/sysname}
++		}
++		if(! ~ $systest $sysname){
++			echo warning sysname mismatch between dev and env
++		}
++	case ''
++		if(~ $systest ''){
++			if(~ $service cpu){
++				sysname=helix
++			} 
++			if(~ $service terminal){
++				sysname=front
++			}
++			if(~ $sysname ''){
++				sysname=mutant
++			}
++			echo no sysname found in dev or env setting to $sysname
++			echo -n $sysname >/dev/sysname
++		}
++		if not{
++			echo setting sysname var to $systest from /dev/sysname
++			sysname = $systest
++		}
++	}
++}
++
++fn ants{
++	paqfs -s -S bootpaq /boot/bootpaq
++	mount -a /srv/bootpaq /boot
++	bind -a /boot /bin
++	
++	hostcheck
++	dochecksys
++
++##	set up ramfs as a rootlike fs
++	
++	hostdir=`{cat '#c/hostowner'}
++	cd /
++	echo -n 'ramfs -S ramboot...'
++	ramfs -S ramboot
++	mount -c /srv/ramboot /root
++	bind -ac /root /
++	echo -n 'tar xf /boot/skel.tar...'
++	tar xf /boot/skel.tar
++	if (test -d /root/mnt)
++		bind -ac /root/mnt /mnt
++	mount -b /srv/factotum /mnt
++	bind -ac /root/bin /bin
++
++##	get tgzfs if chosen and load into the ramdisk
++
++	if(~ $tgzfs *.tgz){
++		dossrv
++		if(~ $fatpath '')
++			fatpath=/dev/sdC0/9fat
++		if(! test -d /x)
++			mkdir /root/x
++		mount /srv/dos /x $fatpath
++		if(test -e /x/$tgzfs){
++			echo -n tar xzf $tgzfs^...
++			tar xzf /x/$tgzfs
++		}
++		if not
++			echo 'tgz not found continuing with only /boot'
++	}
++
++	timezone=`{cat /adm/timezone/local}
++
++##	if we aren't bootes we need to have a $home
++
++	if(! ~ $user bootes){
++		echo 'copying bootes skeleton to '$user
++		mkdir /root/usr/$user
++		mkdir /root/usr/$user/lib
++		mkdir /root/usr/$user/tmp
++		mkdir /root/usr/$user/bin
++		mkdir /root/usr/$user/bin/rc
++		mkdir /root/usr/$user/bin/$cputype
++		cp /usr/bootes/lib/profile /root/usr/$user/lib/profile
++	}
++
++	bind -c /usr/$user/tmp /tmp
++	echo 'partial root built starting services'
++	newns -n /boot/namespace initskel
++	if(! ~ $privpassword ''){
++		echo adding key to factotum
++		if(~ $passdom '')
++			passdom=9front
++		if(~ $keyowner '')
++			keyowner=$user
++		echo 'key proto=p9sk1 dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
++		rm /env/privpassword
++		rm /env/passdom
++		rm /env/keyowner
++	}
++}
++
+ mt=()
+ 
+ fn main{
+@@ -99,6 +217,9 @@
+ 		must $x
+ 	}
+ 
++	# setup low level namespace
++	ants
++
+ 	# config method
+ 	$mp(1) $ma
+ 
+@@ -179,6 +300,12 @@
+ if(test -x /bin/nusbrc && ! test -e /env/nousbrc)
+ 	nusbrc
+ 
++# wait for devices to settle down
++if(~ $#usbwait 1)
++	sleep $usbwait
++if(~ $#usbwait 0)
++	sleep 2
++
+ # load boot methods
+ fn showlocaldevs {}
+ fn configlocal {}
+@@ -233,5 +360,5 @@
+ 
+ 	# cleanup so it can be restarted
+ 	nobootprompt=()
+-	rm -f /srv/^(cfs boot cs dns)
++	rm -f /srv/^(cfs boot slashn cs dns)
+ } </dev/cons

@@ -1,0 +1,506 @@
+--- /sys/src/9/port/devproc.c	Wed Jan  6 02:58:38 2016
++++ devproc.c	Thu Apr 28 17:41:09 2016
+@@ -89,7 +89,7 @@
+ 	"note",		{Qnote},	0,			0000,
+ 	"noteid",	{Qnoteid},	0,			0664,
+ 	"notepg",	{Qnotepg},	0,			0000,
+-	"ns",		{Qns},		0,			0444,
++	"ns",		{Qns},		0,			0644,
+ 	"ppid",		{Qppid},	0,			0444,
+ 	"proc",		{Qproc},	0,			0400,
+ 	"regs",		{Qregs},	sizeof(Ureg),		0000,
+@@ -152,10 +152,12 @@
+ #define	NOTEID(q)	((q).vers)
+ 
+ void	procctlreq(Proc*, char*, int);
++void procnsreq(Proc*, char*, int);
+ long	procctlmemio(Chan*, Proc*, uintptr, void*, long, int);
+ Chan*	proctext(Chan*, Proc*);
+ int	procstopped(void*);
+ ulong	procpagecount(Proc *);
++long procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, char* spec, Proc* targp);
+ 
+ static Traceevent *tevents;
+ static Lock tlock;
+@@ -163,6 +165,8 @@
+ static int tproduced, tconsumed;
+ void (*proctrace)(Proc*, int, vlong);
+ 
++extern int unfair;
++
+ static void
+ profclock(Ureg *ur, Timer *)
+ {
+@@ -179,6 +183,186 @@
+ 	}
+ }
+ 
++/* begin sysfile.c borrowed functions */
++static void
++punlockfgrp(Fgrp *f)
++{
++	int ex;
++
++	ex = f->exceed;
++	f->exceed = 0;
++	unlock(f);
++	if(ex)
++		pprint("warning: process exceeds %d file descriptors\n", ex);
++}
++
++int
++pgrowfd(Fgrp *f, int fd)	/* fd is always >= 0 */
++{
++	Chan **newfd, **oldfd;
++
++	if(fd < f->nfd)
++		return 0;
++	if(fd >= f->nfd+DELTAFD)
++		return -1;	/* out of range */
++	/*
++	 * Unbounded allocation is unwise; besides, there are only 16 bits
++	 * of fid in 9P
++	 */
++	if(f->nfd >= 5000){
++    Exhausted:
++		print("no free file descriptors\n");
++		return -1;
++	}
++	newfd = malloc((f->nfd+DELTAFD)*sizeof(Chan*));
++	if(newfd == 0)
++		goto Exhausted;
++	oldfd = f->fd;
++	memmove(newfd, oldfd, f->nfd*sizeof(Chan*));
++	f->fd = newfd;
++	free(oldfd);
++	f->nfd += DELTAFD;
++	if(fd > f->maxfd){
++		if(fd/100 > f->maxfd/100)
++			f->exceed = (fd/100)*100;
++		f->maxfd = fd;
++	}
++	return 1;
++}
++
++/*
++ *  this assumes that the fgrp is locked
++ */
++int
++pfindfreefd(Fgrp *f, int start)
++{
++	int fd;
++
++	for(fd=start; fd<f->nfd; fd++)
++		if(f->fd[fd] == 0)
++			break;
++	if(fd >= f->nfd && pgrowfd(f, fd) < 0)
++		return -1;
++	return fd;
++}
++
++Chan*
++pfdtochan(int fd, int mode, int chkmnt, int iref, Proc *targp)
++{
++	Chan *c;
++	Fgrp *f;
++
++	c = 0;
++	f = targp->fgrp;
++
++	lock(f);
++	if(fd<0 || f->nfd<=fd || (c = f->fd[fd])==0) {
++		unlock(f);
++		error(Ebadfd);
++	}
++	if(iref)
++		incref(c);
++	unlock(f);
++
++	if(chkmnt && (c->flag&CMSG)) {
++		if(iref)
++			cclose(c);
++		error(Ebadusefd);
++	}
++
++	if(mode<0 || c->mode==ORDWR)
++		return c;
++
++	if((mode&OTRUNC) && c->mode==OREAD) {
++		if(iref)
++			cclose(c);
++		error(Ebadusefd);
++	}
++
++	if((mode&~OTRUNC) != c->mode) {
++		if(iref)
++			cclose(c);
++		error(Ebadusefd);
++	}
++
++	return c;
++}
++
++int
++pnewfd(Chan *c, Proc *targp)
++{
++	int fd;
++	Fgrp *f;
++
++	f = targp->fgrp;
++	lock(f);
++	fd = pfindfreefd(f, 0);
++	if(fd < 0){
++		punlockfgrp(f);
++		return -1;
++	}
++	if(fd > f->maxfd)
++		f->maxfd = fd;
++	f->fd[fd] = c;
++	punlockfgrp(f);
++	return fd;
++}
++
++uintptr
++psysopen(Proc *targp, va_list list)
++{
++	int fd;
++	Chan *c;
++	char *filename;
++	ulong flags;
++
++	filename = va_arg(list, char*);
++	flags = va_arg(list, ulong);
++
++	openmode(flags);	/* error check only */
++//	validaddr(arg[0], 1, 0);
++	c = pnamec(filename, Aopen, flags, 0, targp);
++	if(waserror()){
++		cclose(c);
++		nexterror();
++	}
++	fd = pnewfd(c, targp);
++	if(fd < 0)
++		error(Enofd);
++	poperror();
++	return (uintptr)fd;
++}
++
++void
++pfdclose(int fd, int flag, Proc *targp)
++{
++	int i;
++	Chan *c;
++	Fgrp *f = targp->fgrp;
++
++	lock(f);
++	c = f->fd[fd];
++	if(c == 0){
++		/* can happen for users with shared fd tables */
++		unlock(f);
++		return;
++	}
++	if(flag){
++		if(c==0 || !(c->flag&flag)){
++			unlock(f);
++			return;
++		}
++	}
++	f->fd[fd] = 0;
++	if(fd == f->maxfd)
++		for(i=fd; --i>=0 && f->fd[i]==0; )
++			f->maxfd = i;
++
++	unlock(f);
++	cclose(c);
++}
++/* End borrowed functions from sysfile.c */
++
+ static int
+ procgen(Chan *c, char *name, Dirtab *tab, int, int s, Dir *dp)
+ {
+@@ -398,6 +582,10 @@
+ 	case Qsegment:
+ 	case Qprofile:
+ 	case Qns:
++		if((omode != OREAD) && (p->privatemem))
++			error(Eperm);
++		break;
++
+ 	case Qfd:
+ 		if(omode != OREAD)
+ 			error(Eperm);
+@@ -1036,7 +1224,8 @@
+ 
+ 	eqlock(&p->debug);
+ 	if(waserror()){
+-		qunlock(&p->debug);
++		if(p->debug.locked == 1)
++			qunlock(&p->debug);
+ 		nexterror();
+ 	}
+ 	if(p->pid != PID(c->qid))
+@@ -1124,12 +1313,20 @@
+ 		if(p->noteid != id)
+ 			error(Ebadarg);
+ 		break;
++	case Qns:
++//		print("procnsreq on p, %s, %ld\n", a, n);
++		if(p->debug.locked == 1)
++			qunlock(&p->debug);
++		procnsreq(p, va, n);
++		break;
++
+ 	default:
+ 		print("unknown qid in procwrite\n");
+ 		error(Egreg);
+ 	}
+ 	poperror();
+-	qunlock(&p->debug);
++	if(p->debug.locked == 1)
++		qunlock(&p->debug);
+ 	return n;
+ }
+ 
+@@ -1540,4 +1737,242 @@
+ 		p->newtlb = 1;
+ 
+ 	return n;
++}
++/* modified version of bindmount from sysfile.c. This operates on a target process */
++
++long
++procbindmount(int ismount, int fd, int afd, char* arg0, char* arg1, ulong flag, char* spec, Proc* targp)
++{
++	int ret;
++	Chan *c0, *c1, *ac, *bc;
++
++	if((flag&~MMASK) || (flag&MORDER)==(MBEFORE|MAFTER))
++		error(Ebadarg);
++
++	if(ismount){
++		if(waserror()) {
++			print("nsmod /proc mounts locked on process %uld\n", targp->pid);
++			nexterror();
++		}
++		if(canqlock(&targp->procmount) == 0){
++			error("mounts on this process via /proc locked by previous error");
++			poperror();
++			return -1;
++		}
++		poperror();
++
++//		validaddr((ulong)spec, 1, 0);
++		spec = validnamedup(spec, 1);
++		if(waserror()){
++			free(spec);
++			nexterror();
++		}
++
++		if(targp->pgrp->noattach)
++			error(Enoattach);
++
++		ac = nil;
++		bc = pfdtochan(fd, ORDWR, 0, 1, targp);
++		if(waserror()) {
++			if(ac)
++				cclose(ac);
++			cclose(bc);
++			nexterror();
++		}
++
++		if(afd >= 0)
++			ac = pfdtochan(afd, ORDWR, 0, 1, targp);
++
++//		ret = devno('M', 0);
++//		c0 = devtab[ret]->attach((char*)&bogus);
++		c0 = mntattach(bc, ac, spec, flag&MCACHE);
++		qunlock(&targp->procmount);
++//		print("c0 devtab attach assigned\n");
++		poperror();	/* ac bc */
++		if(ac)
++			cclose(ac);
++		cclose(bc);
++	}else{
++		spec = nil;
++//		validaddr((ulong)arg0, 1, 0);
++//		print("c0 = pnamec(%s, Abind, 0, 0, targp)\n", arg0);
++		c0 = pnamec(arg0, Abind, 0, 0, targp);
++	}
++
++	if(waserror()){
++		cclose(c0);
++		nexterror();
++	}
++//	validaddr((ulong)arg1, 1, 0);
++//	print("c1 = pnamec(%s, Abind, 0, 0, targp)\n", arg1);
++	c1 = pnamec(arg1, Amount, 0, 0, targp);
++	if(waserror()){
++		cclose(c1);
++		nexterror();
++	}
++//	print("ret = pcmount(&c0, c1, flag, bogus.spec, targp)\n");
++	ret = pcmount(&c0, c1, flag, spec, targp);
++
++	poperror();
++	cclose(c1);
++	poperror();
++	cclose(c0);
++	if(ismount){
++		pfdclose(fd, 0, targp);
++		poperror();	/* spec */
++		free(spec);	
++	}
++	return ret;
++}
++
++long
++procunmount(char *new, char *old, Proc *targp)
++{
++	Chan *cmount, *cmounted;
++
++	cmounted = 0;
++
++//	validaddr(arg[1], 1, 0);
++	cmount = pnamec(old, Amount, 0, 0, targp);
++
++	if(new) {
++		if(waserror()) {
++			cclose(cmount);
++			nexterror();
++		}
++//		validaddr(arg[0], 1, 0);
++		/*
++		 * This has to be namec(..., Aopen, ...) because
++		 * if arg[0] is something like /srv/cs or /fd/0,
++		 * opening it is the only way to get at the real
++		 * Chan underneath.
++		 */
++		cmounted = pnamec(new, Aopen, OREAD, 0, targp);
++		poperror();
++	}
++
++	if(waserror()) {
++		cclose(cmount);
++		if(cmounted)
++			cclose(cmounted);
++		nexterror();
++	}
++
++	pcunmount(cmount, cmounted, targp);
++	cclose(cmount);
++	if(cmounted)
++		cclose(cmounted);
++	poperror();
++	return 0;
++}
++
++int
++psysopenwrap(Proc *p, int nargs, ...)
++{
++	int fd;
++	va_list args;
++	va_start(args,nargs);
++	fd=psysopen(p, args);
++	va_end(args);
++	return fd;
++}
++
++/* parses writes on the ns file converts to namespace operations */
++/* the completed command is sent to procbindmount or procunmount */
++
++void
++procnsreq(Proc *p, char *va, int n)
++{
++	Cmdbuf *cbf;
++	char *new, *old, *charflags, *spec;
++	ulong flags;
++	int fd;
++	int countnf;
++
++	flags=MREPL;
++	countnf=1;
++	spec = "";
++
++	cbf = parsecmd(va, n);
++	if(waserror()){
++		free(cbf);
++		nexterror();
++	}
++
++//	print("cbf->nf=%d\n", cbf->nf);
++	if((cbf->nf < 2) || (cbf->nf > 5)){
++		error(Ebadarg);
++		poperror();
++		return;
++	} else if(cbf->nf == 2){
++		if(strcmp(cbf->f[0], "unmount") != 0){
++			error(Ebadarg);
++			poperror();
++			return;		
++		}
++		new = nil;
++		old = cbf->f[1];
++		if(strncmp(old, "#|", 2)==0){
++			error(Ebadsharp);
++			poperror();
++			return;
++		}
++//		print("procunmount(everything from %s on %uld)\n", old, p->pid);
++		procunmount(new, old, p);
++		poperror();
++		return;		
++	} else if(cbf->nf == 3){
++		new = cbf->f[1];
++		old = cbf->f[2];
++	} else {
++		if(*(cbf->f[1]) == '-'){
++			charflags = cbf->f[1];
++			for(int i = 1; *(charflags+i) != '\0'; i++){
++				if(*(charflags+i) == 'a')
++					flags |= MAFTER;
++				if(*(charflags+i) == 'b')
++					flags |= MBEFORE;
++				if(*(charflags+i) == 'c')
++					flags |= MCREATE;
++				if(*(charflags+i) == 'C')
++					flags |= MCACHE;
++			}
++			countnf++;
++		}
++		new = cbf->f[countnf++];
++		old = cbf->f[countnf++];
++		if(countnf < cbf->nf){
++			spec=cbf->f[countnf];
++		}
++	}
++	if(strcmp(cbf->f[0], "bind")==0){
++//		print("procbindmount(0, -1, -1, %s, %s, %uld, nil, %uld)\n", new, old, flags, p->pid);
++		procbindmount(0, -1, -1, new, old, flags, nil, p);
++	} else if (strcmp(cbf->f[0], "mount")==0){
++		if((strncmp(new, "#|", 2)==0) || (strncmp(old, "#|", 2)==0)){
++			error(Ebadsharp);
++			poperror();
++			return;
++		}
++//		print("psysopenwrap(targp, 2, %s, ORDWR)\n", new);
++		fd=psysopenwrap(p, 2, new, ORDWR);
++		if(fd < 0){
++			error(Ebadfd);
++			poperror();
++			return;
++		}
++//		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
++		procbindmount(1, fd, -1, nil, old, flags, spec, p);
++	} else if (strcmp(cbf->f[0], "unmount")==0){
++		if((strncmp(new, "#|/", 3)==0) || (strncmp(old, "#|", 2)==0)){
++			error(Ebadsharp);
++			poperror();
++			return;
++		}
++//		print("procunmount(%s from %s on %uld)\n", new, old, p->pid);
++		procunmount(new, old, p);
++	}
++
++	poperror();
++	free(cbf);
+ }

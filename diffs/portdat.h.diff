@@ -1,0 +1,11 @@
+--- /sys/src/9/port/portdat.h	Thu Apr  7 18:45:07 2016
++++ portdat.h	Thu Apr 28 17:41:09 2016
+@@ -771,6 +771,8 @@
+ 	PMMU;
+ 
+ 	char	*syscalltrace;	/* syscall trace */
++	QLock	procmount;		/* lock for proc ns mounts */
++
+ };
+ 
+ enum

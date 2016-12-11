@@ -1,0 +1,10 @@
+--- /sys/src/cmd/auth/factotum/dat.h	Wed Jan  6 02:58:39 2016
++++ factotumdat.h	Thu Apr 28 17:41:09 2016
+@@ -150,6 +150,7 @@
+ extern	int		askforkeys;
+ extern	char		*authaddr[8];	/* bootstrap auth servers */
+ extern	int		*confirminuse;
++extern	int		nomntcs;
+ extern	int		debug;
+ extern	int		gflag;
+ extern	int		kflag;

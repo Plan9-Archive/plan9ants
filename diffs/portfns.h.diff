@@ -1,0 +1,9 @@
+--- /sys/src/9/port/portfns.h	Thu Apr  7 18:45:07 2016
++++ portfns.h	Thu Apr 28 17:41:09 2016
+@@ -401,3 +401,6 @@
+ #pragma varargck argpos iprint	1
+ #pragma	varargck argpos	panic	1
+ #pragma varargck argpos pprint	1
++int		pcmount(Chan**, Chan*, int, char*, Proc*);
++void		pcunmount(Chan*, Chan*, Proc*);
++Chan*		pnamec(char*, int, int, ulong, Proc*);

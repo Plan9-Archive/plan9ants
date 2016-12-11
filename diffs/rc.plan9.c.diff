@@ -1,0 +1,8 @@
+--- /sys/src/cmd/rc/plan9.c	Sun Feb 28 22:48:52 2016
++++ rc.plan9.c	Thu Apr 28 17:41:09 2016
+@@ -29,7 +29,7 @@
+ 	"term",
+ 	0
+ };
+-char Rcmain[]="/rc/lib/rcmain";
++char Rcmain[]="/boot/rcmain";
