@@ -144,7 +144,7 @@ Vinit(void)
 					setvar(ent[i].name, val);
 					vlook(ent[i].name)->changed = 0;
 					close(f);
-					efree(buf);
+					free(buf);
 				}
 			}
 		}
@@ -152,42 +152,20 @@ Vinit(void)
 	}
 	close(dir);
 }
-int envdir;
 
 void
 Xrdfn(void)
 {
-	int f, len;
-	Dir *e;
-	char envname[Maxenvname];
-	static Dir *ent, *allocent;
-	static int nent;
-
-	for(;;){
-		if(nent == 0){
-			free(allocent);
-			nent = dirread(envdir, &allocent);
-			ent = allocent;
-		}
-		if(nent <= 0)
-			break;
-		while(nent){
-			e = ent++;
-			nent--;
-			len = e->length;
-			if(len && strncmp(e->name, "fn#", 3)==0){
-				snprint(envname, sizeof envname, "/env/%s", e->name);
-				if((f = open(envname, 0))>=0){
-					execcmds(openfd(f));
-					return;
-				}
-			}
-		}
+	if(runq->argv->words == 0)
+		poplist();
+	else {
+		int f = open(runq->argv->words->word, 0);
+		popword();
+		runq->pc--;
+		if(f>=0) execcmds(openfd(f));
 	}
-	close(envdir);
-	Xreturn();
 }
-union code rdfns[4];
+union code rdfns[8];
 
 void
 execfinit(void)
@@ -195,17 +173,15 @@ execfinit(void)
 	static int first = 1;
 	if(first){
 		rdfns[0].i = 1;
-		rdfns[1].f = Xrdfn;
-		rdfns[2].f = Xjump;
-		rdfns[3].i = 1;
+		rdfns[1].f = Xmark;
+		rdfns[2].f = Xglobs;
+		rdfns[4].i = Globsize(rdfns[3].s = "/env/fn#\001*");
+		rdfns[5].f = Xglob;
+		rdfns[6].f = Xrdfn;
+		rdfns[7].f = Xreturn;
 		first = 0;
 	}
-	Xpopm();
-	envdir = open("/env", 0);
-	if(envdir<0){
-		pfmt(err, "rc: can't open /env: %r\n");
-		return;
-	}
+	poplist();
 	start(rdfns, 1, runq->local);
 }
 
@@ -273,12 +249,10 @@ addenv(var *v)
 		if((f = Creat(envname))<0)
 			pfmt(err, "rc: can't open %s: %r\n", envname);
 		else{
-			if(v->fn){
-				fd = openfd(f);
+			fd = openfd(f);
+			if(v->fn)
 				pfmt(fd, "fn %q %s\n", v->name, v->fn[v->pc-1].s);
-				closeio(fd);
-			}
-			close(f);
+			closeio(fd);
 		}
 	}
 }
@@ -305,73 +279,37 @@ Updenv(void)
 
 /* not used on plan 9 */
 int
-ForkExecute(char *file, char **argv, int sin, int sout, int serr)
+ForkExecute(char *, char **, int, int, int)
 {
-	int pid;
-
-	if(access(file, 1) != 0)
-		return -1;
-	switch(pid = fork()){
-	case -1:
-		return -1;
-	case 0:
-		if(sin >= 0)
-			dup(sin, 0);
-		else
-			close(0);
-		if(sout >= 0)
-			dup(sout, 1);
-		else
-			close(1);
-		if(serr >= 0)
-			dup(serr, 2);
-		else
-			close(2);
-		exec(file, argv);
-		exits(file);
-	}
-	return pid;
+	return -1;
 }
 
 void
 Execute(word *args, word *path)
 {
 	char **argv = mkargv(args);
-	char file[1024], errstr[1024];
-	int nc;
+	char file[1024];
+	int nc, mc;
 
 	Updenv();
-	errstr[0] = '\0';
+	mc = strlen(argv[1])+1;
 	for(;path;path = path->next){
 		nc = strlen(path->word);
-		if(nc < sizeof file - 1){	/* 1 for / */
-			strcpy(file, path->word);
-			if(file[0]){
-				strcat(file, "/");
-				nc++;
-			}
-			if(nc + strlen(argv[1]) < sizeof file){
-				strcat(file, argv[1]);
-				exec(file, argv+1);
-				rerrstr(errstr, sizeof errstr);
-				/*
-				 * if file exists and is executable, exec should
-				 * have worked, unless it's a directory or an
-				 * executable for another architecture.  in
-				 * particular, if it failed due to lack of
-				 * swap/vm (e.g., arg. list too long) or other
-				 * allocation failure, stop searching and print
-				 * the reason for failure.
-				 */
-				if (strstr(errstr, " allocat") != nil ||
-				    strstr(errstr, " full") != nil)
-					break;
-			}
-			else werrstr("command name too long");
+		if(nc + mc >= sizeof file - 1){	/* 1 for / */
+			werrstr("command path name too long");
+			continue;
 		}
+		if(nc > 0){
+			memmove(file, path->word, nc);
+			file[nc++] = '/';
+		}
+		memmove(file+nc, argv[1], mc);
+		exec(file, argv+1);
 	}
-	pfmt(err, "%s: %s\n", argv[1], errstr);
-	efree((char *)argv);
+	rerrstr(file, sizeof file);
+	setstatus(file);
+	pfmt(err, "%s: %s\n", argv[1], file);
+	free(argv);
 }
 #define	NDIR	256		/* shoud be a better way */
 
@@ -464,7 +402,7 @@ Again:
 	}
 	if(dir[f].i == dir[f].n)
 		return 0;
-	strcpy(p, dir[f].dbuf[dir[f].i].name);
+	strncpy((char*)p, dir[f].dbuf[dir[f].i].name, NDIR);
 	dir[f].i++;
 	return 1;
 }
@@ -608,24 +546,6 @@ Abort(void)
 	pfmt(err, "aborting\n");
 	flush(err);
 	Exit("aborting");
-}
-
-void
-Memcpy(void *a, void *b, long n)
-{
-	memmove(a, b, n);
-}
-
-void*
-Malloc(ulong n)
-{
-	return malloc(n);
-}
-
-void*
-Realloc(void *p, ulong n)
-{
-	return realloc(p, n);
 }
 
 int *waitpids;
