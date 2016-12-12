@@ -91,5 +91,8 @@ also
 
 nroff -man doc/plan9rc.man ## the full documentation for plan9rc
 bootup
-Current compatible 9front version: 5217
+
+hg up -r379 builds vs 9front 5625
+hg up -r377 builds vs 9front 5360
+hg up -r369 builds vs 9front 5217
 hg up -r368 builds vs 9front 4796
