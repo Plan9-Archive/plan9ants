@@ -79,12 +79,13 @@ useful tools compiled right into /boot of the kernel so it is not
 necessary to download the tools.tgz to use the precompiled kernel
 effectively.
 
-To install without recompiling, place the 9pcram.gz kernel in your
-9fat: partition and edit plan9.ini to use a boot menu to give you the
-option of using that kernel.  Some additional tweaking and studying of
-what is going on is recommended for effective use.  The precompiled
-kernel also includes the writable /proc/ns mod which is the basis for
-the cpns, addns, subns process namespace manipulation scripts.
+To install without recompiling, place the distribution-appropriate
+kernel (9pcram.gz for Labs, 9ants for 9front) in your 9fat partition
+and edit plan9.ini to use a boot menu to give you the option of using
+that kernel.  Some additional tweaking and studying of what is going
+on is recommended for effective use.  The precompiled kernel also
+includes the writable /proc/ns mod which is the basis for the cpns,
+addns, subns process namespace manipulation scripts.
 
 Please view doc/ants.ps for the full Giants ANTS paper.
 
@@ -95,4 +96,4 @@ tree from December of 2009.  Development resumed with updated plan 9
 sources in January 2013. Development resumed in July 2015.
 
 These tools include code from the main Plan 9 distribution. Original portions
-copyright Mycroftiv. Licensed under the Lucent Public License/ GPL2.
+copyright Mycroftiv. Licensed under the Lucent Public License/GPL2.

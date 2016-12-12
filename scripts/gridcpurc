@@ -83,6 +83,8 @@ case `{	echo $sysname; ndb/query sys $sysname dom
 
 	# cpu+auth server
 	auth/keyfs -wp -m /mnt/keys /adm/keys
+	srv $registry registry
+	mount /srv/registry /mnt/registry
 	gridlisten -q -t /rc/bin/service tcp
 	gridlisten -q -t /rc/bin/service.auth tcp
 case *

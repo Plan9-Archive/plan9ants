@@ -1,7 +1,12 @@
 #!/bin/rc
 echo 'grid controlled cpurc'
 ndb/cs
-import -E ssl -c $hubserver / /n/$hubserver
+if (test -e /bin/rimport) {
+	rimport -s controlhub -c $hubserver /n/$hubserver
+}
+if not {
+	import -E ssl -s controlhub -c $hubserver / /n/$hubserver
+}
 mount -c /n/$hubserver/srv/gridhub /n/gridhub
 echo 'attaching to '$hubserver' gridhub'
 if(test -e /n/gridhub/^$sysname^0){
