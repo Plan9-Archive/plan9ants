@@ -19,7 +19,7 @@ enum flags{
 enum buffersizes{
 	BUCKSIZE = 777777,			/* Make this bigger if you want larger buffers */
 	MAGIC = 77777,			/* In paranoid mode let readers lag this many bytes */
-	MAXQ = 777,				/* Maximum number of 9p requests to queue */
+	MAXQ = 13,				/* Maximum number of 9p requests to queue */
 	SMBUF = 777,				/* Just for names, small strings, etc */
 };
 
@@ -269,6 +269,8 @@ fsread(Req *r)
 	u32int count;
 	vlong offset;
 	char tmpstr[SMBUF];
+	int i;
+	int j;
 
 	h = r->fid->file->aux;
 
@@ -322,13 +324,29 @@ fsread(Req *r)
 		return;
 	}
 	/* Actual queue logic, ctl file and freeze mode logic is rarely used */
-	h->qrnum++;
+
 	if(h->qrnum >= MAXQ - 2){
-		msgsend(h);
-		h->qrorphans = h->qrnum - h->qrans;
-		h->qrnum = 1;
+//		msgsend(h);
+#ifdef DEBUG
+		print("\ttransferring unanswered reqs to start of queue!\n");
+#endif
+		h->qrorphans = h->qrnum - h->qrans + 1;
+		j = 1;
+		for(i = h->qrans; i <= h->qrnum; i++) {
+			h->qreqs[j] = h->qreqs[i];
+			h->rstatus[j] = h->rstatus[i];
+#ifdef DEBUG
+			print("\setting qreqs[%d] equal to qreqs[%d]\n", j, i);
+#endif
+			j++;
+		}
+		h->qrnum = h->qrorphans;
+#ifdef DEBUG
+		print("\th->qrnum set to %d\n", h->qrnum);
+#endif
 		h->qrans = 1;
 	}
+	h->qrnum++;
 	h->rstatus[h->qrnum] = WAIT;
 	h->qreqs[h->qrnum] = r;
 	msgsend(h);
