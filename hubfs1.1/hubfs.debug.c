@@ -36,7 +36,7 @@ struct Hub{
 	int rstatus[MAXQ];			/* status of read requests */
 	int qrnum;				/* index of read Reqs waiting to be filled */
 	int qrans;					/* number of read Reqs answered */
-	int qrorphans;				/* Unanswered Reqs when qreqs wraps around */
+//	int qrorphans;				/* Unanswered Reqs when qreqs wraps around */
 	Req *qwrits[MAXQ];			/* Similar for write Reqs */
 	int wstatus[MAXQ];
 	int qwnum;
@@ -330,7 +330,7 @@ fsread(Req *r)
 #ifdef DEBUG
 		print("\ttransferring unanswered reqs to start of queue!\n");
 #endif
-		h->qrorphans = h->qrnum - h->qrans + 1;
+//		h->qrorphans = h->qrnum - h->qrans + 1;
 		j = 1;
 		for(i = h->qrans; i <= h->qrnum; i++) {
 			h->qreqs[j] = h->qreqs[i];
@@ -340,7 +340,7 @@ fsread(Req *r)
 #endif
 			j++;
 		}
-		h->qrnum = h->qrorphans;
+		h->qrnum = h->qrnum - h->qrans + 1;
 #ifdef DEBUG
 		print("\th->qrnum set to %d\n", h->qrnum);
 #endif
