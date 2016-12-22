@@ -260,6 +260,25 @@ fn dogetrootfs{
 				cfs -a tcp!$fs!564 -f $cfs -z boot
 			bootsrv=/srv/boot
 		}
+	case tls
+		if(! ~ $ipdone yes){
+			ipsetup
+		}
+		if(~ $fs ''){
+			echo 'fs is [ ' $fs ' ]?'
+			getans fs $fs
+		}
+		if(~ $auth '')
+			auth=$fs
+## HACK: on terminals start new factotum that knows where to dial
+		if(~ $factotum terminal)
+			factotum -a $auth
+		echo srv $fs to /srv/boot...
+		if(~ $fs tls*)
+			srvtls $fs boot
+		if not
+			srvtls tcp!$fs!17020 boot
+		bootsrv=/srv/boot
 	case local
 		if(~ $kfs ''){
 			if(! ~ $fossil ?*){
@@ -444,6 +463,11 @@ if(~ $bootparse(1) tcp*){
 	if(! ~ $bootparse(2) '')
 		ipparams=`{shifter $bootparse}
 }
+if(~ $bootparse(1) tls*){
+	getrootfs=tls
+	if(! ~ $bootparse(2) '')
+		ipparams=`{shifter $bootparse}
+}
 if(~ $bootparse(1) srv*)
 	getrootfs=srv
 if(~ $bootparse(1) *fs){
@@ -511,7 +535,7 @@ fn startinter{
 		getans vhttplisten $vhttplisten
 	}
 	dostartventi
-	echo 'Attach to a file server? Choose local or tcp or leave blank for none.'
+	echo 'Attach to a file server? Choose local,tcp,tls or leave blank for none.'
 	getans getrootfs $getrootfs
 	if(~ $getrootfs tcp){
 		echo 'fileserver is [ ' $fs ' ]?'
@@ -520,6 +544,12 @@ fn startinter{
 		getans auth $auth
 		echo 'cfs is [ ' $cfs ' ]?'
 		getans cfs $cfs
+	}
+	if(~ $getrootfs tls){
+		echo 'fileserver is [ ' $fs ' ]?'
+		getans fs $fs
+		echo 'auth is [ ' $auth ' ]?'
+		getans auth $auth
 	}
 	if(~ $getrootfs local){
 		echo 'Dial a venti server? Enter a dialstring or ip if so.'
@@ -561,7 +591,7 @@ fn starttrad{
 	hostcheck
 	dochecksys
 	doafterfact
-	echo -n 'root is from (tcp,local)['$bootargs']: '
+	echo -n 'root is from (tcp,tls,local)['$bootargs']: '
 	bootanswer=`{read}
 	if(~ $bootanswer rc){
 		rc -i
@@ -583,9 +613,20 @@ fn starttrad{
 		if(! ~ $bootparse(2) '')
 			ipparams=`{shifter $bootparse}
 	}
+	if(~ $bootparse(1) tls*){
+		getrootfs=tls
+		if(! ~ $bootparse(2) '')
+			ipparams=`{shifter $bootparse}
+	}
 	if(~ $bootparse(1) srv*)
 		getrootfs=srv
 	if(~ $getrootfs tcp){
+		echo 'fileserver is [ ' $fs ' ]?'
+		getans fs $fs
+		echo 'auth is [ ' $auth ' ]?'
+		getans auth $auth
+	}
+	if(~ $getrootfs tls){
 		echo 'fileserver is [ ' $fs ' ]?'
 		getans fs $fs
 		echo 'auth is [ ' $auth ' ]?'
