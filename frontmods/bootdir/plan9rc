@@ -356,7 +356,6 @@ fn dorootstart{
 		if not{
 			echo no hubrc found trying defaults
 			cs
-			mntgen /n
 			import -c $hubserver / /n/$hubserver
 			mount -c /n/$hubserver/srv/gridhub /n/gridhub
 			echo 'attaching to '$hubserver' gridhub'
@@ -417,7 +416,18 @@ if(test -e /boot/bootpaq){
 	bind -a /boot /bin
 }
 
-mntgen -s slash /mnt
+# mount points
+if (test -e /bin/mntgen){
+	mntgen -s slashn /n
+	mntgen -s slashmnt /mnt
+	mntgen -s mntexport /mnt/exportfs
+}
+if (test -e /bin/chmod){
+	chmod 666 /srv/slashn
+	chmod 666 /srv/slashmnt
+	chmod 666 /srv/mntexport
+}
+
 bind /root /mnt/broot
 unmount /root
 
@@ -575,9 +585,8 @@ fn startinter{
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(! ~ $staylocal no){
-		echo starting mntgen and shell in current namespace
+		echo starting shell in current namespace
 		home=/usr/$user
-		mntgen
 		rc -i
 	}
 }
@@ -643,9 +652,8 @@ fn starttrad{
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(! ~ $staylocal no){
-		echo starting mntgen and shell in current namespace
+		echo starting shell in current namespace
 		home=/usr/$user
-		mntgen
 		rc -i
 	}
 }
@@ -668,9 +676,8 @@ fn startnonint{
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	if(! ~ $staylocal no){
-		echo starting mntgen and shell in current namespace
+		echo starting shell in current namespace
 		home=/usr/$user
-		mntgen
 		rc -i
 	}
 }
