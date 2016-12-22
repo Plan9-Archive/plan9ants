@@ -1,0 +1,29 @@
+--- /sys/src/9/pc64/pc64	Thu May  5 14:54:19 2016
++++ frontmods/pc64/pc64	Sun Dec 18 06:55:33 2016
+@@ -65,7 +65,7 @@
+ #	ethervt6105m	pci ethermii
+ #	ethersink
+ #	ethersmc	devi82365 cis
+-	etheryuk	pci
++#	etheryuk	pci
+ #	etherwavelan	wavelan devi82365 cis pci
+ 	etheriwl	pci wifi
+ 	etherwpi	pci wifi
+@@ -145,6 +145,16 @@
+ 
+ bootdir
+ 	/$objtype/bin/paqfs
+-	/$objtype/bin/auth/factotum
+ 	bootfs.paq
+ 	boot
++	/amd64/bin/bind
++	/amd64/bin/mount
++	/amd64/bin/read
++	/amd64/bin/cat
++	/amd64/bin/echo
++	/amd64/bin/test
++	/n/rootless/bootdir.extras/rc
++	/n/rootless/bootdir.extras/rcmain
++	/n/rootless/bootdir.extras/factotum
++	/n/rootless/bootdir.extras/bootpaq
++	/n/rootless/bootdir.extras/plan9rc
