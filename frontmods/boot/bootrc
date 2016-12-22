@@ -4,7 +4,11 @@ if(~ $#rootdir 0)
 	rootdir=/root
 objtype=`{cat /env/cputype}
 
-mntgen -s slash /mnt
+# mount points
+mntgen -s slashn /n && chmod 666 /srv/slashn
+mntgen -s slashmnt /mnt && chmod 666 /srv/slashmnt
+mntgen -s mntexport /mnt/exportfs && chmod 666 /srv/mntexport
+
 bind /root /mnt/broot
 unmount /root
 
@@ -188,7 +192,7 @@ fn main{
 		if(~ $#nobootprompt 0){
 			echo
 			showlocaldevs
-			ask bootargs ' is (tcp, il, local!device)' $"bootargs
+			ask bootargs ' is (tcp, tls, il, local!device)' $"bootargs
 		}
 		if not bootargs=$nobootprompt
 		nobootprompt=()
@@ -300,12 +304,6 @@ if(test -x /bin/aux/kbdfs){
 if(test -x /bin/nusbrc && ! test -e /env/nousbrc)
 	nusbrc
 
-# wait for devices to settle down
-if(~ $#usbwait 1)
-	sleep $usbwait
-if(~ $#usbwait 0)
-	sleep 2
-
 # load boot methods
 fn showlocaldevs {}
 fn configlocal {}
@@ -360,5 +358,5 @@ while(){
 
 	# cleanup so it can be restarted
 	nobootprompt=()
-	rm -f /srv/^(cfs boot slashn cs dns)
+	rm -f /srv/^(cfs boot cs dns)
 } </dev/cons
