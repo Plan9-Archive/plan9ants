@@ -243,9 +243,7 @@ if(~ $1 vultrfossil){
 	build portsinstall
 	cd cfg
 	cat vultdisk |disk/prep /dev/sdF0/plan9
-#	hget http://files.9gridchan.org/fossil.tgz >>/root/386/bin/fossil.tgz
-#	cd /root/386/bin
-#	tar xzf fossil.tgz
+	cd $builddir
 	if (! test -e /mnt/web/ctl)
 		webfs
 	hg clone https://bitbucket.org/mycroftiv/fossiloventi
