@@ -1,6 +1,6 @@
---- /sys/src/9/port/devproc.c	Wed Jan  6 02:58:38 2016
-+++ devproc.c	Thu Apr 28 17:41:09 2016
-@@ -89,7 +89,7 @@
+--- /sys/src/9/port/devproc.c	Fri Sep 16 21:22:24 2016
++++ devproc.c	Sun Dec 25 06:19:41 2016
+@@ -91,7 +91,7 @@
  	"note",		{Qnote},	0,			0000,
  	"noteid",	{Qnoteid},	0,			0664,
  	"notepg",	{Qnotepg},	0,			0000,
@@ -9,7 +9,7 @@
  	"ppid",		{Qppid},	0,			0444,
  	"proc",		{Qproc},	0,			0400,
  	"regs",		{Qregs},	sizeof(Ureg),		0000,
-@@ -152,10 +152,12 @@
+@@ -154,10 +154,12 @@
  #define	NOTEID(q)	((q).vers)
  
  void	procctlreq(Proc*, char*, int);
@@ -22,16 +22,7 @@
  
  static Traceevent *tevents;
  static Lock tlock;
-@@ -163,6 +165,8 @@
- static int tproduced, tconsumed;
- void (*proctrace)(Proc*, int, vlong);
- 
-+extern int unfair;
-+
- static void
- profclock(Ureg *ur, Timer *)
- {
-@@ -179,6 +183,186 @@
+@@ -181,6 +183,186 @@
  	}
  }
  
@@ -218,7 +209,7 @@
  static int
  procgen(Chan *c, char *name, Dirtab *tab, int, int s, Dir *dp)
  {
-@@ -398,6 +582,10 @@
+@@ -400,6 +582,10 @@
  	case Qsegment:
  	case Qprofile:
  	case Qns:
@@ -229,7 +220,7 @@
  	case Qfd:
  		if(omode != OREAD)
  			error(Eperm);
-@@ -1036,7 +1224,8 @@
+@@ -1037,7 +1223,8 @@
  
  	eqlock(&p->debug);
  	if(waserror()){
@@ -239,7 +230,7 @@
  		nexterror();
  	}
  	if(p->pid != PID(c->qid))
-@@ -1124,12 +1313,20 @@
+@@ -1125,12 +1312,20 @@
  		if(p->noteid != id)
  			error(Ebadarg);
  		break;
@@ -261,7 +252,7 @@
  	return n;
  }
  
-@@ -1540,4 +1737,242 @@
+@@ -1541,4 +1736,242 @@
  		p->newtlb = 1;
  
  	return n;

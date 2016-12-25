@@ -1,14 +1,5 @@
 --- /sys/src/9/port/chan.c	Thu Apr  7 18:45:07 2016
-+++ chan.c	Thu Apr 28 17:41:09 2016
-@@ -520,7 +520,7 @@
- 		return;
- 
- 	if(devtab[c->type]->dc == L'M')
--	if((c->flag&COPEN) == 0 || (c->flag&(CRCLOSE|CCACHE)) == CCACHE)
-+	if((c->flag&(CRCLOSE|CCACHE)) == CCACHE)
- 	if((c->qid.type&(QTEXCL|QTMOUNT|QTAUTH)) == 0)
- 	if((clunkq.nqueued - clunkq.nclosed) < 64){
- 		closechanq(c);
++++ chan.c	Sun Dec 25 05:52:10 2016
 @@ -753,6 +753,128 @@
  	return nm->mountid;
  }
@@ -288,7 +279,7 @@
  /*
   * If c is the right-hand-side of a mount point, returns the left hand side.
   * Changes name to reflect the fact that we've uncrossed the mountpoint,
-@@ -1112,33 +1363,204 @@
+@@ -1112,50 +1363,221 @@
  	return 0;
  }
  
@@ -307,7 +298,17 @@
 +	Mhead *mh, *nmh;
  	Mount *f;
 +	Walkqid *wq;
-+
+ 
+-	rlock(&m->lock);
+-	if(waserror()){
+-		runlock(&m->lock);
+-		nexterror();
+-	}
+-	for(f = m->mount; f != nil; f = f->next){
+-		if((f->mflag&MCREATE) != 0){
+-			nc = cclone(f->to);
+-			runlock(&m->lock);
+-			poperror();
 +	c = *cp;
 +	incref(c);
 +	path = c->path;
@@ -333,7 +334,8 @@
 +			if(nerror)
 +				*nerror = nhave;
 +			pathclose(path);
-+			cclose(c);
+ 			cclose(c);
+-			return nc;
 +			strcpy(up->errstr, Enotdir);
 +			if(mh != nil)
 +				putmhead(mh);
@@ -352,14 +354,34 @@
 +					ntry = i;
 +				break;
 +			}
-+		}
-+
+ 		}
+-	}
+-	error(Enocreate);
+-	return 0;
+-}
+-
+-void
+-saveregisters(void)
+-{
+-}
+ 
+-static void
+-growparse(Elemlist *e)
+-{
+-	char **new;
+-	int *inew;
+-	enum { Delta = 8 };
 +		if(!dotdot && !nomount && !didmount)
 +			pdomount(&c, &mh, &path, targp);
 +		
 +		type = c->type;
 +		dev = c->dev;
-+
+ 
+-	if((e->nelems % Delta) == 0){
+-		new = smalloc((e->nelems+Delta) * sizeof(char*));
+-		memmove(new, e->elems, e->nelems*sizeof(char*));
+-		free(e->elems);
+-		e->elems = new;
 +		if((wq = ewalk(c, nil, names+nhave, ntry)) == nil){
 +			/* try a union mount, if any */
 +			if(mh && !nomount){
@@ -495,28 +517,27 @@
 +	error(Enocreate);
 +	return 0;
 +}
- 
--	rlock(&m->lock);
--	if(waserror()){
--		runlock(&m->lock);
--		nexterror();
--	}
--	for(f = m->mount; f != nil; f = f->next){
--		if((f->mflag&MCREATE) != 0){
--			nc = cclone(f->to);
--			runlock(&m->lock);
--			poperror();
--			cclose(c);
--			return nc;
--		}
--	}
--	error(Enocreate);
--	return 0;
--}
--
- void
- saveregisters(void)
- {
++
++void
++saveregisters(void)
++{
++}
++
++static void
++growparse(Elemlist *e)
++{
++	char **new;
++	int *inew;
++	enum { Delta = 8 };
++
++	if((e->nelems % Delta) == 0){
++		new = smalloc((e->nelems+Delta) * sizeof(char*));
++		memmove(new, e->elems, e->nelems*sizeof(char*));
++		free(e->elems);
++		e->elems = new;
+ 		inew = smalloc((e->nelems+Delta+1) * sizeof(int));
+ 		memmove(inew, e->off, (e->nelems+1)*sizeof(int));
+ 		free(e->off);
 @@ -1622,6 +2044,354 @@
  
  	return c;

@@ -8,7 +8,8 @@
 #include	"../port/error.h"
 #include	"ureg.h"
 #include	"edf.h"
-#include	"pool.h"
+
+#include	<pool.h>
 
 enum
 {
