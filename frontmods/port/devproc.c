@@ -584,7 +584,8 @@ procopen(Chan *c, int omode)
 	case Qns:
 		if((omode != OREAD) && (p->privatemem))
 			error(Eperm);
-		nonone(p);
+		if(omode != OREAD)
+			nonone(p);
 		break;
 
 	case Qfd:
