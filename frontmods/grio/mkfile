@@ -1,7 +1,7 @@
 </$objtype/mkfile
 BIN=/$objtype/bin
 
-TARG=rio
+TARG=grio
 OFILES=\
 	rio.$O\
 	data.$O\

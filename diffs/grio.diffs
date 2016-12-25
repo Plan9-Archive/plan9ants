@@ -66,6 +66,18 @@ diff -Nurp /sys/src/cmd/rio/data.c grio/data.c
  	} else {
  		cols[HIGH] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DPurpleblue);
  		titlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DPurpleblue);
+diff -Nurp /sys/src/cmd/rio/mkfile grio/mkfile
+--- /sys/src/cmd/rio/mkfile	Wed Jan 18 00:12:54 2012
++++ grio/mkfile	Sun Dec 25 08:18:54 2016
+@@ -1,7 +1,7 @@
+ </$objtype/mkfile
+ BIN=/$objtype/bin
+ 
+-TARG=rio
++TARG=grio
+ OFILES=\
+ 	rio.$O\
+ 	data.$O\
 diff -Nurp /sys/src/cmd/rio/rio.c grio/rio.c
 --- /sys/src/cmd/rio/rio.c	Sun Dec 25 06:59:38 2016
 +++ grio/rio.c	Sun Dec 25 07:23:06 2016
