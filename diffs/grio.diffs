@@ -21,8 +21,8 @@ diff -Nurp /sys/src/cmd/rio/README grio/README
 +
 +in the initial hubfs shell
 diff -Nurp /sys/src/cmd/rio/dat.h grio/dat.h
---- /sys/src/cmd/rio/dat.h	Sun Dec 25 06:48:50 2016
-+++ grio/dat.h	Fri Dec 23 16:30:09 2016
+--- /sys/src/cmd/rio/dat.h	Sun Dec 25 06:59:38 2016
++++ grio/dat.h	Sun Dec 25 07:23:05 2016
 @@ -43,7 +43,7 @@ typedef	struct	Xfid Xfid;
  
  enum
@@ -40,9 +40,9 @@ diff -Nurp /sys/src/cmd/rio/dat.h grio/dat.h
 +ulong	bgtrans;
 +ulong	borderactivecolor;
 +ulong	borderbgcolor;
- int		winborder(Window*, Point);
  void		winctl(void*);
  void		winshell(void*);
+ Window*	wlookid(int);
 diff -Nurp /sys/src/cmd/rio/data.c grio/data.c
 --- /sys/src/cmd/rio/data.c	Sat Nov 23 21:21:19 2013
 +++ grio/data.c	Fri Dec 23 16:30:09 2016
@@ -67,8 +67,8 @@ diff -Nurp /sys/src/cmd/rio/data.c grio/data.c
  		cols[HIGH] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DPurpleblue);
  		titlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DPurpleblue);
 diff -Nurp /sys/src/cmd/rio/rio.c grio/rio.c
---- /sys/src/cmd/rio/rio.c	Sun Dec 25 06:48:50 2016
-+++ grio/rio.c	Fri Dec 23 16:30:09 2016
+--- /sys/src/cmd/rio/rio.c	Sun Dec 25 06:59:38 2016
++++ grio/rio.c	Sun Dec 25 07:23:06 2016
 @@ -45,9 +45,13 @@ Channel* initkbd(void);
  
  char		*fontname;
@@ -101,7 +101,7 @@ diff -Nurp /sys/src/cmd/rio/rio.c grio/rio.c
  
  int errorshouldabort = 0;
  
-@@ -113,23 +121,47 @@ derror(Display*, char *errorstr)
+@@ -113,22 +121,48 @@ derror(Display*, char *errorstr)
  void
  usage(void)
  {
@@ -115,23 +115,23 @@ diff -Nurp /sys/src/cmd/rio/rio.c grio/rio.c
  {
 -	char *initstr, *kbdin, *s;
 +	char *initstr, *kbdin, *s, *usercol, *borderwidth, *bacolor, *bbcolor;
- 	static void *arg[1];
  	char buf[256];
  	Image *i;
  	Rectangle r;
--
 +	bgtrans = 0x777777FF;
 +	Selborder = 4;
 +	borderactivecolor = DGreygreen;
 +	borderbgcolor = DPalegreygreen;
 +	char mountstr[512] = "/srv/riohubfs.";
 +	char hubstr[512]= "riohubfs.";
+ 
 +/*
  	if(strstr(argv[0], ".out") == nil){
  		menu3str[Exit] = nil;
  		Hidden--;
  	}
 +*/
++
 +	strcat(hubstr, getenv("user"));
 +	strcat(mountstr, getenv("user"));
 +	if(access("/n/hubfs/io0", 0) != 0){
@@ -152,7 +152,7 @@ diff -Nurp /sys/src/cmd/rio/rio.c grio/rio.c
  	initstr = nil;
  	kbdin = nil;
  	maxtab = 0;
-@@ -154,6 +186,43 @@ threadmain(int argc, char *argv[])
+@@ -153,6 +187,43 @@ threadmain(int argc, char *argv[])
  	case 'D':
  		debug++;
  		break;
@@ -196,23 +196,24 @@ diff -Nurp /sys/src/cmd/rio/rio.c grio/rio.c
  	default:
  		usage();
  	}ARGEND
-@@ -726,12 +795,19 @@ button3menu(void)
+@@ -744,6 +815,7 @@ button3menu(void)
  		free(menu3str[i]);
  		menu3str[i] = nil;
  	}
 +	menu3str[Altc] = altargv[0];
- 	sweeping = 1;
+ 	sweeping = TRUE;
  	switch(i = menuhit(3, mousectl, &menu3, wscreen)){
  	case -1:
- 		break;
+@@ -751,6 +823,12 @@ button3menu(void)
  	case New:
  		new(sweep(), FALSE, scrolling, 0, nil, "/bin/rc", nil);
-+		break;
+ 		break;
 +	case Hub:
 +		new(sweep(), FALSE, scrolling, 0, nil, "/bin/hubshell", hubargv);
 +		break;
 +	case Altc:
 +		new(sweep(), FALSE, scrolling, 0, nil, altcmd, altargv);
- 		break;
++ 		break;
  	case Reshape:
  		resize();
+ 		break;
