@@ -8,6 +8,7 @@
 #include	"../port/error.h"
 #include	"ureg.h"
 #include	"edf.h"
+#include	"pool.h"
 
 enum
 {
@@ -164,8 +165,6 @@ static Lock tlock;
 static int topens;
 static int tproduced, tconsumed;
 void (*proctrace)(Proc*, int, vlong);
-
-extern int unfair;
 
 static void
 profclock(Ureg *ur, Timer *)
@@ -904,7 +903,7 @@ procread(Chan *c, void *va, long n, vlong off)
 {
 	char *a, *sps, statbuf[1024];
 	int i, j, navail, ne, rsize;
-	long l;
+	ulong l;
 	uchar *rptr;
 	uintptr addr;
 	ulong offset;
@@ -977,7 +976,7 @@ procread(Chan *c, void *va, long n, vlong off)
 		if(addr < KZERO)
 			return procctlmemio(c, p, addr, va, n, 1);
 
-		if(!iseve())
+		if(!iseve() || poolisoverlap(secrmem, (uchar*)addr, n))
 			error(Eperm);
 
 		/* validate kernel addresses */
@@ -1091,8 +1090,7 @@ procread(Chan *c, void *va, long n, vlong off)
 			l = p->time[i];
 			if(i == TReal)
 				l = MACHP(0)->ticks - l;
-			l = TK2MS(l);
-			readnum(0, statbuf+j+NUMSIZE*i, NUMSIZE, l, NUMSIZE);
+			readnum(0, statbuf+j+NUMSIZE*i, NUMSIZE, tk2ms(l), NUMSIZE);
 		}
 
 		readnum(0, statbuf+j+NUMSIZE*6, NUMSIZE, procpagecount(p)*BY2PG/1024, NUMSIZE);
