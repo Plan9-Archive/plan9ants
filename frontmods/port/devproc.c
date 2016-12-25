@@ -584,8 +584,6 @@ procopen(Chan *c, int omode)
 	case Qns:
 		if((omode != OREAD) && (p->privatemem))
 			error(Eperm);
-		if(omode != OREAD)
-			nonone(p);
 		break;
 
 	case Qfd:
@@ -1318,6 +1316,7 @@ procwrite(Chan *c, void *va, long n, vlong off)
 //		print("procnsreq on p, %s, %ld\n", a, n);
 		if(p->debug.locked == 1)
 			qunlock(&p->debug);
+		nonone(p);
 		procnsreq(p, va, n);
 		break;
 
