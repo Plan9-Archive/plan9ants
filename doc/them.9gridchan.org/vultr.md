@@ -1,7 +1,7 @@
 # Walkthrough for installing 9front-ANTS on Vultr
 ### Walkthrough done with 768mb ram image size
 
-Create a Vultr account if you do not have one, and upload a copy of the current 9front iso. A working copy of a 9front iso can be found at http://files.9gridchan.org/9front.iso. Choose to enable a private ip. Make sure the size (smallest is good) and location are correct, and that the 9front iso is attached. Deploy!
+Create a Vultr account if you do not have one, and upload a copy of the current 9front iso. A working copy of a 9front release iso (revision 5641 from 25 December 2016) can be found at http://files.9gridchan.org/9front5641.iso. Choose to enable a private ip. Make sure the size (smallest is good) and location are correct, and that the 9front iso is attached. Deploy!
 
 ##	Manage the vm and install through the graphical console interface ##
 
@@ -29,7 +29,7 @@ Remove the iso from the virtual machine, reboot the fresh install, and clone the
 	hg clone https://bitbucket.org/mycroftiv/plan9ants
 	cd plan9ants
 
-You probably want to set the rio window to 'scroll' mode. Now we will install ANTS. The command depends on whether you chose to make a small hjfs partition to allow room for fossil+venti, or will be using hjfs only. For a fossil+venti full ANTS system:
+You probably want to set the rio window to 'scroll' mode. Now we will install ANTS. The command depends on whether you chose to make a small hjfs partition to allow room for fossil+venti, or will be using hjfs only. For a fossil+venti full ANTS system (requires the special partitioning during install shown above):
 
 	build vultrfossil
 
