@@ -10,7 +10,7 @@ if (! test -e /dev/mordor){
 	exit ''
 }
 
-# rest of the script is a simplified copied of 9front screenrc
+# rest of the script is mostly copied from 9front screenrc
 
 fn ask {
 	if(~ $"$1 ask){

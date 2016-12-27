@@ -32,6 +32,50 @@ fn getans{
 	}
 }
 
+fn cleanenv {
+	rm /env/bootargs
+	rm /env/bootcmd
+	rm /env/bootfile
+	rm /env/bootparse
+	rm /env/bootpartition
+	rm /env/cpuport
+	rm /env/factotum
+	rm /env/factotumopts
+	rm '/env/fn#doafterfact'
+	rm '/env/fn#doafterroot'
+	rm '/env/fn#dochecksys'
+	rm '/env/fn#dofactotum'
+	rm '/env/fn#dogetrootfs'
+	rm '/env/fn#doinitscript'
+	rm '/env/fn#doramsetup'
+	rm '/env/fn#dostartventi'
+	rm '/env/fn#dotryusb'
+	rm '/env/fn#findpart'
+	rm '/env/fn#getans'
+	rm '/env/fn#hostcheck'
+	rm '/env/fn#ipsetup'
+	rm '/env/fn#shifter'
+	rm '/env/fn#startinter'
+	rm '/env/fn#startnonint'
+	rm '/env/fn#starttrad'
+	rm /env/getrootfs
+	rm /env/hostdir
+	rm /env/hosttest
+	rm /env/initscript
+	rm /env/interactive
+	rm /env/ipdone
+	rm /env/ramsetup
+	rm /env/startventi
+	rm /env/systest
+	rm /env/tgzfs
+	rm /env/usercheck
+	rm /env/venticonf
+	rm /env/ventilisten
+	rm /env/ventiparse
+	rm /env/vhttplisten
+	rm /env/cleanenv
+}
+
 ##	ENVIRONMENT CHECKING FUNCTIONS ##
 
 fn findpart{
@@ -185,6 +229,7 @@ fn doafterfact{
 			if(~ $keyowner '')
 				keyowner=$user
 			echo 'key proto=dp9ik dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
+			rm '#ec/privpassword'
 			rm /env/privpassword
 			rm /env/passdom
 			rm /env/keyowner
@@ -589,6 +634,7 @@ fn startinter{
 	getans staylocal $staylocal
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
+	cleanenv >[2] /dev/null
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user
@@ -656,6 +702,7 @@ fn starttrad{
 #	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
+	cleanenv >[2] /dev/null
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user
@@ -680,6 +727,7 @@ fn startnonint{
 #	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
+	cleanenv >[2] /dev/null
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user
