@@ -55,9 +55,6 @@ fn cleanenv {
 	rm '/env/fn#hostcheck'
 	rm '/env/fn#ipsetup'
 	rm '/env/fn#shifter'
-	rm '/env/fn#startinter'
-	rm '/env/fn#startnonint'
-	rm '/env/fn#starttrad'
 	rm /env/getrootfs
 	rm /env/hostdir
 	rm /env/hosttest
@@ -628,13 +625,13 @@ fn startinter{
 	doinitscript
 	echo 'Start cpurc termrc from the file server? Enter cpu or terminal if so.'
 	getans rootstart $rootstart
+	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
+	save9cfg
+	cleanenv >[2] /dev/null
 	dorootstart
 	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'Keep console in ramboot namespace? yes if so.'
 	getans staylocal $staylocal
-	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
-	save9cfg
-	cleanenv >[2] /dev/null
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user
@@ -698,11 +695,11 @@ fn starttrad{
 	interactive=traditional
 	doafterroot
 	doinitscript
-	dorootstart
-#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	cleanenv >[2] /dev/null
+	dorootstart
+#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user
@@ -723,11 +720,11 @@ fn startnonint{
 	dogetrootfs
 	doafterroot
 	doinitscript
-	dorootstart
-#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'storing startup configuration to ramdisk in /usr/'$user'/tmp/p9cfg'
 	save9cfg
 	cleanenv >[2] /dev/null
+	dorootstart
+#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user

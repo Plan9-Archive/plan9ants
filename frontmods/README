@@ -44,4 +44,7 @@ home=/usr/$user; cd; . $home/lib/profile
 
 this is necessary to make sure the user on the terminal stays in the
 namespace created by the termrc on top of the ants service namespace
-accessible via cpu or through the hubfs,
+accessible via cpu or through the hubfs.
+
+note for drawterm into the service namespace: use the -B flag
+
