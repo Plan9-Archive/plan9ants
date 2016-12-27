@@ -30,6 +30,9 @@ fn ask {
 	}
 }
 
+if(! test -e /dev/vgactl)
+	bind -a '#v' /dev
+
 if(test -f /dev/vgactl){
 	ask vgasize ' is (text, 640x480x8, 1024x768x16, ...)' 1024x768x16
 	if(! ~ $"vgasize '' text none){
@@ -61,4 +64,5 @@ if(test -f /dev/mousectl && test -f /dev/winname){
 
 rm -f '/env/fn#ask'
 
+font=/lib/font/bit/lucm/unicode.9.font
 grio -s -w 2 -y 0 -c 0xffaaaaff

@@ -116,7 +116,7 @@ fn doramsetup{
 		rc -c $ramsetup
 		if (test -e /srv/ramboot) {
 			mount -c /srv/ramboot /mnt/rboot
-			bind -ac /mnt/ramboot/lib /lib
+			bind -ac /mnt/rboot/lib /lib
 		}
 		echo 'timezone...'
 		timezone=`{cat /adm/timezone/local}
