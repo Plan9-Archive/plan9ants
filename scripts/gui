@@ -1,9 +1,64 @@
 #!/bin/rc
 # start gui in rootless environment
 
-bind -b '#P' /dev
-bind -b '#m' /dev
-mouse $mouseport
-vga -m vesa -l 1024x768x24
-grio
-exit ''
+if (! test -e /dev/mordor){
+	bind -b '#P' /dev
+	bind -b '#m' /dev
+	mouse $mouseport
+	vga -m vesa -l 1024x768x24
+	grio
+	exit ''
+}
+
+# rest of the script is a simplified copied of 9front screenrc
+
+fn ask {
+	if(~ $"$1 ask){
+		echo -n $1
+		echo -n $2
+		echo -n ' ['
+		echo -n $3
+		echo -n '] '
+		$1=`{read}
+		if(~ $"$1 '!rc'){
+			rc -i
+			$1=ask
+		}
+		if(~ $#$1 0)
+			$1=$3
+		ask $*
+	}
+}
+
+if(test -f /dev/vgactl){
+	ask vgasize ' is (text, 640x480x8, 1024x768x16, ...)' 1024x768x16
+	if(! ~ $"vgasize '' text none){
+		ask monitor ' is (vesa, xga, lcd, ...)' vesa
+		if(! ~ $"monitor ''){
+			@{
+				rfork n
+				if(~ $monitor vesa)
+					realemu
+				vga -l $vgasize
+			}
+		}
+	}
+}
+
+if(! test -d /dev/draw)
+	bind -a '#i' /dev
+
+if(! test -f /dev/mouse)
+	bind -a '#m' /dev
+
+if(test -f /dev/mousectl && test -f /dev/winname){
+	ask mouseport ' is (ps2, ps2intellimouse, 0, 1, 2)' ps2
+	switch($mouseport){
+	case ps2 ps2intellimouse 0 1 2
+		aux/mouse $mouseport
+	}
+}
+
+rm -f '/env/fn#ask'
+
+grio -s -w 2 -y 0 -c 0xffaaaaff
