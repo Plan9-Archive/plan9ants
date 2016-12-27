@@ -16,6 +16,7 @@ echo -n 'ramfs -S ramboot...'
 ramfs -S ramboot
 mount -c /srv/ramboot /root
 bind -ac /root /
+bind -ac /root/lib /lib
 echo -n 'tar xf /boot/skel.tar...'
 tar xf /boot/skel.tar
 if (test -d /root/mnt)

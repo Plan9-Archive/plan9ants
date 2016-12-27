@@ -397,6 +397,7 @@ fn dorootstart{
 
 echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
 
+bind -q '#d' /fd
 bind -q '#p' /proc
 for(i in S f k æ t b m)
 	bind -qa '#'^$i /dev

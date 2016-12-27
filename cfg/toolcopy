@@ -22,18 +22,18 @@ cp /$objtype/bin/auth/secstore .
 #cp /$objtype/bin/usb/usbd .
 #cp /$objtype/bin/dossrv .
 cp /$objtype/bin/9660srv .
-cp /$objtype/bin/usb/disk usbdisk
+#cp /$objtype/bin/usb/disk usbdisk
 
 ## fileserver and disk admin tools
 cp /$objtype/bin/disk/fdisk .
 cp /$objtype/bin/disk/format .
-cp /$objtype/bin/disk/kfscmd .
+#cp /$objtype/bin/disk/kfscmd .
 cp /$objtype/bin/disk/mkfs .
 cp /$objtype/bin/disk/prep .
 cp /$objtype/bin/fossil/flfmt .
 cp /$objtype/bin/fossil/last fossilast
 cp /$objtype/bin/venti/rdarena .
-cp /$objtype/bin/venti/sync ventisync
+cp /$objtype/bin/venti/sync sync
 cp /$objtype/bin/venti/syncindex .
 cp /$objtype/bin/venti/wrarena .
 #cp /$objtype/bin/venti/checkarenas .
@@ -56,13 +56,14 @@ cp /rc/bin/hget .
 cp /$objtype/bin/import .
 cp /$objtype/bin/vac .
 cp /$objtype/bin/vacfs .
-cp /$objtype/bin/netssh .
-cp /$objtype/bin/ssh .
-cp /$objtype/bin/scp .
+#cp /$objtype/bin/netssh .
+#cp /$objtype/bin/ssh .
+#cp /$objtype/bin/scp .
 cp /$objtype/bin/telnet .
 cp /$objtype/bin/ip/telnetd .
 cp /$objtype/bin/vncs .
 cp /$objtype/bin/vncv .
+#cp /$objtype/bin/webfs .
 #cp /$objtype/bin/ip/ftpd .
 #cp /$objtype/bin/aquarela .
 #cp /$objtype/bin/ip/httpd .
@@ -117,8 +118,8 @@ cp /$objtype/bin/fortune .
 cp /$objtype/bin/htmlfmt .
 cp /$objtype/bin/sha1sum .
 cp /$objtype/bin/syscall .
-cp /$objtype/bin/topng .
-cp /$objtype/bin/vt .
+#cp /$objtype/bin/topng .
+#cp /$objtype/bin/vt .
 #cp /$objtype/bin/db .
 #cp /$objtype/bin/plumb .
 #cp /$objtype/bin/plumber .
@@ -130,6 +131,7 @@ cp /$objtype/bin/vt .
 ## auxilliary utilities
 cp /$objtype/bin/aux/stub .
 cp /$objtype/bin/aux/mouse .
+cp /$objtype/bin/aux/realemu .
 cp /$objtype/bin/aux/vga .
 cp /$objtype/bin/aux/zerotrunc .
 #cp /$objtype/bin/aux/timesync .

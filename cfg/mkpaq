@@ -27,7 +27,7 @@ cp /n/rootless/bootdir.extras/skel.tar .
 cp /$objtype/bin/dossrv .
 cp /$objtype/bin/fossil/fossil .
 cp /$objtype/bin/venti/venti .
-cp /$objtype/bin/disk/kfs .
+#cp /$objtype/bin/disk/kfs .
 cp /$objtype/bin/cfs .
 #	shell tools used by namespace scripts etc
 cp /$objtype/bin/ls .
