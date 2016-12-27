@@ -147,12 +147,12 @@ bootdir
 	/$objtype/bin/paqfs
 	bootfs.paq
 	boot
-	/amd64/bin/bind
-	/amd64/bin/mount
-	/amd64/bin/read
-	/amd64/bin/cat
-	/amd64/bin/echo
-	/amd64/bin/test
+	/$objtype/bin/bind
+	/$objtype/bin/mount
+	/$objtype/bin/read
+	/$objtype/bin/cat
+	/$objtype/bin/echo
+	/$objtype/bin/test
 	/n/rootless/bootdir.extras/rc
 	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/factotum
