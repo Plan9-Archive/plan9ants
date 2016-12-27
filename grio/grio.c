@@ -119,7 +119,7 @@ derror(Display*, char *errorstr)
 void
 usage(void)
 {
-	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-b borderwidth] [-y bordercolor1] [-z bordercolor2] [-f font] [-i initcmd] [-k kbdcmd] [-s]\n");
+	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-y bordercolor1] [-z bordercolor2] [-f font] [-i initcmd] [-k kbdcmd] [-s]\n");
 	exits("usage");
 }
 
@@ -194,7 +194,7 @@ threadmain(int argc, char *argv[])
  			usage();
 		bgtrans = strtoul(usercol,0,0);
 		break;
-	case 'b':
+	case 'w':
 		borderwidth = ARGF();
 		if (borderwidth == nil)
  			usage();

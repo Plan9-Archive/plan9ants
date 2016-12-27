@@ -31,7 +31,7 @@ case cpu
 #		font=/lib/font/bit/pelm/latin1.8.font
 #		plumber
 #		auth/factotum
-		exec grio -b 2 -c 0xbbccddff -s -x /boot/grio -a -s
+		exec grio -w 2 -c 0xbbccddff -s -x /boot/grio -a -s
 	}
 case con
 	prompt=('cpu% ' '	')
