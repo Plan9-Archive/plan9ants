@@ -1,7 +1,5 @@
 The ants bootpaq should probably be integrated with the 9front boot paqfs, with a standard organization. This would be more space efficient, and would solve a few different issues, such as eliminating the need for the one-line customization of rc to use /boot/rcmain rather than /rc/lib/rcmain. This will require careful analysis of the existing boot scripts, which are written to look for a lot of things in /boot.
 
-Unless I'm missing something, there is no reason to have separate copies of the mkpaq and toolcopy scripts for the amd64 build. Everything should just be parameterized by $objtype. There's no reason we shouldn't be able to build on other arches than 386/amd64.
-
 When trying to secure the service namespace against failures of the main environment, the mount of cs in the default /lib/namespace file is problematic. Even when using factotum -x, new processes started by cpu and import will try to mount /srv/cs and freeze. The /lib/namespace file used by the early environment is stored in ramdisk so removing the mount of cs (and dns?) will prevent frozen logins via cpu.
 
 the -m parameter is not passed to hjfs when plan9rc is the boot script
@@ -9,8 +7,6 @@ the -m parameter is not passed to hjfs when plan9rc is the boot script
 the partition and filesystem detection logic in plan9rc should be improved
 
 similarly the install scripts should autodetect partition locations and edit plan9.ini files accordingly
-
-there is a namespace/file conflict between /lib of the 9front bootfs and /lib from the ramfs skeleton. trying to run cs in the early 9front environment will complain that /lib/ndb/local does not exist.
 
 ventiprog should be more careful about not replacing the wrcmd with bad information
 
@@ -41,3 +37,8 @@ similarly, why are some binaries non-executable via vacfs? (both seem to be rela
 
 what is needed to get any ssh client other than openssh working?
 
+============= Resolved: ===============
+
+Unless I'm missing something, there is no reason to have separate copies of the mkpaq and toolcopy scripts for the amd64 build. Everything should just be parameterized by $objtype. There's no reason we shouldn't be able to build on other arches than 386/amd64. Fixed in ANTS2.6
+
+there is a namespace/file conflict between /lib of the 9front bootfs and /lib from the ramfs skeleton. trying to run cs in the early 9front environment will complain that /lib/ndb/local does not exist. Fixed in ANTS2.6
