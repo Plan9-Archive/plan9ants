@@ -141,7 +141,7 @@ fn ants{
 	if(~ $tgzfs *.tgz){
 		dossrv
 		if(~ $fatpath '')
-			fatpath=/dev/sdC0/9fat
+			fatpath=`{ls /dev/sd*/9fat}
 		if(! test -d /x)
 			mkdir /root/x
 		mount /srv/dos /x $fatpath

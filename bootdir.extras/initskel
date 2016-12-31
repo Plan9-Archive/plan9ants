@@ -133,7 +133,7 @@ if(! ~ $hubsvc no){
 
 if(! ~ $cpusvc no){
 	if(~ $cpuport '')
-		cpuport=17020
+		cpuport=17060
 	echo 'listen1 '$cpuport' cpu 17027 exportfs rexexec...'
 	listen1 -t tcp!*!$cpuport /boot/cpu -R &
 	listen1 -t tcp!*!17027 /bin/exportfs -a &

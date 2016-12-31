@@ -301,7 +301,7 @@ listener. Set no to disable this.
 .B cpuport
 this sets the numeric port used for the 
 .IR cpu (1)
-listener. It is set to [17020] by default to avoid conflict with the host system 
+listener. It is set to [17060] by default to avoid conflict with the host system 
 .IR cpu (1)
 listener.
 .TP

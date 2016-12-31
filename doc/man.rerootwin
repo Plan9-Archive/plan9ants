@@ -91,7 +91,7 @@ commands to reattach to the saved devices.
 To enter a fossil-root namespace from within a rootless service namespace:
 .IP
 .EX
-cpu -h tcp!fileserver!17020 -u bootes
+cpu -h tcp!fileserver!17060 -u bootes
 rerootwin boot
 grio
 .EE
