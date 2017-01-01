@@ -93,6 +93,14 @@ fn findpart{
 			echo /dev/sdD0/$1
 		if(~ $bootparse(1) *sdD1/$1)
 			echo /dev/sdD1/$1
+		if(~ $bootparse(1) *sdE0/$1)
+			echo /dev/sdE0/$1
+		if(~ $bootparse(1) *sdE1/$1)
+			echo /dev/sdE1/$1
+		if(~ $bootparse(1) *sdF0/$1)
+			echo /dev/sdF0/$1
+		if(~ $bootparse(1) *sdF1/$1)
+			echo /dev/sdF1/$1
 		if(~ $bootparse(1) *sdXX/$1)
 			echo /dev/sdXX/$1
 	}
@@ -260,6 +268,10 @@ fn dogetrootfs{
 			echo 'no bootpartition found, trying /dev/sdC0/fs as default'
 			bootpartition=/dev/sdC0/fs
 		}
+		if (! test -e $bootpartition)
+			bootpartition=`{ls /dev/sd*/fs}
+		if (~ $bootpartition '')
+			bootpartition=FAIL
 		hjfs=$bootpartition
 		{hjfs -s -f $bootpartition &} | echo 0 >/srv/boot
 		bootsrv=/srv/boot		
@@ -274,9 +286,40 @@ fn dogetrootfs{
 			echo 'no bootpartition found, trying /dev/sdC0/fscache as default'
 			bootpartition=/dev/sdC0/fscache
 		}
+		if (! test -e $bootpartition)
+			bootpartition=`{ls /dev/sd*/fscache}
+		if (~ $bootpartition '')
+			bootpartition=FAIL
 		cwfs=$bootpartition
 		{cwfs64x -s -f $bootpartition &} <[0=1] | echo 0 >/srv/boot
 		bootsrv=/srv/boot
+	case fossil
+		if(! ~ $fossil ?*){
+			bootpartition=`{findpart fossil}
+			if(~ $interactive yes){
+				echo 'parsed fossil bootpartition as ' $bootpartition ' enter new value if this is incorrect'
+				getans bootpartition $bootpartition
+			}
+			if not if(~ $bootpartition ''){
+				echo 'no bootpartition found, trying /dev/sdC0/fossil as default'
+				bootpartition=/dev/sdC0/fossil
+			}
+			if (! test -e $bootpartition)
+				bootpartition=`{ls /dev/sd*/fossil}
+			if (~ $bootpartition '')
+				bootpartition=FAIL
+			fossil=$bootpartition
+		}
+		if(! ~ $venti ''){
+			if(! ~ $ipdone yes){
+				ipsetup
+			}
+		}
+		echo starting fossil from $fossil...
+		fossil -f $fossil -c 'srv -p fscons'
+		echo 'srv -A boot' >>/srv/fscons
+		bootsrv=/srv/boot
+		bootpartition=$fossil
 	case tcp
 		if(! ~ $ipdone yes){
 			ipsetup
@@ -290,22 +333,12 @@ fn dogetrootfs{
 ## HACK: on terminals start new factotum that knows where to dial
 		if(~ $factotum terminal)
 			factotum -a $auth
-		if(~ $cfs ''){
-			echo srv $fs to /srv/boot...
-			if(~ $fs tcp*)
-				srv $fs boot
-			if not
-				srv tcp!$fs!564 boot
-			bootsrv=/srv/boot
-		}
-		if not{
-			echo starting cfs $cfs dialing $fs and serving root to /srv/boot...
-			if(~ $fs tcp*)
-				cfs -a $fs -f $cfs -z boot
-			if not
-				cfs -a tcp!$fs!564 -f $cfs -z boot
-			bootsrv=/srv/boot
-		}
+		echo srv $fs to /srv/boot...
+		if(~ $fs tcp*)
+			srv $fs boot
+		if not
+			srv tcp!$fs!564 boot
+		bootsrv=/srv/boot
 	case tls
 		if(! ~ $ipdone yes){
 			ipsetup
@@ -325,43 +358,6 @@ fn dogetrootfs{
 		if not
 			srvtls tcp!$fs!17020 boot
 		bootsrv=/srv/boot
-	case local
-		if(~ $kfs ''){
-			if(! ~ $fossil ?*){
-				bootpartition=`{findpart fossil}
-				if(~ $interactive yes){
-					echo 'parsed fossil bootpartition as ' $bootpartition ' enter new value if this is incorrect'
-					getans bootpartition $bootpartition
-				}
-				if not if(~ $bootpartition ''){
-					echo 'no bootpartition found, trying /dev/sdC0/fossil as default'
-					bootpartition=/dev/sdC0/fossil
-				}
-				fossil=$bootpartition
-			}
-			if(! ~ $venti ''){
-				if(! ~ $ipdone yes){
-					ipsetup
-				}
-			}
-			echo starting fossil from $fossil...
-			fossil -f $fossil -c 'srv -p fscons'
-			echo 'srv -A boot' >>/srv/fscons
-			bootsrv=/srv/boot
-			bootpartition=$fossil
-		}
-		if not{
-			if(~ $interactive yes){
-				echo 'kfs parsed as ' $kfs ' enter new value if this is incorrect'
-				getans kfs $kfs
-			}
-			if(! ~ $bootparse(2) '')
-				kfsparams=`{shifter $bootparse}
-			echo kfs -f $kfs -n boot $kfsparams
-			kfs -f $kfs -n boot $kfsparams
-			bootsrv=/srv/kfs.boot
-			bootpartition=$kfs
-		}
 	case srv
 		if(~ $interactive yes){
 			echo 'enter full path to target srv'
@@ -369,6 +365,12 @@ fn dogetrootfs{
 		}
 	case ''
 		echo no standard root fs attached
+	}
+# add cfs if requested
+	if(~ $#cfs 1 && test -x /bin/cfs && test -f $cfs){
+		{/bin/cfs -s -f $cfs </srv/boot &} | echo 0 >/srv/cfs
+		mv /srv/boot /srv/boot.nocfs
+		mv /srv/cfs /srv/boot
 	}
 }
 
@@ -509,8 +511,8 @@ if(~ $bootargs ''){
 }
 factotumopts=`{echo $factotumopts}
 bootparse=`{echo $bootargs}
-if(~ $bootparse(1) local*)
-	getrootfs=local
+if(~ $bootparse(1) *fossil)
+	getrootfs=fossil
 if(~ $bootparse(1) *fs)
 	getrootfs=hjfs
 if(~ $bootparse(1) *fscache)
@@ -527,11 +529,6 @@ if(~ $bootparse(1) tls*){
 }
 if(~ $bootparse(1) srv*)
 	getrootfs=srv
-if(~ $bootparse(1) *fs){
-	if(~ $kfs ''){
-		kfs=`{findpart fs}
-	}
-}
 if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')
@@ -592,7 +589,7 @@ fn startinter{
 		getans vhttplisten $vhttplisten
 	}
 	dostartventi
-	echo 'Attach to a file server? Choose local,tcp,tls or leave blank for none.'
+	echo 'Attach to a file server? Choose cwfs,hjfs,fossil,tcp,tls or leave blank for none.'
 	getans getrootfs $getrootfs
 	if(~ $getrootfs tcp){
 		echo 'fileserver is [ ' $fs ' ]?'
@@ -608,7 +605,7 @@ fn startinter{
 		echo 'auth is [ ' $auth ' ]?'
 		getans auth $auth
 	}
-	if(~ $getrootfs local){
+	if(~ $getrootfs fossil){
 		echo 'Dial a venti server? Enter a dialstring or ip if so.'
 		getans venti $venti
 		if(! ~ $venti ''){
@@ -659,8 +656,8 @@ fn starttrad{
 	if not{
 		bootparse=`{echo $bootargs}
 	}
-	if(~ $bootparse(1) local*)
-		getrootfs=local
+	if(~ $bootparse(1) *fossil)
+		getrootfs=fossil
 	if(~ $bootparse(1) *fs)
 		getrootfs=hjfs
 	if(~ $bootparse(1) *fscache)
