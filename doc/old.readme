@@ -1,0 +1,99 @@
+This directory holds the source code modifications and compiled tools
+for a Plan 9 kernel that can boot with no root fileserver, and places
+all the post-kernel load bootup procedures into an rc-based
+environment.  The user can also choose to bypass the normal bootup
+procedure entirely and create a small self-sufficient ramdisk based
+cpu server.  The non-rooted cpu server environment can act as a host
+or "namespace hypervisor" for multiple other plan 9 environments.  The
+current toolkit is focused on standard pc bootup sequences.  Fossil,
+Venti, kfs, cfs and booting from USB are all supported.  Test coverage
+has been focused on fossil and venti based environments using standard
+pc desktop hardware. 9front support added July 2015.
+
+The core kernel remains mostly unmodified, but the traditional boot
+and init programs have been combined into a single, smaller program
+that aims to transfer control to rc as soon as possible.  An rc script
+called "plan9rc" controls the functions of starting factotum,
+potentially creating a small ramfs based independent environment,
+starting venti/fossil/kfs or dialing an external fs in the fashion of
+a tcp booted cpu.
+
+By setting interactive=yes in plan9.ini the user can control whether
+or not any or all of these services are started and with what
+variables.  To emulate traditional boot intsead, set traditional=yes
+to receive only a "root is from" prompt.  The user can also drop to an
+rc shell to work freely with whatever tools are compiled into /boot or
+setup in a ramfs.  The kernel was compiled as a cpu kernel, but
+setting factotum=terminal and rootstart=terminal should produce
+terminal-style behavior.  Interactive mode is useful for bringing new
+nodes online because the configuration is saved to temporary files on
+the ramdisk and may be used as a plan9.ini menuitem option.
+
+Other plan9.ini variables can be used to control the behavior of
+options additional boot time behavior.  A provided skeleton fs setup
+can be controlled with the ramsetup variable, which defaults to use a
+provided script, ramskel.  Another optional script can be run later in
+boot.  The provided 'initskel' script (requires initscript=initskel
+option) starts a minimal cpu server environement in the restricted
+initial namespace.  The default port for this is 17020 to avoid
+conflict with a standard cpu listener started later.
+
+It is possible to create multiple independent environments with the
+kernel-rooted environment separate from any of them.  With suitable
+control of options, the plan9rc script can be used as a general
+purpose launcher for plan 9 environments.  Also, it is possible to
+provide a separate key at boot time for the early boot environment,
+but this runs the risk of conflicting with existing auth servers and
+requires some understanding of factotum namespaces to make use of.
+
+There are also some scripts that provide easy ways to modify your
+namespace to acquire different "roots".  Especially useful is
+"rerootwin [target]" which accepts the name of a /srv or an ip or
+system name to dial and arranges to use it as the root of the
+environment while still keeping the devices from /mnt/term in the
+namespace.  addwrroot and addroroot attach to the target in writable
+or read-only mode without the extra shenanigans.  addsources gives you
+access to sources copy of the distribution as your 'root'.  Another
+package of scripts assists in saving fossil rootscores and resetting
+fossils to known states.  These can be used to rapidly transfer the
+root of your active environment to different hardware.
+
+Other scripts included are some for rapidly cloning fossils across the
+network using their rootscore.  The cpsys script calls one machine,
+gets its most recent rootscore, then calls anothe rmachine and tells
+it to stop its local fossil and reset it to the given score.  This can
+be used to rapidly shift your physical hardware dependency on a given
+fileserver while still maintaining access to data.  Another helper
+script assists with progressive backup of venti data.
+
+To use the precompiled kernel, just boot it and it will provide an
+interactive environment for starting and attaching to bootup services,
+or if you provide appropriate configuration variables via plan9.ini it
+will follow them with results that should be mostly identical to a
+standard kernel.  It provides many tools compiled into boot allowing
+the kernel to be self-sufficient in starting and attaching to
+services.  It is optional to provide an additional .tgz in the bootup
+partition which can allow for local customization of the early boot
+environment without recompiling the kernel.  There are already many
+useful tools compiled right into /boot of the kernel so it is not
+necessary to download the tools.tgz to use the precompiled kernel
+effectively.
+
+To install without recompiling, place the distribution-appropriate
+kernel (9pcram.gz for Labs, 9ants for 9front) in your 9fat partition
+and edit plan9.ini to use a boot menu to give you the option of using
+that kernel.  Some additional tweaking and studying of what is going
+on is recommended for effective use.  The precompiled kernel also
+includes the writable /proc/ns mod which is the basis for the cpns,
+addns, subns process namespace manipulation scripts.
+
+Please view doc/ants.ps for the full Giants ANTS paper.
+
+9front and Bell Labs versions differ in some options and configurations.
+
+This kernel version and software originally based on the Plan 9 source
+tree from December of 2009.  Development resumed with updated plan 9
+sources in January 2013. Development resumed in July 2015.
+
+These tools include code from the main Plan 9 distribution. Original portions
+copyright Mycroftiv. Licensed under the Lucent Public License/GPL2.

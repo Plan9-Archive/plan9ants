@@ -1,99 +1,67 @@
-This directory holds the source code modifications and compiled tools
-for a Plan 9 kernel that can boot with no root fileserver, and places
-all the post-kernel load bootup procedures into an rc-based
-environment.  The user can also choose to bypass the normal bootup
-procedure entirely and create a small self-sufficient ramdisk based
-cpu server.  The non-rooted cpu server environment can act as a host
-or "namespace hypervisor" for multiple other plan 9 environments.  The
-current toolkit is focused on standard pc bootup sequences.  Fossil,
-Venti, kfs, cfs and booting from USB are all supported.  Test coverage
-has been focused on fossil and venti based environments using standard
-pc desktop hardware. 9front support added July 2015.
+## README
 
-The core kernel remains mostly unmodified, but the traditional boot
-and init programs have been combined into a single, smaller program
-that aims to transfer control to rc as soon as possible.  An rc script
-called "plan9rc" controls the functions of starting factotum,
-potentially creating a small ramfs based independent environment,
-starting venti/fossil/kfs or dialing an external fs in the fashion of
-a tcp booted cpu.
+### Advanced Namespace Tools for 9front and Bell Labs Plan 9
 
-By setting interactive=yes in plan9.ini the user can control whether
-or not any or all of these services are started and with what
-variables.  To emulate traditional boot intsead, set traditional=yes
-to receive only a "root is from" prompt.  The user can also drop to an
-rc shell to work freely with whatever tools are compiled into /boot or
-setup in a ramfs.  The kernel was compiled as a cpu kernel, but
-setting factotum=terminal and rootstart=terminal should produce
-terminal-style behavior.  Interactive mode is useful for bringing new
-nodes online because the configuration is saved to temporary files on
-the ramdisk and may be used as a plan9.ini menuitem option.
+This is a toolkit of additions and modifications to Plan 9. It is designed to make Plan 9 installations, on single machines or on networks, more flexible. ANTS has:
 
-Other plan9.ini variables can be used to control the behavior of
-options additional boot time behavior.  A provided skeleton fs setup
-can be controlled with the ramsetup variable, which defaults to use a
-provided script, ramskel.  Another optional script can be run later in
-boot.  The provided 'initskel' script (requires initscript=initskel
-option) starts a minimal cpu server environement in the restricted
-initial namespace.  The default port for this is 17020 to avoid
-conflict with a standard cpu listener started later.
+* A modified boot process which creates an isolated administrative namespace independent of any root fileserver.
+* A modified kernel which accepts manipulation of process namespace via writes of standard namespace operations to the /proc/PID/ns files
+* Scripts for moving between and systematically altering namespaces such as "rerootwin" which is similar to chroot in unix and keeps the terminal devices at /mnt/term active.
+* Optional fossil/venti support with administrative scripts for progressive backup/replication and maintaining a log of rootscores
+* Hubfs 9p fs for networked persistent shell sessions and a lightweight general purpose multiclient read/write buffered message queue with pipelike hubfiles
+* Grio modified Rio with customizable appearance for color-coded namespace grouping, user-selectable additional menu command, and hubfs integration
 
-It is possible to create multiple independent environments with the
-kernel-rooted environment separate from any of them.  With suitable
-control of options, the plan9rc script can be used as a general
-purpose launcher for plan 9 environments.  Also, it is possible to
-provide a separate key at boot time for the early boot environment,
-but this runs the risk of conflicting with existing auth servers and
-requires some understanding of factotum namespaces to make use of.
+Most of these components are synergistic, but not interdependent. The userspace programs and utilities do not generally depend on using the modified ANTS kernel.
 
-There are also some scripts that provide easy ways to modify your
-namespace to acquire different "roots".  Especially useful is
-"rerootwin [target]" which accepts the name of a /srv or an ip or
-system name to dial and arranges to use it as the root of the
-environment while still keeping the devices from /mnt/term in the
-namespace.  addwrroot and addroroot attach to the target in writable
-or read-only mode without the extra shenanigans.  addsources gives you
-access to sources copy of the distribution as your 'root'.  Another
-package of scripts assists in saving fossil rootscores and resetting
-fossils to known states.  These can be used to rapidly transfer the
-root of your active environment to different hardware.
+### Installing on 9front from source
 
-Other scripts included are some for rapidly cloning fossils across the
-network using their rootscore.  The cpsys script calls one machine,
-gets its most recent rootscore, then calls anothe rmachine and tells
-it to stop its local fossil and reset it to the given score.  This can
-be used to rapidly shift your physical hardware dependency on a given
-fileserver while still maintaining access to data.  Another helper
-script assists with progressive backup of venti data.
+Check that your 9front hg revision matched up with a compatible ANTS revision. The most recent tested 9front revision is 5641, the "GZ" release. Previously tested ANTS/9front revisions are listed in the INSTALLING file.The build script has a variety of possible targets. A basic sequence:
 
-To use the precompiled kernel, just boot it and it will provide an
-interactive environment for starting and attaching to bootup services,
-or if you provide appropriate configuration variables via plan9.ini it
-will follow them with results that should be mostly identical to a
-standard kernel.  It provides many tools compiled into boot allowing
-the kernel to be self-sufficient in starting and attaching to
-services.  It is optional to provide an additional .tgz in the bootup
-partition which can allow for local customization of the early boot
-environment without recompiling the kernel.  There are already many
-useful tools compiled right into /boot of the kernel so it is not
-necessary to download the tools.tgz to use the precompiled kernel
-effectively.
+	# compile everything but install nothing yet
+	build 9front
+	# install userspace components but not kernel/9fat
+	build fronthost 
+	# copy new kernel and tools to 9fat partition
+	9fs 9fat && cp 9ants /n/9fat/9ants && cp tools.tgz /n/9fat/tools.tgz
+	# add one line to /rc/bin/termrc for gui/terminal service
+	echo 'home=/usr/$user; cd; . $home/lib/profile' >>/rc/bin/termrc
+	# edit plan9.ini
+	acme /n/9fat/plan9.ini
+	
+To allow you to select between kernels at boot, you can set bootfile= in plan9.ini to not provide a value. Then at boot you will have to type "bootfile=9ants" or "bootfile=9pcf" (assuming that is your original kernel name) and then "boot". You will probably want to set "tgzfs=tools.tgz" and possibly "bootcmd=plan9rc". frontmods/plan9.ini has a minimal example that works with a fresh cwfs install to a qemu vm. 
 
-To install without recompiling, place the distribution-appropriate
-kernel (9pcram.gz for Labs, 9ants for 9front) in your 9fat partition
-and edit plan9.ini to use a boot menu to give you the option of using
-that kernel.  Some additional tweaking and studying of what is going
-on is recommended for effective use.  The precompiled kernel also
-includes the writable /proc/ns mod which is the basis for the cpns,
-addns, subns process namespace manipulation scripts.
+You may also wish to change "rio" to "grio" in your profile.
 
-Please view doc/ants.ps for the full Giants ANTS paper.
+### Using 9front/ANTS
 
-9front and Bell Labs versions differ in some options and configurations.
+The behavior of the standard user namespace should be unchanged, apart from the use of grio rather rio if desired. To access the special service namespace, either rcpu in (the default port is 17060) or, if using a terminal system, "hub hubfs" to connect to a peristent shell in that namespace. When connecting to the service namespace via Drawterm, add the -B flag. From within the service namespace, you may enter the standard namespace with this sequence:
 
-This kernel version and software originally based on the Plan 9 source
-tree from December of 2009.  Development resumed with updated plan 9
-sources in January 2013. Development resumed in July 2015.
+	rerootwin -f boot
+	service=con
+	. $home/lib/profile
 
-These tools include code from the main Plan 9 distribution. Original portions
-copyright Mycroftiv. Licensed under the Lucent Public License/GPL2.
+With bootcmd=plan9rc set in plan9.ini, ANTS supports additional boot options, such as fossil+venti (requires installing fossil, partitioning hard drive correctly, and setting plan9.ini options.) or fully interactive boot with prompts for all options (with interactive=yes in plan9.ini).
+
+Additional documentation found in the INSTALLING file and in the doc/ subdirectory.
+
+### Installing on Bell Labs from source
+
+	# compile everything but install nothing yet
+	build everything
+	# install userspace components but not kernel/9fat
+	build labshost 
+	# copy new kernel and tools to 9fat partition
+	9fat: && cp 9pcram.gz /n/9fat/9pcram.gz && cp tools.tgz /n/9fat/tools.tgz
+	# edit plan9.ini
+	acme /n/9fat/plan9.ini
+
+A sample plan9.ini file with boot menu is found at doc/plan9.ini
+
+### Using Labs/ANTS
+
+The behavior of the standard user namespace should be unchanged, apart from the use of grio rather rio if desired. To access the special service namespace, either cpu in (the default port is 17060) or, if using a terminal system, "hub hubfs" to connect to a peristent shell in that namespace. From within the service namespace, you may enter the standard namespace with the command:
+
+	rerootwin boot
+
+Additional documentation found in the INSTALLING file and in the doc/ subdirectory.
+
