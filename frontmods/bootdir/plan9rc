@@ -1,4 +1,4 @@
-#!/boot/rc
+#!/bin/rc
 # rootless environment startup and launcher script by mycroftiv
 # 9front version liberally copied from 9/boot/bootrc
 
