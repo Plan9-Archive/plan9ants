@@ -1,7 +1,5 @@
 #!/bin/rc
 # build script for advanced namespace tools/rootless boot kernel
-# build clean, build patched, build tools, build extras, build bootpaq, build docs
-# build ramfs / build
 
 if(! test -e bootdir.extras){
 	echo 'This build script must be run only from the base rootless directory'
@@ -60,12 +58,10 @@ if(~ $1 9front){
 	cd $builddir
 	if(test -e compiletemp/9pcf){
 		cp compiletemp/9pcf 9ants
-		sha1sum 9ants >>build.hashes
 		echo 9ants kernel built
 	}
 	if(test -e compiletemp/9pc64){
 		cp compiletemp/9pc64 9ants64
-		sha1sum 9ants64 >>build.hashes
 		echo 9ants64 kernel built
 	}
 	exit
@@ -108,8 +104,8 @@ if(~ $1 portsinstall){
 	mk install
 	cd ..
 	cd patched
-	8c -FTVw gridlisten.c
-	8l -o gridlisten gridlisten.8
+	$CC -FTVw gridlisten.c
+	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
 	cp frontmods/bootdir/grio /$objtype/bin
@@ -185,8 +181,8 @@ if(~ $1 9frontinstall){
 	echo 'use bootfile=9pcf for previous kernel'
 	sleep 5
 	cd patched
-	8c -FTVw gridlisten.c
-	8l -o gridlisten gridlisten.8
+	$CC -FTVw gridlisten.c
+	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
 	cd hubfs1.1
@@ -306,8 +302,8 @@ if(~ $1 labshost){
 	build extras
 	cd patched
 	echo 'installing ANTS userspace tools to host'
-	8c -FTVw gridlisten.c
-	8l -o gridlisten gridlisten.8
+	$CC -FTVw gridlisten.c
+	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
 	cd hubfs1.1
@@ -345,8 +341,8 @@ if(~ $1 isoinstall){
 	sleep 5
 	echo installing hubfs and grio and scripts
 	cd patched
-	8c -FTVw gridlisten.c
-	8l -o gridlisten gridlisten.8
+	$CC -FTVw gridlisten.c
+	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
 	cd hubfs1.1
@@ -502,7 +498,6 @@ if(~ $1 bootpaq){
 	cd $builddir
 	strip root/bin/* >/dev/null >[2=1]
 	mkpaqfs -b 8192 -o bootdir.extras/bootpaq root/bin
-	sha1sum bootdir.extras/bootpaq >>build.hashes
 	exit ''
 }
 
@@ -520,7 +515,6 @@ if(~ $1 tools){
 	gzip -9 -c /tmp/tools.tar >tools.tgz
 	rm /tmp/tools.tar
 	cd $builddir
-	sha1sum tools.tgz >>build.hashes
 	exit ''
 }
 
@@ -545,6 +539,5 @@ cd /sys/src/9/pc
 mk 'CONF=pcram'
 gzip -9 -c 9pcram > $builddir/compiletemp/9pcram.gz
 cd $builddir
-sha1sum compiletemp/9pcram.gz >>build.hashes
 cp compiletemp/9pcram.gz 9pcram.gz
 exit ''
