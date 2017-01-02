@@ -1,4 +1,4 @@
-#!/boot/rc
+#!/bin/rc
 # ramroot startup after newns
 
 fn server { . <{n=`{read} && ! ~ $#n 0 && read -c $n} >[2=1] }
