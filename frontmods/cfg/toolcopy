@@ -25,16 +25,16 @@ cp /$objtype/bin/auth/keyfs .
 #cp /$objtype/bin/usb/disk usbdisk
 
 ## fileserver and disk admin tools
-#cp /$objtype/bin/disk/fdisk .
 cp /$objtype/bin/disk/format .
 cp /$objtype/bin/disk/mkfs .
-#cp /$objtype/bin/disk/prep .
 cp /$objtype/bin/fossil/flfmt .
 cp /$objtype/bin/fossil/last fossilast
 cp /$objtype/bin/venti/rdarena .
 cp /$objtype/bin/venti/sync sync
 cp /$objtype/bin/venti/syncindex .
 cp /$objtype/bin/venti/wrarena .
+#cp /$objtype/bin/disk/prep .
+#cp /$objtype/bin/disk/fdisk .
 #cp /$objtype/bin/venti/checkarenas .
 #cp /$objtype/bin/venti/checkindex .
 #cp /$objtype/bin/mkext .
@@ -79,16 +79,16 @@ cp /$objtype/bin/webfs .
 
 ## shell tools
 cp /$objtype/bin/date .
-#cp /$objtype/bin/dd .
 cp /$objtype/bin/diff .
-#cp /$objtype/bin/grep .
 cp /$objtype/bin/hoc .
-#cp /$objtype/bin/mv .
 cp /$objtype/bin/ns .
 cp /$objtype/bin/p .
 cp /$objtype/bin/ps .
 cp /$objtype/bin/pwd .
 cp /$objtype/bin/seq .
+#cp /$objtype/bin/mv .
+#cp /$objtype/bin/grep .
+#cp /$objtype/bin/dd .
 #cp /$objtype/bin/unmount .
 #cp /$objtype/bin/xd .
 #cp /$objtype/bin/awk .
@@ -114,8 +114,6 @@ cp /rc/bin/memory .
 
 ## acme and others
 cp /$objtype/bin/acme .
-#cp /$objtype/bin/mothra .
-#cp /$objtype/bin/uhtml .
 cp /$objtype/bin/stats .
 cp /$objtype/bin/con .
 cp /$objtype/bin/fortune .
@@ -131,6 +129,8 @@ cp /$objtype/bin/syscall .
 #cp /$objtype/bin/samterm .
 #cp /$objtype/bin/faces .
 #cp /$objtype/bin/togif .
+#cp /$objtype/bin/mothra .
+#cp /$objtype/bin/uhtml .
 
 ## auxilliary utilities
 cp /$objtype/bin/aux/stub .
