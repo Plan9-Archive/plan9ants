@@ -324,6 +324,8 @@ fswrite(Req *r)
 	Hub *h;
 	u32int count;
 	vlong offset;
+	int i;
+	int j;
 
 	h = r->fid->file->aux;
 	if(strncmp(h->name, "ctl", 3) == 0){
@@ -351,12 +353,17 @@ fswrite(Req *r)
 		return;
 	}
 	/* Actual queue logic here */
-	h->qwnum++;
 	if(h->qwnum >= MAXQ - 2){
-		msgsend(h);
-		h->qwnum = 1;
+		j = 1;
+		for(i = h->qwans; i <= h->qwnum; i++) {
+			h->qwrits[j] = h->qwrits[i];
+			h->wstatus[j] = h->wstatus[i];
+			j++;
+		}
+		h->qwnum = h->qwnum - h->qwans + 1;
 		h->qwans = 1;
 	}
+	h->qwnum++;
 	h->wstatus[h->qwnum] = WAIT;
 	h->qwrits[h->qwnum] = r;
 	wrsend(h);
