@@ -115,6 +115,7 @@ cp /rc/bin/memory .
 ## acme and others
 cp /$objtype/bin/acme .
 cp /$objtype/bin/mothra .
+cp /$objtype/bin/uhtml .
 cp /$objtype/bin/con .
 cp /$objtype/bin/fortune .
 cp /$objtype/bin/htmlfmt .
