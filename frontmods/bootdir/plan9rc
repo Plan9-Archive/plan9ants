@@ -6,7 +6,7 @@ if(~ $#rootdir 0)
 	rootdir=/root
 objtype=`{cat /env/cputype}
 
-##	UTILITY FUNCTIONS ##
+# utility functions
 
 fn shifter{
 	shift
@@ -17,8 +17,7 @@ fn getans{
 	query=$1
 	value=`{shifter $*}
 	echo '* '$"query' = '$"value' : accept, new value, '''clear'''', or '''rc'''
-#	answer=`{read}
-	answer=`{dd -bs 64 -count 1 >[2]/dev/null}
+	answer=`{dd -bs 128 -count 1 >[2]/dev/null}
 	switch($answer){
 	case rc
 		rc -i
@@ -73,7 +72,7 @@ fn cleanenv {
 	rm /env/cleanenv
 }
 
-##	ENVIRONMENT CHECKING FUNCTIONS ##
+# environment checking functions
 
 fn findpart{
 	if((test -e /boot/sed) || (test -e /bin/sed)){
@@ -153,7 +152,7 @@ fn dochecksys{
 	}
 }
 
-##	STARTUP ACTION FUNCTIONS ##
+# startup action functions
 
 fn doramsetup{
 	switch($ramsetup){
@@ -273,10 +272,9 @@ fn dogetrootfs{
 		if (~ $bootpartition '')
 			bootpartition=FAIL
 		hjfs=$bootpartition
-		{hjfs -s -f $bootpartition &} | echo 0 >/srv/boot
+		{hjfs -s -f $bootpartition &} <[0=1] | echo 0 >/srv/boot
 		bootsrv=/srv/boot		
 	case cwfs
-###		{$1 -s -f $*(2-) &} <[0=1] | echo 0 >/srv/boot
 		bootpartition=`{findpart fscache}
 		if(~ $interactive yes){
 			echo 'parsed cwfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
@@ -440,10 +438,8 @@ fn dorootstart{
 	}
 }
 
-############# End of fn definitions #################
 ############# Begin script execution ###############
-
-echo 'ROOTLESS PLAN 9 NAMESPACE LAUNCHER'
+echo 'PLAN 9 ADVANCED NAMESPACE TOOLS BOOT'
 
 # mount points
 if (test -e /bin/mntgen){
@@ -460,6 +456,7 @@ if (test -e /bin/chmod){
 bind /root /mnt/broot
 unmount /root
 
+# bind devices
 bind -q '#d' /fd
 bind -q '#p' /proc
 for(i in S f k æ t b m)
@@ -483,16 +480,9 @@ if(test -x /bin/aux/kbdfs){
 if(test -x /bin/nusbrc && ! test -e /env/nousbrc)
 	nusbrc
 
-# wait for devices to settle down
-if(~ $#usbwait 1)
-	sleep $usbwait
-if(~ $#usbwait 0)
-	sleep 2
-
 diskparts
 
-##	if we have an ANTS paqfs (we should) set it up in both boot and bin
-
+# set up ANTS paqfs
 if(test -e /boot/bootpaq){
 	echo -n paqfs...
 	paqfs -s -S bootpaq -c 256 /boot/bootpaq
@@ -500,8 +490,7 @@ if(test -e /boot/bootpaq){
 	bind -a /boot /bin
 }
 
-##	Parse plan9.ini options and trying to set sane defaults ##
-
+# Parse plan9.ini options and trying to set sane defaults
 if(! ~ $1 '')
 	. $1
 if(~ $bootargs ''){
@@ -556,8 +545,7 @@ if(~ $vhttplisten '')
 if(~ $interactive '')
 	interactive=traditional
 
-##	INTERACTIVE STARTUP PROMPTS AND ACTIONS ##
-
+# interactive startup prompts and actions
 fn startinter{
 	echo Interactive Startup - enter to continue to options or type rc for a shell
 	answer=`{read}
@@ -622,7 +610,6 @@ fn startinter{
 	save9cfg
 	cleanenv >[2] /dev/null
 	dorootstart
-	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	echo 'Keep console in ramboot namespace? yes if so.'
 	getans staylocal $staylocal
 	if(! ~ $staylocal no){
@@ -632,8 +619,7 @@ fn startinter{
 	}
 }
 
-##	TRADITIONAL STARTUP PROMPTS AND ACTIONS ##
-
+# traditional startup prompts and actions
 fn starttrad{
 	dofactotum
 	dotryusb
@@ -691,7 +677,6 @@ fn starttrad{
 	save9cfg
 	cleanenv >[2] /dev/null
 	dorootstart
-#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user
@@ -699,8 +684,7 @@ fn starttrad{
 	}
 }
 
-##	NON-INTERACTIVE STARTUP ACTIONS ##
-
+# non-interactive startup actions
 fn startnonint{
 	dofactotum
 	dotryusb
@@ -716,7 +700,6 @@ fn startnonint{
 	save9cfg
 	cleanenv >[2] /dev/null
 	dorootstart
-#	echo '#c' `{cat '#c/user'} `{cat '#c/sysname'} /env $user $sysname
 	if(! ~ $staylocal no){
 		echo starting shell in current namespace
 		home=/usr/$user
