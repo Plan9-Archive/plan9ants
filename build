@@ -49,7 +49,7 @@ if(~ $1 9front){
 	bind -bc frontmods/bootdir bootdir.extras
 	bind -bc frontmods/cfg cfg
 	build extras
-	build patched
+	build frontpatched
 	build bootpaq
 	build tools
 	bind -bc frontmods/boot /sys/src/9/boot
@@ -457,6 +457,23 @@ if(~ $1 patched){
 	strip bootdir.extras/rc >/dev/null >[2=1]
 	strip bootdir.extras/factotum >/dev/null >[2=1]
 	rm -rf /tmp/rc
+	rm -rf /tmp/factotum
+	exit ''
+}
+
+if(~ $1 frontpatched){
+	echo building patched
+	ramfs
+	mkdir /tmp/factotum
+	dircp /sys/src/cmd/auth/factotum /tmp/factotum
+	cp patched/factotumdat.h /tmp/factotum/dat.h
+	cp patched/factotumfs.c /tmp/factotum/fs.c
+	cp patched/factotumutil.c /tmp/factotum/util.c
+	cd /tmp/factotum
+	mk $O.factotum
+	cp $O.factotum $builddir/bootdir.extras/factotum
+	cd $builddir
+	strip bootdir.extras/factotum >/dev/null >[2=1]
 	rm -rf /tmp/factotum
 	exit ''
 }	
