@@ -353,7 +353,7 @@ fn dogetrootfs{
 		if(~ $factotum terminal)
 			factotum -a $auth
 		echo srv $fs to /srv/boot...
-		if(~ $fs tls*)
+		if(~ $fs tcp*)
 			srvtls $fs boot
 		if not
 			srvtls tcp!$fs!17020 boot
@@ -591,19 +591,15 @@ fn startinter{
 	dostartventi
 	echo 'Attach to a file server? Choose cwfs,hjfs,fossil,tcp,tls or leave blank for none.'
 	getans getrootfs $getrootfs
-	if(~ $getrootfs tcp){
+	if(~ $getrootfs tcp || ~ $getrootfs tls){
 		echo 'fileserver is [ ' $fs ' ]?'
 		getans fs $fs
+		if (~ $auth '')
+			auth=$fs
 		echo 'auth is [ ' $auth ' ]?'
 		getans auth $auth
 		echo 'cfs is [ ' $cfs ' ]?'
 		getans cfs $cfs
-	}
-	if(~ $getrootfs tls){
-		echo 'fileserver is [ ' $fs ' ]?'
-		getans fs $fs
-		echo 'auth is [ ' $auth ' ]?'
-		getans auth $auth
 	}
 	if(~ $getrootfs fossil){
 		echo 'Dial a venti server? Enter a dialstring or ip if so.'
@@ -674,17 +670,16 @@ fn starttrad{
 	}
 	if(~ $bootparse(1) srv*)
 		getrootfs=srv
-	if(~ $getrootfs tcp){
-		echo 'fileserver is [ ' $fs ' ]?'
-		getans fs $fs
-		echo 'auth is [ ' $auth ' ]?'
-		getans auth $auth
-	}
-	if(~ $getrootfs tls){
-		echo 'fileserver is [ ' $fs ' ]?'
-		getans fs $fs
-		echo 'auth is [ ' $auth ' ]?'
-		getans auth $auth
+	if(~ $getrootfs tcp || ~ $getrootfs tls){
+		if (~ $fs ''){
+			echo 'fileserver is [ ' $fs ' ]?'
+			getans fs $fs
+		}
+		if (~ $auth ''){
+			auth=$fs
+			echo 'auth is [ ' $auth ' ]?'
+			getans auth $auth
+		}
 	}
 	dostartventi
 	interactive=yes
