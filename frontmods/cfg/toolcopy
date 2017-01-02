@@ -79,7 +79,7 @@ cp /$objtype/bin/webfs .
 
 ## shell tools
 cp /$objtype/bin/date .
-cp /$objtype/bin/dd .
+#cp /$objtype/bin/dd .
 cp /$objtype/bin/diff .
 #cp /$objtype/bin/grep .
 cp /$objtype/bin/hoc .

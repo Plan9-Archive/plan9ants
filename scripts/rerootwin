@@ -1,4 +1,4 @@
-#!/boot/rc
+#!/bin/rc
 # change your current root and stay attached to window system and devices
 # rerootwin targetsrv [ authagent ]
 
