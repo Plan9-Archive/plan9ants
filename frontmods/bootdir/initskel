@@ -141,9 +141,9 @@ if(! ~ $cpusvc no){
 	if(~ $cpuport '')
 		cpuport=17060
 	echo 'listen1 '$cpuport' rcpu rexexec...'
-	listen1 -t tcp!*!$cpuport tlssrv -a /boot/rc -c server &
+	listen1 -t tcp!*!$cpuport tlssrv -a /bin/rc -c server &
 #	listen1 -t tcp!*!17027 /bin/exportfs -a &
-	listen1 -t tcp!*!17009 /boot/rexexec &
+	listen1 -t tcp!*!17009 /bin/rexexec &
 }
 
 if(~ $unprivileged no){
