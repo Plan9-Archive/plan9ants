@@ -57,6 +57,7 @@ struct Msgq{
 char *srvname;
 int paranoia;					/* In paranoid mode loose reader/writer sync is maintained */
 int freeze;						/* In frozen mode the hubs operate simply as a ramfs */
+int trunc;						/* In trunc mode clients auto-truncate files when opened */
 
 static char Ebad[] = "something bad happened";
 static char Enomem[] = "no memory";
@@ -297,7 +298,22 @@ fsread(Req *r)
 		mq = r->fid->aux;
 		if(mq->bufuse > 0){
 			if(h->qrnum >= MAXQ -2){
-				h->qrnum = 1;
+#ifdef DEBUG
+				print("\ttransferring unanswered reqs to start of queue!\n");
+#endif
+				j = 1;
+				for(i = h->qrans; i <= h->qrnum; i++) {
+					h->qreqs[j] = h->qreqs[i];
+					h->rstatus[j] = h->rstatus[i];
+#ifdef DEBUG
+					print("\setting qreqs[%d] equal to qreqs[%d]\n", j, i);
+#endif
+					j++;
+				}
+				h->qrnum = h->qrnum - h->qrans + 1;
+#ifdef DEBUG
+				print("\th->qrnum set to %d\n", h->qrnum);
+#endif
 				h->qrans = 1;
 			}
 			h->qrnum++;
@@ -326,11 +342,9 @@ fsread(Req *r)
 	/* Actual queue logic, ctl file and freeze mode logic is rarely used */
 
 	if(h->qrnum >= MAXQ - 2){
-//		msgsend(h);
 #ifdef DEBUG
 		print("\ttransferring unanswered reqs to start of queue!\n");
 #endif
-//		h->qrorphans = h->qrnum - h->qrans + 1;
 		j = 1;
 		for(i = h->qrans; i <= h->qrnum; i++) {
 			h->qreqs[j] = h->qreqs[i];
@@ -386,12 +400,26 @@ fswrite(Req *r)
 		return;
 	}
 	/* Actual queue logic here */
-	h->qwnum++;
 	if(h->qwnum >= MAXQ - 2){
-		msgsend(h);
-		h->qwnum = 1;
+#ifdef DEBUG
+		print("\ttransferring unanswered write reqs to start of queue!\n");
+#endif
+		j = 1;
+		for(i = h->qwans; i <= h->qwnum; i++) {
+			h->qwrits[j] = h->qwrits[i];
+			h->wstatus[j] = h->wstatus[i];
+#ifdef DEBUG
+			print("\setting qwrits[%d] equal to qwrits[%d]\n", j, i);
+#endif
+			j++;
+		}
+		h->qwnum = h->qwnum - h->qwans + 1;
+#ifdef DEBUG
+		print("\th->qwnum set to %d\n", h->qwnum);
+#endif
 		h->qwans = 1;
 	}
+	h->qwnum++;
 	h->wstatus[h->qwnum] = WAIT;
 	h->qwrits[h->qwnum] = r;
 	wrsend(h);
@@ -434,6 +462,10 @@ fsopen(Req *r)
 	q->myfid = r->fid->fid;
 	q->nxt = h->bucket;
 	q->bufuse = 0;
+	if (trunc == 1){
+		q->nxt = h->inbuckp;
+		q->bufuse = h->buckfull;
+	}
 	r->fid->aux = q;
 	if(h && (r->ifcall.mode&OTRUNC)){
 		h->inbuckp = h->bucket;
@@ -516,6 +548,7 @@ main(int argc, char **argv)
 	srvname = nil;
 	fs.tree = alloctree(nil, nil, DMDIR|0777, fsdestroyfile);
 	q = fs.tree->root->qid;
+	trunc = 0;
 
 	ARGBEGIN{
 	case 'D':
@@ -529,6 +562,9 @@ main(int argc, char **argv)
 		break;
 	case 'm':
 		mtpt = EARGF(usage());
+		break;
+	case 't':
+		trunc = 1;
 		break;
 	default:
 		usage();
