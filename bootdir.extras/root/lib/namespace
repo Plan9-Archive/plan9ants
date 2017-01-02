@@ -1,5 +1,6 @@
 # root
 mount -ac #s/ramboot /root $rootspec
+mount -a #s/frontpaq /root
 bind -a $rootdir /
 bind -c $rootdir/mnt /mnt
 mount -a #s/bootpaq /boot
