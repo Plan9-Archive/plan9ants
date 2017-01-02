@@ -14,7 +14,7 @@ cp /$objtype/bin/auth/keyfs .
 #cp /$objtype/bin/netkey .
 
 ## fileservers mostly compiled into bootpaq
-cp /$objtype/bin/9660srv .
+#cp /$objtype/bin/9660srv .
 #cp /$objtype/bin/disk/kfs .
 #cp /$objtype/bin/fossil/fossil .
 #cp /$objtype/bin/venti/venti .
@@ -114,9 +114,9 @@ cp /rc/bin/memory .
 
 ## acme and others
 cp /$objtype/bin/acme .
-cp /$objtype/bin/mothra .
-cp /$objtype/bin/uhtml .
-co /$objtype/bin/stats .
+#cp /$objtype/bin/mothra .
+#cp /$objtype/bin/uhtml .
+cp /$objtype/bin/stats .
 cp /$objtype/bin/con .
 cp /$objtype/bin/fortune .
 cp /$objtype/bin/htmlfmt .

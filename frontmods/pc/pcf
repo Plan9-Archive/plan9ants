@@ -149,14 +149,6 @@ bootdir
 	/$objtype/bin/paqfs
 	bootfs.paq
 	boot
-	/$objtype/bin/bind
-	/$objtype/bin/mount
-	/$objtype/bin/read
-	/$objtype/bin/cat
-	/$objtype/bin/echo
-	/$objtype/bin/test
-	/n/rootless/bootdir.extras/rc
-	/n/rootless/bootdir.extras/rcmain
 	/n/rootless/bootdir.extras/factotum
 	/n/rootless/bootdir.extras/bootpaq
 	/n/rootless/bootdir.extras/plan9rc

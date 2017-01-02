@@ -179,14 +179,14 @@ fn dofactotum{
 		echo no factotum
 	case cpu
 		echo $spc cpu factotum...
-		factotum $factotumopts -S -s factotum
+		/boot/factotum $factotumopts -S -s factotum
 	case terminal
 		echo $spc terminal factotum...
-		factotum $factotumopts -u -s factotum
+		/boot/factotum $factotumopts -u -s factotum
 	case debug
 		hostcheck
 		echo $spc debug factotum...
-		factotum $factotumopts -d -s factotum
+		/boot/factotum $factotumopts -d -s factotum
 	}
 }
 
@@ -330,7 +330,7 @@ fn dogetrootfs{
 			auth=$fs
 ## HACK: on terminals start new factotum that knows where to dial
 		if(~ $factotum terminal)
-			factotum -a $auth
+			/boot/factotum -a $auth
 		echo srv $fs to /srv/boot...
 		if(~ $fs tcp*)
 			srv $fs boot
@@ -349,7 +349,7 @@ fn dogetrootfs{
 			auth=$fs
 ## HACK: on terminals start new factotum that knows where to dial
 		if(~ $factotum terminal)
-			factotum -a $auth
+			/boot/factotum -a $auth
 		echo srv $fs to /srv/boot...
 		if(~ $fs tcp*)
 			srvtls $fs boot

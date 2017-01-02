@@ -1,6 +1,7 @@
 # 	mkpaq dotscript for paqsfs needed for rootless boot namespaces
 
 #	minimal tools for plan9rc script
+cp /$objtype/bin/read
 cp /$objtype/bin/ip/ipconfig .
 cp /$objtype/bin/ramfs .
 cp /$objtype/bin/auth/newns .
@@ -11,7 +12,7 @@ cp /$objtype/bin/tar .
 #cp /$objtype/bin/mkdir .
 cp /$objtype/bin/gunzip .
 #cp /$objtype/bin/sed .
-cp /$objtype/bin/rm .
+#cp /$objtype/bin/rm .
 #	other bootscripts, namespace files, factotum -x
 # cp /n/rootless/bootdir.extras/factotum .
 cp /n/rootless/bootdir.extras/namespace .

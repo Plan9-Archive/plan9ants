@@ -105,7 +105,7 @@ if(~ $hostfactotum no){
 	passdom=`{read}
 	echo auth ip
 	authip=`{read}
-	factotum -x -a $authip -s hostfactotum
+	/boot/factotum -x -a $authip -s hostfactotum
 	echo private hostfactotum started
 	mount -b /srv/hostfactotum /mnt
 	if(! ~ $privpassword ''){
