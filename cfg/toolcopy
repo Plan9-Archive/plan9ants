@@ -14,6 +14,7 @@ cp /$objtype/bin/auth/secstore .
 #cp /$objtype/bin/netkey .
 
 ## fileservers mostly compiled into bootpaq
+cp /$objtype/bin/9660srv .
 #cp /$objtype/bin/disk/kfs .
 #cp /$objtype/bin/fossil/fossil .
 #cp /$objtype/bin/venti/venti .
@@ -21,13 +22,11 @@ cp /$objtype/bin/auth/secstore .
 #cp /$objtype/bin/cfs .
 #cp /$objtype/bin/usb/usbd .
 #cp /$objtype/bin/dossrv .
-cp /$objtype/bin/9660srv .
 #cp /$objtype/bin/usb/disk usbdisk
 
 ## fileserver and disk admin tools
 cp /$objtype/bin/disk/fdisk .
 cp /$objtype/bin/disk/format .
-#cp /$objtype/bin/disk/kfscmd .
 cp /$objtype/bin/disk/mkfs .
 cp /$objtype/bin/disk/prep .
 cp /$objtype/bin/fossil/flfmt .
@@ -39,6 +38,7 @@ cp /$objtype/bin/venti/wrarena .
 #cp /$objtype/bin/venti/checkarenas .
 #cp /$objtype/bin/venti/checkindex .
 #cp /$objtype/bin/mkext .
+#cp /$objtype/bin/disk/kfscmd .
 
 ## networking tools
 cp /$objtype/bin/netstat .
@@ -52,18 +52,17 @@ cp /$objtype/bin/aan .
 #cp /$objtype/bin/snoopy .
 
 ## clients and servers
-cp /rc/bin/hget .
 cp /$objtype/bin/import .
 cp /$objtype/bin/vac .
 cp /$objtype/bin/vacfs .
-#cp /$objtype/bin/netssh .
-#cp /$objtype/bin/ssh .
-#cp /$objtype/bin/scp .
 cp /$objtype/bin/telnet .
 cp /$objtype/bin/ip/telnetd .
 cp /$objtype/bin/vncs .
 cp /$objtype/bin/vncv .
-#cp /$objtype/bin/webfs .
+cp /$objtype/bin/webfs .
+#cp /$objtype/bin/netssh .
+#cp /$objtype/bin/ssh .
+#cp /$objtype/bin/scp .
 #cp /$objtype/bin/ip/ftpd .
 #cp /$objtype/bin/aquarela .
 #cp /$objtype/bin/ip/httpd .
@@ -82,7 +81,6 @@ cp /$objtype/bin/vncv .
 cp /$objtype/bin/date .
 cp /$objtype/bin/dd .
 cp /$objtype/bin/diff .
-cp /rc/bin/dircp .
 cp /$objtype/bin/grep .
 cp /$objtype/bin/hoc .
 cp /$objtype/bin/mv .
@@ -103,6 +101,7 @@ cp /$objtype/bin/xd .
 #cp /$objtype/bin/zip .
 
 ## scripts
+cp /rc/bin/dircp .
 cp /rc/bin/9fs .
 cp /rc/bin/kill .
 cp /rc/bin/Kill .
@@ -110,9 +109,12 @@ cp /rc/bin/slay .
 cp /rc/bin/reboot .
 cp /rc/bin/window .
 cp /rc/bin/yesterday .
+cp /rc/bin/hget .
+cp /rc/bin/memory .
 
 ## acme and others
 cp /$objtype/bin/acme .
+cp /$objtype/bin/mothra .
 cp /$objtype/bin/con .
 cp /$objtype/bin/fortune .
 cp /$objtype/bin/htmlfmt .
