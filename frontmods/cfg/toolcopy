@@ -6,7 +6,7 @@ cp /$objtype/bin/auth/as .
 cp /$objtype/bin/auth/changeuser .
 cp /$objtype/bin/auth/debug authdebug
 cp /$objtype/bin/auth/keyfs .
-cp /$objtype/bin/auth/secstore .
+#cp /$objtype/bin/auth/secstore .
 #cp /$objtype/bin/auth/aescbc .
 #cp /$objtype/bin/auth/secstored .
 #cp /$objtype/bin/auth/secuser .
@@ -18,17 +18,17 @@ cp /$objtype/bin/9660srv .
 #cp /$objtype/bin/disk/kfs .
 #cp /$objtype/bin/fossil/fossil .
 #cp /$objtype/bin/venti/venti .
-#cp /$objtype/bin/disk/partfs . 
+#cp /$objtype/bin/disk/partfs .
 #cp /$objtype/bin/cfs .
-cp /$objtype/bin/usb/usbd .
+#cp /$objtype/bin/usb/usbd .
 #cp /$objtype/bin/dossrv .
-cp /$objtype/bin/usb/disk usbdisk
+#cp /$objtype/bin/usb/disk usbdisk
 
 ## fileserver and disk admin tools
-cp /$objtype/bin/disk/fdisk .
+#cp /$objtype/bin/disk/fdisk .
 cp /$objtype/bin/disk/format .
 cp /$objtype/bin/disk/mkfs .
-cp /$objtype/bin/disk/prep .
+#cp /$objtype/bin/disk/prep .
 cp /$objtype/bin/fossil/flfmt .
 cp /$objtype/bin/fossil/last fossilast
 cp /$objtype/bin/venti/rdarena .
@@ -38,7 +38,7 @@ cp /$objtype/bin/venti/wrarena .
 #cp /$objtype/bin/venti/checkarenas .
 #cp /$objtype/bin/venti/checkindex .
 #cp /$objtype/bin/mkext .
-cp /$objtype/bin/disk/kfscmd .
+#cp /$objtype/bin/disk/kfscmd .
 
 ## networking tools
 cp /$objtype/bin/netstat .
@@ -81,16 +81,16 @@ cp /$objtype/bin/webfs .
 cp /$objtype/bin/date .
 cp /$objtype/bin/dd .
 cp /$objtype/bin/diff .
-cp /$objtype/bin/grep .
+#cp /$objtype/bin/grep .
 cp /$objtype/bin/hoc .
-cp /$objtype/bin/mv .
+#cp /$objtype/bin/mv .
 cp /$objtype/bin/ns .
 cp /$objtype/bin/p .
 cp /$objtype/bin/ps .
 cp /$objtype/bin/pwd .
 cp /$objtype/bin/seq .
-cp /$objtype/bin/unmount .
-cp /$objtype/bin/xd .
+#cp /$objtype/bin/unmount .
+#cp /$objtype/bin/xd .
 #cp /$objtype/bin/awk .
 #cp /$objtype/bin/chgrp .
 #cp /$objtype/bin/du .
@@ -110,10 +110,12 @@ cp /rc/bin/reboot .
 cp /rc/bin/window .
 cp /rc/bin/yesterday .
 cp /rc/bin/hget .
-#cp /rc/bin/memory .
+cp /rc/bin/memory .
 
 ## acme and others
 cp /$objtype/bin/acme .
+cp /$objtype/bin/mothra .
+cp /$objtype/bin/uhtml .
 co /$objtype/bin/stats .
 cp /$objtype/bin/con .
 cp /$objtype/bin/fortune .
@@ -129,13 +131,11 @@ cp /$objtype/bin/syscall .
 #cp /$objtype/bin/samterm .
 #cp /$objtype/bin/faces .
 #cp /$objtype/bin/togif .
-#cp /$objtype/bin/mothra .
-#cp /$objtype/bin/uhtml .
 
 ## auxilliary utilities
 cp /$objtype/bin/aux/stub .
 cp /$objtype/bin/aux/mouse .
-#cp /$objtype/bin/aux/realemu .
+cp /$objtype/bin/aux/realemu .
 cp /$objtype/bin/aux/vga .
 cp /$objtype/bin/aux/zerotrunc .
 #cp /$objtype/bin/aux/timesync .

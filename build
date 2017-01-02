@@ -47,6 +47,7 @@ if(~ $1 9front){
 	bind -c frontmods/grio grio
 	bind -bc frontmods/patched patched
 	bind -bc frontmods/bootdir bootdir.extras
+	bind -bc frontmods/cfg cfg
 	build extras
 	build patched
 	build bootpaq

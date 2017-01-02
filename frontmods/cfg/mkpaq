@@ -4,13 +4,13 @@
 cp /$objtype/bin/ip/ipconfig .
 cp /$objtype/bin/ramfs .
 cp /$objtype/bin/auth/newns .
-cp /$objtype/bin/mntgen .
-cp /$objtype/bin/srv .
+#cp /$objtype/bin/mntgen .
+#cp /$objtype/bin/srv .
 cp /$objtype/bin/tar .
-cp /$objtype/bin/chmod .
-cp /$objtype/bin/mkdir .
+#cp /$objtype/bin/chmod .
+#cp /$objtype/bin/mkdir .
 cp /$objtype/bin/gunzip .
-cp /$objtype/bin/sed .
+#cp /$objtype/bin/sed .
 cp /$objtype/bin/rm .
 #	other bootscripts, namespace files, factotum -x
 # cp /n/rootless/bootdir.extras/factotum .
@@ -24,13 +24,13 @@ cp /n/rootless/bootdir.extras/save9cfg .
 cp /n/rootless/bootdir.extras/skel.tar .
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE .
 #	fileserver options
-cp /$objtype/bin/dossrv .
+#cp /$objtype/bin/dossrv .
 cp /$objtype/bin/fossil/fossil .
 cp /$objtype/bin/venti/venti .
-cp /$objtype/bin/disk/kfs .
-cp /$objtype/bin/cfs .
+#cp /$objtype/bin/disk/kfs .
+#cp /$objtype/bin/cfs .
 #	shell tools used by namespace scripts etc
-cp /$objtype/bin/ls .
+#cp /$objtype/bin/ls .
 cp /$objtype/bin/cp .
 cp /$objtype/bin/ed .
 cp /$objtype/bin/tr .
@@ -47,11 +47,11 @@ cp /rc/bin/rimport .
 cp /rc/bin/rexport .
 cp /rc/bin/rconnect .
 cp /$objtype/bin/tlssrv .
-cp /$objtype/bin/tlsclient .
+#cp /$objtype/bin/tlsclient .
 #	hubfs and support
 cp /n/rootless/bootdir.extras/grio .
 cp /n/rootless/bootdir.extras/hubfs .
 cp /n/rootless/bootdir.extras/hubshell .
 cp /n/rootless/bootdir.extras/hub .
-cp /$objtype/bin/sleep .
+#cp /$objtype/bin/sleep .
 cp /$objtype/bin/touch .
