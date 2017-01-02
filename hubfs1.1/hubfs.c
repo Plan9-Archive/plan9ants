@@ -56,6 +56,7 @@ struct Msgq{
 char *srvname;
 int paranoia;					/* In paranoid mode loose reader/writer sync is maintained */
 int freeze;						/* In frozen mode the hubs operate simply as a ramfs */
+int trunc;						/* In trunc mode clients auto-truncate files when opened */
 
 static char Ebad[] = "something bad happened";
 static char Enomem[] = "no memory";
@@ -406,6 +407,10 @@ fsopen(Req *r)
 	q->myfid = r->fid->fid;
 	q->nxt = h->bucket;
 	q->bufuse = 0;
+	if (trunc == 1){
+		q->nxt = h->inbuckp;
+		q->bufuse = h->buckfull;
+	}
 	r->fid->aux = q;
 	if(h && (r->ifcall.mode&OTRUNC)){
 		h->inbuckp = h->bucket;
@@ -439,6 +444,7 @@ zerohub(Hub *h)
 	h->qwnum = 0;
 	h->qwans = 0;
 	h->ketchup = 0;
+	h->buckfull = 0;
 	h->buckwrap = h->inbuckp + BUCKSIZE;
 }
 
@@ -475,7 +481,7 @@ hubcmd(char *cmd)
 void
 usage(void)
 {
-	fprint(2, "usage: hubfs [-D] [-s srvname] [-m mtpt]\n");
+	fprint(2, "usage: hubfs [-D] [-t] [-s srvname] [-m mtpt]\n");
 	exits("usage");
 }
 
@@ -488,6 +494,7 @@ main(int argc, char **argv)
 	srvname = nil;
 	fs.tree = alloctree(nil, nil, DMDIR|0777, fsdestroyfile);
 	q = fs.tree->root->qid;
+	trunc = 0;
 
 	ARGBEGIN{
 	case 'D':
@@ -501,6 +508,9 @@ main(int argc, char **argv)
 		break;
 	case 'm':
 		mtpt = EARGF(usage());
+		break;
+	case 't':
+		trunc = 1;
 		break;
 	default:
 		usage();

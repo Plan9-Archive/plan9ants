@@ -8,6 +8,9 @@ while (~ $1 -*){
 	case -b
 		background = yes
 		shift
+	case -t
+		trunc = yes
+		shift
 	case *
 		echo bad flag $1
 		shift
@@ -52,7 +55,10 @@ if (test -e /n/$srvname/io0){
 if (! test -e /srv/$srvname){
 	create = yes
 	echo creating hubfs /srv/$srvname
-	hubfs -s $srvname
+	if (! ~ $trunc yes)
+		hubfs -s $srvname
+	if (~ $trunc yes)
+		hubfs -t -s $srvname
 }
 
 mount -c /srv/$srvname /n/$srvname

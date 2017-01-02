@@ -239,6 +239,8 @@ fsread(Req *r)
 	u32int count;
 	vlong offset;
 	char tmpstr[SMBUF];
+	int i;
+	int j;
 
 	h = r->fid->file->aux;
 
@@ -264,8 +266,14 @@ fsread(Req *r)
 	if(freeze == UP){
 		mq = r->fid->aux;
 		if(mq->bufuse > 0){
-			if(h->qrnum >= MAXQ -2){
-				h->qrnum = 1;
+			if(h->qrnum >= MAXQ - 2){
+				j = 1;
+				for(i = h->qrans; i <= h->qrnum; i++) {
+					h->qreqs[j] = h->qreqs[i];
+					h->rstatus[j] = h->rstatus[i];
+					j++;
+				}
+				h->qrnum = h->qrnum - h->qrans + 1;
 				h->qrans = 1;
 			}
 			h->qrnum++;
@@ -292,12 +300,18 @@ fsread(Req *r)
 		return;
 	}
 	/* Actual queue logic, ctl file and freeze mode logic is rarely used */
-	h->qrnum++;
+
 	if(h->qrnum >= MAXQ - 2){
-		msgsend(h);
-		h->qrnum = 1;
+		j = 1;
+		for(i = h->qrans; i <= h->qrnum; i++) {
+			h->qreqs[j] = h->qreqs[i];
+			h->rstatus[j] = h->rstatus[i];
+			j++;
+		}
+		h->qrnum = h->qrnum - h->qrans + 1;
 		h->qrans = 1;
 	}
+	h->qrnum++;
 	h->rstatus[h->qrnum] = WAIT;
 	h->qreqs[h->qrnum] = r;
 	msgsend(h);
@@ -337,12 +351,17 @@ fswrite(Req *r)
 		return;
 	}
 	/* Actual queue logic here */
-	h->qwnum++;
 	if(h->qwnum >= MAXQ - 2){
-		msgsend(h);
-		h->qwnum = 1;
+		j = 1;
+		for(i = h->qwans; i <= h->qwnum; i++) {
+			h->qwrits[j] = h->qwrits[i];
+			h->wstatus[j] = h->wstatus[i];
+			j++;
+		}
+		h->qwnum = h->qwnum - h->qwans + 1;
 		h->qwans = 1;
 	}
+	h->qwnum++;
 	h->wstatus[h->qwnum] = WAIT;
 	h->qwrits[h->qwnum] = r;
 	wrsend(h);
