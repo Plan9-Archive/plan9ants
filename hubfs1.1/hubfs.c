@@ -266,8 +266,14 @@ fsread(Req *r)
 	if(freeze == UP){
 		mq = r->fid->aux;
 		if(mq->bufuse > 0){
-			if(h->qrnum >= MAXQ -2){
-				h->qrnum = 1;
+			if(h->qrnum >= MAXQ - 2){
+				j = 1;
+				for(i = h->qrans; i <= h->qrnum; i++) {
+					h->qreqs[j] = h->qreqs[i];
+					h->rstatus[j] = h->rstatus[i];
+					j++;
+				}
+				h->qrnum = h->qrnum - h->qrans + 1;
 				h->qrans = 1;
 			}
 			h->qrnum++;

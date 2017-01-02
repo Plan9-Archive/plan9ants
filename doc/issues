@@ -4,9 +4,7 @@ When trying to secure the service namespace against failures of the main environ
 
 the -m parameter is not passed to hjfs when plan9rc is the boot script
 
-the partition and filesystem detection logic in plan9rc should be improved
-
-similarly the install scripts should autodetect partition locations and edit plan9.ini files accordingly
+the install scripts should autodetect partition locations and edit plan9.ini files accordingly
 
 ventiprog should be more careful about not replacing the wrcmd with bad information
 
@@ -42,3 +40,7 @@ what is needed to get any ssh client other than openssh working?
 Unless I'm missing something, there is no reason to have separate copies of the mkpaq and toolcopy scripts for the amd64 build. Everything should just be parameterized by $objtype. There's no reason we shouldn't be able to build on other arches than 386/amd64. Fixed in ANTS2.6
 
 there is a namespace/file conflict between /lib of the 9front bootfs and /lib from the ramfs skeleton. trying to run cs in the early 9front environment will complain that /lib/ndb/local does not exist. Fixed in ANTS2.6
+
+the partition and filesystem detection logic in plan9rc should be improved. Fixed in ANTS2.6
+
+cfs support was broken. Fixed in ANTS2.6
