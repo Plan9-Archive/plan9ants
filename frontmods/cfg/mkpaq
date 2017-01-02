@@ -1,7 +1,7 @@
 # 	mkpaq dotscript for paqsfs needed for rootless boot namespaces
 
 #	minimal tools for plan9rc script
-cp /$objtype/bin/read
+cp /$objtype/bin/read .
 cp /$objtype/bin/ip/ipconfig .
 cp /$objtype/bin/ramfs .
 cp /$objtype/bin/auth/newns .
