@@ -4,9 +4,10 @@ hubfs to be installed.  If an available hubfs is not mounted at
 /n/hubfs, it starts one.  It uses /srv/riohubfs.username for the new
 hubfs.  Additional options: the -x argument sets a command (default
 /bin/acme), -a provides an argument to it.  Colors are defined by 8
-digit hexidecimal numbers.  -c sets backgrouind color, -y the border
-color of active windows, -z the border color of backgrounded windows.
-The width of borders can be set with an integer parameter for -w.
+digit hexidecimal numbers.  -c sets backgrouind color, -t the text
+color, -u the window color, -y the border color of active windows, -z
+the border color of backgrounded windows.  The width of borders can be
+set with an integer parameter for -w.
 
 Example: grio -x /bin/stats -a -elm -c 0xaabbccff -y 0x11111111 -w 2
 
