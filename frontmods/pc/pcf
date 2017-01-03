@@ -150,5 +150,4 @@ bootdir
 	bootfs.paq
 	boot
 	/n/rootless/bootdir.extras/factotum
-	/n/rootless/bootdir.extras/bootpaq
 	/n/rootless/bootdir.extras/plan9rc

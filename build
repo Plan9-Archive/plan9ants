@@ -39,8 +39,41 @@ if(~ $1 9front){
 	bind -bc frontmods/cfg cfg
 	build extras
 	build frontpatched
-	build bootpaq
 	build tools
+	bind -bc frontmods/boot /sys/src/9/boot
+	bind -bc frontmods/port /sys/src/9/port
+	bind -bc frontmods/pc /sys/src/9/pc
+	bind -bc frontmods/pc64 /sys/src/9/pc64
+	bind -bc compiletemp /sys/src/9/pc
+	if(~ $objtype amd64){
+		unmount compiletemp /sys/src/9/pc
+		bind -bc compiletemp /sys/src/9/pc64
+	}
+	bind . /n/rootless
+	cd /sys/src/9/pc
+	if(~ $objtype amd64)
+		cd /sys/src/9/pc64
+	mk
+	cd $builddir
+	if(test -e compiletemp/9pcf){
+		cp compiletemp/9pcf 9ants
+		echo 9ants kernel built
+	}
+	if(test -e compiletemp/9pc64){
+		cp compiletemp/9pc64 9ants64
+		echo 9ants64 kernel built
+	}
+	exit
+}
+
+if(~ $1 frontkernel){
+	cd $builddir
+	bind -c frontmods/grio grio
+	bind -bc frontmods/patched patched
+	bind -bc frontmods/bootdir bootdir.extras
+	bind -bc frontmods/cfg cfg
+	build extras
+	build frontpatched
 	bind -bc frontmods/boot /sys/src/9/boot
 	bind -bc frontmods/port /sys/src/9/port
 	bind -bc frontmods/pc /sys/src/9/pc
