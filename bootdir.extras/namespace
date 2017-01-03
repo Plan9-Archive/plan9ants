@@ -29,7 +29,7 @@ bind -a /mnt/broot /
 bind -a /mnt/broot/lib /lib
 
 # authentication
-mount -a /srv/factotum /mnt
+mount -b /srv/factotum /mnt
 
 # standard bin
 bind -a /boot /bin
