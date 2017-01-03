@@ -1,6 +1,5 @@
 # root
 mount -ac #s/ramboot /root $rootspec
-mount -a #s/frontpaq /root
 bind -a $rootdir /
 bind -c $rootdir/mnt /mnt
 mount -a #s/bootpaq /boot
@@ -20,6 +19,13 @@ bind -b #P /dev
 
 # mount points
 mount -a /srv/slashn /n
+mount -a /srv/slashmnt /mnt
+mount -a /srv/mntexport /mnt/exportfs
+
+# 9front paqfs root
+mount -a #s/frontpaq /mnt/broot
+bind -a /mnt/broot /
+bind -a /mnt/broot/lib /lib
 
 # authentication
 mount -a /srv/factotum /mnt
