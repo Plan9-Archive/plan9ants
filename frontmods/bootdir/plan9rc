@@ -366,7 +366,7 @@ fn dogetrootfs{
 	}
 # add cfs if requested
 	if(~ $#cfs 1 && test -x /bin/cfs && test -f $cfs){
-		{/bin/cfs -s -f $cfs </srv/boot &} | echo 0 >/srv/cfs
+		{/bin/cfs -s -S -f $cfs </srv/boot &} | echo 0 >/srv/cfs
 		mv /srv/boot /srv/boot.nocfs
 		mv /srv/cfs /srv/boot
 	}
