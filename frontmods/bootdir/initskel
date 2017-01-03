@@ -143,7 +143,7 @@ if(! ~ $cpusvc no){
 	echo 'aux/listen1 '$cpuport' rcpu rexexec...'
 	aux/listen1 -t tcp!*!$cpuport tlssrv -a /bin/rc -c server &
 #	aux/listen1 -t tcp!*!17027 /bin/exportfs -a &
-	aux/listen1 -t tcp!*!17009 /bin/rexexec &
+	aux/listen1 -t tcp!*!17009 /bin/ip/rexexec &
 }
 
 if(~ $unprivileged no){

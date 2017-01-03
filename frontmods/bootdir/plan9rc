@@ -520,7 +520,7 @@ if(~ $bootparse(1) tls*){
 if(~ $bootparse(1) srv*)
 	getrootfs=srv
 if(~ $ramsetup '')
-	ramsetup=/boot/ramskel
+	ramsetup=ramskel
 if(~ $initscript '')
 	initscript=initskel
 #if(~ $tgzfs '')
