@@ -114,10 +114,8 @@ fn dochecksys{
 }
 
 fn ants{
-	paqfs -s -S bootpaq /boot/bootpaq
-	mount -a /srv/bootpaq /boot
+	paqfs -s -S frontpaq -c 128 /boot/bootfs.paq
 	bind -a /boot /bin
-	
 	hostcheck
 	dochecksys
 
@@ -170,7 +168,7 @@ fn ants{
 
 	bind -c /usr/$user/tmp /tmp
 	echo 'partial root built starting services'
-	newns -n /boot/namespace initskel
+	auth/newns -n /lib/namespace initskel
 	if(! ~ $privpassword ''){
 		echo adding key to factotum
 		if(~ $passdom '')

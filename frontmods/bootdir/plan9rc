@@ -385,7 +385,7 @@ fn doafterroot{
 fn doinitscript{
 	switch($initscript){
 	case ?*
-		auth/newns -n /boot/$namespace $initscript
+		auth/newns -n /lib/$namespace $initscript
 	case easteregg
 		echo guess i should make an easter egg here
 	}
@@ -482,14 +482,10 @@ if(test -x /bin/nusbrc && ! test -e /env/nousbrc)
 
 diskparts
 
-# set up ANTS paqfs and srv of 9front paqfs
-if(test -e /boot/bootpaq){
-	echo -n paqfs...
-	paqfs -s -S bootpaq -c 64 /boot/bootpaq
-	paqfs -s -S frontpaq /boot/bootfs.paq
-	mount -a /srv/bootpaq /boot
-	bind -a /boot /bin
-}
+# set up srv of 9front paqfs
+echo -n paqfs...
+paqfs -s -S frontpaq -c 128 /boot/bootfs.paq
+bind -a /boot /bin
 
 # Parse plan9.ini options and trying to set sane defaults
 if(! ~ $1 '')
