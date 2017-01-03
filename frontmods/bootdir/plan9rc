@@ -214,8 +214,8 @@ fn ipsetup{
 			ipparams=( -g $gateway ether /net/ether0 $ipaddress $ipmask )
 		}
 		echo ipconfig $ipparams
-		ipconfig $ipparams
-		ipconfig loopback /dev/null 127.1
+		ip/ipconfig $ipparams
+		ip/ipconfig loopback /dev/null 127.1
 	}
 	ipdone=yes
 }
@@ -248,7 +248,7 @@ fn dostartventi{
 		if(! ~ $ipdone yes){
 			ipsetup
 		}
-		venti -c $venticonf -a $ventilisten -h $vhttplisten
+		venti/venti -c $venticonf -a $ventilisten -h $vhttplisten
 		venti=tcp!127.1!17034
 	case later
 		echo ok you can start venti later that is fine
@@ -314,7 +314,7 @@ fn dogetrootfs{
 			}
 		}
 		echo starting fossil from $fossil...
-		fossil -f $fossil -c 'srv -p fscons'
+		fossil/fossil -f $fossil -c 'srv -p fscons'
 		echo 'srv -A boot' >>/srv/fscons
 		bootsrv=/srv/boot
 		bootpartition=$fossil
@@ -385,7 +385,7 @@ fn doafterroot{
 fn doinitscript{
 	switch($initscript){
 	case ?*
-		newns -n /boot/$namespace $initscript
+		auth/newns -n /boot/$namespace $initscript
 	case easteregg
 		echo guess i should make an easter egg here
 	}
@@ -398,7 +398,7 @@ fn dorootstart{
 		echo grid service started mounting $bootsrv and starting hubrc
 		mount $bootsrv /root
 		if(test -e /root/rc/bin/hubrc)
-			newns -n /root/lib/namespace /root/rc/bin/hubrc
+			auth/newns -n /root/lib/namespace /root/rc/bin/hubrc
 		if not{
 			echo no hubrc found trying defaults
 			cs
@@ -416,7 +416,7 @@ fn dorootstart{
 		echo mounting $bootsrv to /root and starting cpurc
 		mount $bootsrv /root
 		if(test -e /root/rc/bin/cpurc)
-			newns -n /root/lib/namespace /root/rc/bin/cpurc
+			auth/newns -n /root/lib/namespace /root/rc/bin/cpurc
 		if not
 			echo ERROR no cpurc found
 	case terminal
@@ -428,8 +428,8 @@ fn dorootstart{
 		}
 		home=/usr/$user
 		if(test -e /root/rc/bin/termrc){
-			newns -n /root/lib/namespace /root/rc/bin/termrc
-			newns -n /root/lib/namespace rc -c 'cd; . $home/lib/profile'
+			auth/newns -n /root/lib/namespace /root/rc/bin/termrc
+			auth/newns -n /root/lib/namespace rc -c 'cd; . $home/lib/profile'
 		}
 		if not
 			echo ERROR no termrc found

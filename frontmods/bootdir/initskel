@@ -121,8 +121,8 @@ if(~ $hostfactotum no){
 if(! ~ $netsvc no){
 	if(! test -e /net/ipifc/0/ctl){
 		echo -n 'ipconfig ' $ipparams '...'
-		ipconfig $ipparams
-		ipconfig loopback /dev/null 127.1
+		ip/ipconfig $ipparams
+		ip/ipconfig loopback /dev/null 127.1
 	}
 }
 
@@ -140,10 +140,10 @@ if(! ~ $hubsvc no){
 if(! ~ $cpusvc no){
 	if(~ $cpuport '')
 		cpuport=17060
-	echo 'listen1 '$cpuport' rcpu rexexec...'
-	listen1 -t tcp!*!$cpuport tlssrv -a /bin/rc -c server &
-#	listen1 -t tcp!*!17027 /bin/exportfs -a &
-	listen1 -t tcp!*!17009 /bin/rexexec &
+	echo 'aux/listen1 '$cpuport' rcpu rexexec...'
+	aux/listen1 -t tcp!*!$cpuport tlssrv -a /bin/rc -c server &
+#	aux/listen1 -t tcp!*!17027 /bin/exportfs -a &
+	aux/listen1 -t tcp!*!17009 /bin/rexexec &
 }
 
 if(~ $unprivileged no){
@@ -159,7 +159,7 @@ if(~ $unprivileged no){
 #	echo cron...
 #	cron >>/sys/log/cron >[2=1] &
 	echo -n authsrv...
-	listen1 -tv tcp!*!567 authsrv -d &
+	aux/listen1 -tv tcp!*!567 authsrv -d &
 }
 
 if(~ $font ''){

@@ -1,12 +1,12 @@
 # 	mkpaq dotscript for paqsfs needed for rootless boot namespaces
 
 #	minimal tools for plan9rc script
-cp /$objtype/bin/read .
-cp /$objtype/bin/ip/ipconfig .
-cp /$objtype/bin/ramfs .
-cp /$objtype/bin/auth/newns .
-cp /$objtype/bin/tar .
-cp /$objtype/bin/gunzip .
+#cp /$objtype/bin/read .
+#cp /$objtype/bin/ip/ipconfig .
+#cp /$objtype/bin/ramfs .
+#cp /$objtype/bin/auth/newns .
+#cp /$objtype/bin/tar .
+#cp /$objtype/bin/gunzip .
 #	already present in 9front bootfs.paq
 #cp /$objtype/bin/mntgen .
 #cp /$objtype/bin/srv .
@@ -15,45 +15,45 @@ cp /$objtype/bin/gunzip .
 #cp /$objtype/bin/sed .
 #cp /$objtype/bin/rm .
 #	other bootscripts, namespace files, factotum -x
-cp /n/rootless/bootdir.extras/namespace .
+#cp /n/rootless/bootdir.extras/namespace .
 cp /n/rootless/bootdir.extras/namespace.standard .
-cp /n/rootless/bootdir.extras/namespace.saveterm .
-cp /n/rootless/bootdir.extras/namespace.save9front .
-cp /n/rootless/bootdir.extras/ramskel .
-cp /n/rootless/bootdir.extras/initskel .
-cp /n/rootless/bootdir.extras/save9cfg .
-cp /n/rootless/bootdir.extras/skel.tar .
-# cp /n/rootless/bootdir.extras/factotum .
+#cp /n/rootless/bootdir.extras/namespace.saveterm .
+#cp /n/rootless/bootdir.extras/namespace.save9front .
+#cp /n/rootless/bootdir.extras/ramskel .
+#cp /n/rootless/bootdir.extras/initskel .
+#cp /n/rootless/bootdir.extras/save9cfg .
+#cp /n/rootless/bootdir.extras/skel.tar .
+#cp /n/rootless/bootdir.extras/factotum .
 #	MANDATORY FOR ROOTLESS BOOT SCRIPTS ABOVE THIS LINE .
 #	fileserver options
-cp /$objtype/bin/fossil/fossil .
-cp /$objtype/bin/venti/venti .
+#cp /$objtype/bin/fossil/fossil .
+#cp /$objtype/bin/venti/venti .
 #cp /$objtype/bin/dossrv .
 #cp /$objtype/bin/disk/kfs .
 #cp /$objtype/bin/cfs .
 #	shell tools used by namespace scripts etc
-cp /$objtype/bin/cp .
-cp /$objtype/bin/ed .
-cp /$objtype/bin/tr .
-cp /$objtype/bin/wc .
+#cp /$objtype/bin/cp .
+#cp /$objtype/bin/ed .
+#cp /$objtype/bin/tr .
+#cp /$objtype/bin/wc .
 #cp /$objtype/bin/ls .
 #	remote access
-cp /$objtype/bin/aux/listen1 .
-cp /$objtype/bin/exportfs .
-cp /$objtype/bin/cpu .
-cp /$objtype/bin/srvfs .
-cp /$objtype/bin/ip/rexexec .
-cp /$objtype/bin/rx .
-cp /rc/bin/rcpu .
-cp /rc/bin/rimport .
-cp /rc/bin/rexport .
-cp /rc/bin/rconnect .
-cp /$objtype/bin/tlssrv .
+#cp /$objtype/bin/aux/listen1 .
+#cp /$objtype/bin/exportfs .
+#cp /$objtype/bin/cpu .
+#cp /$objtype/bin/srvfs .
+#cp /$objtype/bin/ip/rexexec .
+#cp /$objtype/bin/rx .
+#cp /rc/bin/rcpu .
+#cp /rc/bin/rimport .
+#cp /rc/bin/rexport .
+#cp /rc/bin/rconnect .
+#cp /$objtype/bin/tlssrv .
 #cp /$objtype/bin/tlsclient .
 #	hubfs and support
-cp /n/rootless/bootdir.extras/grio .
-cp /n/rootless/bootdir.extras/hubfs .
-cp /n/rootless/bootdir.extras/hubshell .
-cp /n/rootless/bootdir.extras/hub .
-cp /$objtype/bin/touch .
+#cp /n/rootless/bootdir.extras/grio .
+#cp /n/rootless/bootdir.extras/hubfs .
+#cp /n/rootless/bootdir.extras/hubshell .
+#cp /n/rootless/bootdir.extras/hub .
+#cp /$objtype/bin/touch .
 #cp /$objtype/bin/sleep .

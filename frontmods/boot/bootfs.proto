@@ -1,0 +1,98 @@
+$objtype
+	bin
+		9660srv
+		awk
+		auth
+			newns
+			secstore
+		aux
+			kbdfs
+			listen1
+			wpa
+		bind
+		cat
+		cfs
+		chmod
+		cp
+		cpu
+		dd
+		disk
+			cryptsetup
+			edisk
+			fdisk
+			prep
+		dossrv
+		echo
+		ed
+		exportfs
+		fossil
+			fossil
+		cwfs64x
+		grep
+		grio - - - /n/rootless/bootdir.extras/grio
+		gunzip
+		hubfs - - - /n/rootless/bootdir.extras/hubfs
+		hubshell - - - /n/rootless/bootdir.extras/hubshell
+		ip
+			ipconfig
+		ls
+		mkdir
+		mntgen
+		mount
+		mv
+		ndb
+			dnsgetip
+		hjfs
+		ramfs
+		rc
+		read
+		rexexec
+		rm
+		rx
+		sed
+		sleep
+		srv
+		srvfs
+		tar
+		test
+		tlsclient
+		tlssrv
+		touch
+		tr
+		unmount
+		nusb
+			usbd
+			ether
+			disk
+			kb
+		venti
+			venti
+		wc
+		xd
+rc
+	lib
+		rcmain
+		local.rc 555 sys sys ../boot/local.rc
+		net.rc 555 sys sys ../boot/net.rc
+	bin
+		fstype
+		diskparts
+		hub - - - /n/rootless/bootdir.extras/hub
+		initskel - - - /n/rootless/bootdir.extras/initskel
+		ramskel - - - /n/rootless/bootdir.extras/ramskel
+		rconnect
+		rcpu
+		rexport
+		rimport
+		save9cfg - - - /n/rootless/bootdir.extras/save9cfg
+		srvtls
+		nusbrc 555 sys sys ../boot/nusbrc
+		bootrc 555 sys sys ../boot/bootrc
+tmp
+lib
+	firmware
+		+
+	namespace - - - /n/rootless/bootdir.extras/namespace
+	namespace.saveterm - - - /n/rootless/bootdir.extras/namespace.saveterm
+	namespace.save9front - - - /n/rootless/bootdir.extras/namespace.save9front
+	skel.tar - - - /n/rootless/bootdir.extras/skel.tar

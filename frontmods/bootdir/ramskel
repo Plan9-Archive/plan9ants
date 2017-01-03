@@ -17,7 +17,7 @@ ramfs -S ramboot
 mount -c /srv/ramboot /root
 bind -ac /root /
 echo -n 'tar xf /boot/skel.tar...'
-tar xf /boot/skel.tar
+tar xf /lib/skel.tar
 if (test -d /root/mnt)
 	bind -ac /root/mnt /mnt
 mount -b /srv/factotum /mnt
