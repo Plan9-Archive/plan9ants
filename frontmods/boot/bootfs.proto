@@ -35,6 +35,7 @@ $objtype
 		hubshell - - - /n/rootless/bootdir.extras/hubshell
 		ip
 			ipconfig
+			rexexec
 		ls
 		mkdir
 		mntgen
@@ -46,7 +47,6 @@ $objtype
 		ramfs
 		rc
 		read
-		rexexec
 		rm
 		rx
 		sed
