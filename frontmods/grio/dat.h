@@ -176,6 +176,8 @@ int		Selborder;
 ulong	bgtrans;
 ulong	borderactivecolor;
 ulong	borderbgcolor;
+ulong	textcolor;
+ulong	winbgcolor;
 void		winctl(void*);
 void		winshell(void*);
 Window*	wlookid(int);

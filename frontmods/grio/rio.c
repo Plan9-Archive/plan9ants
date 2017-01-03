@@ -121,14 +121,14 @@ derror(Display*, char *errorstr)
 void
 usage(void)
 {
-	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-y bordercolor1] [-z bordercolor2] [-f font] [-i initcmd] [-k kbdcmd] [-s]\n");
+	fprint(2, "usage: grio [-x altcmd] [-a altarg] [-c bgcolor] [-w borderwidth] [-t textcolor] [-u wincolor ] [-y bordercolor1] [-z bordercolor2] [-f font] [-i initcmd] [-k kbdcmd] [-s]\n");
 	exits("usage");
 }
 
 void
 threadmain(int argc, char *argv[])
 {
-	char *initstr, *kbdin, *s, *usercol, *borderwidth, *bacolor, *bbcolor;
+	char *initstr, *kbdin, *s, *usercol, *borderwidth, *bacolor, *bbcolor, *tcolor, *ucolor;
 	char buf[256];
 	Image *i;
 	Rectangle r;
@@ -136,6 +136,8 @@ threadmain(int argc, char *argv[])
 	Selborder = 4;
 	borderactivecolor = DGreygreen;
 	borderbgcolor = DPalegreygreen;
+	textcolor = 0x000000FF;
+	winbgcolor = 0xFFFFFFFF;
 	char mountstr[512] = "/srv/riohubfs.";
 	char hubstr[512]= "riohubfs.";
 
@@ -169,6 +171,8 @@ threadmain(int argc, char *argv[])
 	ARGBEGIN{
 	case 'b':
 		reverse = ~0xFF;
+		borderactivecolor = DPurpleblue;
+		borderbgcolor = 0x222222FF;
 		break;
 	case 'f':
 		fontname = EARGF(usage());
@@ -223,6 +227,18 @@ threadmain(int argc, char *argv[])
 		if (bbcolor == nil)
 			usage();
 		borderbgcolor = strtoul(bbcolor,0,0);
+		break;
+	case 't':
+		tcolor = ARGF();
+		if (tcolor == nil)
+			usage();
+		textcolor = strtoul(tcolor,0,0);
+		break;
+	case 'u':
+		ucolor = ARGF();
+		if (ucolor == nil)
+			usage();
+		winbgcolor = strtoul(ucolor,0,0);
 		break;
 	default:
 		usage();

@@ -178,9 +178,9 @@ iconinit(void)
 	background = allocimage(display, Rect(0,0,1,1), RGB24, 1, bgtrans);
 
 	/* greys are multiples of 0x11111100+0xFF, 14* being palest */
-	cols[BACK] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0xFFFFFFFF^reverse);
+	cols[BACK] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, winbgcolor^reverse);
 	cols[BORD] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0x999999FF^reverse);
-	cols[TEXT] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0x000000FF^reverse);
+	cols[TEXT] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, textcolor^reverse);
 	cols[HTEXT] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0x000000FF);
 	if(!reverse) {
 		cols[HIGH] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0xCCCCCCFF);
@@ -188,8 +188,8 @@ iconinit(void)
 		lighttitlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, borderbgcolor);
 	} else {
 		cols[HIGH] = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DPurpleblue);
-		titlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DPurpleblue);
-		lighttitlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, 0x222222FF);
+		titlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, borderactivecolor);
+		lighttitlecol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, borderbgcolor);
 	}
 	dholdcol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DMedblue);
 	lightholdcol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DGreyblue);
