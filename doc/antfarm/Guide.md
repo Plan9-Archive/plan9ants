@@ -2,7 +2,7 @@
 ## What you need
 
 The absolute minimum is a copy of qemu and the 6mb
-[9worker](http://9gridchan.org/9worker.gz) image.  Drawterm is also
+[9worker](http://files.9gridchan.org/9worker.gz) image.  Drawterm is also
 required for almost all of the tutorials.  It is also good to have
 copies of the Bell Labs and/or 9front cd .iso images.  The more
 advanced tutorials make use of a fully installed and modified image

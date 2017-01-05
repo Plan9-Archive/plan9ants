@@ -60,6 +60,7 @@ cp /$objtype/bin/ip/telnetd .
 cp /$objtype/bin/vncs .
 cp /$objtype/bin/vncv .
 cp /$objtype/bin/webfs .
+cp /$objtype/bin/hget .
 #cp /$objtype/bin/netssh .
 #cp /$objtype/bin/ssh .
 #cp /$objtype/bin/scp .
@@ -109,12 +110,11 @@ cp /rc/bin/slay .
 cp /rc/bin/reboot .
 cp /rc/bin/window .
 cp /rc/bin/yesterday .
-cp /rc/bin/hget .
 #cp /rc/bin/memory .
 
 ## acme and others
 cp /$objtype/bin/acme .
-co /$objtype/bin/stats .
+cp /$objtype/bin/stats .
 cp /$objtype/bin/con .
 cp /$objtype/bin/fortune .
 cp /$objtype/bin/htmlfmt .
