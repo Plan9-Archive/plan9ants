@@ -42,10 +42,6 @@ cp /$objtype/bin/cpu .
 cp /$objtype/bin/srvfs .
 cp /$objtype/bin/ip/rexexec .
 cp /$objtype/bin/rx .
-cp /rc/bin/rcpu .
-cp /rc/bin/rimport .
-cp /rc/bin/rexport .
-cp /rc/bin/rconnect .
 cp /$objtype/bin/tlssrv .
 cp /$objtype/bin/tlsclient .
 #	hubfs and support
