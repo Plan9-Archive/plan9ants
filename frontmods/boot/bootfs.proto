@@ -1,6 +1,7 @@
 $objtype
 	bin
 		9660srv
+		aan
 		awk
 		auth
 			newns

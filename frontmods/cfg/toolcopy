@@ -46,7 +46,6 @@ cp /$objtype/bin/ip/ping .
 cp /$objtype/bin/ip/traceroute .
 cp /$objtype/bin/ndb/cs .
 cp /$objtype/bin/ndb/dns .
-cp /$objtype/bin/aan .
 #cp /$objtype/bin/ndb/dnsquery .
 #cp /$objtype/bin/ip/dhcpd .
 #cp /$objtype/bin/snoopy .

@@ -356,6 +356,25 @@ fn dogetrootfs{
 		if not
 			srvtls tcp!$fs!17020 boot
 		bootsrv=/srv/boot
+	case aan
+		if(! ~ $ipdone yes){
+			ipsetup
+		}
+		if(~ $fs ''){
+			echo 'fs is [ ' $fs ' ]?'
+			getans fs $fs
+		}
+		if(~ $auth '')
+			auth=$fs
+## HACK: on terminals start new factotum that knows where to dial
+		if(~ $factotum terminal)
+			/boot/factotum -a $auth
+		echo srv $fs to /srv/boot...
+		if(~ $fs tcp*)
+			rimport -p -s boot $fs / /n/bootimp
+		if not
+			rimport -p -s boot tcp!$fs!17019 / /n/bootimp
+		bootsrv=/srv/boot
 	case srv
 		if(~ $interactive yes){
 			echo 'enter full path to target srv'
@@ -513,6 +532,11 @@ if(~ $bootparse(1) tls*){
 	if(! ~ $bootparse(2) '')
 		ipparams=`{shifter $bootparse}
 }
+if(~ $bootparse(1) aan*){
+	getrootfs=aan
+	if(! ~ $bootparse(2) '')
+		ipparams=`{shifter $bootparse}
+}
 if(~ $bootparse(1) srv*)
 	getrootfs=srv
 if(~ $ramsetup '')
@@ -576,7 +600,7 @@ fn startinter{
 	dostartventi
 	echo 'Attach to a file server? Choose cwfs,hjfs,fossil,tcp,tls or leave blank for none.'
 	getans getrootfs $getrootfs
-	if(~ $getrootfs tcp || ~ $getrootfs tls){
+	if(~ $getrootfs tcp || ~ $getrootfs tls || ~ $getrootfs aan){
 		echo 'fileserver is [ ' $fs ' ]?'
 		getans fs $fs
 		if (~ $auth '')
@@ -651,9 +675,14 @@ fn starttrad{
 		if(! ~ $bootparse(2) '')
 			ipparams=`{shifter $bootparse}
 	}
+	if(~ $bootparse(1) aan*){
+		getrootfs=aan
+		if(! ~ $bootparse(2) '')
+			ipparams=`{shifter $bootparse}
+	}
 	if(~ $bootparse(1) srv*)
 		getrootfs=srv
-	if(~ $getrootfs tcp || ~ $getrootfs tls){
+	if(~ $getrootfs tcp || ~ $getrootfs tls || ~ $getrootfs aan){
 		if (~ $fs ''){
 			echo 'fileserver is [ ' $fs ' ]?'
 			getans fs $fs
