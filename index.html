@@ -24,7 +24,7 @@ a:hover { text-decoration: none; color: #C00; background: #FC0; }
 <div id="body">
 ANTS is a set of tools to structure and manage Plan 9 namespaces to make systems and grids more flexible, reliable, and easy to administer. It supports both the Bell Labs and 9front distributions of Plan 9. ANTS is well suited to cloud based hosting and scripts for use with vultr.com are provided.
 <h4>Update and Status 7 January 2017</h4>
-The main ANTS repo, found at <a href="https://bitbucket.org/mycroftiv/plan9ants">bitbucket.org/mycroftiv/plan9ants</a> has been updated to revision 470 to compile with the December 2016 9front release r5641. I am planning on discontinuing releasing tarballs with pre-compiled kernels, I think everyone who might use ANTS is happier compiling locally. If desired, precompiled kernels and tools.tgz may be downloaded from the "frontants" and "labsants" subdirectories of <a href="http://files.9gridchan.org">files.9gridchan.org</a>. Development can be followed at <a href="https://bitbucket.org/mycroftiv/antsexperiments">bitbucket.org/mycroftiv/antsexperiments</a>
+The main ANTS repo, found at <a href="https://bitbucket.org/mycroftiv/plan9ants">bitbucket.org/mycroftiv/plan9ants</a> has been updated to revision 471 to compile with the December 2016 9front release r5641. Building from source is the preferred method for installing ANTS, I think everyone who might use ANTS is happier compiling locally. If desired, precompiled kernels and tools.tgz may be downloaded from the "frontants" and "labsants" subdirectories of <a href="http://files.9gridchan.org">files.9gridchan.org</a>. Development can be followed at <a href="https://bitbucket.org/mycroftiv/antsexperiments">bitbucket.org/mycroftiv/antsexperiments</a>
 <h4>Development Blog</h4>
 Beginning in December 2016, I have been blogging intensively about development and testing of ANTS in 9front. The blog is found at <a href="http://doc.9gridchan.org/blog">doc.9gridchan.org/blog</a>
 <h4>Components</h4>
@@ -40,11 +40,6 @@ ANTS is a modular toolkit. The components can be used separately:
 <h4>Code repositories</h4>
 <p><a href="https://bitbucket.org/mycroftiv/plan9ants">bitbucket.org/mycroftiv/plan9ants</a> - The current release source code repo<p>
 <p><a href="https://bitbucket.org/mycroftiv/antsexperiments">bitbucket.org/mycroftiv/antsexperiments</a> - Ongoing development code<p>
-<h4>QEMU images from 2013</h4>
-<p><a href="http://files.9gridchan.org/9worker.gz">9worker.gz</a> - A tiny image with only the ANTS kernel and tools for the administrative namespace<p>
-<p>446979a360ad398bfeddcb8de1f4d458c1bfa7d0  9worker.gz sha1sum<p>
-<p><a href="http://files.9gridchan.org/9queen.gz">9queen.gz</a> - A fully installed system image
-<p>864b0379423d8bc7381ceb2375294e292bca3f50  9queen.gz sha1sum<p>
 <h4>Documentation, Walkthroughs, Tutorials</h4>
 <p><a href="http://ants.9gridchan.org/ants.html">9gridchan.org/ants.html</a> - Code, manpages, and the description paper<p>
 <p><a href="http://doc.9gridchan.org/them">doc.9gridchan.org/them</a> - Walkthroughs for setting up a full ANTS grid with examples and support scripts for <a href="http://www.vultr.com/?ref=6843332">vultr.com</a> [referrer link] hosting<p>
@@ -70,7 +65,12 @@ The name of the 9front kernel is 9ants. A precompiled x86 9ants is located in th
 Once correct plan9.ini variables are set, your system can be rebooted with the new kernel. Assuming proper configuration, there should be no disruption of your userland and the new ANTS namespace will be accessible via cpu or hubfs. To install the userspace components to the main system, cd to the base ants2.1 directory and 'build fronthost'.
 <h4>Bell Labs</h4>
 The name of the Bell Labs kernel is 9pcram. A precompiled x86 9pcram.gz is located in the base ants2.1 directory. Copy that kernel to your 9fat partition. You probably also want to copy the tools.tgz to 9fat as well. Modify your plan9.ini to use the new kernel. Setting up a boot menu is recommended. An example configuration is located at doc/PLAN9.INI. Once correct plan9.ini variables are set, your system can be rebooted with the new kernel. Assuming proper configuration, there should be no disruption of your userland and the new ANTS namespace will be accessible via cpu or hubfs. To install the userspace components to the main system, cd to the base ants2.1 directory and 'build labshost'.
-<h4>Old ANTS 2.1 release tarball - deprecated</h4>
+<h4>QEMU images from 2013</h4>
+<p><a href="http://files.9gridchan.org/9worker.gz">9worker.gz</a> - A tiny image with only the ANTS kernel and tools for the administrative namespace<p>
+<p>446979a360ad398bfeddcb8de1f4d458c1bfa7d0  9worker.gz sha1sum<p>
+<p><a href="http://files.9gridchan.org/9queen.gz">9queen.gz</a> - A fully installed system image
+<p>864b0379423d8bc7381ceb2375294e292bca3f50  9queen.gz sha1sum<p>
+<h4>Old ANTS 2.1 release tarball from 2015 - deprecated</h4>
 <p><a href="http://files.9gridchan.org/ants2.1.tgz">ants2.1.tgz</a> - Old ANTS 2.1 release tarball with source code and compiled kernels<p>
 <p>7cffc5f4a6413e5aab510e424b1e13ca61f2aa4e	ants2.1.tgz sha1sum<p>
 <p>------------------------------------------------------<p>
