@@ -40,6 +40,10 @@ if(~ $1 9front){
 	build extras
 	build frontpatched
 	build tools
+	cd bootdir.extras
+	rm skel.tar
+	tar cf skel.tar root
+	cd $builddir
 	bind -bc frontmods/boot /sys/src/9/boot
 	bind -bc frontmods/port /sys/src/9/port
 	bind -bc frontmods/pc /sys/src/9/pc
@@ -74,6 +78,10 @@ if(~ $1 frontkernel){
 	bind -bc frontmods/cfg cfg
 	build extras
 	build frontpatched
+	cd bootdir.extras
+	rm skel.tar
+	tar cf skel.tar root
+	cd $builddir
 	bind -bc frontmods/boot /sys/src/9/boot
 	bind -bc frontmods/port /sys/src/9/port
 	bind -bc frontmods/pc /sys/src/9/pc
