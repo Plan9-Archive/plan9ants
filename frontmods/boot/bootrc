@@ -136,6 +136,11 @@ fn ants{
 
 ##	get tgzfs if chosen and load into the ramdisk
 
+	if(~ $tgzfs '')
+		tgzfs=tools.tgz
+	if(~ $tgzfs no)
+		tgzfs=''
+
 	if(~ $tgzfs *.tgz){
 		dossrv
 		if(~ $fatpath '')

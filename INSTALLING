@@ -1,27 +1,80 @@
-You may either install the prebuilt 9pcram.gz and its optional
-tools.tgz, or build the kernel (and optional .tgz) locally.  The file
-doc/PLAN9.INI is an example of a plan9.ini file which works with the
-rootless kernel in a stock plan9 fossil install.  (Add the venti= if
-needed).  From a fresh install from the bell labs .iso, just copying
-9pcram.gz, tools.tgz, and doc/PLAN9.INI to the 9fat is a complete
-install of the toolkit.  Make any adjustsments for your specific
-hardware as needed to the PLAN9.INI file.  It may also be useful to
-install hubfs and grio and the scripts and namespace files also to the
-host system, but this is not required.
+9front and Bell Labs are both supported.  Installing from source is
+the recommended method, although precompiled kernels and tools.tgz may
+be found in the "frontants" and "labsants" subdirectories on
+files.9gridchan.org, along with source/utilities tarballs.
 
-9front is supported with the 9ants kernel built by build 9front. Please see
-the frontmods/README file for more information. 
+Overview: A full ANTS install includes a kernel (9ants for 9front,
+9pcram.gz for Bell Labs) and tools.tgz placed in 9fat.  Hubfs, grio,
+utility scripts, and manpages are installed to your main filesystem.
+The 9fat plan9.ini needs a few additional variables for configuration.
+The 9front /rc/bin/termrc needs one line added to the end.
 
-You may also build everything locally.  The build script uses binds to
-work only within the rootless directory and leave all existing system
-src unmodified.  It has the following modes:
+Building and installing is mostly done by the build script in the root
+of the ANTS directory.  This script has multiple modes.
+
+9front Install
+--------------
+
+build 9front # compiles everything, but does not install anything. 
+build fronthost # installs the userspace components
+copy the new 9ants kernel and tools.tgz to the 9fat partition
+edit plan9.ini
+add the following line to /rc/bin/termrc:
+home=/usr/$user; cd; . $home/lib/profile
+
+The minimal change to plan9.ini is setting "bootfile=9ants"
+To change to using the main ANTS boot script, add "bootcmd=plan9rc"
+To set a password for remote access on systems not using an auth server:
+add "privpassword=SOMEPASSWORD"
+
+There are many optional plan9.ini variables which affect the plan9rc
+script.  Please see its documentation for a comprehensive list.
+
+Bell Labs Install
+-----------------
+
+build everything # compiles kernel, tools.tgz, and userspace utilities
+build labshost # installs userspace components and docs
+copy the 9pcram.gz and tools.tgz to 9fat and edit plan9.ini
+
+build script info
+-----------------
+
+The build script uses binds to work only within the rootless directory
+and leave all existing system src unmodified.  It has the following
+modes:
+
+9front build script modes
+-------------------------
 
 build - with no arguments, this builds a 9pcram.gz kernel with the
 kernel and its compilation files located in compiletemp. Requires 
 build extras build patched build bootpaq be run first.
 
-build 9front - this builds a 9ants kernel and copies it to the root of
-the ants directory
+build 9front - this builds a 9ants kernel and tools.tgz and copies
+them to the root of the ants directory
+
+build fronthost - builds and installs the userspace components
+(hubfs, grio, contents of the scripts directory, manpages)
+
+build 9frontinstall - installs kernel and tools to 9fat, then installs
+userspace programs and prompts for a privpassword.  Requires "build
+9front" be run first.  It is necessary to edit and change the new
+plan9.ini as needed
+
+build frontkernel - builds the 9ants kernel but does not create a
+tools.tgz
+
+build vultr - installs to a clean vultr install (hjfs recommended)
+
+build vultrfossil - installs to a custom-partitioned 9front vultr install
+changes system to use venti+fossil
+
+build frontuninstall - uninstall installed userspace components.  does
+not change 9fat
+
+bell labs build script modes
+----------------------------
 
 build ramfs - this uses a ramfs for the compile and copies only the
 9pcram.gz kernel to compiletemp.
@@ -45,20 +98,6 @@ extras build bootpaq build
 
 build isoinstall - can be run after build everything to modify a Bell
 Labs default install fresh from the .iso
-
-build 9frontinstall - installs to a clean 9front install after build 9front
-change the default privpassword=rootless in plan9.ini and other values
-as needed for local configuration
-
-build portsinstall - installs from 9front-ports tree without modifying
-9fat or system files
-
-build portsuninstall - uninstall components installed by portsinstall
-
-build vultr - installs to a clean vultr install (hjfs recommended)
-
-build vultrfossil - installs to a custom-partitioned 9front vultr install
-changes system to use venti+fossil
 
 The 9pcram.gz kernel and optional .tgz are placed in the conventional
 9fat partition.  Conventional plan9.ini variiables are mostly
@@ -98,3 +137,14 @@ hg up -r379 builds vs 9front 5625
 hg up -r377 builds vs 9front 5360
 hg up -r369 builds vs 9front 5217
 hg up -r368 builds vs 9front 4796
+
+You may either install the prebuilt 9pcram.gz and its optional
+tools.tgz, or build the kernel (and optional .tgz) locally.  The file
+doc/PLAN9.INI is an example of a plan9.ini file which works with the
+rootless kernel in a stock plan9 fossil install.  (Add the venti= if
+needed).  From a fresh install from the bell labs .iso, just copying
+9pcram.gz, tools.tgz, and doc/PLAN9.INI to the 9fat is a complete
+install of the toolkit.  Make any adjustsments for your specific
+hardware as needed to the PLAN9.INI file.  It may also be useful to
+install hubfs and grio and the scripts and namespace files also to the
+host system, but this is not required.

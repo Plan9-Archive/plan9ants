@@ -181,7 +181,6 @@ if(~ $1 portsuninstall){
 	rm /sys/doc/ants.ms
 	rm /sys/doc/ants.ps
 	rm /sys/man/3/procns
-	cp scripts/* /rc/bin
 	rm /rc/bin/addns
 	rm /rc/bin/addroroot
 	rm /rc/bin/addsources

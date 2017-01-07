@@ -543,8 +543,10 @@ if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')
 	initscript=initskel
-#if(~ $tgzfs '')
-#	tgzfs=tools.tgz
+if(~ $tgzfs '')
+	tgzfs=tools.tgz
+if(~ $tgzfs no)
+	tgzfs=''
 if(~ $namespace '')
 	namespace=namespace
 if(~ $factotum '')
@@ -598,7 +600,7 @@ fn startinter{
 		getans vhttplisten $vhttplisten
 	}
 	dostartventi
-	echo 'Attach to a file server? Choose cwfs,hjfs,fossil,tcp,tls or leave blank for none.'
+	echo 'Root file server? cwfs, hjfs, fossil, tcp, tls, aan or leave blank.'
 	getans getrootfs $getrootfs
 	if(~ $getrootfs tcp || ~ $getrootfs tls || ~ $getrootfs aan){
 		echo 'fileserver is [ ' $fs ' ]?'
@@ -648,7 +650,7 @@ fn starttrad{
 	hostcheck
 	dochecksys
 	doafterfact
-	echo -n 'root is from (tcp,tls,local)['$bootargs']: '
+	echo -n 'root is from (tcp,tls,aan,local)['$bootargs']: '
 	bootanswer=`{read}
 	if(~ $bootanswer rc){
 		rc -i

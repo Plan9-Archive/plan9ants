@@ -350,8 +350,10 @@ if(~ $ramsetup '')
 	ramsetup=ramskel
 if(~ $initscript '')
 	initscript=initskel
-#if(~ $tgzfs '')
-#	tgzfs=tools.tgz
+if(~ $tgzfs '')
+	tgzfs=tools.tgz
+if(~ $tgzfs no)
+	tgzfs=''
 if(~ $namespace '')
 	namespace=namespace
 if(~ $factotum '')
