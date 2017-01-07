@@ -76,6 +76,11 @@ not change 9fat
 bell labs build script modes
 ----------------------------
 
+build everything - runs build clean build patched build tools build
+extras build bootpaq build
+
+build labshost - this installs the userspace components
+
 build ramfs - this uses a ramfs for the compile and copies only the
 9pcram.gz kernel to compiletemp.
 
@@ -93,34 +98,22 @@ persistent rcs and a modified rio to work in grid namespaces
 build clean - this simply runs mk clean with the necessary binds to
 clear out the compiletemp folder
 
-build everything - runs build clean build patched build tools build
-extras build bootpaq build
-
 build isoinstall - can be run after build everything to modify a Bell
 Labs default install fresh from the .iso
 
-The 9pcram.gz kernel and optional .tgz are placed in the conventional
-9fat partition.  Conventional plan9.ini variiables are mostly
-supported, with many new optional additions.  The most important are:
+Additional notes
+----------------
 
-interactive= if not provided, of if set to "traditional" the plan9rc
-scripts attempts to emulate the traditional bootprompts, while also
-executing any new options found from plan9.ini.  Set interactive=yes
-to be prompted for all options throughout the boot process.  Set
-interactive=no for automated bootup with no prompting unless an error
-condition is hit.
+set interactive= in plan9.ini to control bootup prompting. 
+interactive=traditional (or unset) gives only standard boot prompts
+interactive=yes gives fully interactive configurable boot
+interactive=no will boot with no prompts unless info is missing
 
-factotum= rootstart= these default to 'cpu' because the 9pcram kernel
-is compiled with that flag set.  This means factotum will start in the
-same way as a cpu server and the /rc/bin/cpurc from any mounted root
-will be started.  If you wish to produce terminal style behavior, set
-both of these to "terminal".  It is also possible to run cpurc with
-terminal factotum or vice-versa, if you understand what you are doing
-and why.
+tgzfs= if you wish to load a tgz of tools other than tools.tgz, set
+this to the name of the .tgz in 9fant, or set to "no" to skip loading
 
-tgzfs= if you wish to load an optional tools.tgz or other named extra
-set of utilities into the bootup ramdisk, set this tools.tgz (or the
-name of your toolset.)
+fatpath= if the correct 9fat partition isn't auto-detected, set this
+to supply the correct pathname
 
 full explanation of all new plan9.ini possibilities and their defaults
 is found within the doc subdirectory.
@@ -131,20 +124,13 @@ also
 nroff -man doc/plan9rc.man ## the full documentation for plan9rc
 bootup
 
+9front version/ANTS version coordination (approximate, different
+revisions may work as well, these were tested during the development
+process)
+
 hg up -r422 builds vs 9front 5641
 hg up -r395 builds vs 9front 5639
 hg up -r379 builds vs 9front 5625
 hg up -r377 builds vs 9front 5360
 hg up -r369 builds vs 9front 5217
 hg up -r368 builds vs 9front 4796
-
-You may either install the prebuilt 9pcram.gz and its optional
-tools.tgz, or build the kernel (and optional .tgz) locally.  The file
-doc/PLAN9.INI is an example of a plan9.ini file which works with the
-rootless kernel in a stock plan9 fossil install.  (Add the venti= if
-needed).  From a fresh install from the bell labs .iso, just copying
-9pcram.gz, tools.tgz, and doc/PLAN9.INI to the 9fat is a complete
-install of the toolkit.  Make any adjustsments for your specific
-hardware as needed to the PLAN9.INI file.  It may also be useful to
-install hubfs and grio and the scripts and namespace files also to the
-host system, but this is not required.

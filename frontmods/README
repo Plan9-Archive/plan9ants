@@ -6,7 +6,7 @@ from the base ants directory:
 
 build 9front ## makes a 9ants kernel in root of ants directories
 
-build portsinstall ## install userspace components without kernel
+build fronthost ## install userspace components without kernel
 
 At this point the user can copy the 9ants kernel to 9fat and modify
 the plan9.ini file as needed. ANTS has several additional boot options.

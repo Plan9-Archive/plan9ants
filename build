@@ -168,7 +168,7 @@ if(~ $1 portsinstall){
 	exit
 }
 
-if(~ $1 portsuninstall){
+if(~ $1 frontuninstall){
 	rm /$objtype/bin/grio
 	rm /$objtype/bin/gridlisten
 	rm /lib/namespace.saveterm
