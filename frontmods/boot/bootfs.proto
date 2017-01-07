@@ -10,6 +10,7 @@ $objtype
 			kbdfs
 			listen1
 			wpa
+		basename
 		bind
 		cat
 		cfs
