@@ -1,16 +1,16 @@
-GUIDE TO CONTENTS OF THIS DIRECTORY
+CONTENTS OF THIS DIRECTORY:
 
-9pcram.gz - prebuilt kernel.  install in 9fat partition as usual
+AFTER COMPILING:
 
-tools.tgz - optional support utilities.  place in 9fat and set
-tgzfs=tools.tgz in plan9.ini to use
+9ants - 9front kernel. install in 9fat partition
+
+9pcram.gz - bell labs kernel. install in 9fat partition
+
+tools.tgz - optional support utilities. Place in 9fat
 
 INSTALLING README INDEX GUIDE - intro documentation and help
 
 build - script to build all components of the namespace toolkit
-
-build.hashes - hashes of the most recent kernel, tools.tgz, and
-bootpaq (compiled into kernel)
 
 bootdir.extras/ - central point for main rootless boot tools
 
@@ -68,8 +68,10 @@ tools, plan9.ini/plan9rc/initskel variables
 
 frontmods/ - 9front patches and modifications. Subdirs get bound over
 	base directories during build 9front
+	
+	grio/ - 9front version of customized rio
 
-grio/ - modified rio with hubfs integration and other features
+grio/ - labs modified rio with hubfs integration and other features
 
 hubfs1.1/ - a 'screen' replacement as a 9p fs, also general purpose
 	network transparent pipe muxing for grids
@@ -80,17 +82,17 @@ plan9 programs adapted to the rootless environment
 root/ - used to build the tools.tgz.  It contains additional chunks of
 information used to provide a slightly richer plan 9 environment.
 
-root.targz - used by build script to create empty dirs after mercurial clone.
+root.targz - used by build script to create empty dirs after hg clone.
 
 scripts/ - contains the non-bootup related namespace manipulation and
 fossil/venti maintenance scripts.
 
-src.9.boot/ - modified files from /sys/src/9/boot.  The build script
+src.9.boot/ - labs modified files from /sys/src/9/boot.  The build script
 binds these modified files over the parallel directory.
 
-src.9.pc/ - the 9pcram kernel configuration file and its mkfile
+src.9.pc/ - the labs 9pcram kernel configuration file and its mkfile
 
-src.9.port/ - modified files for writable /proc/ns and the rootless
-boot.  These two mods are separable if desired.  The ns mod affects
-chan.c devproc.c and portfns.h.  The boot related files are devroot.c
-and devsrv.c
+src.9.port/ - labs version pf modified files for writable /proc/ns and
+the rootless boot.  These two mods are separable if desired.  The ns
+mod affects chan.c devproc.c and portfns.h.  The boot related files
+are devroot.c and devsrv.c

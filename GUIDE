@@ -1,18 +1,26 @@
+## 9front build kernel and install 
+
+build 9front
+build fronthost
+cp 9ants /n/9fat/9ants
+cp tools.tgz /n/9fat
+echo 'home=/usr/$user; cd; . $home/lib/profile' >>/rc/bin/termrc
+ed /n/9fat/plan9.ini 	# adjust config as needed
+bootfile=9ants
+bootcmd=plan9rc	#to use the ANTS plan9rc boot script
+privpassword=APASS #optional hostowner password without auth server
+
 ## INSTALL (BELL LABS)
 
+build everything
+build labshost
 9fat:
 cp /n/9fat/plan9.ini /n/9fat/p9ini.bak
 cp 9pcram.gz /n/9fat/9pcram.gz
 cp tools.tgz /n/9fat/tools.tgz
-cp doc/PLAN9.INI /n/9fat/PLAN9.INI
-
-## 9front build kernel and install 
-
-build 9front
-build portsinstall
-cp 9ants /n/9fat/9ants
-cp tools.tgz /n/9fat
-/n/9fat/plan9.ini 	# adjust config as needed
+ed /n/9fat/PLAN9.INI	#adjust config as needed
+bootfile=sdC0!9fat!9pcram.gz	#adjust for your boot disk
+privpassword=APASS #optional hostowner password without auth server
 
 ## documentation
 
@@ -24,29 +32,12 @@ nroff -man doc/man.ventiprog
 nroff -man doc/man.cpns
 nroff -man doc/man.addwrroot
 
-## customization, building locally, installing tools to main fs are OPTIONAL
-##
-## customize these files if desired
+## 9front customization files
+
+frontmods/boot/bootfs.proto
+frontmods/cfg/toolcopy
+
+## labs customization files
 
 cfg/toolcopy
 cfg/mkpaq
-
-## compiling locally
-
-build everything
-
-## install namespace tools to local fs
-
-cd hubfs1.1 && mk install && cd ..
-cd grio && mk install && cd ..
-cp scripts/* /rc/bin
-cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
-
-## copy docs
-
-cp doc/man.plan9rc /sys/man/8/plan9rc
-cp doc/man.ventiprog /sys/man/8/ventiprog
-cp doc/man.rerootwin /sys/man/1/rerootwin
-cp doc/man.cpns /sys/man/1/cpns
-cp doc/man.addwrroot /sys/man/1/addwrroot
-
