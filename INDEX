@@ -48,6 +48,9 @@ contents of the early boot namespace
 compiletemp/ - used by the build script to compile things in, after
 running build the new 9pcram.gz kernel will be found here
 
+diffs/ - these files show the diffs between the modified ANTS files
+and the base 9front distribution
+
 doc/ - documentation for bootup, namespace scripts, fossil/venti
 tools, plan9.ini/plan9rc/initskel variables
 
