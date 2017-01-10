@@ -308,7 +308,7 @@ if(~ $1 vultrfossil){
 	exit ''
 }
 
-bind -b $builddir/src.9.boot /sys/src/9/boot
+bind -bc $builddir/src.9.boot /sys/src/9/boot
 bind -b $builddir/src.9.port /sys/src/9/port
 bind -b $builddir/src.9.pc /sys/src/9/pc
 bind -b $builddir/scripts /bin
