@@ -398,6 +398,7 @@ if(~ $1 labshost){
 }
 
 if(~ $1 isoinstall){
+	checklabsclean
 	if(! ~ $user `{cat /dev/hostowner}){
 		echo only hostowner can build isoinstall
 		exit no.hostowner
@@ -463,6 +464,7 @@ if(~ $1 docs){
 }
 
 if(~ $1 everything){
+	checklabsclean
 	echo building everything
 	build clean
 	build patched
@@ -584,6 +586,7 @@ if(~ $1 tools){
 	exit ''
 }
 
+checklabsclean
 echo building kernel
 rm root/bin/* >/dev/null >[2=1]
 cp /bin/paqfs root/bin
