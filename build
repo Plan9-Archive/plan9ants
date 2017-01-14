@@ -40,7 +40,7 @@ fn checkfrontclean{
 		}
 	}
 	if(~ $objtype amd64){
-		if(test -e /sys/src/9/pc/9pc64{
+		if(test -e /sys/src/9/pc/9pc64){
 			echo 'please mk clean in /sys/src/9/pc64 before building'
 			exit
 		}
