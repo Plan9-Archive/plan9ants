@@ -30,8 +30,31 @@ if(! test -d root/bin){
 	echo 'creating root tools skeleton'
 	tar xzf root.targz
 }
+rm -rf compiletemp/*
+
+fn checkfrontclean{
+	if(~ $objtype 386){
+		if(test -e /sys/src/9/pc/9pcf){
+			echo 'please mk clean in /sys/src/9/pc before building'
+			exit
+		}
+	}
+	if(~ $objtype amd64){
+		if(test -e /sys/src/9/pc/9pc64{
+			echo 'please mk clean in /sys/src/9/pc64 before building'
+			exit
+		}
+	}
+}
+fn checklabsclean{
+	if(test -e /sys/src/9/pc/9pccpuf){
+		echo 'please mk clean in /sys/src/9/pc before building'
+		exit
+	}
+}
 
 if(~ $1 9front){
+	checkfrontclean
 	cd $builddir
 	bind -c frontmods/grio grio
 	bind -bc frontmods/patched patched
@@ -71,6 +94,7 @@ if(~ $1 9front){
 }
 
 if(~ $1 frontkernel){
+	checkfrontclean
 	cd $builddir
 	bind -c frontmods/grio grio
 	bind -bc frontmods/patched patched
@@ -255,6 +279,7 @@ if(~ $1 9frontinstall){
 }
 
 if(~ $1 vultr){
+	checkfrontclean
 	build 9front
 	build 9frontinstall
 	9fs 9fat
@@ -268,6 +293,7 @@ if(~ $1 vultr){
 }
 
 if(~ $1 vultrfossil){
+	checkfrontclean
 	build portsinstall
 	cd cfg
 	cat vultdisk |disk/prep /dev/sdF0/plan9
