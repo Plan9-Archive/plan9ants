@@ -418,8 +418,6 @@ if(~ $interactive yes){
 		if(! ~ $venti ''){
 			if(! ~ $venti tcp*)
 				venti=tcp!^$venti^!17034
-		}
-		if(~ ! venti ''){
 			ipsetup
 		}
 	}
