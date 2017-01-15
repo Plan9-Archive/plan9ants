@@ -1964,7 +1964,14 @@ procnsreq(Proc *p, char *va, int n)
 //		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
 		procbindmount(1, fd, -1, nil, old, flags, spec, p);
 	} else if (strcmp(cbf->f[0], "unmount")==0){
+		/* forbid access to pipe devices */
 		if((strncmp(new, "#|/", 3)==0) || (strncmp(old, "#|", 2)==0)){
+			error(Ebadsharp);
+			poperror();
+			return;
+		}
+		/* forbid access to tls device */
+		if((strncmp(new, "#a/", 3)==0) || (strncmp(old, "#a", 2)==0)){
 			error(Ebadsharp);
 			poperror();
 			return;
