@@ -199,7 +199,7 @@ fn dogetrootfs{
 		if(~ $factotum terminal)
 			factotum -a $auth
 		echo srv $fs to /srv/boot...
-		if(~ $fs tcp*)
+		if(~ $fs *tcp*)
 			srv $fs boot
 		if not
 			srv tcp!$fs!564 boot

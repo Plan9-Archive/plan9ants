@@ -334,7 +334,7 @@ fn dogetrootfs{
 		if(~ $factotum terminal)
 			/boot/factotum -a $auth
 		echo srv $fs to /srv/boot...
-		if(~ $fs tcp*)
+		if(~ $fs *tcp*)
 			srv $fs boot
 		if not
 			srv tcp!$fs!564 boot
@@ -353,7 +353,7 @@ fn dogetrootfs{
 		if(~ $factotum terminal)
 			/boot/factotum -a $auth
 		echo srv $fs to /srv/boot...
-		if(~ $fs tcp*)
+		if(~ $fs *tcp*)
 			srvtls $fs boot
 		if not
 			srvtls tcp!$fs!17020 boot
@@ -372,7 +372,7 @@ fn dogetrootfs{
 		if(~ $factotum terminal)
 			/boot/factotum -a $auth
 		echo srv $fs to /srv/boot...
-		if(~ $fs tcp*)
+		if(~ $fs *tcp*)
 			rimport -p -s boot $fs / /n/bootimp
 		if not
 			rimport -p -s boot tcp!$fs!17019 / /n/bootimp
