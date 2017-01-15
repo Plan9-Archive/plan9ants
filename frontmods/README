@@ -1,6 +1,7 @@
 ANTS has a custom kernel and userspace software. A full install
 includes the 9ants kernel, an optional tools.tgz in 9fat, and the
-userspace components. 
+userspace components. A list matching ANTS revisions with 9front
+is located in the base directory's INSTALLING file.
 
 from the base ants directory:
 

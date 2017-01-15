@@ -128,6 +128,7 @@ bootup
 revisions may work as well, these were tested during the development
 process)
 
+hg up -r485 builds vs 9front 5675
 hg up -r422 builds vs 9front 5641
 hg up -r395 builds vs 9front 5639
 hg up -r379 builds vs 9front 5625
