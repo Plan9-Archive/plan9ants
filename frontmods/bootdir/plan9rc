@@ -249,7 +249,7 @@ fn dostartventi{
 			ipsetup
 		}
 		venti/venti -c $venticonf -a $ventilisten -h $vhttplisten
-		venti=tcp!127.1!17034
+		venti=`{echo $ventilisten | sed 's/!.*!/!127.1!/'}
 	case later
 		echo ok you can start venti later that is fine
 	}
