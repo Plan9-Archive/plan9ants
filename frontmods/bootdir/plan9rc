@@ -312,6 +312,8 @@ fn dogetrootfs{
 			if(! ~ $ipdone yes){
 				ipsetup
 			}
+			if(! ~ $venti *tcp*)
+				venti=tcp!^$venti^!17034
 		}
 		echo starting fossil from $fossil...
 		fossil/fossil -f $fossil -c 'srv -p fscons'
@@ -616,7 +618,7 @@ fn startinter{
 		echo 'Dial a venti server? Enter a dialstring or ip if so.'
 		getans venti $venti
 		if(! ~ $venti ''){
-			if(! ~ $venti tcp*)
+			if(! ~ $venti *tcp*)
 				venti=tcp!^$venti^!17034
 			ipsetup
 		}

@@ -228,6 +228,8 @@ fn dogetrootfs{
 				if(! ~ $ipdone yes){
 					ipsetup
 				}
+				if(! ~ $venti *tcp*)
+					venti=tcp!^$venti^!17034
 			}
 			echo starting fossil from $fossil...
 			fossil -f $fossil -c 'srv -p fscons'
