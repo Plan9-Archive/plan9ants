@@ -49,9 +49,11 @@ if(! test -e /mnt/term/dev/cons){
 		exit no.cons
 	}
 	if(! test -e /mnt/term/dev)
-		mkdir /mnt/term/dev
+		mntgen /mnt/term
 	echo binding /mnt/wsys /mnt/term/dev
 	bind /mnt/wsys /mnt/term/dev
+	if(! test -e /mnt/term/dev/draw)
+		bind -a /dev /mnt/term/dev
 }
 
 if(! test -e /srv/$1){
