@@ -1109,7 +1109,11 @@ pointto(int wait)
 	Window *w;
 
 	menuing = TRUE;
-	riosetcursor(&sightcursor);
+	if(deleting == TRUE){
+		riosetcursor(&deletecursor);
+		deleting = FALSE;
+	} else
+		riosetcursor(&sightcursor);
 	while(mouse->buttons == 0)
 		readmouse(mousectl);
 	if(mouse->buttons == 4)
@@ -1137,6 +1141,7 @@ delete(void)
 {
 	Window *w;
 
+	deleting = TRUE;
 	w = pointto(TRUE);
 	if(w)
 		wsendctlmesg(w, Deleted, ZR, nil);

@@ -314,6 +314,7 @@ Screen	*wscreen;
 Cursor	boxcursor;
 Cursor	crosscursor;
 Cursor	sightcursor;
+Cursor	deletecursor;
 Cursor	whitearrow;
 Cursor	query;
 Cursor	*corners[9];
@@ -354,6 +355,7 @@ char		srvpipe[];
 char		srvwctl[];
 int		errorshouldabort;
 int		menuing;		/* menu action is pending; waiting for window to be indicated */
+int		deleting;		/* for changing cursor in pointto() */
 int		snarfversion;	/* updated each time it is written */
 int		messagesize;		/* negotiated in 9P version setup */
 int		shiftdown;
