@@ -1,0 +1,12 @@
+#!/bin/rc
+
+rfork e
+venticall = $1
+if(~ $venticall '')
+	venticall = 'http://127.1:8000/index'
+hget $venticall | 
+awk '
+/^index=/ { blockSize=0+substr($3, 11); }
+/^arena=/ { arena=substr($1, 7); }
+/^	arena=/ { start=0+substr($5, 2)-blockSize; printf("x %s %d %s\n", arena, start, $3); }
+'
