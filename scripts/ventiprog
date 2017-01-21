@@ -28,6 +28,7 @@ if(! ~ $targetventis ''){
 }
 newcmd=`{echo $oldcmd |sed 's/0x.*/'$newoff'/g'}
 echo $oldcmd >>/n/9fat/rootscor
+echo $newcmd >>/n/9fat/rootscor
 echo $newcmd >/n/9fat/wrcmd
 echo $oldcmd
 echo $newcmd

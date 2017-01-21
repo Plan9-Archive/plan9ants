@@ -85,6 +85,7 @@ cp /$objtype/bin/p .
 cp /$objtype/bin/ps .
 cp /$objtype/bin/pwd .
 cp /$objtype/bin/seq .
+cp /$objtype/bin/xd .
 #cp /$objtype/bin/mv .
 #cp /$objtype/bin/grep .
 #cp /$objtype/bin/dd .

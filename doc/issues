@@ -1,4 +1,6 @@
-The ants bootpaq should probably be integrated with the 9front boot paqfs, with a standard organization. This would be more space efficient, and would solve a few different issues, such as eliminating the need for the one-line customization of rc to use /boot/rcmain rather than /rc/lib/rcmain. This will require careful analysis of the existing boot scripts, which are written to look for a lot of things in /boot.
+The venti configuration stored in the arenas is overridden by plan9rc even if the user did not provide parameters. The venti command should only provide parameters if the user did not.
+
+The skel.tar and root.targz files remain a hassle. Possibly switch to using placeholder files to avoid issues with them.
 
 There are 3 different copies of the lib/namespace file for the ANTS boot environment in the repository. The one that is actually used is at root/lib/namespace. Why do bootdir.extras/namespace and bootdir.extras/root/lib/namespace exist?
 
@@ -17,6 +19,8 @@ when controlling linux machines via hubfs, it is necessary to use bash if you wi
 should add autosnapshotting to vultr fossil config
 
 ------ non-ants specific random questions ------
+
+How to fix the issue involving a bad interaction of ip/httpd/httpd and hget? In some circumstances, .tgz files are incorrectly transferred due to httpd trying to be 'smart' and claiming it is serving gzipped content, rather than just sending the base file with no 'commentary' and hget automatically decompressing.
 
 The u9fs in the bell labs distribution needs two minor patches to build correctly. First is taken from https://code.google.com/p/plan9front/source/diff?spec=svn4be476d6a993298bb5a797a6f872212536c69541&r=4be476d6a993298bb5a797a6f872212536c69541&format=side&path=/sys/src/cmd/unix/u9fs/plan9.h&old_path=/sys/src/cmd/unix/u9fs/plan9.h&old=eaccc3e8d22668badfdfd7fa12c67f3fbb94c67d
 
@@ -46,3 +50,5 @@ there is a namespace/file conflict between /lib of the 9front bootfs and /lib fr
 the partition and filesystem detection logic in plan9rc should be improved. Fixed in ANTS2.6
 
 cfs support was broken. Fixed in ANTS2.6
+
+The ants bootpaq should probably be integrated with the 9front boot paqfs, with a standard organization. This would be more space efficient, and would solve a few different issues, such as eliminating the need for the one-line customization of rc to use /boot/rcmain rather than /rc/lib/rcmain. This will require careful analysis of the existing boot scripts, which are written to look for a lot of things in /boot. Fixed in ANTS2.8
