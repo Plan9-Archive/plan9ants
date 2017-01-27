@@ -4,7 +4,7 @@ rerootwin, savedevs, getdevs \- change root and keep devices
 .SH SYNOPSIS
 .B rerootwin
 [
-.I -f -u -n
+.I -f -u -n -t nsfile
 ]
 .I newroot
 [
@@ -46,7 +46,9 @@ The file
 .I /lib/namespace.saveterm
 or
 .I /boot/namespace.saveterm
-must be available. By default the 
+must be available, unless the 
+.I -t nsfile
+option is given, in which case that file must be a correctly constructed namespace file. By default the 
 .I /net.alt 
 directory is used as a
 pivot point for the remount of the user's devices. The
@@ -59,7 +61,7 @@ or
 .I /u 
 respectively. (
 .I /u 
-will only exist on systems running the rootless kernel.) The
+will only exist on systems running the Bell Labs rootless kernel.) The
 .B -f
 option changes the namespace file used to
 .I /lib/namespace.save9front

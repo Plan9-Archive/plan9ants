@@ -18,14 +18,19 @@ while (~ $1 -*){
 		nsfile=/boot/namespace.save9front
 		if(test -e /lib/namespace.save9front)
 			nsfile=/lib/namespace.save9front
-		shift
 	case -u
 		pivot=/u
-		shift
 	case -n
 		pivot=/n
+	case -t
+		nsfile=$2
+		if(! test -e $2){
+			echo nsfile $2 not found
+			exit no.namespacefile
+		}
 		shift
 	}
+	shift
 }
 if(! ~ $1 ?*){
 	echo need a target srv
