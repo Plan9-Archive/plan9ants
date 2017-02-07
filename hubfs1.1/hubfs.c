@@ -4,6 +4,7 @@
 #include <fcall.h>
 #include <thread.h>
 #include <9p.h>
+#include <ctype.h>
 
 /* provides input/output multiplexing for 'screen' like functionality */
 /* usually used in combination with hubshell client and hub wrapper script */
@@ -18,23 +19,24 @@ enum flags{
 
 enum buffersizes{
 	BUCKSIZE = 777777,			/* Make this bigger if you want larger buffers */
-	MAGIC = 77777,			/* In paranoid mode let readers lag this many bytes */
-	MAXQ = 777,				/* Maximum number of 9p requests to queue */
+	MAGIC = 77777,				/* In paranoid mode let readers lag this many bytes */
+	MAXQ = 777,					/* Maximum number of 9p requests to queue */
 	SMBUF = 777,				/* Just for names, small strings, etc */
 };
 
-typedef struct Hub	Hub;			/* A Hub file functions as a multiplexed pipe-like data buffer */
+typedef struct Hub	Hub;		/* A Hub file functions as a multiplexed pipe-like data buffer */
 typedef struct Msgq	Msgq;		/* The Msgq is a per-client fid structure to track location */
+typedef struct Hublist Hublist;	/* Linked list of hubs */
 
 struct Hub{
 	char name[SMBUF];			/* name */
 	char bucket[BUCKSIZE];		/* data buffer */
 	char *inbuckp;				/* location to store next message */
 	int buckfull;				/* amount of data stored in bucket */
-	char *buckwrap;			/* exact limit of written data before pointer reset */
+	char *buckwrap;				/* exact limit of written data before pointer reset */
 	Req *qreqs[MAXQ];			/* pointers to queued read Reqs */
 	int rstatus[MAXQ];			/* status of read requests */
-	int qrnum;				/* index of read Reqs waiting to be filled */
+	int qrnum;					/* index of read Reqs waiting to be filled */
 	int qrans;					/* number of read Reqs answered */
 	Req *qwrits[MAXQ];			/* Similar for write Reqs */
 	int wstatus[MAXQ];
@@ -42,7 +44,7 @@ struct Hub{
 	int qwans;
 	int ketchup;				/* used to track lag of readers relative to writers in paranoid mode */
 	int tomatoflag;				/* readers put up the tomatoflag to tell writers to wait for them  */
-	QLock wrlk;				/* writer lock during fear */
+	QLock wrlk;					/* writer lock during fear */
 	QLock replk;				/* reply lock during fear */
 	int killme;					/* in paranoid mode we fork new procs and need to kill old ones */
 };
@@ -50,13 +52,22 @@ struct Hub{
 struct Msgq{
 	ulong myfid;				/* Msgq is associated with client fids */
 	char *nxt;					/* Location of this client in the buffer */
-	int bufuse;				/* how much of the buffer has been used */
+	int bufuse;					/* how much of the buffer has been used */
 };
 
-char *srvname;
+struct Hublist{
+	Hub* targethub;				/* Hub referenced by this entry */
+	char *hubname;				/* Name of referenced Hub */
+	Hublist* nexthub;			/* Pointer to next Hublist entry in list */
+};
+
+Hublist* firsthublist;			/* Pointer to start of linked list of hubs */
+Hublist* lasthublist;			/* Pointer to the list entry for next hub to be created */
+char *srvname;					/* Name of this hubfs service */
 int paranoia;					/* In paranoid mode loose reader/writer sync is maintained */
 int freeze;						/* In frozen mode the hubs operate simply as a ramfs */
 int trunc;						/* In trunc mode clients auto-truncate files when opened */
+int endoffile;					/* Send zero length end of file read to all clients */
 
 static char Ebad[] = "something bad happened";
 static char Enomem[] = "no memory";
@@ -65,6 +76,11 @@ void wrsend(Hub *h);
 void msgsend(Hub *h);
 void hubcmd(char *cmd);
 void zerohub(Hub *h);
+void addhub(Hub *h);
+void removehub(Hub *h);
+void eofall(void);
+void eofhub(char *target);
+
 void fsread(Req *r);
 void fswrite(Req *r);
 void fscreate(Req *r);
@@ -98,30 +114,34 @@ msgsend(Hub *h)
 	u32int count;
 	int i;
 
-	if(h->qrnum == 0){
+	if(h->qrnum == 0)
 		return;
-	}
+
 	/* LOOP through all queued 9p read requests for this hub and answer if needed */
 	for(i = h->qrans; i <= h->qrnum; i++){
-
-		if(paranoia == UP){
+		if(paranoia == UP)
 			qlock(&h->replk);
-		}
 		if(h->rstatus[i] != WAIT){
-			if((i == h->qrans) && (i < h->qrnum)){
+			if((i == h->qrans) && (i < h->qrnum))
 				h->qrans++;
-			}
-			if(paranoia == UP){
+			if(paranoia == UP)
 				qunlock(&h->replk);
-			}
 			continue;
 		}
-		/* request found, if it has already read all data then keep it waiting for more and return */
+
+		/* request found, if it has already read all data keep it waiting unless eof was sent */
 		r = h->qreqs[i];
 		mq = r->fid->aux;
 		if(mq->nxt == h->inbuckp){
-			if(paranoia == UP){
+			if(paranoia == UP)
 				qunlock(&h->replk);
+			if(endoffile == UP){
+				r->ofcall.count = 0;
+				h->rstatus[i] = DONE;
+				if((i == h->qrans) && (i < h->qrnum))
+					h->qrans++;
+				respond(r, nil);
+				continue;
 			}
 			continue;
 		}
@@ -132,12 +152,10 @@ msgsend(Hub *h)
 			mq->nxt = h->bucket;
 			mq->bufuse = 0;
 		}
-		if(mq->nxt + count > h->buckwrap){
+		if(mq->nxt + count > h->buckwrap)
 			count = h->buckwrap - mq->nxt;
-		}
-		if((mq->bufuse + count > h->buckfull) && (mq->bufuse < h->buckfull)){
+		if((mq->bufuse + count > h->buckfull) && (mq->bufuse < h->buckfull))
 			count = h->buckfull - mq->bufuse;
-		}
 
 		/* Done with wraparound checks, now we can send the data */
 		memmove(r->ofcall.data, mq->nxt, count);
@@ -145,18 +163,16 @@ msgsend(Hub *h)
 		mq->nxt += count;
 		mq->bufuse += count;
 		h->rstatus[i] = DONE;
-		if((i == h->qrans) && (i < h->qrnum)){
+		if((i == h->qrans) && (i < h->qrnum))
 			h->qrans++;
-		}
 		respond(r, nil);
 
 		if(paranoia == UP){
 			h->ketchup = mq->bufuse;
-			if(mq->bufuse <= h->buckfull){
+			if(mq->bufuse <= h->buckfull)
 				h->tomatoflag = DOWN;	/* DOWN means do not wait for us */
-			} else {
+			 else
 				h->tomatoflag = UP;
-			}
 			qunlock(&h->replk);
 		}
 	}
@@ -171,9 +187,8 @@ wrsend(Hub *h)
 	int i;
 	int j;
 
-	if(h->qwnum == 0){
+	if(h->qwnum == 0)
 		return;
-	}
 
 	if(paranoia == UP){		/* If we are paranoid, we fork and slack off while the readers catch up */
 		qlock(&h->wrlk);
@@ -181,20 +196,18 @@ wrsend(Hub *h)
 			if(rfork(RFPROC|RFMEM) == 0){
 				sleep(100);
 				h->killme = UP;
-				for(j = 0; ((j < 77) && (h->tomatoflag == UP)); j++){
+				for(j = 0; ((j < 77) && (h->tomatoflag == UP)); j++)
 					sleep(7);		/* Give the readers some time to catch up and drop the flag */
-				}
-			} else {
+			} else
 				return;	/* We want this flow of control to become an incoming read request */
-			}
 		}
 	}
+
 	/* LOOP through queued 9p write requests for this hub */
 	for(i = h->qwans; i <= h->qwnum; i++){
 		if(h->wstatus[i] != WAIT){
-			if((i == h->qwans) && (i < h->qwnum)){
+			if((i == h->qwans) && (i < h->qwnum))
 				h->qwans++;
-			}
 			continue;
 		}
 		r = h->qwrits[i];
@@ -214,15 +227,13 @@ wrsend(Hub *h)
 		r->fid->file->length = h->buckfull;
 		r->ofcall.count = count;
 		h->wstatus[i] = DONE;
-		if((i == h->qwans) && (i < h->qwnum)){
+		if((i == h->qwans) && (i < h->qwnum))
 			h->qwans++;
-		}
 		respond(r, nil);
 
 		if(paranoia == UP){
-			if(h->wrlk.locked == 1){
+			if(h->wrlk.locked == 1)
 				qunlock(&h->wrlk);
-			}
 			if(h->killme == UP){		/* If killme is up we forked another flow of control and need to die */
 				h->killme = DOWN;
 				exits(nil);
@@ -254,16 +265,16 @@ fsread(Req *r)
 			return;
 		}
 		sprint(tmpstr, "\tHubfs %s status:\nParanoia == %d\tFreeze == %d\n", srvname, paranoia, freeze);
-		if(strlen(tmpstr) <= count){
+		if(strlen(tmpstr) <= count)
 			count = strlen(tmpstr);
-		} else {
+		else
 			respond(r, "read count too small to answer\b");
-		}
 		memmove(r->ofcall.data, tmpstr, count);
 		r->ofcall.count = count;
 		respond(r, nil);
 		return;
 	}
+
 	if(freeze == UP){
 		mq = r->fid->aux;
 		if(mq->bufuse > 0){
@@ -284,24 +295,22 @@ fsread(Req *r)
 		}
 		count = r->ifcall.count;
 		offset = r->ifcall.offset;
-		while(offset >= BUCKSIZE){
+		while(offset >= BUCKSIZE)
 			offset -= BUCKSIZE;
-		}
 		if(offset >= h->buckfull){
 			r->ofcall.count = 0;
 			respond(r, nil);
 			return;
 		}
-		if((offset + count >= h->buckfull) && (offset < h->buckfull)){
+		if((offset + count >= h->buckfull) && (offset < h->buckfull))
 			count = h->buckfull - offset;
-		}
 		memmove(r->ofcall.data, h->bucket + offset, count);
 		r->ofcall.count = count;
 		respond(r, nil);
 		return;
 	}
-	/* Actual queue logic, ctl file and freeze mode logic is rarely used */
 
+	/* Actual queue logic, ctl file and freeze mode logic is rarely used */
 	if(h->qrnum >= MAXQ - 2){
 		j = 1;
 		for(i = h->qrans; i <= h->qrnum; i++) {
@@ -329,16 +338,14 @@ fswrite(Req *r)
 	int j;
 
 	h = r->fid->file->aux;
-	if(strncmp(h->name, "ctl", 3) == 0){
+	if(strncmp(h->name, "ctl", 3) == 0)
 		hubcmd(r->ifcall.data);
-	}
 
 	if(freeze == UP){
 		count = r->ifcall.count;
 		offset = r->ifcall.offset;
-		while(offset >= BUCKSIZE){
+		while(offset >= BUCKSIZE)
 			offset -= BUCKSIZE;
-		}
 		h->inbuckp = h->bucket +offset;
 		h->buckfull = h->inbuckp - h->bucket;
 		if(h->buckfull + count >= BUCKSIZE){
@@ -353,6 +360,7 @@ fswrite(Req *r)
 		respond(r, nil);
 		return;
 	}
+
 	/* Actual queue logic here */
 	if(h->qwnum >= MAXQ - 2){
 		j = 1;
@@ -373,7 +381,7 @@ fswrite(Req *r)
 	/* THEREFORE we know that there will be new data for readers and should send it to them ASAP */
 }
 
-/* making a file is making a new hub so we allocate and zero it to prepare for i/o */
+/* making a file is making a new hub, prepare it for i/o and add to list of hubs */
 void
 fscreate(Req *r)
 {
@@ -383,6 +391,7 @@ fscreate(Req *r)
 	if(f = createfile(r->fid->file, r->ifcall.name, r->fid->uid, r->ifcall.perm, nil)){
 		h = emalloc9p(sizeof(Hub));
 		zerohub(h);
+		addhub(h);
 		strcat(h->name, r->ifcall.name);
 		f->aux = h;
 		r->fid->file = f;
@@ -392,7 +401,6 @@ fscreate(Req *r)
 	}
 	respond(r, Ebad);
 }
-
 
 /* new client for the hubfile so associate a new message queue with client fid and hub file */
 void
@@ -421,7 +429,6 @@ fsopen(Req *r)
 }
 
 /* delete the hub. Note that we don't track the associated mqs of clients so we leak them. */
-/* This is a small leak and in normal usage hubs aren't deleted anyway. */
 void
 fsdestroyfile(File *f)
 {
@@ -429,11 +436,13 @@ fsdestroyfile(File *f)
 
 	h = f->aux;
 	if(h){
+		removehub(h);
 		free(h);
 	}
 }
 
-/* called when a hubfile is created ?Why is qrans being set to 1 and qwans to 0 when both are set to 1 upon looping? */
+/* called when a hubfile is created */
+/* ?Why is qrans being set to 1 and qwans to 0 when both are set to 1 upon looping? */
 void
 zerohub(Hub *h)
 {
@@ -448,34 +457,129 @@ zerohub(Hub *h)
 	h->buckwrap = h->inbuckp + BUCKSIZE;
 }
 
-/* set status of paranoid mode and frozen/normal from ctl messages */
+/* add a new hub to the linked list of hubs */
+void
+addhub(Hub *h)
+{
+	lasthublist->targethub = h;
+	lasthublist->hubname = h->name;
+	lasthublist->nexthub = (Hublist*)emalloc9p(sizeof(Hublist)); /* always keep an empty */
+	lasthublist = lasthublist->nexthub;
+	lasthublist->nexthub = nil;
+	lasthublist->targethub = nil;
+}
+
+/* remove a hub about to be deleted from the linked list of hubs */
+void
+removehub(Hub *h)
+{
+	Hublist* currenthub;
+
+	currenthub = firsthublist;
+	if(currenthub->targethub = h){
+		if(currenthub->nexthub != nil)
+			firsthublist = currenthub->nexthub;
+		free(currenthub);
+		return;
+	}
+	while(currenthub->nexthub->targethub != nil){
+		if(currenthub->nexthub->targethub = h){
+			currenthub->nexthub = currenthub->nexthub->nexthub;
+			free(currenthub->nexthub);
+			return;
+		}
+		currenthub=currenthub->nexthub;
+	}
+}
+
+/* issue eofs or set status of paranoid mode and frozen/normal from ctl messages */
 void
 hubcmd(char *cmd)
 {
-	if(strncmp(cmd, "quit", 4) == 0){
-		sysfatal("quit command sent to hubfs!");
-	}
+	int i;
+	char cmdbuf[256];
+	
+	if(strncmp(cmd, "quit", 4) == 0)
+		sysfatal("hubfs: quit command received");
 	if(strncmp(cmd, "fear", 4) == 0){
 		paranoia = UP;
-		print("you feel a cold creeping feeling coming up your spine...\n");
+		fprint(2, "hubfs: paranoid mode activated\n");
 		return;
 	}
 	if(strncmp(cmd, "calm", 4) == 0){
 		paranoia = DOWN;
-		print("you feel relaxed and confident.\n");
+		fprint(2, "hubfs: non-paranoid mode resumed\n");
 		return;
 	}
 	if(strncmp(cmd, "freeze", 6) == 0){
 		freeze = UP;
-		print("the pipes freeze in place!\n");
+		fprint(2, "hubfs: the pipes freeze in place\n");
 		return;
 	}
 	if(strncmp(cmd, "melt", 4) == 0){
 		freeze = DOWN;
-		print("the pipes thaw and data flows freely again\n");
+		fprint(2, "hubfs: the pipes thaw\n");
 		return;
 	}
-	fprint(2, "no matching command found\n");
+
+	/* eof command received, check if it applies to single hub then call matching eof func */
+	if(strncmp(cmd, "eof", 3) == 0){
+		endoffile = UP;
+		if(strlen(cmd) > 4){
+			i=0;
+			while(isalnum(*(cmd+i+4))){
+				cmdbuf[i]=*(cmd+i+4);
+				i++;
+			}
+			cmdbuf[i] = '\0';
+			eofhub(cmdbuf);
+			endoffile = DOWN;
+			return;
+		}
+		fprint(2, "hubfs: sending end of file to all client readers\n");
+		eofall();
+		endoffile = DOWN;
+		return;
+	}
+	fprint(2, "hubfs: no matching command found\n");
+}
+
+/* send eof to specific named hub */
+void
+eofhub(char *target){
+	Hublist* currenthub;
+
+	currenthub = firsthublist;
+	if(currenthub->targethub == nil)
+		return;
+	if(strcmp(target, currenthub->hubname) == 0){
+		fprint(2, "hubfs: eof to %s\n", currenthub->hubname);
+		msgsend(currenthub->targethub);
+		return;
+	}
+	while(currenthub->nexthub->targethub != nil){
+		currenthub=currenthub->nexthub;
+		if(strcmp(target, currenthub->hubname) == 0){
+			fprint(2, "hubfs: eof to %s\n", currenthub->hubname);
+			msgsend(currenthub->targethub);
+			return;
+		}
+	}
+}	
+
+/* send eof to all hub readers */
+void
+eofall(){
+	Hublist* currenthub;
+
+	currenthub = firsthublist;
+	if(currenthub->targethub == nil)
+		return;
+	msgsend(currenthub->targethub);
+	while(currenthub->nexthub->targethub != nil){
+		currenthub=currenthub->nexthub;
+		msgsend(currenthub->targethub);
+	}
 }
 
 void
@@ -495,6 +599,7 @@ main(int argc, char **argv)
 	fs.tree = alloctree(nil, nil, DMDIR|0777, fsdestroyfile);
 	q = fs.tree->root->qid;
 	trunc = 0;
+	endoffile = DOWN;
 
 	ARGBEGIN{
 	case 'D':
@@ -522,6 +627,14 @@ main(int argc, char **argv)
 		fprint(2, "hubsrv.nopipe %d srvname %s mtpt %s\n", fs.nopipe, srvname, mtpt);
 	if(addr == nil && srvname == nil && mtpt == nil)
 		sysfatal("must specify -a, -s, or -m option");
+
+	/* start with an allocated but empty first Hublist entry */
+	lasthublist = (Hublist*)emalloc9p(sizeof(Hublist));
+	lasthublist->targethub = nil;
+	lasthublist->hubname = nil;
+	lasthublist->nexthub = nil;
+	firsthublist = lasthublist;
+
 	if(addr)
 		listensrv(&fs, addr);
 	if(srvname || mtpt)
