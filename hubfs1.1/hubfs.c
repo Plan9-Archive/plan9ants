@@ -66,7 +66,7 @@ Hublist* lasthublist;			/* Pointer to the list entry for next hub to be created 
 char *srvname;					/* Name of this hubfs service */
 int paranoia;					/* In paranoid mode loose reader/writer sync is maintained */
 int freeze;						/* In frozen mode the hubs operate simply as a ramfs */
-int trunc;						/* In trunc mode clients auto-truncate files when opened */
+int trunc;						/* In trunc mode only new data is sent, not the buffered data */
 int endoffile;					/* Send zero length end of file read to all clients */
 
 static char Ebad[] = "something bad happened";
@@ -264,7 +264,7 @@ fsread(Req *r)
 			respond(r, nil);
 			return;
 		}
-		sprint(tmpstr, "\tHubfs %s status:\nParanoia == %d\tFreeze == %d\n", srvname, paranoia, freeze);
+		sprint(tmpstr, "\tHubfs %s status (1 is active, 2 is inactive):\nParanoia == %d  Freeze == %d  Trunc == %d\n", srvname, paranoia, freeze, trunc);
 		if(strlen(tmpstr) <= count)
 			count = strlen(tmpstr);
 		else
@@ -410,21 +410,25 @@ fsopen(Req *r)
 	Msgq *q;
 
 	h = r->fid->file->aux;
+	if(!h){
+		respond(r, nil);
+		return;
+	}
 	q = (Msgq*)emalloc9p(sizeof(Msgq));
 	memset(q, 0, sizeof(Msgq));
 	q->myfid = r->fid->fid;
 	q->nxt = h->bucket;
 	q->bufuse = 0;
-	if (trunc == 1){
-		q->nxt = h->inbuckp;
-		q->bufuse = h->buckfull;
-	}
-	r->fid->aux = q;
-	if(h && (r->ifcall.mode&OTRUNC)){
+	if(r->ifcall.mode&OTRUNC){
 		h->inbuckp = h->bucket;
 		h->buckfull = 0;
 		r->fid->file->length = 0;
 	}
+	if (trunc == UP){
+		q->nxt = h->inbuckp;
+		q->bufuse = h->buckfull;
+	}
+	r->fid->aux = q;
 	respond(r, nil);
 }
 
@@ -521,6 +525,16 @@ hubcmd(char *cmd)
 		fprint(2, "hubfs: the pipes thaw\n");
 		return;
 	}
+	if(strncmp(cmd, "trunc", 5) == 0){
+		trunc = UP;
+		fprint(2, "trunc mode set\n");
+		return;
+	}
+	if(strncmp(cmd, "notrunc", 7) == 0){
+		trunc = DOWN;
+		fprint(2, "trunc mode off\n");
+		return;
+	}
 
 	/* eof command received, check if it applies to single hub then call matching eof func */
 	if(strncmp(cmd, "eof", 3) == 0){
@@ -598,7 +612,9 @@ main(int argc, char **argv)
 	srvname = nil;
 	fs.tree = alloctree(nil, nil, DMDIR|0777, fsdestroyfile);
 	q = fs.tree->root->qid;
-	trunc = 0;
+	paranoia = DOWN;
+	freeze = DOWN;
+	trunc = DOWN;
 	endoffile = DOWN;
 
 	ARGBEGIN{
@@ -615,7 +631,7 @@ main(int argc, char **argv)
 		mtpt = EARGF(usage());
 		break;
 	case 't':
-		trunc = 1;
+		trunc = UP;
 		break;
 	default:
 		usage();

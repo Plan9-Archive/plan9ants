@@ -7,6 +7,9 @@ hub, hubfs, hubshell  \- persistent multiplexed i/o sessions, or 'screen without
 .B -b
 ]
 [
+.B -t
+]
+[
 .I srvname
 ]
 [
@@ -18,7 +21,7 @@ hub, hubfs, hubshell  \- persistent multiplexed i/o sessions, or 'screen without
 .PP
 .B hubfs
 [
-.B -Dasm
+.B -Dtasm
 ]
 .I srvname
 .PP
@@ -53,11 +56,11 @@ session. Thus, the simplest possible model of use is:
 hub
 .EE
 .PP
-to start a backgrounded 
+to start a 
 .IR hubfs 
 hosted persistent 
 .IR rc (1)
-shell, and then 
+shell. Another invocation of 
 .IP
 .EX
 hub
@@ -65,13 +68,15 @@ hub
 .PP
 from any window with access to that 
 .I /srv
-to connect to it. The
+will connect to it. The
 .B -b
 flag to 
 .IR hub
 backgrounds the initially created 
 .IR rc (1)
-instead of attaching to it.
+instead of attaching to it. The
+.B -t
+flag starts the hubfs in trunc mode, which means clients will not be sent the previously buffered data upon connection.
 .PP
 .IR Hubfs 
 can be used to provide general purpose pipes locally or across a network, with some special features. Most notably, echoing
@@ -92,7 +97,7 @@ session and move between them. A distinctive feature is the ability for remote c
 .B %local NAME
 command does this. The more traditional mode of starting new shells on the remote host is done with the
 .B %remote NAME
-command. Note that 'remote' is the machine hosting the shell you are connected to currently.
+command. Note that 'remote' is the machine hosting the shell you are connected to currently, and the active hubs must be running a shell, not another application.
 .B %detach
 terminates the 
 .IR hubshell
@@ -164,51 +169,77 @@ Making new shells and moving in hubshell:
 .PP
 .IP
 .EX
-%unecho # turn off echo flush when moving between shells
+%fear # paranoid mode, %calm to return to normal operation
 .EE
 .PP
 .IP
 .EX
-%fortun # turn on fortune flush when moving between shells
+%trunc # don't send buffered data, %notrunc reactivates
+.EE
+.PP
+.IP
+.EX
+%unecho # turn off echo flush, %echoes to reactivate
+.EE
+.PP
+.IP
+.EX
+%fortun # turn on fortune flush, %unfort to deactivate
 .EE
 .PP
 .IP
 .PP
 Controlling 
 .IR hubfs 
-via the ctl file:
-.PP
--reading from ctl file returns status-
+via the ctl file (reading from ctl file returns status):
 .PP
 .IP
 .EX
-echo freeze >/n/hubfs/ctl #freeze Hubs as static files
+echo eof >/n/hubfs/ctl # send eof to all readers on all hubs
 .EE
 .PP
 .IP
 .EX
-echo melt >/n/hubfs/ctl #resume normal flow of data
+echo eof NAME >/n/hubfs/ctl # send eof to the named hub
 .EE
 .PP
 .IP
 .EX
-echo fear >/n/hubfs/ctl #activate paranoid(safe) mode
-# - writers wait for readers
+echo freeze >/n/hubfs/ctl # freeze Hubs as static files
 .EE
 .PP
 .IP
 .EX
-echo calm >/n/hubfs/ctl #resume non-paranoid mode
+echo melt >/n/hubfs/ctl # resume normal flow of data
 .EE
 .PP
 .IP
 .EX
-echo quit >/n/hubfs/ctl #kill the fs
+echo fear >/n/hubfs/ctl # paranoid, writers wait for readers
 .EE
-
+.PP
+.IP
+.EX
+echo calm >/n/hubfs/ctl # resume non-paranoid mode
+.EE
+.PP
+.IP
+.EX
+echo trunc >/n/hubfs/ctl # don't send buffered data
+.EE
+.PP
+.IP
+.EX
+echo notrunc >/n/hubfs/ctl # send buffer to new clients
+.EE
+.PP
+.IP
+.EX
+echo quit >/n/hubfs/ctl # kill the fs
+.EE
 .PP
 .SH SOURCE
-.B /n/sources/contrib/mycroftiv/hubfs.tgz
+.B https://bitbucket.org/mycroftiv/hubfs
 .SH "SEE ALSO"
 UNIX pipes,
 .IR pipe (3)
@@ -220,6 +251,8 @@ and
 In the standard mode of use for interactive rc shells, the synchronization between stdout and stderr is not maintained. The symptom is prompts appearing in seemingly the wrong place. To fix this, enter a command like %err 300 to set 300 milliseconds of delay before data from stderr is printed.
 .PP
 Because hubfs maintains static buffers and always allows clients to write to avoid loss of interactivity, slow readers may experience data loss while reading output larger than the size of the static buffer if the output was also transmitted fast enough to "wrap around" the location of the reader in the data buffer. The purpose of "paranoid" mode is to restrict the speed of writers if this is a concern.
+.PP
+Hubs must be given alphabetic names within the ascii subset of unicode.
 .PP
 -
 .PP

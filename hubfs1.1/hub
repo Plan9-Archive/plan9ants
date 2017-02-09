@@ -2,7 +2,7 @@
 # wrapper script for hubfs and hubshell - starts both servers and clients
 # hub [srvname] [shellname]
 
-rfork
+rfork enf
 while (~ $1 -*){
 	switch($1){
 	case -b
@@ -25,35 +25,7 @@ if(~ $attach ''){
 	attach = io
 }
 
-if (test -e /n/$srvname/$attach'0'){
-#	echo attaching hubshell to $srvname/$attach hubgroup
-	hubshell /n/$srvname/$attach
-	echo hubshell ended
-	exit ''
-}
-
-if (test -e /n/$srvname/io0){
-	touch /n/$srvname/$attach'0'
-	touch /n/$srvname/$attach'1'
-	touch /n/$srvname/$attach'2'
-	rfork
-#	echo created /$srvname/$attach hubgroup and starting initial rc
-	oldprompt = $prompt
-	prompt =($attach'% ')
-	rc -i </n/$srvname/$attach'0' >/n/$srvname/$attach'1' >[2]/n/$srvname/$attach'2' &
-	prompt = $oldprompt
-	rfork
-	if(! ~ $background yes){
-		sleep 1
-#		echo attaching hubshell to $srvname/$attach hubgroup
-		hubshell /n/$srvname/$attach
-		echo hubshell ended
-	}
-	exit ''
-}
-
-if (! test -e /srv/$srvname){
-	create = yes
+fn starthubfs {
 	echo creating hubfs /srv/$srvname
 	if (! ~ $trunc yes)
 		hubfs -s $srvname
@@ -61,26 +33,34 @@ if (! test -e /srv/$srvname){
 		hubfs -t -s $srvname
 }
 
-mount -c /srv/$srvname /n/$srvname
-if (! test -e /n/$srvname/$attach'0'){
-	if(! test -e /n/$srvname/ctl){
+fn makehubs {
+	if(! test -e /n/$srvname/ctl)
 		touch /n/$srvname/ctl
-	}
 	touch /n/$srvname/$attach'0'
 	touch /n/$srvname/$attach'1'
 	touch /n/$srvname/$attach'2'
-	rfork
-#	echo created /$srvname/$attach hubgroup and starting initial rc
+	touch /n/$srvname/$attach^0.note
 	oldprompt = $prompt
 	prompt =($attach'% ')
 	rc -i </n/$srvname/$attach'0' >/n/$srvname/$attach'1' >[2]/n/$srvname/$attach'2' &
-	prompt = $oldprompt
-	rfork
+	cat /n/$srvname/$attach^0.note >/proc/$apid/notepg &
 	sleep 1
 }
+
+if (! test -e /n/$srvname/$attach'0'){
+	if (! test -e /n/$srvname/io0){
+		if (! test -e /srv/$srvname)
+			starthubfs
+		mount -c /srv/$srvname /n/$srvname
+	}
+	if (! test -e /n/$srvname/$attach'0')
+		makehubs
+}
+
 if(! ~ $background yes){
-#	echo attaching hubshell to $srvname/$attach hubgroup
 	hubshell /n/$srvname/$attach
 	echo hubshell ended
 }
+rfork e
+prompt = $oldprompt
 exit ''

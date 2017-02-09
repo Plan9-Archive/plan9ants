@@ -175,10 +175,11 @@ readloop:
 			if(n != strlen(ctlbuf) + 1)
 				fprint(2, "hubshell: error writing to %s on fd %d\n", ctlname, ctlfd);
 		close(ctlfd);
-		goto readloop;		/* Use more gotos, they aren't harmful */
 	}
-	if(n < 0)
-		fprint(2, "hubshell: error reading fd %d\n", infd);
+	/* commented out error message because it printed after interrupt note-passing */
+//	if(n < 0)
+//		fprint(2, "hubshell: error reading fd %d\n", infd);
+	goto readloop;		/* Use more gotos, they aren't harmful */
 }
 
 /* for creating new hubfiles */
@@ -212,10 +213,8 @@ parsebuf(Shell *s, char *buf, int outfd)
 	char tmpstr[SMBUF];
 	char tmpname[SMBUF];
 	Shell *newshell;
-	char *fi[3];
 	memset(tmpstr, 0, SMBUF);
 	memset(tmpname, 0, SMBUF);
-	int i;
 	char ctlbuf[SMBUF];
 	int ctlfd;
 	int n;
@@ -233,7 +232,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		exits(nil);
 	}
 
-	/* %remote command makes new shell on hubfs host by creating new hubfiles starting new rc and exiting current */
+	/* %remote command makes new shell on hubfs host by sending hub -b command */
 	if(strncmp(buf, "remote", 6) == 0){
 		if(isalpha(*(buf + 7)) == 0){
 			fprint(2, "hubshell: remote needs a name parameter to create new hubs\n:io ");
@@ -241,20 +240,9 @@ parsebuf(Shell *s, char *buf, int outfd)
 		}
 		strncat(tmpname, buf + 7, strcspn(buf + 7, "\n"));
 		fprint(2, "hubshell: creating new shell %s %s on remote host\n", srvname, tmpname);
-		for(i = 0; i < 3; i++){
-			snprint(tmpstr, SMBUF, "/n/%s/%s%d", srvname, tmpname, i);
-			if(touch(tmpstr) !=0){
-				fprint(2, "hubshell: cant create new hubs to remote to!\nio: ");
-				return;
-			}
-			fi[i] = strdup(tmpstr);		
-		}
-		snprint(tmpstr, SMBUF, "rc -i <%s >%s >[2]%s &\n", fi[0], fi[1], fi[2]);
+		snprint(tmpstr, SMBUF, "hub -b %s %s\n", srvname, tmpname);
 		write(outfd, tmpstr, strlen(tmpstr));
-		sleep(700);
-		snprint(tmpstr, SMBUF, "echo 'prompt=%s%%'' '' ' >>%s\n", tmpname, fi[0]);
-		write(outfd, tmpstr, strlen(tmpstr));
-		sleep(200);
+		sleep(1000);
 		snprint(tmpstr, SMBUF, "/n/%s/%s", srvname, tmpname);
 		newshell = setupshell(tmpstr);
 		if(newshell == nil){
@@ -370,7 +358,7 @@ parsebuf(Shell *s, char *buf, int outfd)
 		return;
 	}
 
-	/* send eof or freeze/melt/fear/calm messages to ctl file */
+	/* send eof or freeze/melt/fear/calm/trunc/notrunc messages to ctl file */
 	if(strncmp(buf, "eof", 3) == 0){
 		if((ctlfd = open(ctlname, OWRITE)) == - 1){
 			fprint(2, "hubshell: can't open ctl file\n");
@@ -434,6 +422,32 @@ parsebuf(Shell *s, char *buf, int outfd)
 		fprint(2, "io: ");
 		return;
 	}
+	if(strncmp(buf, "trunc", 5) == 0){
+		if((ctlfd = open(ctlname, OWRITE)) == - 1){
+			fprint(2, "hubshell: can't open ctl file\n");
+			return;
+		}
+		sprint(ctlbuf, "trunc\n");
+		n=write(ctlfd, ctlbuf, strlen(ctlbuf) +1);
+			if(n != strlen(ctlbuf) + 1)
+				fprint(2, "hubshell: error writing to %s on fd %d\n", ctlname, ctlfd);
+		close(ctlfd);
+		fprint(2, "io: ");
+		return;
+	}
+	if(strncmp(buf, "notrunc", 7) == 0){
+		if((ctlfd = open(ctlname, OWRITE)) == - 1){
+			fprint(2, "hubshell: can't open ctl file\n");
+			return;
+		}
+		sprint(ctlbuf, "notrunc\n");
+		n=write(ctlfd, ctlbuf, strlen(ctlbuf) +1);
+			if(n != strlen(ctlbuf) + 1)
+				fprint(2, "hubshell: error writing to %s on fd %d\n", ctlname, ctlfd);
+		close(ctlfd);
+		fprint(2, "io: ");
+		return;
+	}
 
 	/* %list displays attached hubs %status reports variable settings */
 	if(strncmp(buf, "list", 4) == 0){
@@ -459,8 +473,30 @@ parsebuf(Shell *s, char *buf, int outfd)
 	}
 
 	/* no matching command found, print list of commands as reminder */
-	fprint(2, "hubshell %% commands: \n\tdetach, remote NAME, local NAME, attach NAME \n\tstatus, list, err TIME, in TIME, out TIME\n\tfortun unfort echoes unecho eof\n");
+	fprint(2, "hubshell %% commands: \n\tdetach, remote NAME, local NAME, attach NAME \n\tstatus, list, err TIME, in TIME, out TIME\n\tfortun unfort echoes unecho trunc notrunc eof\n");
 	s->cmdresult = 'x';
+}
+
+/* receive interrupt messages (delete key) and pass them through to attached shells */
+int
+sendinterrupt(void *regs, char *notename)
+{
+	char notehub[SMBUF];
+	int notefd;
+
+	if(strcmp(notename, "interrupt") != 0)
+		return 0;
+	if(regs == nil)		/* this is just to shut up a compiler warning */
+		fprint(2, "error in note registers\n");
+	sprint(notehub, "%s%s.note", hubdir, basehub);
+//	fprint(2, "sending interrupt to %s\n", notehub);
+	if((notefd = open(notehub, OWRITE)) == -1){
+		fprint(2, "can't open %s\n", notehub);
+		return 1;
+	}
+	fprint(notefd, "interrupt");
+	close(notefd);	
+	return 1;
 }
 
 void
@@ -487,6 +523,7 @@ main(int argc, char *argv[])
 	strncat(ctlname, srvname, SMBUF-6);
 	strcat(ctlname, "/ctl");
 
+	atnotify(sendinterrupt, 1);
 	s = setupshell(initname);
 	if(s == nil)
 		sysfatal("couldnt setup shell, bailing out\n");
