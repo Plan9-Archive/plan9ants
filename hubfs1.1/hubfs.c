@@ -89,10 +89,10 @@ void fsdestroyfile(File *f);
 void usage(void);
 
 Srv fs = {
-	.open=	fsopen,
-	.read=	fsread,
-	.write=	fswrite,
-	.create=	fscreate,
+	.open = fsopen,
+	.read = fsread,
+	.write = fswrite,
+	.create = fscreate,
 };
 
 /*
@@ -171,12 +171,12 @@ msgsend(Hub *h)
 			h->ketchup = mq->bufuse;
 			if(mq->bufuse <= h->buckfull)
 				h->tomatoflag = DOWN;	/* DOWN means do not wait for us */
-			 else
+			else
 				h->tomatoflag = UP;
 			qunlock(&h->replk);
 		}
 	}
-}	
+}
 
 /* wrsend replies to Reqs queued by fswrite */
 void
@@ -291,7 +291,7 @@ fsread(Req *r)
 			h->qrnum++;
 			h->rstatus[h->qrnum] = WAIT;
 			h->qreqs[h->qrnum] = r;
-			return;			
+			return;
 		}
 		count = r->ifcall.count;
 		offset = r->ifcall.offset;
@@ -502,7 +502,7 @@ hubcmd(char *cmd)
 {
 	int i;
 	char cmdbuf[256];
-	
+
 	if(strncmp(cmd, "quit", 4) == 0)
 		sysfatal("hubfs: quit command received");
 	if(strncmp(cmd, "fear", 4) == 0){
@@ -579,7 +579,7 @@ eofhub(char *target){
 			return;
 		}
 	}
-}	
+}
 
 /* send eof to all hub readers */
 void

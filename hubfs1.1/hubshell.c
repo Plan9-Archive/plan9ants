@@ -489,13 +489,12 @@ sendinterrupt(void *regs, char *notename)
 	if(regs == nil)		/* this is just to shut up a compiler warning */
 		fprint(2, "error in note registers\n");
 	sprint(notehub, "%s%s.note", hubdir, basehub);
-//	fprint(2, "sending interrupt to %s\n", notehub);
 	if((notefd = open(notehub, OWRITE)) == -1){
 		fprint(2, "can't open %s\n", notehub);
 		return 1;
 	}
 	fprint(notefd, "interrupt");
-	close(notefd);	
+	close(notefd);
 	return 1;
 }
 
