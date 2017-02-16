@@ -519,6 +519,21 @@ if(~ $1 patched){
 if(~ $1 frontpatched){
 	echo building patched
 	ramfs
+	if(! test -e /sys/include/libc.h.orig){
+		echo 'backing up libc at libc.h.orig'
+		cp /sys/include/libc.h /sys/include/libc.h.orig
+	}
+	cp frontmods/include/libc.h /sys/include/libc.h
+	if(! test -e /$objtype/bin/rc.orig){
+		echo backing up rc at rc.orig
+		cp /$objtype/bin/rc /$objtype/bin/rc.orig
+	}
+	mkdir /tmp/rc
+	dircp /sys/src/cmd/rc /tmp/rc
+	cp frontmods/rc/plan9.c /tmp/rc/plan9.c
+	cd /tmp/rc
+	mk install
+	cd $builddir
 	mkdir /tmp/factotum
 	dircp /sys/src/cmd/auth/factotum /tmp/factotum
 	cp patched/factotumdat.h /tmp/factotum/dat.h

@@ -44,6 +44,8 @@ typedef struct Schedq	Schedq;
 typedef struct Segment	Segment;
 typedef struct Segio	Segio;
 typedef struct Sema	Sema;
+typedef struct Sgrp Sgrp;
+typedef struct Srv Srv;
 typedef struct Timer	Timer;
 typedef struct Timers	Timers;
 typedef struct Uart	Uart;
@@ -464,6 +466,21 @@ struct Image
 	Page	*pghash[PGHSIZE];	/* page cache */
 };
 
+struct Srv
+{
+	char	*name;
+	char	*owner;
+	ulong	perm;
+	Chan	*chan;
+	Srv	*link;
+	ulong	path;
+};
+
+struct Sgrp
+{
+	Ref;
+	Srv	*srvgrp;
+};
 
 struct Pgrp
 {
@@ -571,6 +588,7 @@ enum
 	RFPROC		= (1<<4),
 	RFMEM		= (1<<5),
 	RFNOWAIT	= (1<<6),
+	RFCSRVG		= (1<<9),
 	RFCNAMEG	= (1<<10),
 	RFCENVG		= (1<<11),
 	RFCFDG		= (1<<12),
@@ -669,6 +687,7 @@ struct Proc
 	Egrp 	*egrp;		/* Environment group */
 	Fgrp	*fgrp;		/* File descriptor group */
 	Rgrp	*rgrp;		/* Rendez group */
+	Sgrp	*sgrp;		/* Srv group */
 
 	Fgrp	*closingfgrp;	/* used during teardown */
 

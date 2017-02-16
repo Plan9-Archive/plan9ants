@@ -34,6 +34,7 @@ void		closeegrp(Egrp*);
 void		closefgrp(Fgrp*);
 void		closepgrp(Pgrp*);
 void		closergrp(Rgrp*);
+void		closesgrp(Sgrp*);
 long		clrfpintr(void);
 void		cmderror(Cmdbuf*, char*);
 int		cmount(Chan**, Chan*, int, char*);
