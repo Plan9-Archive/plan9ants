@@ -34,7 +34,7 @@ modified ANTS kernel.
 - Installing on 9front from source -
 
 Check that your 9front hg revision matched up with a compatible ANTS
-revision.  The most recent tested 9front revision is 5641, the "GZ"
+revision.  The most recent tested 9front revision is the 5736 Feb2017
 release.  Previously tested ANTS/9front revisions are listed in the
 INSTALLING file.The build script has a variety of possible targets.  A
 basic sequence:
