@@ -329,6 +329,8 @@ void		splx(int);
 void		splxpc(int);
 char*		srvname(Chan*);
 void		srvrenameuser(char*, char*);
+char*		zrvname(Chan*);
+void		zrvrenameuser(char*, char*);
 void		shrrenameuser(char*, char*);
 int		swapcount(uintptr);
 int		swapfull(void);

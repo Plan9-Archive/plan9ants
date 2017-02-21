@@ -828,6 +828,8 @@ readns1(Chan *c, Proc *p, char *buf, int nbuf)
 		int2flag(cm->mflag, flag);
 		if(strcmp(cm->to->path->s, "#M") == 0){
 			srv = srvname(cm->to->mchan);
+			if(srv == nil)
+				srv = zrvname(cm->to->mchan);
 			i = snprint(buf, nbuf, "mount %s %s %s %s\n", flag,
 				srv==nil? cm->to->mchan->path->s : srv,
 				mh->from->path->s, cm->spec? cm->spec : "");

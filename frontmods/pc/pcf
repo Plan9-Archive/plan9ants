@@ -9,6 +9,7 @@ dev
 	proc
 	mnt
 	srv
+	zrv
 	shr
 	dup
 	rtc

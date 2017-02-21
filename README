@@ -10,6 +10,8 @@ namespace independent of any root fileserver.
 * A modified kernel which accepts manipulation of process namespace
 via writes of standard namespace operations to the /proc/PID/ns files
 
+* Kernel mod and rc patch to allow rfork V into a new /srv namespace
+
 * Scripts for moving between and systematically altering namespaces
 such as "rerootwin" which is similar to chroot in unix and keeps the
 terminal devices at /mnt/term active.
