@@ -9,15 +9,6 @@
 static QLock	srvlk;
 static int	qidpath;
 
-void
-srvprocset(void)
-{
-	if(up->sgrp == nil){
-		up->sgrp = smalloc(sizeof(Sgrp));
-		up->sgrp->ref = 1;
-	}
-}
-
 static Srv*
 srvlookup(char *name, ulong qidpath)
 {
@@ -63,8 +54,6 @@ srvgen(Chan *c, char *name, Dirtab*, int, int s, Dir *dp)
 static void
 srvinit(void)
 {
-	print("srvinit: ");
-	srvprocset();
 	qidpath = 1;
 }
 
@@ -302,7 +291,6 @@ srvclose(Chan *c)
 	 */
 
 	if(c->flag & CRCLOSE){
-		srvprocset();
 		if(waserror())
 			return;
 		srvremove(c);

@@ -81,14 +81,6 @@ sysrfork(va_list list)
 			up->sgrp = smalloc(sizeof(Sgrp));
 			up->sgrp->ref = 1;
 			closesgrp(osg);
-		} else {
-			/* Seems like this branch is never hit */
-			/* Could this change if boot script changes? */
-			if(up->sgrp == nil) {
-				print("rfork no RFPROC and up->sgrp == nil\n");
-				up->sgrp = smalloc(sizeof(Sgrp));
-				up->sgrp->ref = 1;
-			}
 		}
 		if(flag & (RFENVG|RFCENVG)) {
 			oeg = up->egrp;
@@ -182,13 +174,6 @@ sysrfork(va_list list)
 		p->sgrp = smalloc(sizeof(Sgrp));
 		p->sgrp->ref = 1;
 	} else {
-		if(up->sgrp == nil){
-			/* Seems like this if statement is never hit */
-			/* Could this change if boot script changes? */
-			print("rfork RFPROC with up->srvgrp == nil\n");
-			up->sgrp = smalloc(sizeof(Sgrp));
-			up->sgrp->ref = 1;
-		}
 		p->sgrp = up->sgrp;
 		incref(p->sgrp);
 	}

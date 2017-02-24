@@ -1120,8 +1120,6 @@ pexit(char *exitstr, int freemem)
 	up->rgrp = nil;
 	pgrp = up->pgrp;
 	up->pgrp = nil;
-	sgrp = up->sgrp;
-	up->sgrp = nil;
 	dot = up->dot;
 	up->dot = nil;
 	qunlock(&up->debug);
@@ -1132,12 +1130,17 @@ pexit(char *exitstr, int freemem)
 		closeegrp(egrp);
 	if(rgrp != nil)
 		closergrp(rgrp);
+	/* sgrp is nilled out here because closefgrp may need srvclose */
+	qlock(&up->debug);
+	sgrp = up->sgrp;
+	up->sgrp = nil;
+	qunlock(&up->debug);
+	if(sgrp != nil)
+		closesgrp(sgrp);
 	if(dot != nil)
 		cclose(dot);
 	if(pgrp != nil)
 		closepgrp(pgrp);
-	if(sgrp != nil)
-		closesgrp(sgrp);
 
 	/*
 	 * if not a kernel process and have a parent,
