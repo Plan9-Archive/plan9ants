@@ -85,8 +85,6 @@ plan9 programs adapted to the rootless environment
 root/ - used to build the tools.tgz.  It contains additional chunks of
 information used to provide a slightly richer plan 9 environment.
 
-root.targz - used by build script to create empty dirs after hg clone.
-
 scripts/ - contains the non-bootup related namespace manipulation and
 fossil/venti maintenance scripts.
 
