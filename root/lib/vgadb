@@ -428,6 +428,25 @@ ctlr
 	ctlr=radeon linear=1
 	hwgc=radeonhwgc
 
+ctlr
+	vid=0x1022 did=0x2081 # AMD Geode LX
+	link=vga
+	hwgc=geodehwgc
+	ctlr=geode linear=1
+
+ctlr
+	vid=0x8086 did=0x0166	# Intel 3rd Gen Core
+	vid=0x8086 did=0x2a42	# Intel 4 Series Mobile
+	link=vga
+	hwgc=igfxhwgc
+	ctlr=igfx linear=1
+
+ctlr
+	vid=0x8086 did=0x27a2	# Intel GM945/82940GML (hardware cursor broken)
+	vid=0x8086 did=0x2a02	# Intel GM965/GL960/X3100 (hardware cursor broken)
+	link=vga
+	ctlr=igfx linear=1
+
 #
 # mode:
 # These entries specify a monitor operating mode.
@@ -685,6 +704,15 @@ dell2007fp=1600x1200					# 60Hz, 75KHz
 	shb=1864 ehb=1888 ht=2144
 	shs=1648
 	vrs=1202 vre=1208 vt=1240
+
+# Dell ST2210 at 1920x1080
+dellst2210
+	videobw=200
+	alias=multisync					# 60Hz
+dellst2210=1920x1080
+	defaultclock=148.5
+	shb=2008 ehb=2052 ht=2200
+	vrs=1084 vre=1089 vt=1125
 
 #
 # EIZO (Nanao) FlexScan 6600 (greyscale)
@@ -1631,3 +1659,182 @@ p109b6=1600x1200		# 75Hz
 # QUXGA		3200x2400	Quad UXGA
 # QUXGA-W	3840x2400	Wide-QUXGA
 #
+
+geode
+	alias=vga
+
+geode=1024x768
+	defaultclock=65
+	shb=1032 ehb=1176 ht=1344
+	shs=1056
+	vrs=771 vre=777 vt=806
+	hsync=- vsync=-
+
+geode=1280x1024
+	defaultclock=108
+	shb=1312 ehb=1496 ht=1720
+	vrs=1025 vre=1028 vt=1074
+
+
+#
+# EIZO Flexscan s2231W (LCD) Analog
+#
+s2231wA=1680x1050
+	defaultclock=146.25
+	shb=1784 ehb=1960 ht=2240
+	vrs=1053 vre=1059 vt=1089
+	hsync=- vsync=+
+
+#
+# EIZO Flexscan s2231w (LCD) Digital
+#
+s2231wD=1680x1050
+	defaultclock=119.0
+	shb=1728 ehb=1760 vt=1840
+	vrs=1053 vre=1059 vt=1080
+	hsync=+ vsync=-
+
+#
+# Lenovo X230 (LCD) LVDS
+#
+x230=1366x768		# 60Hz
+	clock=75.2
+	shb=1414 ehb=1478 ht=1582
+	vrs=772 vre=779 vt=792
+	hsync=+ vsync=-
+	lcd=1
+
+#
+# Lenovo ThinkPad X200 (LCD) LVDS
+#
+x200=1280x800		# 60Hz
+	clock=75
+	shb=1296 ehb=1344 ht=1512
+	vrs=802 vre=804 vt=830
+	hsync=- vsync=-
+	lcd=1
+
+x200s
+	alias=x200
+
+#
+# Lenovo ThinkPad X301 (LCD) LVDS
+#
+x301=1440x900		# 60Hz
+	clock=102
+	shb=1488 ehb=1520 ht=1836
+	vrs=903 vre=909 vt=926
+	hsync=- vsync=-
+	lcd=1
+
+#
+# LG Flatron L1730P
+#
+l1730p=1280x1024		# 60Hz
+	clock=108
+	shb=1320 ehb=1440 ht=1688
+	vrs=1025 vre=1028 vt=1066
+	hsync=+ vsync=+
+
+#
+# Lenovo ThinkPad X60 Tablet (LCD) LVDS
+#
+x60t=640x480		# 60Hz   
+	clock=25.175
+	shb=648 ehb=792 ht=800
+	vrs=490 vre=492 vt=525
+	hsync=- vsync=-
+	lcd=1
+x60t=800x600		# 60Hz   
+	clock=40
+	shb=800 ehb=1056 ht=1056
+	vrs=601 vre=605 vt=628
+	hsync=+ vsync=+
+	lcd=1
+x60t=1024x768		# 60Hz  
+	clock=65
+	shb=1024 ehb=1344 ht=1344
+	vrs=771 vre=777 vt=806
+	hsync=- vsync=-
+	lcd=1
+x60t=1400x1050		# 50Hz
+	clock=84.8
+	shb=1420 ehb=1536 ht=1600
+	vrs=1052 vre=1057 vt=1060
+	hsync=- vsync=-
+	lcd=1
+
+#
+# NEC LCD2190uXp
+#
+lcd2190uxp=640x480		# 60Hz   
+	clock=25.175
+	shb=648 ehb=792 ht=800
+	vrs=490 vre=492 vt=525
+	hsync=- vsync=- 
+lcd2190uxp=640x480		# 73Hz   
+	clock=31.5
+	shb=648 ehb=824 ht=832
+	vrs=489 vre=492 vt=520
+	hsync=- vsync=- 
+lcd2190uxp=640x480		# 75Hz   
+	clock=31.5
+	shb=640 ehb=840 ht=840
+	vrs=481 vre=484 vt=500
+	hsync=- vsync=- 
+lcd2190uxp=800x600		# 56Hz   
+	clock=36
+	shb=800 ehb=1024 ht=1024
+	vrs=601 vre=603 vt=625
+	hsync=+ vsync=+ 
+lcd2190uxp=800x600		# 60Hz   
+	clock=40
+	shb=800 ehb=1056 ht=1056
+	vrs=601 vre=605 vt=628
+	hsync=+ vsync=+ 
+lcd2190uxp=800x600		# 72Hz   
+	clock=50
+	shb=800 ehb=1040 ht=1040
+	vrs=637 vre=643 vt=666
+	hsync=+ vsync=+ 
+lcd2190uxp=800x600		# 75Hz   
+	clock=49.5
+	shb=800 ehb=1056 ht=1056
+	vrs=601 vre=604 vt=625
+	hsync=+ vsync=+ 
+lcd2190uxp=1024x768		# 60Hz  
+	clock=65
+	shb=1024 ehb=1344 ht=1344
+	vrs=771 vre=777 vt=806
+	hsync=- vsync=- 
+lcd2190uxp=1024x768		# 70Hz  
+	clock=75
+	shb=1024 ehb=1328 ht=1328
+	vrs=771 vre=777 vt=806
+	hsync=- vsync=- 
+lcd2190uxp=1024x768		# 75Hz  
+	clock=78.75
+	shb=1024 ehb=1312 ht=1312
+	vrs=769 vre=772 vt=800
+	hsync=+ vsync=+ 
+lcd2190uxp=1280x1024		# 75Hz 
+	clock=135
+	shb=1280 ehb=1688 ht=1688
+	vrs=1025 vre=1028 vt=1066
+	hsync=+ vsync=+ 
+lcd2190uxp=1600x1200		# 60Hz 
+	clock=162
+	shb=1664 ehb=1856 ht=2160
+	vrs=1201 vre=1204 vt=1250
+	hsync=+ vsync=+
+
+#
+# Panasonic CF-R7 LCD panel
+#
+cfr7=1024x768
+	lcd=1
+	defaultclock=75
+	shb=1096 ehb=1232 ht=1344
+	shs=1072
+	vrs=771 vre=777 vt=806
+	hsync=- vsync=-
