@@ -1,20 +1,19 @@
 --- /sys/src/9/pc/pcf	Sun Jun 28 16:34:10 2015
-+++ frontmods/pc/pcf	Sun Dec 18 06:55:33 2016
-@@ -147,6 +147,16 @@
++++ ../frontmods/pc/pcf	Tue Feb 21 01:07:58 2017
+@@ -9,6 +9,7 @@
+ 	proc
+ 	mnt
+ 	srv
++	zrv
+ 	shr
+ 	dup
+ 	rtc
+@@ -147,6 +148,7 @@
  
  bootdir
  	/$objtype/bin/paqfs
 -	/$objtype/bin/auth/factotum
  	bootfs.paq
  	boot
-+	/bin/bind
-+	/bin/mount
-+	/bin/read
-+	/bin/cat
-+	/bin/echo
-+	/bin/test
-+	/n/rootless/bootdir.extras/rc
-+	/n/rootless/bootdir.extras/rcmain
 +	/n/rootless/bootdir.extras/factotum
-+	/n/rootless/bootdir.extras/bootpaq
 +	/n/rootless/bootdir.extras/plan9rc

@@ -1,6 +1,23 @@
---- /sys/src/9/port/portfns.h	Thu Apr  7 18:45:07 2016
-+++ portfns.h	Thu Apr 28 17:41:09 2016
-@@ -401,3 +401,6 @@
+--- /sys/src/9/port/portfns.h	Thu Jan 19 08:13:22 2017
++++ ../frontmods/port/portfns.h	Tue Feb 21 01:09:21 2017
+@@ -34,6 +34,7 @@
+ void		closefgrp(Fgrp*);
+ void		closepgrp(Pgrp*);
+ void		closergrp(Rgrp*);
++void		closesgrp(Sgrp*);
+ long		clrfpintr(void);
+ void		cmderror(Cmdbuf*, char*);
+ int		cmount(Chan**, Chan*, int, char*);
+@@ -328,6 +329,8 @@
+ void		splxpc(int);
+ char*		srvname(Chan*);
+ void		srvrenameuser(char*, char*);
++char*		zrvname(Chan*);
++void		zrvrenameuser(char*, char*);
+ void		shrrenameuser(char*, char*);
+ int		swapcount(uintptr);
+ int		swapfull(void);
+@@ -400,3 +403,6 @@
  #pragma varargck argpos iprint	1
  #pragma	varargck argpos	panic	1
  #pragma varargck argpos pprint	1

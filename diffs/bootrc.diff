@@ -1,21 +1,16 @@
---- /sys/src/9/boot/bootrc	Sun Feb 28 22:48:50 2016
-+++ bootrc	Thu Apr 28 17:41:09 2016
-@@ -1,10 +1,10 @@
+--- /sys/src/9/boot/bootrc	Sat Dec 31 23:31:12 2016
++++ ../frontmods/boot/bootrc	Sat Jan  7 12:20:28 2017
+@@ -1,5 +1,9 @@
  #!/bin/rc
  
--# mount points
--mntgen -s slashn /n && chmod 666 /srv/slashn
--mntgen -s slashmnt /mnt && chmod 666 /srv/slashmnt
--mntgen -s mntexport /mnt/exportfs && chmod 666 /srv/mntexport
 +if(~ $#rootdir 0)
 +	rootdir=/root
 +objtype=`{cat /env/cputype}
- 
-+mntgen -s slash /mnt
- bind /root /mnt/broot
- unmount /root
- 
-@@ -62,6 +62,124 @@
++
+ # mount points
+ mntgen -s slashn /n && chmod 666 /srv/slashn
+ mntgen -s slashmnt /mnt && chmod 666 /srv/slashmnt
+@@ -62,6 +66,128 @@
  		ask $*
  }
  
@@ -67,10 +62,8 @@
 +}
 +
 +fn ants{
-+	paqfs -s -S bootpaq /boot/bootpaq
-+	mount -a /srv/bootpaq /boot
++	paqfs -s -S frontpaq -c 128 /boot/bootfs.paq
 +	bind -a /boot /bin
-+	
 +	hostcheck
 +	dochecksys
 +
@@ -82,8 +75,8 @@
 +	ramfs -S ramboot
 +	mount -c /srv/ramboot /root
 +	bind -ac /root /
-+	echo -n 'tar xf /boot/skel.tar...'
-+	tar xf /boot/skel.tar
++	echo -n 'tar xf /lib/skel.tar...'
++	tar xf /lib/skel.tar
 +	if (test -d /root/mnt)
 +		bind -ac /root/mnt /mnt
 +	mount -b /srv/factotum /mnt
@@ -91,10 +84,15 @@
 +
 +##	get tgzfs if chosen and load into the ramdisk
 +
++	if(~ $tgzfs '')
++		tgzfs=tools.tgz
++	if(~ $tgzfs no)
++		tgzfs=''
++
 +	if(~ $tgzfs *.tgz){
 +		dossrv
 +		if(~ $fatpath '')
-+			fatpath=/dev/sdC0/9fat
++			fatpath=`{ls /dev/sd*/9fat}
 +		if(! test -d /x)
 +			mkdir /root/x
 +		mount /srv/dos /x $fatpath
@@ -123,7 +121,7 @@
 +
 +	bind -c /usr/$user/tmp /tmp
 +	echo 'partial root built starting services'
-+	newns -n /boot/namespace initskel
++	auth/newns -n /lib/namespace initskel
 +	if(! ~ $privpassword ''){
 +		echo adding key to factotum
 +		if(~ $passdom '')
@@ -131,6 +129,7 @@
 +		if(~ $keyowner '')
 +			keyowner=$user
 +		echo 'key proto=p9sk1 dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
++		rm '#ec/privpassword'
 +		rm /env/privpassword
 +		rm /env/passdom
 +		rm /env/keyowner
@@ -140,33 +139,13 @@
  mt=()
  
  fn main{
-@@ -99,6 +217,9 @@
+@@ -98,6 +224,9 @@
+ 			x=($x -p)
  		must $x
  	}
- 
++
 +	# setup low level namespace
 +	ants
-+
+ 
  	# config method
  	$mp(1) $ma
- 
-@@ -179,6 +300,12 @@
- if(test -x /bin/nusbrc && ! test -e /env/nousbrc)
- 	nusbrc
- 
-+# wait for devices to settle down
-+if(~ $#usbwait 1)
-+	sleep $usbwait
-+if(~ $#usbwait 0)
-+	sleep 2
-+
- # load boot methods
- fn showlocaldevs {}
- fn configlocal {}
-@@ -233,5 +360,5 @@
- 
- 	# cleanup so it can be restarted
- 	nobootprompt=()
--	rm -f /srv/^(cfs boot cs dns)
-+	rm -f /srv/^(cfs boot slashn cs dns)
- } </dev/cons

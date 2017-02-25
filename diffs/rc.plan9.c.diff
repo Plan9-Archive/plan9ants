@@ -1,11 +1,17 @@
---- /sys/src/cmd/rc/plan9.c	Thu May 19 16:48:54 2016
-+++ frontmods/patched/rc.plan9.c	Sun Dec 18 06:55:33 2016
-@@ -29,7 +29,7 @@
- 	"term",
- 	0
- };
--char Rcmain[]="/rc/lib/rcmain";
-+char Rcmain[]="/boot/rcmain";
- char Fdprefix[]="/fd/";
- void execfinit(void);
- void execbind(void);
+--- /sys/src/cmd/rc/plan9.c	Sat Dec 31 23:31:23 2016
++++ ../frontmods/rc/plan9.c	Thu Feb 16 02:50:07 2017
+@@ -81,11 +81,13 @@
+ 			arg|=RFFDG;    break;
+ 		case 'F':
+ 			arg|=RFCFDG;   break;
++		case 'V':
++			arg|=RFCSRVG;  break;
+ 		}
+ 		break;
+ 	default:
+ 	Usage:
+-		pfmt(err, "Usage: %s [fnesFNEm]\n", runq->argv->words->word);
++		pfmt(err, "Usage: %s [fnesFNEmV]\n", runq->argv->words->word);
+ 		setstatus("rfork usage");
+ 		poplist();
+ 		return;

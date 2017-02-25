@@ -1,0 +1,23 @@
+#!/bin/rc
+
+ape/diff -u /sys/src/9/boot/boot.c ../frontmods/boot/boot.c >boot.c.diff
+ape/diff -u /sys/src/9/boot/bootfs.proto ../frontmods/boot/bootfs.proto >bootfs.proto.diff
+ape/diff -u /sys/src/9/boot/bootrc ../frontmods/boot/bootrc >bootrc.diff
+ape/diff -u /sys/src/9/pc/main.c ../frontmods/pc/main.c >pc.main.c.diff
+ape/diff -u /sys/src/9/pc/pcf ../frontmods/pc/pcf >pc.pcf.diff
+ape/diff -u /sys/src/9/pc64/main.c ../frontmods/pc64/main.c >pc64.main.c.diff
+ape/diff -u /sys/src/9/pc64/pc64 ../frontmods/pc64/pc64 >pc64.pc64.diff
+ape/diff -u /sys/src/9/port/auth.c ../frontmods/port/auth.c >auth.c.diff
+ape/diff -u /sys/src/9/port/chan.c ../frontmods/port/chan.c >chan.c.diff
+ape/diff -u /sys/src/9/port/devproc.c ../frontmods/port/devproc.c >devproc.c.diff
+ape/diff -u /sys/src/9/port/devsrv.c ../frontmods/port/devsrv.c >devsrv.c.diff
+ape/diff -u /sys/src/9/port/proc.c ../frontmods/port/proc.c >proc.c.diff
+ape/diff -u /sys/src/9/port/sysproc.c ../frontmods/port/sysproc.c >sysproc.c.diff
+ape/diff -u /sys/src/9/port/portdat.h ../frontmods/port/portdat.h >portdat.h.diff
+ape/diff -u /sys/src/9/port/portfns.h ../frontmods/port/portfns.h >portfns.h.diff
+ape/diff -u /sys/src/cmd/rc/plan9.c ../frontmods/rc/plan9.c >rc.plan9.c.diff
+ape/diff -u /sys/src/cmd/auth/factotum/fs.c ../frontmods/patched/factotumfs.c >factotumfs.c.diff
+ape/diff -u /sys/src/cmd/auth/factotum/util.c ../frontmods/patched/factotumutil.c >factotumutil.c.diff
+ape/diff -u /sys/src/cmd/auth/factotum/dat.h ../frontmods/patched/factotumdat.h >factotumdat.h.diff
+ape/diff -Nurp /sys/src/cmd/rio ../frontmods/grio >grio.diffs
+ape/diff -u /sys/include/libc.h.orig ../frontmods/include/libc.h >libc.h.diff

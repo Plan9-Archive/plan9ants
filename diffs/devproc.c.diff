@@ -1,5 +1,5 @@
---- /sys/src/9/port/devproc.c	Fri Sep 16 21:22:24 2016
-+++ devproc.c	Sun Dec 25 06:19:41 2016
+--- /sys/src/9/port/devproc.c	Sat Dec 31 23:31:15 2016
++++ ../frontmods/port/devproc.c	Tue Feb 21 01:08:45 2017
 @@ -91,7 +91,7 @@
  	"note",		{Qnote},	0,			0000,
  	"noteid",	{Qnoteid},	0,			0664,
@@ -220,7 +220,16 @@
  	case Qfd:
  		if(omode != OREAD)
  			error(Eperm);
-@@ -1037,7 +1223,8 @@
+@@ -642,6 +828,8 @@
+ 		int2flag(cm->mflag, flag);
+ 		if(strcmp(cm->to->path->s, "#M") == 0){
+ 			srv = srvname(cm->to->mchan);
++			if(srv == nil)
++				srv = zrvname(cm->to->mchan);
+ 			i = snprint(buf, nbuf, "mount %s %s %s %s\n", flag,
+ 				srv==nil? cm->to->mchan->path->s : srv,
+ 				mh->from->path->s, cm->spec? cm->spec : "");
+@@ -1037,7 +1225,8 @@
  
  	eqlock(&p->debug);
  	if(waserror()){
@@ -230,7 +239,7 @@
  		nexterror();
  	}
  	if(p->pid != PID(c->qid))
-@@ -1125,12 +1312,20 @@
+@@ -1125,12 +1314,21 @@
  		if(p->noteid != id)
  			error(Ebadarg);
  		break;
@@ -238,6 +247,7 @@
 +//		print("procnsreq on p, %s, %ld\n", a, n);
 +		if(p->debug.locked == 1)
 +			qunlock(&p->debug);
++		nonone(p);
 +		procnsreq(p, va, n);
 +		break;
 +
@@ -252,7 +262,7 @@
  	return n;
  }
  
-@@ -1541,4 +1736,242 @@
+@@ -1541,4 +1739,249 @@
  		p->newtlb = 1;
  
  	return n;
@@ -483,7 +493,14 @@
 +//		print("procbindmount(1, %d, -1, nil, %s, %uld, spec %s, %uld)\n", fd, old, flags, spec, p->pid);
 +		procbindmount(1, fd, -1, nil, old, flags, spec, p);
 +	} else if (strcmp(cbf->f[0], "unmount")==0){
++		/* forbid access to pipe devices */
 +		if((strncmp(new, "#|/", 3)==0) || (strncmp(old, "#|", 2)==0)){
++			error(Ebadsharp);
++			poperror();
++			return;
++		}
++		/* forbid access to tls device */
++		if((strncmp(new, "#a/", 3)==0) || (strncmp(old, "#a", 2)==0)){
 +			error(Ebadsharp);
 +			poperror();
 +			return;
