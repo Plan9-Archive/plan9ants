@@ -1,0 +1,10 @@
+--- /sys/include/libc.h.orig	Sun Feb 19 00:56:10 2017
++++ ../frontmods/include/libc.h	Thu Feb 16 02:48:37 2017
+@@ -590,6 +590,7 @@
+ 	RFPROC		= (1<<4),
+ 	RFMEM		= (1<<5),
+ 	RFNOWAIT	= (1<<6),
++	RFCSRVG		= (1<<9),
+ 	RFCNAMEG	= (1<<10),
+ 	RFCENVG		= (1<<11),
+ 	RFCFDG		= (1<<12),

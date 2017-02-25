@@ -1,0 +1,109 @@
+--- /sys/src/9/port/devsrv.c	Sat Jun 22 17:25:03 2013
++++ ../frontmods/port/devsrv.c	Fri Feb 24 16:56:45 2017
+@@ -6,19 +6,7 @@
+ #include	"../port/error.h"
+ 
+ 
+-typedef struct Srv Srv;
+-struct Srv
+-{
+-	char	*name;
+-	char	*owner;
+-	ulong	perm;
+-	Chan	*chan;
+-	Srv	*link;
+-	ulong	path;
+-};
+-
+ static QLock	srvlk;
+-static Srv	*srv;
+ static int	qidpath;
+ 
+ static Srv*
+@@ -26,7 +14,7 @@
+ {
+ 	Srv *sp;
+ 
+-	for(sp = srv; sp != nil; sp = sp->link) {
++	for(sp = up->sgrp->srvgrp; sp != nil; sp = sp->link) {
+ 		if(sp->path == qidpath || (name != nil && strcmp(sp->name, name) == 0))
+ 			return sp;
+ 	}
+@@ -48,7 +36,7 @@
+ 	if(name != nil)
+ 		sp = srvlookup(name, -1);
+ 	else {
+-		for(sp = srv; sp != nil && s > 0; sp = sp->link)
++		for(sp = up->sgrp->srvgrp; sp != nil && s > 0; sp = sp->link)
+ 			s--;
+ 	}
+ 	if(sp == nil || (name != nil && (strlen(sp->name) >= sizeof(up->genbuf)))) {
+@@ -95,7 +83,7 @@
+ 
+ 	s = nil;
+ 	qlock(&srvlk);
+-	for(sp = srv; sp != nil; sp = sp->link) {
++	for(sp = up->sgrp->srvgrp; sp != nil; sp = sp->link) {
+ 		if(sp->chan == c){
+ 			s = malloc(3+strlen(sp->name)+1);
+ 			if(s != nil)
+@@ -181,8 +169,8 @@
+ 	c->qid.path = sp->path;
+ 	c->qid.type = QTFILE;
+ 
+-	sp->link = srv;
+-	srv = sp;
++	sp->link = up->sgrp->srvgrp;
++	up->sgrp->srvgrp = sp;
+ 
+ 	qunlock(&srvlk);
+ 	poperror();
+@@ -206,7 +194,7 @@
+ 		qunlock(&srvlk);
+ 		nexterror();
+ 	}
+-	l = &srv;
++	l = &up->sgrp->srvgrp;
+ 	for(sp = *l; sp != nil; sp = *l) {
+ 		if(sp->path == c->qid.path)
+ 			break;
+@@ -301,6 +289,7 @@
+ 	 * since open, but since all that's checked is the owner,
+ 	 * which is immutable, all is well.
+ 	 */
++
+ 	if(c->flag & CRCLOSE){
+ 		if(waserror())
+ 			return;
+@@ -378,12 +367,30 @@
+ };
+ 
+ void
++closesgrp(Sgrp *sg)
++{
++	Srv *sp;
++	Srv *tsp;
++
++	if(decref(sg) == 0){
++		sp = sg->srvgrp;
++		while(sp!=nil){
++			tsp=sp;
++			sp=sp->link;
++			free(tsp);
++		}
++		free(sg);
++	}
++	return;
++}
++
++void
+ srvrenameuser(char *old, char *new)
+ {
+ 	Srv *sp;
+ 
+ 	qlock(&srvlk);
+-	for(sp = srv; sp != nil; sp = sp->link) {
++	for(sp = up->sgrp->srvgrp; sp != nil; sp = sp->link) {
+ 		if(sp->owner != nil && strcmp(old, sp->owner) == 0)
+ 			kstrdup(&sp->owner, new);
+ 	}

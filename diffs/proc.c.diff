@@ -1,0 +1,32 @@
+--- /sys/src/9/port/proc.c	Sat Dec 31 23:31:15 2016
++++ ../frontmods/port/proc.c	Fri Feb 24 16:57:03 2017
+@@ -620,6 +620,7 @@
+ 	p->egrp = nil;
+ 	p->fgrp = nil;
+ 	p->rgrp = nil;
++	p->sgrp = nil;
+ 	p->pdbg = nil;
+ 	p->fpstate = FPinit;
+ 	p->kp = 0;
+@@ -1098,6 +1099,7 @@
+ 	Egrp *egrp;
+ 	Rgrp *rgrp;
+ 	Pgrp *pgrp;
++	Sgrp *sgrp;
+ 	Chan *dot;
+ 	void (*pt)(Proc*, int, vlong);
+ 
+@@ -1128,6 +1130,13 @@
+ 		closeegrp(egrp);
+ 	if(rgrp != nil)
+ 		closergrp(rgrp);
++	/* sgrp is nilled out here because closefgrp may need srvclose */
++	qlock(&up->debug);
++	sgrp = up->sgrp;
++	up->sgrp = nil;
++	qunlock(&up->debug);
++	if(sgrp != nil)
++		closesgrp(sgrp);
+ 	if(dot != nil)
+ 		cclose(dot);
+ 	if(pgrp != nil)

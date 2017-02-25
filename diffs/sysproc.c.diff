@@ -1,0 +1,39 @@
+--- /sys/src/9/port/sysproc.c	Sat Dec 31 23:31:16 2016
++++ ../frontmods/port/sysproc.c	Fri Feb 24 16:57:20 2017
+@@ -36,6 +36,7 @@
+ 	Pgrp *opg;
+ 	Rgrp *org;
+ 	Egrp *oeg;
++	Sgrp *osg;
+ 	ulong pid, flag;
+ 	Mach *wm;
+ 
+@@ -75,6 +76,12 @@
+ 			up->rgrp = newrgrp();
+ 			closergrp(org);
+ 		}
++		if(flag & RFCSRVG) {
++			osg = up->sgrp;
++			up->sgrp = smalloc(sizeof(Sgrp));
++			up->sgrp->ref = 1;
++			closesgrp(osg);
++		}
+ 		if(flag & (RFENVG|RFCENVG)) {
+ 			oeg = up->egrp;
+ 			up->egrp = smalloc(sizeof(Egrp));
+@@ -160,6 +167,15 @@
+ 	else {
+ 		incref(up->rgrp);
+ 		p->rgrp = up->rgrp;
++	}
++
++	/* Srv group */
++	if(flag & RFCSRVG) {
++		p->sgrp = smalloc(sizeof(Sgrp));
++		p->sgrp->ref = 1;
++	} else {
++		p->sgrp = up->sgrp;
++		incref(p->sgrp);
+ 	}
+ 
+ 	/* Environment group */

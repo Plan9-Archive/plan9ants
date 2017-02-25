@@ -1,0 +1,100 @@
+--- /sys/src/9/boot/bootfs.proto	Sat Dec 31 23:31:12 2016
++++ ../frontmods/boot/bootfs.proto	Sat Jan 21 13:30:15 2017
+@@ -1,16 +1,22 @@
+ $objtype
+ 	bin
+ 		9660srv
++		aan
+ 		awk
+ 		auth
++			newns
+ 			secstore
+ 		aux
+ 			kbdfs
++			listen1
+ 			wpa
++		basename
+ 		bind
+ 		cat
+ 		cfs
+ 		chmod
++		cp
++		cpu
+ 		dd
+ 		disk
+ 			cryptsetup
+@@ -19,10 +25,19 @@
+ 			prep
+ 		dossrv
+ 		echo
++		ed
++		exportfs
++		fossil
++			fossil
+ 		cwfs64x
+ 		grep
++		grio - - - /n/rootless/bootdir.extras/grio
++		gunzip
++		hubfs - - - /n/rootless/bootdir.extras/hubfs
++		hubshell - - - /n/rootless/bootdir.extras/hubshell
+ 		ip
+ 			ipconfig
++			rexexec
+ 		ls
+ 		mkdir
+ 		mntgen
+@@ -31,20 +46,30 @@
+ 		ndb
+ 			dnsgetip
+ 		hjfs
++		ramfs
+ 		rc
++		read
+ 		rm
++		rx
+ 		sed
+ 		sleep
+ 		srv
++		srvfs
++		tar
+ 		test
+ 		tlsclient
++		tlssrv
++		touch
++		tr
+ 		unmount
+ 		nusb
+ 			usbd
+ 			ether
+ 			disk
+ 			kb
+-		xd
++		venti
++			venti
++		wc
+ rc
+ 	lib
+ 		rcmain
+@@ -53,6 +78,14 @@
+ 	bin
+ 		fstype
+ 		diskparts
++		hub - - - /n/rootless/bootdir.extras/hub
++		initskel - - - /n/rootless/bootdir.extras/initskel
++		ramskel - - - /n/rootless/bootdir.extras/ramskel
++		rconnect
++		rcpu
++		rexport
++		rimport
++		save9cfg - - - /n/rootless/bootdir.extras/save9cfg
+ 		srvtls
+ 		nusbrc 555 sys sys ../boot/nusbrc
+ 		bootrc 555 sys sys ../boot/bootrc
+@@ -60,3 +93,7 @@
+ lib
+ 	firmware
+ 		+
++	namespace - - - /n/rootless/bootdir.extras/namespace
++	namespace.saveterm - - - /n/rootless/bootdir.extras/namespace.saveterm
++	namespace.save9front - - - /n/rootless/bootdir.extras/namespace.save9front
++	skel.tar - - - /n/rootless/bootdir.extras/skel.tar

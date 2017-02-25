@@ -1,0 +1,10 @@
+--- /sys/src/9/port/auth.c	Sat Dec 31 23:31:14 2016
++++ ../frontmods/port/auth.c	Tue Feb 21 01:09:51 2017
+@@ -141,6 +141,7 @@
+ 
+ 	renameuser(eve, buf);
+ 	srvrenameuser(eve, buf);
++	zrvrenameuser(eve, buf);
+ 	shrrenameuser(eve, buf);
+ 	kstrdup(&eve, buf);
+ 	kstrdup(&up->user, buf);
