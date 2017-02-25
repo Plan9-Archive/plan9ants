@@ -4,8 +4,6 @@ syntax: glob
 *.gz
 *.tgz
 compiletemp
-root/bin
-root/acme
 8.out
 hubfs
 hubshell
