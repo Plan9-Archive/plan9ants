@@ -1,5 +1,5 @@
 --- /sys/src/9/port/devsrv.c	Sat Jun 22 17:25:03 2013
-+++ ../frontmods/port/devsrv.c	Fri Feb 24 16:56:45 2017
++++ ../frontmods/port/devsrv.c	Sat Feb 25 22:54:53 2017
 @@ -6,19 +6,7 @@
  #include	"../port/error.h"
  
@@ -67,15 +67,7 @@
  	for(sp = *l; sp != nil; sp = *l) {
  		if(sp->path == c->qid.path)
  			break;
-@@ -301,6 +289,7 @@
- 	 * since open, but since all that's checked is the owner,
- 	 * which is immutable, all is well.
- 	 */
-+
- 	if(c->flag & CRCLOSE){
- 		if(waserror())
- 			return;
-@@ -378,12 +367,30 @@
+@@ -378,12 +366,30 @@
  };
  
  void

@@ -289,7 +289,6 @@ srvclose(Chan *c)
 	 * since open, but since all that's checked is the owner,
 	 * which is immutable, all is well.
 	 */
-
 	if(c->flag & CRCLOSE){
 		if(waserror())
 			return;

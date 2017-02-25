@@ -1,5 +1,5 @@
 --- /sys/src/cmd/auth/factotum/util.c	Sun Feb 19 00:49:07 2017
-+++ ../frontmods/patched/factotumutil.c	Thu Dec 22 01:31:50 2016
++++ ../frontmods/patched/factotumutil.c	Sat Feb 25 22:57:32 2017
 @@ -11,6 +11,8 @@
  
  	if(access("/net/tcp", AEXIST) < 0)
@@ -9,12 +9,3 @@
  
  	if(access("/net/cs", AEXIST) < 0){
  		if((srvfd = open("#s/cs", ORDWR)) >= 0){
-@@ -419,8 +421,6 @@
- 				case -1:
- 					qunlock(ring);
- 					_freeattr(attr1);
--					_freeattr(attr2);
--					_freeattr(attr3);
- 					return RpcConfirm;
- 				case 0:
- 					continue;
