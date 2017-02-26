@@ -1,18 +1,14 @@
 The venti configuration stored in the arenas is overridden by plan9rc even if the user did not provide parameters. The venti command should only provide parameters if the user did not.
 
-The skel.tar and root.targz files remain a hassle. Possibly switch to using placeholder files to avoid issues with them.
+The skel.tar file remains a hassle.
 
 There are 3 different copies of the lib/namespace file for the ANTS boot environment in the repository. The one that is actually used is at root/lib/namespace. Why do bootdir.extras/namespace and bootdir.extras/root/lib/namespace exist?
 
 When trying to secure the service namespace against failures of the main environment, the mount of cs in the default /lib/namespace file is problematic. Even when using factotum -x, new processes started by cpu and import will try to mount /srv/cs and freeze. The /lib/namespace file used by the early environment is stored in ramdisk so removing the mount of cs (and dns?) will prevent frozen logins via cpu.
 
-the -m parameter is not passed to hjfs when plan9rc is the boot script
-
 the install scripts should autodetect partition locations and edit plan9.ini files accordingly
 
 ventiprog should be more careful about not replacing the wrcmd with bad information
-
-hubshell should probably make %remote shells do rfork n to isolate their namespace
 
 when controlling linux machines via hubfs, it is necessary to use bash if you wish to use interactive tools like ed. using rc results in input being processed by the rc running underneath ed. why?
 
@@ -39,8 +35,6 @@ why does it work to communicate with venti on loopback through an import of /net
 
 similarly, why are some binaries non-executable via vacfs? (both seem to be related to short reads, client not requesting more data?)
 
-what is needed to get any ssh client other than openssh working?
-
 ============= Resolved: ===============
 
 Unless I'm missing something, there is no reason to have separate copies of the mkpaq and toolcopy scripts for the amd64 build. Everything should just be parameterized by $objtype. There's no reason we shouldn't be able to build on other arches than 386/amd64. Fixed in ANTS2.6
@@ -52,3 +46,11 @@ the partition and filesystem detection logic in plan9rc should be improved. Fixe
 cfs support was broken. Fixed in ANTS2.6
 
 The ants bootpaq should probably be integrated with the 9front boot paqfs, with a standard organization. This would be more space efficient, and would solve a few different issues, such as eliminating the need for the one-line customization of rc to use /boot/rcmain rather than /rc/lib/rcmain. This will require careful analysis of the existing boot scripts, which are written to look for a lot of things in /boot. Fixed in ANTS2.8
+
+the -m parameter is not passed to hjfs when plan9rc is the boot script. Fixed in ANTS3.0
+
+root.targz has been removed and placeholder files added for ANTS3.0
+
+hubshell should probably make %remote shells do rfork n to isolate their namespace. Method of creating %remote shells changed in ANTS3.0
+
+
