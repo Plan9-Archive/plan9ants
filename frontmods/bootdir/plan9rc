@@ -272,7 +272,7 @@ fn dogetrootfs{
 		if (~ $bootpartition '')
 			bootpartition=FAIL
 		hjfs=$bootpartition
-		{hjfs -s -f $bootpartition &} <[0=1] | echo 0 >/srv/boot
+		{hjfs -s -f $bootpartition $bootparse(2-) &} <[0=1] | echo 0 >/srv/boot
 		bootsrv=/srv/boot		
 	case cwfs
 		bootpartition=`{findpart fscache}
@@ -289,7 +289,7 @@ fn dogetrootfs{
 		if (~ $bootpartition '')
 			bootpartition=FAIL
 		cwfs=$bootpartition
-		{cwfs64x -s -f $bootpartition &} <[0=1] | echo 0 >/srv/boot
+		{cwfs64x -s -f $bootpartition $bootparse(2-) &} <[0=1] | echo 0 >/srv/boot
 		bootsrv=/srv/boot
 	case fossil
 		if(! ~ $fossil ?*){
