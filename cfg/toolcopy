@@ -91,7 +91,7 @@ cp /$objtype/bin/ps .
 cp /$objtype/bin/pwd .
 cp /$objtype/bin/seq .
 cp /$objtype/bin/unmount .
-cp /$objtype/bin/xd .
+#cp /$objtype/bin/xd .
 #cp /$objtype/bin/awk .
 #cp /$objtype/bin/chgrp .
 #cp /$objtype/bin/du .
