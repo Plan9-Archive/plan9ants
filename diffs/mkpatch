@@ -1,0 +1,73 @@
+#!/bin/rc
+
+echo 'backing up old ants file versions'
+cp ../frontmods/boot/boot.c ../frontmods/boot/boot.c.old
+cp ../frontmods/boot/bootfs.proto ../frontmods/boot/bootfs.proto.old
+cp ../frontmods/boot/bootrc ../frontmods/boot/bootrc.old
+cp ../frontmods/pc/main.c ../frontmods/pc/main.c.old
+cp ../frontmods/pc/pcf ../frontmods/pc/pcf.old
+cp ../frontmods/pc64/main.c ../frontmods/pc64/main.c.old
+cp ../frontmods/pc64/pc64 ../frontmods/pc64/pc64.old
+cp ../frontmods/port/auth.c ../frontmods/port/auth.c.old
+cp ../frontmods/port/chan.c ../frontmods/port/chan.c.old
+cp ../frontmods/port/devproc.c ../frontmods/port/devproc.c.old
+cp ../frontmods/port/devsrv.c ../frontmods/port/devsrv.c.old
+cp ../frontmods/port/proc.c ../frontmods/port/proc.c.old
+cp ../frontmods/port/sysproc.c ../frontmods/port/sysproc.c.old
+cp ../frontmods/port/portdat.h ../frontmods/port/portdat.h.old
+cp ../frontmods/port/portfns.h ../frontmods/port/portfns.h.old
+cp ../frontmods/rc/plan9.c ../frontmods/rc/plan9.c.old
+cp ../frontmods/patched/factotumfs.c ../frontmods/patched/factotumfs.c.old
+cp ../frontmods/patched/factotumutil.c ../frontmods/patched/factotumutil.c.old
+cp ../frontmods/patched/factotumdat.h ../frontmods/patched/factotumdat.h.old
+mkdir ../frontmods/grio.old
+dircp ../frontmods/grio ../frontmods/grio.old
+cp ../frontmods/include/libc.h ../frontmods/include/libc.h.old
+
+echo 'copying current system files to frontmods directory'
+cp /sys/src/9/boot/boot.c ../frontmods/boot/boot.c
+cp /sys/src/9/boot/bootfs.proto ../frontmods/boot/bootfs.proto
+cp /sys/src/9/boot/bootrc ../frontmods/boot/bootrc
+cp /sys/src/9/pc/main.c ../frontmods/pc/main.c
+cp /sys/src/9/pc/pcf ../frontmods/pc/pcf
+cp /sys/src/9/pc64/main.c ../frontmods/pc64/main.c
+cp /sys/src/9/pc64/pc64 ../frontmods/pc64/pc64
+cp /sys/src/9/port/auth.c ../frontmods/port/auth.c
+cp /sys/src/9/port/chan.c ../frontmods/port/chan.c
+cp /sys/src/9/port/devproc.c ../frontmods/port/devproc.c
+cp /sys/src/9/port/devsrv.c ../frontmods/port/devsrv.c
+cp /sys/src/9/port/proc.c ../frontmods/port/proc.c
+cp /sys/src/9/port/sysproc.c ../frontmods/port/sysproc.c
+cp /sys/src/9/port/portdat.h ../frontmods/port/portdat.h
+cp /sys/src/9/port/portfns.h ../frontmods/port/portfns.h
+cp /sys/src/cmd/rc/plan9.c ../frontmods/rc/plan9.c
+cp /sys/src/cmd/auth/factotum/fs.c ../frontmods/patched/factotumfs.c
+cp /sys/src/cmd/auth/factotum/util.c ../frontmods/patched/factotumutil.c
+cp /sys/src/cmd/auth/factotum/dat.h ../frontmods/patched/factotumdat.h
+dircp /sys/src/cmd/rio ../frontmods/grio
+cp /sys/include/libc.h ../frontmods/include/libc.h
+
+echo 'patching updated files from diffs'
+ape/patch ../frontmods/boot/boot.c <boot.c.diff
+ape/patch ../frontmods/boot/bootfs.proto <bootfs.proto.diff
+ape/patch ../frontmods/boot/bootrc <bootrc.diff
+ape/patch ../frontmods/pc/main.c <pc.main.c.diff
+ape/patch ../frontmods/pc/pcf <pc.pcf.diff
+ape/patch ../frontmods/pc64/main.c <pc64.main.c.diff
+ape/patch ../frontmods/pc64/pc64 <pc64.pc64.diff
+ape/patch ../frontmods/port/auth.c <auth.c.diff
+ape/patch ../frontmods/port/chan.c <chan.c.diff
+ape/patch ../frontmods/port/devproc.c <devproc.c.diff
+ape/patch ../frontmods/port/devsrv.c <devsrv.c.diff
+ape/patch ../frontmods/port/proc.c <proc.c.diff
+ape/patch ../frontmods/port/sysproc.c <sysproc.c.diff
+ape/patch ../frontmods/port/portdat.h <portdat.h.diff
+ape/patch ../frontmods/port/portfns.h <portfns.h.diff
+ape/patch ../frontmods/rc/plan9.c <rc.plan9.c.diff
+ape/patch ../frontmods/patched/factotumfs.c <factotumfs.c.diff
+ape/patch ../frontmods/patched/factotumutil.c <factotumutil.c.diff
+ape/patch ../frontmods/patched/factotumdat.h <factotumdat.h.diff
+cd ../frontmods
+ape/patch -p2 <../diffs/grio.diffs
+cd ../diffs
+ape/patch ../frontmods/include/libc.h <libc.h.diff

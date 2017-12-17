@@ -30,7 +30,7 @@ rm -rf compiletemp/*
 
 fn checkfrontclean{
 	if(~ $objtype 386){
-		if(test -e /sys/src/9/pc/9pcf){
+		if(test -e /sys/src/9/pc/9pc){
 			echo 'please mk clean in /sys/src/9/pc before building'
 			exit
 		}
@@ -78,8 +78,8 @@ if(~ $1 9front){
 		cd /sys/src/9/pc64
 	mk
 	cd $builddir
-	if(test -e compiletemp/9pcf){
-		cp compiletemp/9pcf 9ants
+	if(test -e compiletemp/9pc){
+		cp compiletemp/9pc 9ants
 		echo 9ants kernel built
 	}
 	if(test -e compiletemp/9pc64){
@@ -117,8 +117,8 @@ if(~ $1 frontkernel){
 		cd /sys/src/9/pc64
 	mk
 	cd $builddir
-	if(test -e compiletemp/9pcf){
-		cp compiletemp/9pcf 9ants
+	if(test -e compiletemp/9pc){
+		cp compiletemp/9pc 9ants
 		echo 9ants kernel built
 	}
 	if(test -e compiletemp/9pc64){
@@ -238,7 +238,7 @@ if(~ $1 9frontinstall){
 	}
 	echo 'WARNING MODIFIES PLAN9.INI AND BOOTUP'
 	echo 'enter bootfile=9ants at bootup for new kernel'
-	echo 'use bootfile=9pcf for previous kernel'
+	echo 'use bootfile=9pc for previous kernel'
 	sleep 5
 	cd patched
 	$CC -FTVw gridlisten.c
