@@ -16,6 +16,29 @@ if(~ `{pwd} /tmp*){
 rfork ne
 . /$objtype/mkfile
 builddir=`{pwd}
+
+if(test -d /dist/plan9front){
+	if(! test -e /sys/include/libc.h.orig){
+		echo 'backing up libc at libc.h.orig'
+		cp /sys/include/libc.h /sys/include/libc.h.orig
+	}
+	if(! test -e /$objtype/bin/rc.orig){
+		echo 'backing up rc at rc.orig'
+		cp /$objtype/bin/rc /$objtype/bin/rc.orig
+	}
+	if(! test -e frontmods/include/libc.rebuild.complete){
+		echo 'rebuilding libs with modified libc for rfork V'
+		sleep 5
+		cp frontmods/include/libc.h /sys/include/libc.h
+		cd /sys/src
+		mk cleanlibs
+		mk libs
+		mk cleanlibs
+		cd $builddir
+		touch frontmods/include/libc.rebuild.complete
+	}
+}
+
 if(! test -d compiletemp){
 	echo 'mkdir compiletemp'	
 	mkdir compiletemp
@@ -515,15 +538,7 @@ if(~ $1 patched){
 if(~ $1 frontpatched){
 	echo building patched
 	ramfs
-	if(! test -e /sys/include/libc.h.orig){
-		echo 'backing up libc at libc.h.orig'
-		cp /sys/include/libc.h /sys/include/libc.h.orig
-	}
-	cp frontmods/include/libc.h /sys/include/libc.h
-	if(! test -e /$objtype/bin/rc.orig){
-		echo backing up rc at rc.orig
-		cp /$objtype/bin/rc /$objtype/bin/rc.orig
-	}
+
 	mkdir /tmp/rc
 	dircp /sys/src/cmd/rc /tmp/rc
 	cp frontmods/rc/plan9.c /tmp/rc/plan9.c
