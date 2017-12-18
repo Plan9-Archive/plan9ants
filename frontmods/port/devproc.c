@@ -34,6 +34,7 @@ enum
 	Qwait,
 	Qprofile,
 	Qsyscall,
+	Qwatchpt,
 };
 
 enum
@@ -101,6 +102,7 @@ Dirtab procdir[] =
 	"wait",		{Qwait},	0,			0400,
 	"profile",	{Qprofile},	0,			0400,
 	"syscall",	{Qsyscall},	0,			0400,	
+	"watchpt",	{Qwatchpt},	0,			0600,
 };
 
 static
@@ -136,7 +138,7 @@ Cmdtab proccmd[] = {
 };
 
 /* Segment type from portdat.h */
-static char *sname[]={ "Text", "Data", "Bss", "Stack", "Shared", "Phys", "Fixed", };
+static char *sname[]={ "Text", "Data", "Bss", "Stack", "Shared", "Phys", "Fixed", "Sticky" };
 
 /*
  * Qids are, in path:
@@ -182,6 +184,8 @@ profclock(Ureg *ur, Timer *)
 		segclock(ur->pc);
 	}
 }
+
+static int lenwatchpt(Proc *);
 
 /* begin sysfile.c borrowed functions */
 static void
@@ -447,6 +451,11 @@ procgen(Chan *c, char *name, Dirtab *tab, int, int s, Dir *dp)
 		}
 		break;
 	}
+	switch(QID(tab->qid)){
+	case Qwatchpt:
+		len = lenwatchpt(p);
+		break;
+	}
 
 	mkqid(&qid, path|tab->qid.path, c->qid.vers, QTFILE);
 	devdir(c, qid, tab->name, len, p->user, perm, dp);
@@ -516,19 +525,22 @@ nonone(Proc *p)
 	error(Eperm);
 }
 
+static void clearwatchpt(Proc *p);
+
 static Chan*
-procopen(Chan *c, int omode)
+procopen(Chan *c, int omode0)
 {
 	Proc *p;
 	Pgrp *pg;
 	Chan *tc;
 	int pid;
+	int omode;
 
 	if(c->qid.type & QTDIR)
-		return devopen(c, omode, 0, 0, procgen);
+		return devopen(c, omode0, 0, 0, procgen);
 
 	if(QID(c->qid) == Qtrace){
-		if (omode != OREAD) 
+		if (omode0 != OREAD) 
 			error(Eperm);
 		lock(&tlock);
 		if (waserror()){
@@ -548,7 +560,7 @@ procopen(Chan *c, int omode)
 		unlock(&tlock);
 		poperror();
 
-		c->mode = openmode(omode);
+		c->mode = openmode(omode0);
 		c->flag |= COPEN;
 		c->offset = 0;
 		return c;
@@ -564,7 +576,7 @@ procopen(Chan *c, int omode)
 	if(p->pid != pid)
 		error(Eprocdied);
 
-	omode = openmode(omode);
+	omode = openmode(omode0);
 
 	switch(QID(c->qid)){
 	case Qtext:
@@ -611,6 +623,7 @@ procopen(Chan *c, int omode)
 	case Qfpregs:
 	case Qsyscall:	
 	case Qppid:
+	case Qwatchpt:
 		nonone(p);
 		break;
 
@@ -640,6 +653,19 @@ procopen(Chan *c, int omode)
 		error(Eprocdied);
 
 	tc = devopen(c, omode, 0, 0, procgen);
+	if(waserror()){
+		cclose(tc);
+		nexterror();
+	}
+	
+	switch(QID(c->qid)){
+	case Qwatchpt:
+		if((omode0 & OTRUNC) != 0)
+			clearwatchpt(p);
+		break;
+	}
+	
+	poperror();
 	qunlock(&p->debug);
 	poperror();
 
@@ -889,6 +915,119 @@ readfd1(Chan *c, Proc *p, char *buf, int nbuf)
 }
 
 /*
+ * setupwatchpts(Proc *p, Watchpt *wp, int nwp) is defined for all arches separately.
+ * It tests whether wp is a valid set of watchpoints and errors out otherwise.
+ * If and only if they are valid, it sets up all watchpoints (clearing any preexisting ones).
+ * This is to make sure that failed writes to watchpt don't touch the existing watchpoints.
+ */
+
+static void
+clearwatchpt(Proc *p)
+{
+	setupwatchpts(p, nil, 0);
+	free(p->watchpt);
+	p->watchpt = nil;
+	p->nwatchpt = 0;
+}
+
+static int
+lenwatchpt(Proc *pr)
+{
+	/* careful, not holding debug lock */
+	return pr->nwatchpt * (10 + 4 * sizeof(uintptr));
+}
+
+static int
+readwatchpt(Proc *pr, char *buf, int nbuf)
+{
+	char *p, *e;
+	Watchpt *w;
+	
+	p = buf;
+	e = buf + nbuf;
+	/* careful, length has to match lenwatchpt() */
+	for(w = pr->watchpt; w < pr->watchpt + pr->nwatchpt; w++)
+		p = seprint(p, e, sizeof(uintptr) == 8 ? "%c%c%c %#.16p %#.16p\n" : "%c%c%c %#.8p %#.8p\n",
+			(w->type & WATCHRD) != 0 ? 'r' : '-',
+			(w->type & WATCHWR) != 0 ? 'w' : '-',
+			(w->type & WATCHEX) != 0 ? 'x' : '-',
+			(void *) w->addr, (void *) w->len);
+	return p - buf;
+}
+
+static int
+writewatchpt(Proc *pr, char *buf, int nbuf, uvlong offset)
+{
+	char *p, *q, *e;
+	char line[256], *f[4];
+	Watchpt *wp, *wq;
+	int rc, nwp, nwp0;
+	uvlong x;
+	
+	p = buf;
+	e = buf + nbuf;
+	if(offset != 0)
+		nwp0 = pr->nwatchpt;
+	else
+		nwp0 = 0;
+	nwp = 0;
+	for(q = p; q < e; q++)
+		nwp += *q == '\n';
+	if(nwp > 65536) error(Egreg);
+	wp = malloc((nwp0+nwp) * sizeof(Watchpt));
+	if(wp == nil) error(Enomem);
+	if(waserror()){
+		free(wp);
+		nexterror();
+	}
+	if(nwp0 > 0)
+		memmove(wp, pr->watchpt, sizeof(Watchpt) * nwp0);
+	for(wq = wp + nwp0;;){
+		q = memchr(p, '\n', e - p);
+		if(q == nil)
+			break;
+		if(q - p > sizeof(line) - 1)
+			error("line too long");
+		memmove(line, p, q - p);
+		line[q - p] = 0;
+		p = q + 1;
+		
+		rc = tokenize(line, f, nelem(f));
+		if(rc == 0) continue;
+		if(rc != 3)
+			error("wrong number of fields");
+		for(q = f[0]; *q != 0; q++)
+			switch(*q){
+			case 'r': if((wq->type & WATCHRD) != 0) goto tinval; wq->type |= WATCHRD; break;
+			case 'w': if((wq->type & WATCHWR) != 0) goto tinval; wq->type |= WATCHWR; break;
+			case 'x': if((wq->type & WATCHEX) != 0) goto tinval; wq->type |= WATCHEX; break;
+			case '-': break;
+			default: tinval: error("invalid type");
+			}
+		x = strtoull(f[1], &q, 0);
+		if(f[1] == q || *q != 0 || x != (uintptr) x) error("invalid address");
+		wq->addr = x;
+		x = strtoull(f[2], &q, 0);
+		if(f[2] == q || *q != 0 || x > (uintptr)-wq->addr) error("invalid length");
+		wq->len = x;
+		if(wq->addr + wq->len > USTKTOP) error("bad address");
+		wq++;
+	}
+	nwp = wq - (wp + nwp0);
+	if(nwp == 0 && nwp0 == pr->nwatchpt){
+		poperror();
+		free(wp);
+		return p - buf;
+	}
+	setupwatchpts(pr, wp, nwp0 + nwp);
+	poperror();
+	free(pr->watchpt);
+	pr->watchpt = wp;
+	pr->nwatchpt = nwp0 + nwp;
+	return p - buf;
+}
+
+/*
  * userspace can't pass negative file offset for a
  * 64 bit kernel address, so we use 63 bit and sign
  * extend to 64 bit.
@@ -1061,7 +1200,9 @@ procread(Chan *c, void *va, long n, vlong off)
 		goto regread;
 
 	case Qfpregs:
-		rptr = (uchar*)&p->fpsave;
+		if(p->fpstate != FPinactive)
+			error(Enoreg);
+		rptr = (uchar*)p->fpsave;
 		rsize = sizeof(FPsave);
 	regread:
 		if(rptr == nil)
@@ -1109,7 +1250,7 @@ procread(Chan *c, void *va, long n, vlong off)
 				continue;
 			j += sprint(statbuf+j, "%-6s %c%c %8p %8p %4ld\n",
 				sname[sg->type&SG_TYPE],
-				sg->type&SG_RONLY ? 'R' : ' ',
+				sg->type&SG_FAULT ? 'F' : (sg->type&SG_RONLY ? 'R' : ' '),
 				sg->profile ? 'P' : ' ',
 				sg->base, sg->top, sg->ref);
 		}
@@ -1194,6 +1335,16 @@ procread(Chan *c, void *va, long n, vlong off)
 
 	case Qppid:
 		return readnum(offset, va, n, p->parentpid, NUMSIZE);
+	
+	case Qwatchpt:
+		eqlock(&p->debug);
+		j = readwatchpt(p, statbuf, sizeof(statbuf));
+		qunlock(&p->debug);
+		if(offset >= j)
+			return 0;
+		if(offset+n > j)
+			n = j - offset;
+		goto statbufread;
 
 	}
 	error(Egreg);
@@ -1272,7 +1423,9 @@ procwrite(Chan *c, void *va, long n, vlong off)
 			n = 0;
 		else if(offset+n > sizeof(FPsave))
 			n = sizeof(FPsave) - offset;
-		memmove((uchar*)&p->fpsave+offset, va, n);
+		if(p->fpstate != FPinactive || p->fpsave == nil)
+			error(Enoreg);
+		memmove((uchar*)p->fpsave+offset, va, n);
 		break;
 
 	case Qctl:
@@ -1313,6 +1466,9 @@ procwrite(Chan *c, void *va, long n, vlong off)
 		}
 		if(p->noteid != id)
 			error(Ebadarg);
+		break;
+	case Qwatchpt:
+		writewatchpt(p, va, n, off);
 		break;
 	case Qns:
 //		print("procnsreq on p, %s, %ld\n", a, n);
@@ -1410,6 +1566,8 @@ procstopwait(Proc *p, int ctl)
 		error(Eprocdied);
 	if(ctl != 0)
 		p->procctl = ctl;
+	if(p == up)
+		return;
 	p->pdbg = up;
 	qunlock(&p->debug);
 	up->psstate = "Stopwait";

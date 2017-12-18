@@ -51,6 +51,7 @@ typedef struct Timers	Timers;
 typedef struct Uart	Uart;
 typedef struct Waitq	Waitq;
 typedef struct Walkqid	Walkqid;
+typedef struct Watchpt	Watchpt;
 typedef struct Watchdog	Watchdog;
 typedef int    Devgen(Chan*, char*, Dirtab*, int, int, Dir*);
 
@@ -369,6 +370,7 @@ enum
 	SG_SHARED	= 04,
 	SG_PHYSICAL	= 05,
 	SG_FIXED	= 06,
+	SG_STICKY	= 07,
 
 	SG_RONLY	= 0040,		/* Segment is read only */
 	SG_CEXEC	= 0100,		/* Detach at exec */
@@ -573,6 +575,7 @@ struct Timer
 	void	*ta;
 	/* Internal */
 	Lock;
+	Mach	*tactive;	/* The cpu that tf is active on */
 	Timers	*tt;		/* Timers queue this timer runs on */
 	Tval	tticks;		/* tns converted to ticks */
 	Tval	twhen;		/* ns represented in fastticks */
@@ -692,6 +695,8 @@ struct Proc
 	Fgrp	*closingfgrp;	/* used during teardown */
 
 	ulong	parentpid;
+
+	int	insyscall;
 	ulong	time[6];	/* User, Sys, Real; child U, S, R */
 
 	uvlong	kentry;		/* Kernel entry time stamp (for profiling) */
@@ -704,9 +709,6 @@ struct Proc
 	 * (procrestores and procsaves balance), it is pcycles.
 	 */
 	vlong	pcycles;
-
-	int	insyscall;
-	int	fpstate;
 
 	QLock	debug;		/* to access debugging elements of User */
 	Proc	*pdbg;		/* the debugging process */
@@ -736,9 +738,8 @@ struct Proc
 	void	(*kpfun)(void*);
 	void	*kparg;
 
-	FPsave	fpsave;		/* address of this is known by db */
-	int	scallnr;	/* sys call number - known by db */
-	Sargs	s;		/* address of this is known by db */
+	int	scallnr;	/* sys call number */
+	Sargs	s;		/* syscall arguments */
 	int	nerrlab;
 	Label	errlab[NERR];
 	char	*syserrstr;	/* last error from a system call, errbuf0 or 1 */
@@ -782,16 +783,15 @@ struct Proc
 
 	void	*ureg;		/* User registers for notes */
 	void	*dbgreg;	/* User registers for devproc */
-	Notsave;
 
-	/*
-	 *  machine specific MMU
-	 */
-	PMMU;
+	PFPU;			/* machine specific fpu state */
+	PMMU;			/* machine specific mmu state */
 
 	char	*syscalltrace;	/* syscall trace */
-	QLock	procmount;		/* lock for proc ns mounts */
+ 	QLock	procmount;		/* lock for proc ns mounts */
 
+	Watchpt	*watchpt;	/* watchpoints */
+	int	nwatchpt;
 };
 
 enum
@@ -800,7 +800,7 @@ enum
 	NUMSIZE	=	12,		/* size of formatted number */
 	MB =		(1024*1024),
 	/* READSTR was 1000, which is way too small for usb's ctl file */
-	READSTR =	4000,		/* temporary buffer size for device reads */
+	READSTR =	8000,		/* temporary buffer size for device reads */
 };
 
 extern	Conf	conf;
@@ -982,6 +982,16 @@ struct Watchdog
 	void	(*stat)(char*, char*);	/* watchdog statistics */
 };
 
+struct Watchpt
+{
+	enum {
+		WATCHRD = 1,
+		WATCHWR = 2,
+		WATCHEX = 4,
+	} type;
+	uintptr addr, len;
+};
+
 
 /* queue state bits,  Qmsg, Qcoalesce, and Qkick can be set in qopen */
 enum
@@ -1001,3 +1011,13 @@ enum
 #pragma	varargck	type	"V"	uchar*
 #pragma	varargck	type	"E"	uchar*
 #pragma	varargck	type	"M"	uchar*
+
+/*
+ * Log console output so it can be retrieved via /dev/kmesg.
+ * This is good for catching boot-time messages after the fact.
+ */
+struct {
+	Lock lk;
+	uint n;
+	char buf[16384];
+} kmesg;

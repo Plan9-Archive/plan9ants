@@ -5,7 +5,7 @@ cp ../frontmods/boot/boot.c ../frontmods/boot/boot.c.old
 cp ../frontmods/boot/bootfs.proto ../frontmods/boot/bootfs.proto.old
 cp ../frontmods/boot/bootrc ../frontmods/boot/bootrc.old
 cp ../frontmods/pc/main.c ../frontmods/pc/main.c.old
-cp ../frontmods/pc/pcf ../frontmods/pc/pcf.old
+cp ../frontmods/pc/pc ../frontmods/pc/pc.old
 cp ../frontmods/pc64/main.c ../frontmods/pc64/main.c.old
 cp ../frontmods/pc64/pc64 ../frontmods/pc64/pc64.old
 cp ../frontmods/port/auth.c ../frontmods/port/auth.c.old
@@ -29,7 +29,7 @@ cp /sys/src/9/boot/boot.c ../frontmods/boot/boot.c
 cp /sys/src/9/boot/bootfs.proto ../frontmods/boot/bootfs.proto
 cp /sys/src/9/boot/bootrc ../frontmods/boot/bootrc
 cp /sys/src/9/pc/main.c ../frontmods/pc/main.c
-cp /sys/src/9/pc/pcf ../frontmods/pc/pcf
+cp /sys/src/9/pc/pc ../frontmods/pc/pc
 cp /sys/src/9/pc64/main.c ../frontmods/pc64/main.c
 cp /sys/src/9/pc64/pc64 ../frontmods/pc64/pc64
 cp /sys/src/9/port/auth.c ../frontmods/port/auth.c
@@ -52,7 +52,7 @@ ape/patch ../frontmods/boot/boot.c <boot.c.diff
 ape/patch ../frontmods/boot/bootfs.proto <bootfs.proto.diff
 ape/patch ../frontmods/boot/bootrc <bootrc.diff
 ape/patch ../frontmods/pc/main.c <pc.main.c.diff
-ape/patch ../frontmods/pc/pcf <pc.pcf.diff
+ape/patch ../frontmods/pc/pc <pc.pc.diff
 ape/patch ../frontmods/pc64/main.c <pc64.main.c.diff
 ape/patch ../frontmods/pc64/pc64 <pc64.pc64.diff
 ape/patch ../frontmods/port/auth.c <auth.c.diff

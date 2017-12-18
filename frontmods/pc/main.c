@@ -11,131 +11,27 @@
 #include	"reboot.h"
 
 Mach *m;
-
-/*
- * Where configuration info is left for the loaded programme.
- * This will turn into a structure as more is done by the boot loader
- * (e.g. why parse the .ini file twice?).
- * There are 3584 bytes available at CONFADDR.
- */
-#define BOOTLINE	((char*)CONFADDR)
-#define BOOTLINELEN	64
-#define BOOTARGS	((char*)(CONFADDR+BOOTLINELEN))
-#define	BOOTARGSLEN	(4096-0x200-BOOTLINELEN)
-#define	MAXCONF		64
-
 Conf conf;
-char *confname[MAXCONF];
-char *confval[MAXCONF];
-int nconf;
-char *sp;	/* user stack of init proc */
+
 int delaylink;
 int idle_spin;
 
-static void
-multibootargs(void)
-{
-	char *cp, *ep;
-	ulong *m, l;
-
-	extern ulong *multiboot;
-
-	if(multiboot == nil)
-		return;
-
-	/* command line */
-	if((multiboot[0] & (1<<2)) != 0)
-		strncpy(BOOTLINE, KADDR(multiboot[4]), BOOTLINELEN-1);
-
-	cp = BOOTARGS;
-	ep = cp + BOOTARGSLEN-1;
-
-	/* memory map */
-	if((multiboot[0] & (1<<6)) != 0 && (l = multiboot[11]) >= 24){
-		cp = seprint(cp, ep, "*e820=");
-		m = KADDR(multiboot[12]);
-		while(m[0] >= 20 && m[0] <= l-4){
-			uvlong base, size;
-			m++;
-			base = ((uvlong)m[0] | (uvlong)m[1]<<32);
-			size = ((uvlong)m[2] | (uvlong)m[3]<<32);
-			cp = seprint(cp, ep, "%.1lux %.16llux %.16llux ",
-				m[4] & 0xF, base, base+size);
-			l -= m[-1]+4;
-			m = (ulong*)((ulong)m + m[-1]);
-		}
-		cp[-1] = '\n';
-	}
-
-	/* plan9.ini passed as the first module */
-	if((multiboot[0] & (1<<3)) != 0 && multiboot[5] > 0){
-		m = KADDR(multiboot[6]);
-		l = m[1] - m[0];
-		m = KADDR(m[0]);
-		if(cp+l > ep)
-			l = ep - cp;
-		memmove(cp, m, l);
-		cp += l;
-	}
-	*cp = 0;
-}
-
-static void
-options(void)
-{
-	long i, n;
-	char *cp, *line[MAXCONF], *p, *q;
-
-	multibootargs();
-
-	/*
-	 *  parse configuration args from dos file plan9.ini
-	 */
-	cp = BOOTARGS;	/* where b.com leaves its config */
-	cp[BOOTARGSLEN-1] = 0;
-
-	/*
-	 * Strip out '\r', change '\t' -> ' '.
-	 */
-	p = cp;
-	for(q = cp; *q; q++){
-		if(*q == '\r')
-			continue;
-		if(*q == '\t')
-			*q = ' ';
-		*p++ = *q;
-	}
-	*p = 0;
-
-	n = getfields(cp, line, MAXCONF, 1, "\n");
-	for(i = 0; i < n; i++){
-		if(*line[i] == '#')
-			continue;
-		cp = strchr(line[i], '=');
-		if(cp == nil)
-			continue;
-		*cp++ = '\0';
-		confname[nconf] = line[i];
-		confval[nconf] = cp;
-		nconf++;
-	}
-}
-
 extern void (*i8237alloc)(void);
 extern void bootscreeninit(void);
+extern void multibootdebug(void);
 
 void
 main(void)
 {
 	mach0init();
-	options();
+	bootargsinit();
 	ioinit();
 	i8250console();
 	quotefmtinstall();
 	screeninit();
 
 	print("\nPlan 9\n");
-
+	
 	trapinit0();
 	i8253init();
 	cpuidentify();
@@ -164,10 +60,9 @@ main(void)
 	}else
 		links();
 	chandevreset();
+	netconsole();
 	pageinit();
-	swapinit();
 	userinit();
-	active.thunderbirdsarego = 1;
 	schedinit();
 }
 
@@ -213,8 +108,7 @@ machinit(void)
 void
 init0(void)
 {
-	int i;
-	char buf[2*KNAMELEN];
+	char buf[2*KNAMELEN], **sp;
 
 	up->nerrlab = 0;
 
@@ -239,14 +133,15 @@ init0(void)
 			ksetenv("service", "cpu", 0);
 		else
 			ksetenv("service", "terminal", 0);
-		for(i = 0; i < nconf; i++){
-			if(confname[i][0] != '*')
-				ksetenv(confname[i], confval[i], 0);
-			ksetenv(confname[i], confval[i], 1);
-		}
+		setconfenv();
 		poperror();
 	}
 	kproc("alarm", alarmkproc, 0);
+
+	sp = (char**)(USTKTOP - sizeof(Tos) - 8 - sizeof(sp[0])*4);
+	sp[3] = sp[2] = nil;
+	strcpy(sp[1] = (char*)&sp[4], "boot");
+	sp[0] = nil;
 	touser(sp);
 }
 
@@ -293,10 +188,9 @@ userinit(void)
 	s = newseg(SG_STACK, USTKTOP-USTKSIZE, USTKSIZE/BY2PG);
 	p->seg[SSEG] = s;
 	pg = newpage(0, 0, USTKTOP-BY2PG);
+	segpage(s, pg);
 	v = tmpmap(pg);
 	memset(v, 0, BY2PG);
-	segpage(s, pg);
-	bootargs(v);
 	tmpunmap(v);
 
 	/*
@@ -314,82 +208,6 @@ userinit(void)
 	tmpunmap(v);
 
 	ready(p);
-}
-
-void
-bootargs(void *base)
-{
-	char *argv[8];
-	int i, argc;
-
-#define UA(ka)	((char*)(ka) + ((uintptr)(USTKTOP - BY2PG) - (uintptr)base))
-	sp = (char*)base + BY2PG - sizeof(Tos);
-
-	/* push boot command line onto the stack */
-	sp -= BOOTLINELEN;
-	sp[BOOTLINELEN-1] = '\0';
-	memmove(sp, BOOTLINE, BOOTLINELEN-1);
-
-	/* parse boot command line */
-	argc = tokenize(sp, argv, nelem(argv));
-	if(argc < 1){
-		strcpy(sp, "boot");
-		argc = 0;
-		argv[argc++] = sp;
-	}
-
-	/* 4 byte word align stack */
-	sp = (char*)((uintptr)sp & ~3);
-
-	/* build argv on stack */
-	sp -= (argc+1)*BY2WD;
-	for(i=0; i<argc; i++)
-		((char**)sp)[i] = UA(argv[i]);
-	((char**)sp)[i] = nil;
-
-	sp = UA(sp);
-#undef UA
-	sp -= BY2WD;
-}
-
-char*
-getconf(char *name)
-{
-	int i;
-
-	for(i = 0; i < nconf; i++)
-		if(cistrcmp(confname[i], name) == 0)
-			return confval[i];
-	return 0;
-}
-
-static void
-writeconf(void)
-{
-	char *p, *q;
-	int n;
-
-	p = getconfenv();
-
-	if(waserror()) {
-		free(p);
-		nexterror();
-	}
-
-	/* convert to name=value\n format */
-	for(q=p; *q; q++) {
-		q += strlen(q);
-		*q = '=';
-		q += strlen(q);
-		*q = '\n';
-	}
-	n = q - p + 1;
-	if(n >= BOOTARGSLEN)
-		error("kernel configuration too large");
-	memset(BOOTLINE, 0, BOOTLINELEN);
-	memmove(BOOTARGS, p, n);
-	poperror();
-	free(p);
 }
 
 void
@@ -428,6 +246,7 @@ confinit(void)
 		if(userpcnt < 10)
 			userpcnt = 70;
 		kpages = conf.npage - (conf.npage*userpcnt)/100;
+		conf.nimage = conf.nproc;
 
 		/*
 		 * Hack for the big boys. Only good while physmem < 4GB.
@@ -440,7 +259,6 @@ confinit(void)
 		if(getconf("*imagemaxmb") == 0)
 		if(kpages > (64*MB + conf.npage*sizeof(Page))/BY2PG){
 			kpages = (64*MB + conf.npage*sizeof(Page))/BY2PG;
-			conf.nimage = 2000;
 			kpages += (conf.nproc*KSTACK)/BY2PG;
 		}
 	} else {
@@ -495,12 +313,8 @@ confinit(void)
 }
 
 /*
- * we keep FPsave structure in sse format emulating FXSAVE / FXRSTOR
+ * we keep FPsave structure in SSE format emulating FXSAVE / FXRSTOR
  * instructions for legacy x87 fpu.
- *
- * Note that fpx87restore() and fpxsserestore() do modify the FPsave
- * data structure for conversion / realignment shuffeling. this means
- * that p->fpsave is only valid when p->fpstate == FPinactive.
  */
 void
 fpx87save(FPsave *fps)
@@ -625,32 +439,6 @@ fpx87restore(FPsave *fps)
 	fpx87restore0(fps);
 }
 
-/*
- * sse fp save and restore buffers have to be 16-byte (FPalign) aligned,
- * so we shuffle the data up and down as needed or make copies.
- */
-void
-fpssesave(FPsave *fps)
-{
-	FPsave *afps;
-
-	afps = (FPsave *)ROUND(((uintptr)fps), FPalign);
-	fpssesave0(afps);
-	if(fps != afps)  /* not aligned? shuffle down from aligned buffer */
-		memmove(fps, afps, sizeof(FPssestate) - FPalign);
-}
-
-void
-fpsserestore(FPsave *fps)
-{
-	FPsave *afps;
-
-	afps = (FPsave *)ROUND(((uintptr)fps), FPalign);
-	if(fps != afps)  /* shuffle up to make aligned */
-		memmove(afps, fps, sizeof(FPssestate) - FPalign);
-	fpsserestore0(afps);
-}
-
 static char* mathmsg[] =
 {
 	nil,	/* handled below */
@@ -708,9 +496,9 @@ matherror(Ureg*, void*)
 	/*
 	 *  get floating point state to check out error
 	 */
-	fpsave(&up->fpsave);
+	fpsave(up->fpsave);
 	up->fpstate = FPinactive;
-	mathnote(up->fpsave.fsw, up->fpsave.fpuip);
+	mathnote(up->fpsave->fsw, up->fpsave->fpuip);
 }
 
 /*
@@ -719,9 +507,9 @@ matherror(Ureg*, void*)
 static void
 simderror(Ureg *ureg, void*)
 {
-	fpsave(&up->fpsave);
+	fpsave(up->fpsave);
 	up->fpstate = FPinactive;
-	mathnote(up->fpsave.mxcsr & 0x3f, ureg->pc);
+	mathnote(up->fpsave->mxcsr & 0x3f, ureg->pc);
 }
 
 /*
@@ -742,6 +530,8 @@ mathemu(Ureg *ureg, void*)
 		fpinit();
 		if(fpsave == fpssesave)
 			ldmxcsr(0);	/* no simd exceptions on 386 */
+		while(up->fpsave == nil)
+			up->fpsave = mallocalign(sizeof(FPsave), FPalign, 0, 0);
 		up->fpstate = FPactive;
 		break;
 	case FPinactive:
@@ -752,13 +542,13 @@ mathemu(Ureg *ureg, void*)
 		 * More attention should probably be paid here to the
 		 * exception masks and error summary.
 		 */
-		status = up->fpsave.fsw;
-		control = up->fpsave.fcw;
+		status = up->fpsave->fsw;
+		control = up->fpsave->fcw;
 		if((status & ~control) & 0x07F){
-			mathnote(status, up->fpsave.fpuip);
+			mathnote(status, up->fpsave->fpuip);
 			break;
 		}
-		fprestore(&up->fpsave);
+		fprestore(up->fpsave);
 		up->fpstate = FPactive;
 		break;
 	case FPactive:
@@ -803,6 +593,8 @@ procsetup(Proc *p)
 	memset(p->gdt, 0, sizeof(p->gdt));
 	p->ldt = nil;
 	p->nldt = 0;
+	
+	memset(p->dr, 0, sizeof(p->dr));
 }
 
 void
@@ -827,12 +619,17 @@ procfork(Proc *p)
 	s = splhi();
 	switch(up->fpstate & ~FPillegal){
 	case FPactive:
-		fpsave(&up->fpsave);
+		fpsave(up->fpsave);
 		up->fpstate = FPinactive;
 	case FPinactive:
-		p->fpsave = up->fpsave;
+		while(p->fpsave == nil)
+			p->fpsave = mallocalign(sizeof(FPsave), FPalign, 0, 0);
+		memmove(p->fpsave, up->fpsave, sizeof(FPsave));
 		p->fpstate = FPinactive;
 	}
+	
+	/* clear debug registers */
+	memset(p->dr, 0, sizeof(p->dr));
 	splx(s);
 }
 
@@ -840,6 +637,14 @@ void
 procrestore(Proc *p)
 {
 	uvlong t;
+	
+	if(p->dr[7] != 0){
+		m->dr7 = p->dr[7];
+		putdr(p->dr);
+	}
+	
+	if(p->vmx != nil)
+		vmxprocrestore(p);
 
 	if(p->kp)
 		return;
@@ -856,6 +661,12 @@ void
 procsave(Proc *p)
 {
 	uvlong t;
+	
+	/* we could just always putdr7(0) but accessing DR7 might be slow in a VM */
+	if(m->dr7 != 0){
+		m->dr7 = 0;
+		putdr7(0);
+	}
 
 	cycles(&t);
 	p->kentry -= t;
@@ -873,7 +684,7 @@ procsave(Proc *p)
 			 * until the process runs again and generates an
 			 * emulation fault to activate the FPU.
 			 */
-			fpsave(&p->fpsave);
+			fpsave(p->fpsave);
 		}
 		p->fpstate = FPinactive;
 	}
@@ -899,6 +710,7 @@ reboot(void *entry, void *code, ulong size)
 	ulong *pdb;
 
 	writeconf();
+	vmxshutdown();
 
 	/*
 	 * the boot processor is cpu0.  execute this function on it

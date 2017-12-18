@@ -2,6 +2,7 @@
 dev
 	root
 	cons
+	swap
 	arch
 	pnp		pci
 	env
@@ -20,6 +21,7 @@ dev
 	fs
 
 	ether		netif
+	bridge		netif log
 	ip		arp chandial ip ipv6 ipaux iproute netlog ethermedium nullmedium pktmedium inferno
 
 	draw		screen vga vgax swcursor
@@ -37,11 +39,14 @@ dev
 #	i82365		cis
 	uart
 	usb
+	
+	segment
+	vmx
 
 link
 #	devpccard
 #	devi82365
-#	cputemp
+	cputemp
 #	ether2000	ether8390
 #	ether2114x	pci
 #	ether589	etherelnk3
@@ -53,7 +58,7 @@ link
 #	ether82543gc	pci
 #	ether82557	pci
 	ether82563	pci
-#	ether82598	pci
+	ether82598	pci
 #	ether83815	pci
 	etherbcm        pci
 #	etherdp83820	pci
@@ -79,6 +84,7 @@ link
 	usbuhci
 	usbohci
 	usbehci		usbehcipc
+	usbxhci		pci
 
 #	audiosb16	dma
 #	audioac97	audioac97mix
@@ -97,6 +103,7 @@ misc
 #	sdodin		pci sdscsi led
 	sdvirtio	pci sdscsi
 	sdmmc		pci pmmc
+	sdnvme		pci
 	sdloop
 
 	uarti8250
