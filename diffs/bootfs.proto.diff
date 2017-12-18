@@ -1,5 +1,5 @@
---- /sys/src/9/boot/bootfs.proto	Sat Dec 31 23:31:12 2016
-+++ ../frontmods/boot/bootfs.proto	Sat Jan 21 13:30:15 2017
+--- /sys/src/9/boot/bootfs.proto	Sun Oct 30 01:16:15 2016
++++ ../frontmods/boot/bootfs.proto	Mon Dec 18 10:56:51 2017
 @@ -1,16 +1,22 @@
  $objtype
  	bin
@@ -43,7 +43,7 @@
  		ls
  		mkdir
  		mntgen
-@@ -31,20 +46,30 @@
+@@ -31,19 +46,30 @@
  		ndb
  			dnsgetip
  		hjfs
@@ -68,14 +68,13 @@
  			ether
  			disk
  			kb
--		xd
 +		venti
 +			venti
 +		wc
+ 		xd
  rc
  	lib
- 		rcmain
-@@ -53,6 +78,14 @@
+@@ -53,6 +79,14 @@
  	bin
  		fstype
  		diskparts
@@ -90,7 +89,7 @@
  		srvtls
  		nusbrc 555 sys sys ../boot/nusbrc
  		bootrc 555 sys sys ../boot/bootrc
-@@ -60,3 +93,7 @@
+@@ -60,3 +94,7 @@
  lib
  	firmware
  		+

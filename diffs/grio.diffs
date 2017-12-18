@@ -1,6 +1,6 @@
 diff -Nurp /sys/src/cmd/rio/README ../frontmods/grio/README
 --- /sys/src/cmd/rio/README	Thu Jan  1 00:00:00 1970
-+++ ../frontmods/grio/README	Tue Jan  3 13:25:17 2017
++++ ../frontmods/grio/README	Mon Dec 18 10:56:51 2017
 @@ -0,0 +1,19 @@
 +grio is a modified rio that adds hubfs integration, an extra user
 +selectable command in the menu, and appearance options.  grio expects
@@ -22,8 +22,8 @@ diff -Nurp /sys/src/cmd/rio/README ../frontmods/grio/README
 +
 +in the initial hubfs shell
 diff -Nurp /sys/src/cmd/rio/dat.h ../frontmods/grio/dat.h
---- /sys/src/cmd/rio/dat.h	Sat Dec 31 23:31:23 2016
-+++ ../frontmods/grio/dat.h	Thu Jan 19 18:09:37 2017
+--- /sys/src/cmd/rio/dat.h	Sun Dec 17 12:33:20 2017
++++ ../frontmods/grio/dat.h	Mon Dec 18 10:56:51 2017
 @@ -43,7 +43,7 @@ typedef	struct	Xfid Xfid;
  
  enum
@@ -33,7 +33,7 @@ diff -Nurp /sys/src/cmd/rio/dat.h ../frontmods/grio/dat.h
  	Unselborder	= 1,		/* border of unselected window */
  	Scrollwid 		= 12,		/* width of scroll bar */
  	Scrollgap 		= 4,		/* gap right of scroll bar */
-@@ -172,6 +172,12 @@ struct Window
+@@ -173,6 +173,12 @@ struct Window
  	char			*dir;
  };
  
@@ -46,7 +46,7 @@ diff -Nurp /sys/src/cmd/rio/dat.h ../frontmods/grio/dat.h
  void		winctl(void*);
  void		winshell(void*);
  Window*	wlookid(int);
-@@ -308,6 +314,7 @@ Screen	*wscreen;
+@@ -309,6 +315,7 @@ Screen	*wscreen;
  Cursor	boxcursor;
  Cursor	crosscursor;
  Cursor	sightcursor;
@@ -54,7 +54,7 @@ diff -Nurp /sys/src/cmd/rio/dat.h ../frontmods/grio/dat.h
  Cursor	whitearrow;
  Cursor	query;
  Cursor	*corners[9];
-@@ -348,6 +355,7 @@ char		srvpipe[];
+@@ -349,6 +356,7 @@ char		srvpipe[];
  char		srvwctl[];
  int		errorshouldabort;
  int		menuing;		/* menu action is pending; waiting for window to be indicated */
@@ -64,7 +64,7 @@ diff -Nurp /sys/src/cmd/rio/dat.h ../frontmods/grio/dat.h
  int		shiftdown;
 diff -Nurp /sys/src/cmd/rio/data.c ../frontmods/grio/data.c
 --- /sys/src/cmd/rio/data.c	Sat Nov 23 21:21:19 2013
-+++ ../frontmods/grio/data.c	Thu Jan 19 18:09:37 2017
++++ ../frontmods/grio/data.c	Mon Dec 18 10:56:51 2017
 @@ -46,6 +46,18 @@ Cursor sightcursor = {
  	 0x21, 0x84, 0x31, 0x8C, 0x0F, 0xF0, 0x00, 0x00, }
  };
@@ -115,7 +115,7 @@ diff -Nurp /sys/src/cmd/rio/data.c ../frontmods/grio/data.c
  	lightholdcol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DGreyblue);
 diff -Nurp /sys/src/cmd/rio/mkfile ../frontmods/grio/mkfile
 --- /sys/src/cmd/rio/mkfile	Wed Jan 18 00:12:54 2012
-+++ ../frontmods/grio/mkfile	Sun Dec 25 08:14:32 2016
++++ ../frontmods/grio/mkfile	Mon Dec 18 10:56:51 2017
 @@ -1,7 +1,7 @@
  </$objtype/mkfile
  BIN=/$objtype/bin
@@ -126,8 +126,8 @@ diff -Nurp /sys/src/cmd/rio/mkfile ../frontmods/grio/mkfile
  	rio.$O\
  	data.$O\
 diff -Nurp /sys/src/cmd/rio/rio.c ../frontmods/grio/rio.c
---- /sys/src/cmd/rio/rio.c	Sat Dec 31 23:31:24 2016
-+++ ../frontmods/grio/rio.c	Thu Jan 19 18:09:37 2017
+--- /sys/src/cmd/rio/rio.c	Sat Nov 19 15:46:33 2016
++++ ../frontmods/grio/rio.c	Mon Dec 18 10:56:51 2017
 @@ -45,9 +45,13 @@ Channel* initkbd(void);
  
  char		*fontname;

@@ -1,6 +1,6 @@
---- /sys/src/9/port/proc.c	Sat Dec 31 23:31:15 2016
-+++ ../frontmods/port/proc.c	Fri Feb 24 16:57:03 2017
-@@ -620,6 +620,7 @@
+--- /sys/src/9/port/proc.c	Sun Dec 17 12:32:57 2017
++++ ../frontmods/port/proc.c	Mon Dec 18 10:56:51 2017
+@@ -621,6 +621,7 @@
  	p->egrp = nil;
  	p->fgrp = nil;
  	p->rgrp = nil;
@@ -8,7 +8,7 @@
  	p->pdbg = nil;
  	p->fpstate = FPinit;
  	p->kp = 0;
-@@ -1098,6 +1099,7 @@
+@@ -1090,6 +1091,7 @@
  	Egrp *egrp;
  	Rgrp *rgrp;
  	Pgrp *pgrp;
@@ -16,7 +16,7 @@
  	Chan *dot;
  	void (*pt)(Proc*, int, vlong);
  
-@@ -1128,6 +1130,13 @@
+@@ -1119,6 +1121,13 @@
  		closeegrp(egrp);
  	if(rgrp != nil)
  		closergrp(rgrp);

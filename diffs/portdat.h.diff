@@ -1,5 +1,5 @@
---- /sys/src/9/port/portdat.h	Sat Dec 31 23:31:15 2016
-+++ ../frontmods/port/portdat.h	Thu Feb 16 02:47:29 2017
+--- /sys/src/9/port/portdat.h	Sun Dec 17 12:32:56 2017
++++ ../frontmods/port/portdat.h	Mon Dec 18 10:56:51 2017
 @@ -44,6 +44,8 @@
  typedef struct Segment	Segment;
  typedef struct Segio	Segio;
@@ -9,7 +9,7 @@
  typedef struct Timer	Timer;
  typedef struct Timers	Timers;
  typedef struct Uart	Uart;
-@@ -464,6 +466,21 @@
+@@ -466,6 +468,21 @@
  	Page	*pghash[PGHSIZE];	/* page cache */
  };
  
@@ -31,7 +31,7 @@
  
  struct Pgrp
  {
-@@ -571,6 +588,7 @@
+@@ -574,6 +591,7 @@
  	RFPROC		= (1<<4),
  	RFMEM		= (1<<5),
  	RFNOWAIT	= (1<<6),
@@ -39,7 +39,7 @@
  	RFCNAMEG	= (1<<10),
  	RFCENVG		= (1<<11),
  	RFCFDG		= (1<<12),
-@@ -669,6 +687,7 @@
+@@ -672,6 +690,7 @@
  	Egrp 	*egrp;		/* Environment group */
  	Fgrp	*fgrp;		/* File descriptor group */
  	Rgrp	*rgrp;		/* Rendez group */
@@ -47,12 +47,13 @@
  
  	Fgrp	*closingfgrp;	/* used during teardown */
  
-@@ -771,6 +790,8 @@
- 	PMMU;
+@@ -769,7 +788,8 @@
+ 	PMMU;			/* machine specific mmu state */
  
  	char	*syscalltrace;	/* syscall trace */
-+	QLock	procmount;		/* lock for proc ns mounts */
+-	
++ 	QLock	procmount;		/* lock for proc ns mounts */
 +
+ 	Watchpt	*watchpt;	/* watchpoints */
+ 	int	nwatchpt;
  };
- 
- enum

@@ -1,6 +1,6 @@
---- /sys/src/9/port/devproc.c	Sat Dec 31 23:31:15 2016
-+++ ../frontmods/port/devproc.c	Tue Feb 21 01:08:45 2017
-@@ -91,7 +91,7 @@
+--- /sys/src/9/port/devproc.c	Sun Dec 17 12:32:55 2017
++++ ../frontmods/port/devproc.c	Mon Dec 18 10:56:51 2017
+@@ -92,7 +92,7 @@
  	"note",		{Qnote},	0,			0000,
  	"noteid",	{Qnoteid},	0,			0664,
  	"notepg",	{Qnotepg},	0,			0000,
@@ -9,7 +9,7 @@
  	"ppid",		{Qppid},	0,			0444,
  	"proc",		{Qproc},	0,			0400,
  	"regs",		{Qregs},	sizeof(Ureg),		0000,
-@@ -154,10 +154,12 @@
+@@ -156,10 +156,12 @@
  #define	NOTEID(q)	((q).vers)
  
  void	procctlreq(Proc*, char*, int);
@@ -22,9 +22,9 @@
  
  static Traceevent *tevents;
  static Lock tlock;
-@@ -181,6 +183,186 @@
- 	}
- }
+@@ -185,6 +187,186 @@
+ 
+ static int lenwatchpt(Proc *);
  
 +/* begin sysfile.c borrowed functions */
 +static void
@@ -209,7 +209,7 @@
  static int
  procgen(Chan *c, char *name, Dirtab *tab, int, int s, Dir *dp)
  {
-@@ -400,6 +582,10 @@
+@@ -412,6 +594,10 @@
  	case Qsegment:
  	case Qprofile:
  	case Qns:
@@ -220,7 +220,7 @@
  	case Qfd:
  		if(omode != OREAD)
  			error(Eperm);
-@@ -642,6 +828,8 @@
+@@ -668,6 +854,8 @@
  		int2flag(cm->mflag, flag);
  		if(strcmp(cm->to->path->s, "#M") == 0){
  			srv = srvname(cm->to->mchan);
@@ -229,7 +229,7 @@
  			i = snprint(buf, nbuf, "mount %s %s %s %s\n", flag,
  				srv==nil? cm->to->mchan->path->s : srv,
  				mh->from->path->s, cm->spec? cm->spec : "");
-@@ -1037,7 +1225,8 @@
+@@ -1188,7 +1376,8 @@
  
  	eqlock(&p->debug);
  	if(waserror()){
@@ -239,9 +239,9 @@
  		nexterror();
  	}
  	if(p->pid != PID(c->qid))
-@@ -1125,12 +1314,21 @@
- 		if(p->noteid != id)
- 			error(Ebadarg);
+@@ -1281,12 +1470,21 @@
+ 	case Qwatchpt:
+ 		writewatchpt(p, va, n, off);
  		break;
 +	case Qns:
 +//		print("procnsreq on p, %s, %ld\n", a, n);
@@ -262,7 +262,7 @@
  	return n;
  }
  
-@@ -1541,4 +1739,249 @@
+@@ -1699,4 +1897,249 @@
  		p->newtlb = 1;
  
  	return n;

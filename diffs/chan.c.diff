@@ -1,5 +1,5 @@
---- /sys/src/9/port/chan.c	Sat Dec 31 23:31:14 2016
-+++ ../frontmods/port/chan.c	Sun Dec 25 05:38:39 2016
+--- /sys/src/9/port/chan.c	Sun Dec 17 12:32:54 2017
++++ ../frontmods/port/chan.c	Mon Dec 18 10:56:51 2017
 @@ -753,6 +753,128 @@
  	return nm->mountid;
  }
@@ -538,7 +538,7 @@
  		inew = smalloc((e->nelems+Delta+1) * sizeof(int));
  		memmove(inew, e->off, (e->nelems+1)*sizeof(int));
  		free(e->off);
-@@ -1622,6 +2044,354 @@
+@@ -1612,6 +2034,354 @@
  
  	return c;
  }
