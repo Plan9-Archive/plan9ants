@@ -180,7 +180,7 @@ fn ants{
 			passdom=9front
 		if(~ $keyowner '')
 			keyowner=$user
-		echo 'key proto=p9sk1 dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
+		echo 'key proto=dp9ik dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
 		rm '#ec/privpassword'
 		rm /env/privpassword
 		rm /env/passdom
