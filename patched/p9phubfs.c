@@ -324,6 +324,7 @@ fswrite(Req *r)
 	Hub *h;
 	u32int count;
 	vlong offset;
+	int i, j;
 
 	h = r->fid->file->aux;
 	if(strncmp(h->name, "ctl", 3) == 0){
