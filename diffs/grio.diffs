@@ -1,4 +1,3 @@
-Binary files /sys/src/cmd/rio/6.out and ../frontmods/grio/6.out differ
 diff -Nurp /sys/src/cmd/rio/README ../frontmods/grio/README
 --- /sys/src/cmd/rio/README	Thu Jan  1 00:00:00 1970
 +++ ../frontmods/grio/README	Fri Dec 22 02:26:47 2017
@@ -63,7 +62,6 @@ diff -Nurp /sys/src/cmd/rio/dat.h ../frontmods/grio/dat.h
  int		snarfversion;	/* updated each time it is written */
  int		messagesize;		/* negotiated in 9P version setup */
  int		shiftdown;
-Binary files /sys/src/cmd/rio/data.6 and ../frontmods/grio/data.6 differ
 diff -Nurp /sys/src/cmd/rio/data.c ../frontmods/grio/data.c
 --- /sys/src/cmd/rio/data.c	Sat Nov 23 21:21:19 2013
 +++ ../frontmods/grio/data.c	Fri Dec 22 02:26:47 2017
@@ -115,7 +113,6 @@ diff -Nurp /sys/src/cmd/rio/data.c ../frontmods/grio/data.c
  	}
  	dholdcol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DMedblue);
  	lightholdcol = allocimage(display, Rect(0,0,1,1), CMAP8, 1, DGreyblue);
-Binary files /sys/src/cmd/rio/fsys.6 and ../frontmods/grio/fsys.6 differ
 diff -Nurp /sys/src/cmd/rio/mkfile ../frontmods/grio/mkfile
 --- /sys/src/cmd/rio/mkfile	Wed Jan 18 00:12:54 2012
 +++ ../frontmods/grio/mkfile	Fri Dec 22 02:26:47 2017
@@ -128,7 +125,6 @@ diff -Nurp /sys/src/cmd/rio/mkfile ../frontmods/grio/mkfile
  OFILES=\
  	rio.$O\
  	data.$O\
-Binary files /sys/src/cmd/rio/rio.6 and ../frontmods/grio/rio.6 differ
 diff -Nurp /sys/src/cmd/rio/rio.c ../frontmods/grio/rio.c
 --- /sys/src/cmd/rio/rio.c	Sat Nov 19 15:46:33 2016
 +++ ../frontmods/grio/rio.c	Fri Dec 22 02:26:47 2017
@@ -323,9 +319,3 @@ diff -Nurp /sys/src/cmd/rio/rio.c ../frontmods/grio/rio.c
  	w = pointto(TRUE);
  	if(w)
  		wsendctlmesg(w, Deleted, ZR, nil);
-Binary files /sys/src/cmd/rio/scrl.6 and ../frontmods/grio/scrl.6 differ
-Binary files /sys/src/cmd/rio/time.6 and ../frontmods/grio/time.6 differ
-Binary files /sys/src/cmd/rio/util.6 and ../frontmods/grio/util.6 differ
-Binary files /sys/src/cmd/rio/wctl.6 and ../frontmods/grio/wctl.6 differ
-Binary files /sys/src/cmd/rio/wind.6 and ../frontmods/grio/wind.6 differ
-Binary files /sys/src/cmd/rio/xfid.6 and ../frontmods/grio/xfid.6 differ
