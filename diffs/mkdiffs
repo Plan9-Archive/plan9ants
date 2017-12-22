@@ -4,7 +4,7 @@ ape/diff -u /sys/src/9/boot/boot.c ../frontmods/boot/boot.c >boot.c.diff
 ape/diff -u /sys/src/9/boot/bootfs.proto ../frontmods/boot/bootfs.proto >bootfs.proto.diff
 ape/diff -u /sys/src/9/boot/bootrc ../frontmods/boot/bootrc >bootrc.diff
 ape/diff -u /sys/src/9/pc/main.c ../frontmods/pc/main.c >pc.main.c.diff
-ape/diff -u /sys/src/9/pc/pc ../frontmods/pc/pcf >pc.pc.diff
+ape/diff -u /sys/src/9/pc/pc ../frontmods/pc/pc >pc.pc.diff
 ape/diff -u /sys/src/9/pc64/main.c ../frontmods/pc64/main.c >pc64.main.c.diff
 ape/diff -u /sys/src/9/pc64/pc64 ../frontmods/pc64/pc64 >pc64.pc64.diff
 ape/diff -u /sys/src/9/port/auth.c ../frontmods/port/auth.c >auth.c.diff

@@ -1,5 +1,5 @@
 --- /sys/src/cmd/rc/plan9.c	Thu May 19 16:48:54 2016
-+++ ../frontmods/rc/plan9.c	Mon Dec 18 10:56:51 2017
++++ ../frontmods/rc/plan9.c	Fri Dec 22 02:26:47 2017
 @@ -81,11 +81,13 @@
  			arg|=RFFDG;    break;
  		case 'F':

@@ -1,5 +1,5 @@
 --- /sys/src/9/port/auth.c	Thu Mar 10 17:52:45 2016
-+++ ../frontmods/port/auth.c	Mon Dec 18 10:56:51 2017
++++ ../frontmods/port/auth.c	Fri Dec 22 02:26:47 2017
 @@ -141,6 +141,7 @@
  
  	renameuser(eve, buf);

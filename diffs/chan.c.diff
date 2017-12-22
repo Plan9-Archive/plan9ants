@@ -1,5 +1,5 @@
 --- /sys/src/9/port/chan.c	Sun Dec 17 12:32:54 2017
-+++ ../frontmods/port/chan.c	Mon Dec 18 10:56:51 2017
++++ ../frontmods/port/chan.c	Fri Dec 22 02:26:47 2017
 @@ -753,6 +753,128 @@
  	return nm->mountid;
  }

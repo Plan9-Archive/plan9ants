@@ -1,5 +1,5 @@
 --- /sys/src/9/boot/bootrc	Sun Dec 17 12:32:43 2017
-+++ ../frontmods/boot/bootrc	Mon Dec 18 10:56:51 2017
++++ ../frontmods/boot/bootrc	Fri Dec 22 02:26:47 2017
 @@ -1,5 +1,9 @@
  #!/bin/rc
  

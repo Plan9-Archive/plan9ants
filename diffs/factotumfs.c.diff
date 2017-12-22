@@ -1,5 +1,5 @@
 --- /sys/src/cmd/auth/factotum/fs.c	Sun Oct 23 16:08:09 2016
-+++ ../frontmods/patched/factotumfs.c	Mon Dec 18 10:56:51 2017
++++ ../frontmods/patched/factotumfs.c	Fri Dec 22 02:26:47 2017
 @@ -12,6 +12,7 @@
  char		*service;
  int		sflag;
