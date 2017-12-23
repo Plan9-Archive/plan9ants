@@ -19,12 +19,12 @@ a:hover { text-decoration: none; color: #C00; background: #FC0; }
 <div id="header">
 <h1> Advanced Namespace Tools for Plan 9 </h1>
 <p>
-<h2> v2.8 for 9front and Bell Labs </h2>
+<h2> v2.9 for 9front and Bell Labs </h2>
 </div>
 <div id="body">
-ANTS is a set of tools to structure and manage Plan 9 namespaces to make systems and grids more flexible, reliable, and easy to administer. It supports both the 9front and Bell Labs distributions of Plan 9. ANTS is well suited to cloud based hosting and scripts for use with vultr.com are provided.
-<h4>Update and Status 7 January 2017</h4>
-The main ANTS repo, found at <a href="https://bitbucket.org/mycroftiv/plan9ants">bitbucket.org/mycroftiv/plan9ants</a> has been updated to revision 515 to compile with the February 2017 9front release r5736. Building from source is the preferred method for installing ANTS, I think most users who might be interested in ANTS are happier compiling locally. Development can be followed at <a href="https://bitbucket.org/mycroftiv/antsexperiments">bitbucket.org/mycroftiv/antsexperiments</a>
+ANTS is a set of tools to structure and manage Plan 9 namespaces to make systems and grids more flexible, reliable, and easy to administer. It primarily supports the 9front distribution of Plan 9, although it can be installed to the Bell Labs or 9legacy versions also. ANTS is well suited to cloud based hosting and scripts for use with vultr.com are provided.
+<h4>Update and Status 23 December 2017</h4>
+The main ANTS repo, found at <a href="https://bitbucket.org/mycroftiv/plan9ants">bitbucket.org/mycroftiv/plan9ants</a> has been updated to revision 541 to compile with the December 2017 9front release r6245. Building from source is the preferred method for installing ANTS, I think most users who might be interested in ANTS are happier compiling locally. Development can be followed at <a href="https://bitbucket.org/mycroftiv/antsexperiments">bitbucket.org/mycroftiv/antsexperiments</a>
 <h4>Development Blog</h4>
 Beginning in December 2016, I have been blogging intensively about development and testing of ANTS in 9front. The blog is found at <a href="//doc.9gridchan.org/blog/">doc.9gridchan.org/blog</a>
 <h4>Components</h4>
@@ -32,6 +32,7 @@ ANTS is a modular toolkit. The components can be used separately:
 <ul>
 <li>New boot script which creates a separate administrative namespace independent of the root fs
 <li>Modified /proc which allows processes to modify each other's namespace via /proc/pid/ns
+<li>Independent /srv namespaces available via rfork V (9front only)
 <li>Hubfs i/o muxer for persistent shared shells and general purpose network piping
 <li>Namespace modification scripts including rerootwin, a network and rio aware chroot utility
 <li>Progressive venti data replication and fossil cloning scripts to keep multiple roots available
@@ -60,11 +61,6 @@ In the base ANTS directory, do 'build everything' 'build isoinstall' 'cd cfg; st
 In the base ANTS directory, do 'build 9front' 'build 9frontinstall'
 <h3>Vultr Hosting</h3>
 In the base ANTS directory, do 'build vultr'. There is also an option to 'build vultrfossil' which requires hard drive partitioning during install described at <a href="//doc.9gridchan.org/them/vultr">doc.9gridchan.org/them/vultr</a>
-<h4>QEMU images from 2013</h4>
-<p><a href="//files.9gridchan.org/9worker.gz">9worker.gz</a> - A tiny image with only the ANTS kernel and tools for the administrative namespace<p>
-<p><a href="//files.9gridchan.org/9queen.gz">9queen.gz</a> - A fully installed system image
-<h4>Old ANTS 2.1 release tarball from 2015 - deprecated</h4>
-<p><a href="//files.9gridchan.org/ants2.1.tgz">ants2.1.tgz</a> - Old ANTS 2.1 release tarball with source code and compiled kernels<p>
 <p>------------------------------------------------------<p>
 <h3>Other Projects: Plan 9 Interactive Fiction</h3>
 Interactive Fiction is pure old school text-based gaming, in the tradition founded by Colossal Cave Adventure and the works of Infocom. This style of game didn't die out from lack of commercial support - instead it developed a dedicated independent community. Plan 9 is a great OS environment for IF-games, and it is possible to play most of the best works of the genre, and develop new ones, within Plan 9. I keep a repository of software for playing and writing IF in 9front at
@@ -76,6 +72,11 @@ The "harmonic" directory on files.9gridchan.org contains a map, soundtrack files
 The old 9gridchan.org website and its downloads are still available at
 <p><a href="http://www.9gridchan.org/archive/9grid_node_img">the old site</a><p>
 Plan 9 from Bell Labs and 9front code and modifications are distributed under the preferred licenses for those projects.
+<h4>QEMU images from 2013</h4>
+<p><a href="//files.9gridchan.org/9worker.gz">9worker.gz</a> - A tiny image with only the ANTS kernel and tools for the administrative namespace<p>
+<p><a href="//files.9gridchan.org/9queen.gz">9queen.gz</a> - A fully installed system image
+<h4>Old ANTS 2.1 release tarball from 2015 - deprecated</h4>
+<p><a href="//files.9gridchan.org/ants2.1.tgz">ants2.1.tgz</a> - Old ANTS 2.1 release tarball with source code and compiled kernels<p>
 <p>Copyright 2017 Mycroftiv<p>
 Often found in #plan9chan and other plan 9 related irc channels on freenode
 <p>
