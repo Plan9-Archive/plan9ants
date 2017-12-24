@@ -1,0 +1,18 @@
+#!/bin/rc
+
+# desc: choose and mount file system partition
+# prereq: configfs
+
+switch($fstype){
+case fossil
+	exec ./mountfossil $*
+case cwfs cwfs64 cwfs64x
+	exec ./mountcwfs $*
+case hjfs
+	exec ./mounthjfs $*
+case *
+	mountfs=notdone
+	export mountfs
+	exit
+}
+

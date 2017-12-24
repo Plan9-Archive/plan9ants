@@ -1,0 +1,52 @@
+#!/bin/rc
+
+# desc: choose and mount file system partition
+
+sname=fossil
+
+switch($1){
+case go
+	echo
+	echo Installing fossil and venti to /dev/$fsdisk
+	echo
+
+	sed 's/ZZZZ/'$fsdisk'/g' initfossil.conf >/tmp/initfossil.conf
+	sed 's/ZZZZ/'$fsdisk'/g' fossil.conf >/tmp/fossil.conf
+	sed 's/ZZZZ/'$fsdisk'/g' venti.conf >/tmp/venti.conf
+	fs=/dev/$fsdisk/fossil
+	export fs
+	fsflags=()
+	export fsflags
+
+	log Starting $fstype file server for $fs
+	unmount /n/newfs >[2]/dev/null
+
+	fossil/flfmt $fs
+	fossil/conf -w $fs /tmp/initfossil.conf
+	fossil/fossil -f $fs
+	mount -c /srv/fossil /n/fossil
+#	bind /tmp/stub /n/dist/mail
+#	disk/mkfs -U -z 8192 -s /n/dist -d /n/fossil /sys/lib/sysconfig/proto/allproto
+#	echo 'home=/usr/$user; cd; . $home/lib/profile' >>/n/fossil/rc/bin/termrc
+	fossil/conf -w $fs /tmp/fossil.conf
+	venti/fmtarenas arenas /dev/$fsdisk/arenas
+	venti/fmtisect isect /dev/$fsdisk/isect
+	venti/fmtindex /tmp/venti.conf
+	venti/conf -w /dev/$fsdisk/arenas /tmp/venti.conf
+
+	log Mounting $fstype file server for $fs
+	while(! logprog mount -c /srv/$sname /n/newfs)
+		sleep 2
+
+case checkready checkdone
+	if(! ~ $fstype '' && ~ $#fs 1 && test -f $fs){
+		if(test -f /srv/$sname){
+			mountfs=done
+			export mountfs
+			exit
+		}
+	}
+	mountfs=ready
+	export mountfs
+	exit
+}
