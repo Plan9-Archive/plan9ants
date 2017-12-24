@@ -7,8 +7,35 @@ sname=fossil
 switch($1){
 case go
 	echo
-	echo Installing fossil and venti to /dev/$fsdisk
+	echo Please choose drive with fossil and venti arenas+isect partitions
 	echo
+
+	if (~ $#fsdisk 1)
+		default=(-d $fsdisk)
+	if not
+		default=()
+	prompt $default 'Drive with fossil and venti partitions' $fsdisk
+	fsdisk=$rd
+	export fsdisk
+
+	if(! test -f /dev/$fsdisk/fossil){
+		echo 'Fossil partition not found!'
+		mountfs=ready
+		export mountfs
+		exit oops
+	}
+	if(! test -f /dev/$fsdisk/arenas){
+		echo 'Venti arenas partition not found!'
+		mountfs=ready
+		export mountfs
+		exit oops
+	}
+	if(! test -f /dev/$fsdisk/isect){
+		echo 'Venti isect partition not found!'
+		mountfs=ready
+		export mountfs
+		exit oops
+	}
 
 	sed 's/ZZZZ/'$fsdisk'/g' initfossil.conf >/tmp/initfossil.conf
 	sed 's/ZZZZ/'$fsdisk'/g' fossil.conf >/tmp/fossil.conf
@@ -40,7 +67,7 @@ case go
 
 case checkready checkdone
 	if(! ~ $fstype '' && ~ $#fs 1 && test -f $fs){
-		if(test -f /srv/$sname){
+		if(test -f /srv/$sname && test -d /n/newfs/adm){
 			mountfs=done
 			export mountfs
 			exit
