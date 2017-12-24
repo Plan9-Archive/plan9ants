@@ -323,13 +323,13 @@ if(~ $1 vultrfossil){
 	cd fossiloventi
 	INSTALL
 	cd $builddir/cfg
-	mkdir /tmp/stub
+#	mkdir /tmp/stub
 	mount /srv/boot /n/dist
 	fossil/flfmt /dev/sdF0/fossil
 	fossil/conf -w /dev/sdF0/fossil initfossil.conf
 	fossil/fossil -f /dev/sdF0/fossil
 	mount -c /srv/fossil /n/fossil
-	bind /tmp/stub /n/dist/mail
+#	bind /tmp/stub /n/dist/mail
 	disk/mkfs -U -z 8192 -s /n/dist -d /n/fossil /sys/lib/sysconfig/proto/allproto
 	echo 'home=/usr/$user; cd; . $home/lib/profile' >>/n/fossil/rc/bin/termrc
 	fossil/conf -w /dev/sdF0/fossil fossil.conf
