@@ -41,7 +41,7 @@ case go
 			if(~ $#nvram 1)
 				echo 'nvram='^$nvram
 			if(~ $fstype fossil)
-				echo 'venti=#S/'^$fsdisk'/arenas'
+				echo 'venti='$fsarenas |sed 's/\/dev/#S/'
 			echo 'mouseport='^$mouseport
 			echo 'monitor='^$monitor
 			echo 'vgasize='^$vgasize

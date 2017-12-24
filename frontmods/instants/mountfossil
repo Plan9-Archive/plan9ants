@@ -10,40 +10,71 @@ case go
 	echo Please choose drive with fossil and venti arenas+isect partitions
 	echo
 
-	if (~ $#fsdisk 1)
-		default=(-d $fsdisk)
+	files=(`{ls /dev/sd*/fossil* /dev/fs/fossil* >[2]/dev/null})
+	if(! ~ $#files 0)
+		ls -l $files
+	echo
+	if(~ $#files 1)
+		default=(-d $files)
 	if not
 		default=()
-	prompt $default 'Drive with fossil and venti partitions' $fsdisk
-	fsdisk=$rd
-	export fsdisk
+	prompt $default 'Fossil partition' $files
+	fs=$rd
+	export fs
+	fsflags=()
+	export fsflags
 
-	if(! test -f /dev/$fsdisk/fossil){
+	files=(`{ls /dev/sd*/arenas* /dev/fs/arenas* >[2]/dev/null})
+	if(! ~ $#files 0)
+		ls -l $files
+	echo
+	if(~ $#files 1)
+		default=(-d $files)
+	if not
+		default=()
+	prompt $default 'Venti arenas partition' $files
+	fsarenas=$rd
+	export fsarenas
+
+	files=(`{ls /dev/sd*/isect* /dev/fs/isect* >[2]/dev/null})
+	if(! ~ $#files 0)
+		ls -l $files
+	echo
+	if(~ $#files 1)
+		default=(-d $files)
+	if not
+		default=()
+	prompt $default 'Venti isect partition' $files
+	fsisect=$rd
+	export fsisect
+
+	if(! test -f $fs){
 		echo 'Fossil partition not found!'
 		mountfs=ready
 		export mountfs
 		exit oops
 	}
-	if(! test -f /dev/$fsdisk/arenas){
+	if(! test -f $fsarenas){
 		echo 'Venti arenas partition not found!'
 		mountfs=ready
 		export mountfs
 		exit oops
 	}
-	if(! test -f /dev/$fsdisk/isect){
+	if(! test -f $fsisect){
 		echo 'Venti isect partition not found!'
 		mountfs=ready
 		export mountfs
 		exit oops
 	}
 
-	sed 's/ZZZZ/'$fsdisk'/g' initfossil.conf >/tmp/initfossil.conf
-	sed 's/ZZZZ/'$fsdisk'/g' fossil.conf >/tmp/fossil.conf
-	sed 's/ZZZZ/'$fsdisk'/g' venti.conf >/tmp/venti.conf
-	fs=/dev/$fsdisk/fossil
-	export fs
-	fsflags=()
-	export fsflags
+	echo fsys main config $fs >/tmp/initfossil.conf
+	cat initfossil.conf >>/tmp/initfossil.conf
+	echo fsys main config $fs >/tmp/fossil.conf
+	cat fossil.conf >>/tmp/fossil.conf
+	echo index main >/tmp/venti.conf
+	echo arenas $fsarenas >>/tmp/venti.conf
+	echo isect $fsisect >>/tmp/venti.conf
+	cat venti.conf >>/tmp/venti.conf
 
 	log Starting $fstype file server for $fs
 	unmount /n/newfs >[2]/dev/null
@@ -52,14 +83,11 @@ case go
 	fossil/conf -w $fs /tmp/initfossil.conf
 	fossil/fossil -f $fs
 	mount -c /srv/fossil /n/fossil
-#	bind /tmp/stub /n/dist/mail
-#	disk/mkfs -U -z 8192 -s /n/dist -d /n/fossil /sys/lib/sysconfig/proto/allproto
-#	echo 'home=/usr/$user; cd; . $home/lib/profile' >>/n/fossil/rc/bin/termrc
 	fossil/conf -w $fs /tmp/fossil.conf
-	venti/fmtarenas arenas /dev/$fsdisk/arenas
-	venti/fmtisect isect /dev/$fsdisk/isect
+	venti/fmtarenas arenas $fsarenas
+	venti/fmtisect isect $fsisect
 	venti/fmtindex /tmp/venti.conf
-	venti/conf -w /dev/$fsdisk/arenas /tmp/venti.conf
+	venti/conf -w $fsarenas /tmp/venti.conf
 
 	log Mounting $fstype file server for $fs
 	while(! logprog mount -c /srv/$sname /n/newfs)
