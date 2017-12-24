@@ -18,6 +18,10 @@ rfork ne
 builddir=`{pwd}
 
 if(~ $1 9frontcd){
+	if(! test -f /386/9ants || ! test -f /386/tools.tgz){
+		echo please build 9ants kernel and tools.tgz and place in /386
+		exit no.files
+	}
 	mkdir /sys/src/ants
 	mkdir /rc/bin/instants
 	bind /root /n/src9
