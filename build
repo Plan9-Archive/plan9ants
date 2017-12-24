@@ -17,6 +17,21 @@ rfork ne
 . /$objtype/mkfile
 builddir=`{pwd}
 
+if(~ $1 9frontcd){
+	mkdir /sys/src/ants
+	mkdir /rc/bin/instants
+	bind /root /n/src9
+	bind $builddir /n/src9/sys/src/ants
+	bind frontmods/instants /n/src9/rc/bin/instants
+	bind frontmods/syslibdistcfg /n/src9/sys/lib/dist/cfg
+	bind -b frontmods/usrglendalib /n/src9/sys/lib/dist/usr/glenda/lib
+	bind -ac /dist/plan9front /n/src9
+	cd /sys/lib/dist
+	mk /tmp/9front.iso
+	cd $builddir
+	exit
+}
+
 if(test -d /dist/plan9front){
 	if(! test -e /sys/include/libc.h.orig){
 		echo 'backing up libc at libc.h.orig'
