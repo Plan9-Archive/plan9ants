@@ -1,3 +1,5 @@
+The logic for adding a plan9.ini provided privpassword to factotum is placed in the 'doafterfact' function in plan9rc, with a switch statement which only activates it if an 'afterfact' command is not supplied. There is no reason to make these mutually exclusive options, the doafterfact function should be changed to remove this switch logic.
+
 The venti configuration stored in the arenas is overridden by plan9rc even if the user did not provide parameters. The venti command should only provide parameters if the user did not.
 
 The skel.tar file remains a hassle.
@@ -11,8 +13,6 @@ the install scripts should autodetect partition locations and edit plan9.ini fil
 ventiprog should be more careful about not replacing the wrcmd with bad information
 
 when controlling linux machines via hubfs, it is necessary to use bash if you wish to use interactive tools like ed. using rc results in input being processed by the rc running underneath ed. why?
-
-should add autosnapshotting to vultr fossil config
 
 ------ non-ants specific random questions ------
 
