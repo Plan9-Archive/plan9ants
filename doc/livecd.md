@@ -2,7 +2,7 @@
 
 ### ANTS r551 9front r6274 released Dec 27 2017
 
-## [http://files.9gridchan.org/9frants555.iso.gz](http://files.9gridchan.org/9ants555.iso.gz)
+## [http://files.9gridchan.org/9frants555.iso.gz](http://files.9gridchan.org/9frants555.iso.gz)
 
 The Advanced Namespace Tools for Plan 9 are now available for testing and installation as a custom spin of the 9front live/install cd image. The cd boots the 9ants custom kernel and includes all userspace tools, and can installs the full ANTS system. Installation is the same as standard 9front, the command inst/start beings the process. You can experiment with most of the new features without needing to install.
 
