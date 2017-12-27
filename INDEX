@@ -76,7 +76,7 @@ frontmods/ - 9front patches and modifications. Subdirs get bound over
 
 grio/ - labs modified rio with hubfs integration and other features
 
-hubfs1.1/ - a 'screen' replacement as a 9p fs, also general purpose
+hubfs/ - a 'screen' replacement as a 9p fs, also general purpose
 	network transparent pipe muxing for grids
 
 patched/ - contains the source code for modifications of standard

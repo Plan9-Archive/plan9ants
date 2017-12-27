@@ -176,7 +176,7 @@ if(~ $1 fronthost){
 	bind -bc frontmods/patched patched
 	bind -bc frontmods/bootdir bootdir.extras
 	build extras
-	cd hubfs1.1
+	cd hubfs
 	mk install
 	cd ..
 	cd patched
@@ -203,7 +203,7 @@ if(~ $1 fronthost){
 }
 
 if(~ $1 portsinstall){
-	cd hubfs1.1
+	cd hubfs
 	mk install
 	cd ..
 	cd patched
@@ -287,7 +287,7 @@ if(~ $1 9frontinstall){
 	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
-	cd hubfs1.1
+	cd hubfs
 	mk install
 	cd ..
 	cp frontmods/bootdir/grio /$objtype/bin
@@ -410,7 +410,7 @@ if(~ $1 labshost){
 	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
-	cd hubfs1.1
+	cd hubfs
 	mk install
 	cd $builddir
 	cd grio
@@ -450,7 +450,7 @@ if(~ $1 isoinstall){
 	$LD -o gridlisten gridlisten.$O
 	cp gridlisten /$objtype/bin
 	cd ..
-	cd hubfs1.1
+	cd hubfs
 	mk install
 	cd $builddir
 	cd grio
@@ -486,7 +486,7 @@ if(~ $1 isoinstall){
 
 if(~ $1 docs){
 	echo building docs
-	cp hubfs1.1/hubfs.man doc/man.hubfs
+	cp hubfs/hubfs.man doc/man.hubfs
 	cd doc
 	cp man.cpns $builddir/sys/man/1/cpns
 	cp man.rerootwin $builddir/sys/man/1/rerootwin
@@ -521,7 +521,7 @@ if(~ $1 clean){
 	cd grio
 	mk clean
 	cd $builddir
-	cd hubfs1.1
+	cd hubfs
 	mk clean
 	cd $builddir
 	rm root/bin/* >/dev/null >[2=1]
@@ -584,7 +584,7 @@ if(~ $1 extras){
 	mk clean
 	mk
 	cp $O.out ../bootdir.extras/grio
-	cd ../hubfs1.1
+	cd ../hubfs
 	mk clean
 	mk all
 	cp $O.hubfs ../bootdir.extras/hubfs
