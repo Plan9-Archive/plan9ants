@@ -94,7 +94,7 @@ tmp
 lib
 	firmware
 		+
-	namespace - - - /n/rootless/bootdir.extras/namespace
+	namespace - - - /n/rootless/root/lib/namespace
 	namespace.saveterm - - - /n/rootless/bootdir.extras/namespace.saveterm
 	namespace.save9front - - - /n/rootless/bootdir.extras/namespace.save9front
 	skel.tar - - - /n/rootless/bootdir.extras/skel.tar
