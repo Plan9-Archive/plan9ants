@@ -5,7 +5,6 @@ syntax: glob
 *.tgz
 compiletemp
 8.out
-hubfs
 hubshell
 bootpaq
 libboot.a8

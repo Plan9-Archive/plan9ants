@@ -1,0 +1,19 @@
+# Hubfs, Hub, Hubshell - multiplexed i/o tools
+386 - sys sys
+	bin - sys sys
+		hubfs - sys sys
+386	- sys sys
+	bin - sys sys
+		hubshell - sys sys
+rc - sys sys
+	bin - sys sys
+		hub - sys sys
+sys - sys sys
+	man - sys sys
+		1 - sys sys
+			hubfs - sys sys
+sys - sys sys
+	src - sys sys
+		cmd - sys sys
+			hubfs 	- sys sys
+				+ 	- sys sys

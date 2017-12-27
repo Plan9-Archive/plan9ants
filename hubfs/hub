@@ -1,0 +1,66 @@
+#!/bin/rc
+# wrapper script for hubfs and hubshell - starts both servers and clients
+# hub [srvname] [shellname]
+
+rfork enf
+while (~ $1 -*){
+	switch($1){
+	case -b
+		background = yes
+		shift
+	case -t
+		trunc = yes
+		shift
+	case *
+		echo bad flag $1
+		shift
+	}
+}
+srvname = $1
+attach = $2
+if(~ $srvname ''){
+	srvname = hubfs
+}
+if(~ $attach ''){
+	attach = io
+}
+
+fn starthubfs {
+	echo creating hubfs /srv/$srvname
+	if (! ~ $trunc yes)
+		hubfs -s $srvname
+	if (~ $trunc yes)
+		hubfs -t -s $srvname
+}
+
+fn makehubs {
+	if(! test -e /n/$srvname/ctl)
+		touch /n/$srvname/ctl
+	touch /n/$srvname/$attach'0'
+	touch /n/$srvname/$attach'1'
+	touch /n/$srvname/$attach'2'
+	touch /n/$srvname/$attach^0.note
+	oldprompt = $prompt
+	prompt =($attach'% ')
+	rc -i </n/$srvname/$attach'0' >/n/$srvname/$attach'1' >[2]/n/$srvname/$attach'2' &
+	cat /n/$srvname/$attach^0.note >/proc/$apid/notepg &
+	sleep 1
+}
+
+if (! test -e /n/$srvname/$attach'0'){
+	if (! test -e /n/$srvname/io0){
+		if (! test -e /srv/$srvname)
+			starthubfs
+		mount -c /srv/$srvname /n/$srvname
+	}
+	if (! test -e /n/$srvname/$attach'0')
+		makehubs
+}
+
+if(! ~ $background yes){
+	hubshell /n/$srvname/$attach
+	echo hubshell ended
+}
+rfork e
+prompt = $oldprompt
+exit ''
