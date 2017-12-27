@@ -1,6 +1,6 @@
 # ANTS/9front Live+Install CD .iso image
 
-### ANTS r551 9front r6274 released Dec 27 2017
+### ANTS r569 9front r6277 released Dec 28 2017
 
 ## [http://files.9gridchan.org/9frants555.iso.gz](http://files.9gridchan.org/9frants555.iso.gz)
 

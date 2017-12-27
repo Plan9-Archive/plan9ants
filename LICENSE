@@ -1,4 +1,6 @@
-I think Plan 9 from Bell Labs is under both Lucent and GPL licensing.
-9front seems to use the same licenses along with MIT.  All the original components of
-the ANTS toolkit are offered under whatever compatible and legal
-license you wish to use.
+Plan 9 from Bell Labs is available under both Lucent and GPL
+licensing.  9front uses the same licenses along with MIT for
+non-derivative original work.  The ANTS modifications and original
+components are offered under the same licensing as 9front, Lucent for
+modifications of Bell Labs code, MIT for original work and changes to
+9front original code.
