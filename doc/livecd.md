@@ -1,19 +1,26 @@
 # ANTS/9front Live+Install CD .iso image
+
 ### ANTS r551 9front r6274 released Dec 27 2017
+
 ## [http://files.9gridchan.org/9frants555.iso.gz](http://files.9gridchan.org/9ants555.iso.gz)
 
 The Advanced Namespace Tools for Plan 9 are now available for testing and installation as a custom spin of the 9front live/install cd image. The cd boots the 9ants custom kernel and includes all userspace tools, and can installs the full ANTS system. Installation is the same as standard 9front, the command inst/start beings the process. You can experiment with most of the new features without needing to install.
 
-### New features and software
+### New features and applications
+
 #### Kernel
 
-* The namespace of processes can be manipulated via the /proc/pid/ns file. To change the namespace of a process you own
+* The namespace of processes can be manipulated via the /proc/pid/ns file.
+
+To change the namespace of a process you own
 
 	echo 'bind /foo /bar' >/proc/pid/ns
 
 where "pid" is the process id. Binds, mounts, unmounts and the standard flags are supported. Mounts requiring a new authentication are not supported.
 
-* Private /srv namespaces are available. The #s kernel device is handled in the manner of /env. In rc,
+* Private /srv namespaces are available.
+
+The #s kernel device is handled in the manner of /env. In rc,
 
 	rfork V
 
@@ -65,7 +72,7 @@ ANTS is compatible with the standard 9front fileservers, but restores the option
 
 * Install process lets you add a password to plan9.ini to setup boot/admin namespace access
 
-The only additional step in the installer, pwsetup, just adds a value to plan9.ini to provide a password for access to the independent admin namespace. Note that it does set up a full authsrv/keyfs system, it just adds the password to factotum for hostowner access on port 17060. 
+The only additional step in the installer, pwsetup, just adds a value to plan9.ini to provide a password for access to the independent admin namespace. Note that it does not set up a full authsrv/keyfs system, it just adds the password to factotum for hostowner access on port 17060.
 
 * Install makes plan9rc the default booting command/method
 
