@@ -221,23 +221,21 @@ fn ipsetup{
 }
 
 fn doafterfact{
-	switch($afterfact){
-	case ?*
+	if (! ~ $#afterfact 0){
 		echo after factotum command $afterfact
 		rc -c $afterfact
-	case ''
-		if(! ~ $privpassword ''){
-			echo adding key to factotum
-			if(~ $passdom '')
-				passdom=9front
-			if(~ $keyowner '')
-				keyowner=$user
-			echo 'key proto=dp9ik dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
-			rm '#ec/privpassword'
-			rm /env/privpassword
-			rm /env/passdom
-			rm /env/keyowner
-		}
+	}
+	if(! ~ $#privpassword 0){
+		echo adding key to factotum
+		if(~ $passdom '')
+			passdom=9front
+		if(~ $keyowner '')
+			keyowner=$user
+		echo 'key proto=dp9ik dom='$passdom' user='$keyowner' !password='^$privpassword >/mnt/factotum/ctl
+		rm '#ec/privpassword'
+		rm /env/privpassword
+		rm /env/passdom
+		rm /env/keyowner
 	}
 }
 
