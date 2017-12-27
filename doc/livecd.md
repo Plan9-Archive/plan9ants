@@ -88,6 +88,5 @@ The vast majority of code on the live/install cd is the same as standard 9front,
 
 #### Known issues
 
-* The ANTS source code at /sys/src/ants is missing the hubfs1.1 directory. I believe it is filtered out by the cdproto file that generates the livecd image because the .1 hits the filter for compilation artifacts.
 * Updating and rebuilding the system using the 9front sysupdate command may result in the loss of some ANTS features, and require rebuilding/reinstalling some of the ANTS toolkit, because ANTS attempts to mostly contain its modifications and not overwrite the standard distribution, so for instance the customized rc with rfork V available will be overwritten if the system is rebuilt with a standard mk install in /sys/src. 
 * Some documentation is out of date and documentation is spread out between manpages and multiple places on the website.
