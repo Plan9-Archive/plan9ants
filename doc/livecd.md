@@ -4,7 +4,7 @@
 
 ## [http://files.9gridchan.org/9frants555.iso.gz](http://files.9gridchan.org/9frants555.iso.gz)
 
-The Advanced Namespace Tools for Plan 9 are now available for testing and installation as a custom spin of the 9front live/install cd image. The cd boots the 9ants custom kernel and includes all userspace tools, and can installs the full ANTS system. Installation is the same as standard 9front, the command inst/start beings the process. You can experiment with most of the new features without needing to install.
+The Advanced Namespace Tools for Plan 9 are now available for testing and installation as a custom spin of the 9front live/install cd image. The cd boots the 9ants custom kernel and includes all userspace tools, and can install the full ANTS system. Installation is the same as standard 9front, the command inst/start beings the process. You can experiment with most of the new features without needing to install.
 
 ### New features and applications
 
@@ -31,7 +31,7 @@ will move you into a new, clean /srv. Your existing file descriptors are unaffec
 * Hubfs allows persistent shared textual applications similar to tmux/screen
 * Can also be used as a general purpose multiclient message queue via 9p
 
-Hubfs provides general purpose persistent pipelike buffered files as a 9p filesystem. It is usually used to provide shared access to instances of the rc shell and applications like ircrc. To create a new instance or attach to an existing one, a wrapper script is used like this:
+Hubfs provides persistent pipelike buffered files as a 9p filesystem. It is usually used to provide shared access to instances of the rc shell and applications like ircrc. To create a new instance or attach to an existing one, a wrapper script is used like this:
 
 	hub FSNAME
 
@@ -39,7 +39,7 @@ Multiple clients can attach to the same fs, each able to write to it, with reads
 
 * Grio customized rio integrates with hubfs and offers color selection and a customizable command in the menu
 
-The standard rio is launched by the default profile, but the "grio" command will create subrios using the customized ANTS grio. It offers several new features. It adds a "hub" command to the menu, which connects to whatever instance of hubfs is mounted at /n/hubfs. If none is mounted, it creates a new one. It adds the ability to add a custom command of your choice to the menu, by default /bin/acme. -x command -a flags/argument sets the custom command. The argument of -a cannot include spaces. Fully customizable colors are available and specified via their hex values. Check /sys/src/9/ants/frontmods/grio/README for full information. Sample command to start a light blue grio with stats -lems in the menu:
+The standard rio is launched by the default profile, but the "grio" command will create subrios using the customized ANTS grio. It offers several new features. It adds a "hub" command to the menu, which connects to whatever instance of hubfs is mounted at /n/hubfs. If none is mounted, it creates a new one. It adds the ability to add a custom command of your choice to the menu, by default /bin/acme. -x command -a flags/argument sets the custom command. The argument of -a cannot include spaces. Customizable colors are available and specified via their hex values. Check /sys/src/9/ants/frontmods/grio/README for full information. Sample command to start a light blue grio with stats -lems in the menu:
 
 	grio-c 0x49ddddff -x /bin/stats -a -lems
 
@@ -88,6 +88,6 @@ The vast majority of code on the live/install cd is the same as standard 9front,
 
 #### Known issues
 
-* The ANTS source code at /sys/src/ants is missing the hubfs1.1 directory. Perhaps the cdproto file that generates the .iso filters it out for some reason.
+* The ANTS source code at /sys/src/ants is missing the hubfs1.1 directory. I believe it is filtered out by the cdproto file that generates the livecd image because the .1 hits the filter for compilation artifacts.
 * Updating and rebuilding the system using the 9front sysupdate command may result in the loss of some ANTS features, and require rebuilding/reinstalling some of the ANTS toolkit, because ANTS attempts to mostly contain its modifications and not overwrite the standard distribution, so for instance the customized rc with rfork V available will be overwritten if the system is rebuilt with a standard mk install in /sys/src. 
 * Some documentation is out of date and documentation is spread out between manpages and multiple places on the website.
