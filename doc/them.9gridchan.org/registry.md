@@ -1,4 +1,5 @@
 # Walkthrough for setting up Inferno as a registry server on Plan 9
+
 ### Works for any Plan 9 install
 
 Inferno provides a dynamic registry service for grid nodes to communicate what services they are offering. We will install Inferno to plan 9 and start up registry service. Start by fetching a recent tarball of the distribution, then edit the mkconfig, then mk install as follows:

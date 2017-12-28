@@ -1,4 +1,5 @@
 #Walkthrough for setting up a linux+inferno node to interface with ANTS
+
 ### Assumes a linux or other unix system with plan9port and inferno
 
 Linux and unix can do p9sk1 authentication to plan 9 systems, but unfortunately does not yet support the encryption option of import. So, if we wish to have a truly secure control channel across an untrusted network, we use hosted inferno to provide the channel. Note that Inferno does not yet support the newer 9front rcpu/rimport mechanisms, so this assumes that you are running old-fashioned exportfs listeners.

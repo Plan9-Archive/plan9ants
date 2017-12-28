@@ -1,4 +1,5 @@
 #Acid debugging basics
+
 ### How to step through a program and inspect data structures
 
 To help acid print data structures, compile with the -a or -aa options:

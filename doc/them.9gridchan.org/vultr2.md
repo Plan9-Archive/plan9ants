@@ -1,4 +1,5 @@
 # Setting up two ANTS nodes to work together on Vultr
+
 ### Walkthrough done with an install created by build vultrfossil 
 
 This walkthrough shows how to use two ants nodes together to create a small grid with automatic data replication. The starting point is completing the build vultrfossil install process described in the first vultr walkthrough.
