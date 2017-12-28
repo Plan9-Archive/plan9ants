@@ -1,51 +1,65 @@
-# Walkthrough for installing 9front-ANTS on Vultr
+# Walkthrough for 9front-ANTS on Vultr from live/install cd image
+
 ### Walkthrough done with 1gb ram image size
 
-Create a Vultr account if you do not have one, and upload a copy of the current 9front iso. A working copy of a 9front release iso (revision 6245 from December 2017) can be found at http://files.9gridchan.org/9front6245.iso. Choose to enable a private ip. Make sure the size (smallest is good) and location are correct, and that the 9front iso is attached. Deploy!
+First you will need a [vultr.com](http://www.vultr.com/?ref=6843332)(that's a referrer link) account. Next you will need to use the option to upload a custom .iso image. An uncompressed copy of the latest ANTS cd image, based on the 9front distribution, is hosted at [http://files.9gridchan.org/9frants569.iso](http://files.9gridchan.org/9frants569.iso). Create a new vps node in the datacenter closest to you, choosing to use the custom ANTS iso you uploaded from the previous url. The 1gb ram/25gb ssd size is plenty. You probably want to also check the "add private networking" box when creating it if you want to create a grid of multiple nodes.
 
-##	Manage the vm and install through the graphical console interface ##
+After you boot the vps, start the control console to access the system. If the cd doesn't seem to be booting, try reselecting it from the custom iso section of the vps settings. It will prompt you for the boot cd location (accept the default), user (accept the glenda default) and graphics options (accept the defaults) and then change the screen resolution and ask for the mouse type. Resize the console window to see the whole screen. Type "ps2intellimouse" for this prompt to enable the scroll wheel. Rio will start, and you will see a small window running the "stats" command showing various sytem info, and a larger window with a prompt for the rc shell. The mouse may be hyper-responsive. You will need to click the mouse in the rc window. If you want to slow the pointer somewhat, you can type
 
-The general method of installation is covered in the 9front.org fqa. Hit enter a few times until the rio gui starts. You can use the live cd and begin the install with inst/start when ready. You will be choosing to use hjfs instead of the default cwfs. You have the option to do a minimal ANTS install with hjfs only, or to add fossil and venti also. To do so, we will make the hjfs partition small during the install process. Here are the relevant inputs, with everything else being left as default:
+	echo linear >/dev/mousectl
+
+To begin the installation process, type
 
 	inst/start
-	hjfs #configfs
-	sdF0 #partdisk
+
+The ANTS install process is basically identical to standard 9front, as described in the [9front FQA](http://fqa.9front.org/fqa.html). It adds the option to choose to use the fossil+venti fileserver, which is a good choice for use with the Advanced Namespace Tools. If not using Fossil, I would recommend hjfs unless your vps is using a larger disk size. cwfs64x will work, but you are more likely to run out of space long-term. A sample install sequence after the inst/start command. The #entries just label which portion of the process is being described. You will mostly be accepting defaults.
+
+	#configfs
+	[enter to accept Fossil default]
+	#partdisk
+	sdF0
 	mbr
 	w
 	q
-	d fs #prepdisk
-	a fs 204801 4400000
+	#prepdisk
 	w
 	q
-	# press enter a lot until copydist and you wait for a few minutes
-	# set timezone and system name and then say
-	yes # to the questions to make plan 9 mbr active
+	#mountfs
+	[enter several times to accept default partitions]
+	#configdist
+	[enter to accept default]
+	#confignet
+	[enter to accept default]
+	#mountdist
+	[enter several times to accept default locations]
+	#copydist
+	[wait a few minutes while the filesystem is copied to the hard drive]
+	#ndbsetup
+	[choose a system name]
+	#tzsetup
+	[enter your timezone from the list]
+	#pwsetup
+	[choose a password]
+	#bootsetup
+	yes
 	yes
 
-## converting base install to Advanced Namespace Tools ##
-
-Remove the iso from the virtual machine, reboot the fresh install, and clone the ANTS repo:
-
-	hg clone https://bitbucket.org/mycroftiv/plan9ants
-	cd plan9ants
-
-You probably want to set the rio window to 'scroll' mode. Now we will install ANTS. The command depends on whether you chose to make a small hjfs partition to allow room for fossil+venti, or will be using hjfs only. For a fossil+venti full ANTS system (requires the special partitioning during install shown above):
-
-	build vultrfossil
-
-If you are leaving hjfs as your sole filesystem, then instead enter:
-
-	build vultr
-
-Once the installs are completed (the vultrfossil script runs for a long time as it is making another full copy of the distribution into the new fossil) you can fshalt -r to reboot with ANTS installed.
+After the system reboots, you will need to use the vultr website interface to remove the iso image from the machine. It will reboot again, and you will need to reopen the console to view it. Just press enter a couple times to accept the default answers to the prompts during bootup.
 
 ## using the ANTS environment ##
 
-In addition to standard Plan 9, the ANTS namespace and tools are available. You can rcpu or drawterm in to the boot namespace on port 17060. (If using drawterm, add the -B flag). To move into the main environment from there:
+You probably do not want to use the vps much through the vultr console. The best method to access is with drawterm. This can be downloaded from [http://drawterm.9front.org](http://drawterm.9front.org). It is built from source for linux/bsd/os x, and there is also a windows binary available. The ANTS system listens for connections on port 17060, and you can connect as hostowner without using an auth server. A command line like
+	
+	drawterm -a 0.0.0.0 -h tcp!your.node.ip.address!17060 -u glenda
+
+should give you a prompt like "glenda@9front dp9ik password:". Type the password selected, and you will then be given a cpu% rc prompt. You will begin in the minimal ANTS boot namespace. To enter a standard namespace with access to the full operating system, enter these commands:
+
+You can start the gui by typing grio. It will just look like a grey screen. Remember to use the right mouse button menu to create new windows.
+
+In addition to standard Plan 9, the ANTS namespace and tools are available. You can rcpu or drawterm in to the boot namespace on port 17060. To move into the main environment from there:
 
 	rerootwin -f boot
 	service=con
 	. $home/lib/profile
 	webfs
-
-You can also access  the early namespace by attaching hub to /srv/hubfs. It can be convenient to rimport the early namespace rcpu/exportfs listener (port 17060) from another machine also.
+	grio
