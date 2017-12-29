@@ -246,7 +246,10 @@ fn dostartventi{
 		if(! ~ $ipdone yes){
 			ipsetup
 		}
-		venti/venti -c $venticonf -a $ventilisten -h $vhttplisten
+		if(~ $#ventilisten 0)
+			venti/venti -c $venticonf
+		if not
+			venti/venti -c $venticonf -a $ventilisten -h $vhttplisten
 		venti=`{echo $ventilisten | sed 's/!.*!/!127.1!/'}
 	case later
 		echo ok you can start venti later that is fine
@@ -559,12 +562,13 @@ ventilisten=$ventiparse(2)
 vhttplisten=$ventiparse(3)
 if(~ $venticonf '#'*)
 	startventi=yes
+if(~ $venticonf /dev*)
+	starventi=yes
 if(~ $venticonf '')
 	venticonf=/dev/sdC0/arenas
-if(~ $ventilisten '')
-	ventilisten=tcp!*!17034
-if(~ $vhttplisten '')
-	vhttplisten=tcp!127.1!8000
+if(~ $#ventilisten 1)
+	if(~ $#vhttplisten 0)
+		vhttplisten=tcp!127.1!8000
 if(~ $interactive '')
 	interactive=traditional
 
