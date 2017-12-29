@@ -250,7 +250,15 @@ fn dostartventi{
 			venti/venti -c $venticonf
 		if not
 			venti/venti -c $venticonf -a $ventilisten -h $vhttplisten
-		venti=`{echo $ventilisten | sed 's/!.*!/!127.1!/'}
+		if(~ $#ventilisten 0){
+			ventilisten=`{venticonf $venticonf |grep '^addr'}
+			if(~ $#ventilisten 0)
+				venti=tcp!127.1!17034
+			if not
+				venti=`{echo $ventilisten(2) | sed 's/!.*!/!127.1!/'}
+		}
+		if not
+			venti=`{echo $ventilisten | sed 's/!.*!/!127.1!/'}
 	case later
 		echo ok you can start venti later that is fine
 	}
