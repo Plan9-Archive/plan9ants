@@ -208,58 +208,14 @@ if(~ $1 fronthost){
 	exit
 }
 
-if(~ $1 frontuninstall){
-	rm /$objtype/bin/grio
-	rm /$objtype/bin/gridlisten
-	rm /lib/namespace.saveterm
-	rm /lib/namespace.save9front
-	rm /sys/man/1/cpns
-	rm /sys/man/1/rerootwin
-	rm /sys/man/1/addwrroot
-	rm /sys/man/8/plan9rc
-	rm /sys/man/8/ventiprog
-	rm /sys/doc/ants.ms
-	rm /sys/doc/ants.ps
-	rm /sys/man/3/procns
-	rm /rc/bin/addns
-	rm /rc/bin/addroroot
-	rm /rc/bin/addsources
-	rm /rc/bin/addwrroot
-	rm /rc/bin/cpns
-	rm /rc/bin/cpsys
-	rm /rc/bin/foshalt
-	rm /rc/bin/fosreset
-	rm /rc/bin/fossilconf
-	rm /rc/bin/fossilize
-	rm /rc/bin/fossilstart
-	rm /rc/bin/frontstart
-	rm /rc/bin/getdevs
-	rm /rc/bin/gridhubrc
-	rm /rc/bin/gui
-	rm /rc/bin/hubrc
-	rm /rc/bin/importroroot
-	rm /rc/bin/importwrroot
-	rm /rc/bin/mountsrvfs
-	rm /rc/bin/rerootwin
-	rm /rc/bin/riobind
-	rm /rc/bin/riopush
-	rm /rc/bin/savedevs
-	rm /rc/bin/subns
-	rm /rc/bin/venticonf
-	rm /rc/bin/ventiprog
-	rm /rc/bin/winpush
-	exit
-}
-
 if(~ $1 9frontinstall){
 	if (! test -e 9ants){
 		echo no 9ants kernel found, use build 9front first
 		exit
 	}
-	echo 'WARNING MODIFIES PLAN9.INI AND BOOTUP'
-	echo 'enter bootfile=9ants at bootup for new kernel'
+	echo 'MODIFIES PLAN9.INI AND BOOTUP'
+	echo 'use bootfile=9ants at bootup for new kernel'
 	echo 'use bootfile=9pc for previous kernel'
-	sleep 5
 	cd patched
 	$CC -FTVw gridlisten.c
 	$LD -o gridlisten gridlisten.$O
@@ -293,11 +249,13 @@ if(~ $1 9frontinstall){
 	cp sys/man/8/ventiprog /sys/man/8/ventiprog
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
-	echo 'enter a password for remote access:'
-	setpasswd=`{read}
-	echo 'privpassword='$setpasswd >>/n/9fat/plan9.ini
-	rm /env/setpasswd
-	echo '9front-ANTS base install complete'
+	if(! ~ $buildingvultrfossil yes){
+		echo 'enter a password for remote access:'
+		setpasswd=`{read}
+		echo 'privpassword='$setpasswd >>/n/9fat/plan9.ini
+		rm /env/setpasswd
+		echo '9front-ANTS base install complete'
+	}
 	exit
 }
 
@@ -317,7 +275,7 @@ if(~ $1 vultr){
 
 if(~ $1 vultrfossil){
 	checkfrontclean
-#	build fronthost
+	buildingvultrfossil=yes
 	cd cfg
 	cat vultdisk |disk/prep /dev/sdF0/plan9
 	cd $builddir
@@ -333,7 +291,6 @@ if(~ $1 vultrfossil){
 	cd $builddir
 	build 9front
 	build 9frontinstall
-	rm compiletemp/*
 	cd $builddir/cfg
 	mount /srv/boot /n/dist
 	fossil/flfmt /dev/sdF0/fossil
@@ -616,6 +573,11 @@ if(~ $1 tools){
 	rm /tmp/tools.tar
 	cd $builddir
 	exit ''
+}
+
+if(test -d /dist/plan9front){
+	echo 'you are using 9front, use build 9front and build 9frontinstall'
+	exit not.labs
 }
 
 checklabsclean
