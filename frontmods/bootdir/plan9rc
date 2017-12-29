@@ -571,7 +571,7 @@ vhttplisten=$ventiparse(3)
 if(~ $venticonf '#'*)
 	startventi=yes
 if(~ $venticonf '/dev'*)
-	starventi=yes
+	startventi=yes
 if(~ $venticonf '')
 	venticonf=/dev/sdC0/arenas
 if(~ $#ventilisten 1)
