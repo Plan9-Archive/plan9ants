@@ -40,7 +40,7 @@ case go
 				echo 'privpassword='^$password
 			if(~ $#nvram 1)
 				echo 'nvram='^$nvram
-			if(~ $fstype ventifossil)
+			if(~ $fstype venti)
 				echo 'venti='$fsarenas |sed 's/\/dev/#S/'
 			if(~ $fstype fossil)
 				if(! ~ $ventidial none)

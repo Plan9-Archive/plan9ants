@@ -17,9 +17,10 @@ case checkready
 	}
 case go
 	rm -f /tmp/copydone
-#	mkdir /tmp/stub
-#	bind /tmp/stub /n/dist/mail
-	disk/mkfs -z 16372 -U -s /n/dist -d /n/newfs /sys/lib/sysconfig/proto/allproto
+	prompt -d yes 'Copy the distribution to the fs now?' yes no
+	copynow=$rd
+	if(~ $copynow yes)
+		disk/mkfs -z 16372 -U -s /n/dist -d /n/newfs /sys/lib/sysconfig/proto/allproto
 	touch /tmp/copydone
 
 case checkdone
