@@ -1,0 +1,132 @@
+
+
+
+     CPNS(1)                                                   CPNS(1)
+
+
+
+
+
+     NAME
+          cpns, addns, subns - process namespace manipulation
+
+     SYNOPSIS
+          cpns [ -x exclude ] [ -o only ] [ -t ] [ -r ] model target
+          addns [ -x exclude ] [ -o only ] [ -t ] [ -r ] model target
+          subns [ -x exclude ] [ -o only ] [ -t ] [ -r ] model target
+
+     DESCRIPTION
+          These scripts require the writable /proc/*/ns kernel mod.
+          They provide a scripted interface for namespace operations
+          between processes owned by the user visible at /proc. Both
+          local and remote processes may be targeted if the target
+          system is running the correct kernel.  See proc(3) for
+          details on ns operations via /proc.
+
+          All commands take two numeric process IDs as their parame-
+          ters. They compare the /proc/pid/ns files of model and
+          target processes and generate operations to be written back
+          to the /proc/pid/ns file to modify the namespace of the
+          target process.
+
+          cpns copies the namespace of the model process over the
+          namespace of the target process.
+
+          addns finds the mounts and binds that exist in the ns of
+          model but not in target and adds those mounts and binds to
+          the namespace of target process.
+
+          subns performs the reverse operation; it searches the names-
+          pace of target for mounts and binds that do not exist in
+          model and then removes them from the target process.
+
+          All scripts share identical flags.  -t causes the scripts to
+          run in test mode and print the commands they would issue
+          while taking no other action.  -r attempts to make the
+          namespace operations safe for processes making use of rio.
+          It filters out operations which contain the strings
+          /mnt/term /dev/cons or /rio. -x exclude allows the user to
+          specify a string which will be excluded from any of the per-
+          formed operations. -o only allows the user to specify a
+          string which all namespace operations must include.
+
+          Not all namespace commands can be copied literally between
+          processes. It is expected to receive errors from some of the
+          attempted ns operations and the final state of the target's
+          namespace may not precisely mirror the model. In general the
+          error output simply means illegal operations were rejected
+          and not attempted.
+
+
+
+
+
+
+
+
+
+
+
+     CPNS(1)                                                   CPNS(1)
+
+
+
+          The existing Plan 9 software does not expect processes'
+          namespace to be modified without their knowledge during
+          operation. Modifying namespace does not break connections to
+          existing file descriptors so the modifications will not have
+          a noticeable result until new fds are opened. Modifying
+          namespace arbitrarily is powerful and flexible enough that
+          it is impossible to sanity-check all potential operations.
+          Just like cp(1) of files, cpns will allow you to shoot your-
+          self in the foot. Use of the -t flag is recommended until
+          you are confident you understand the results of a given
+          operation.
+
+     SOURCE
+          sources/contrib/mycroftiv/rootlessnext/scripts
+
+     SEE ALSO
+          bind(1), bind(2), mnt(3), proc(3), namespace(4)
+
+     BUGS
+          These scripts operate using simple comparison via grep(1) of
+          matching lines. Namespace structures are more complicated
+          than this because the meaning of later binds depends on pre-
+          vious mounts and binds. Better tools should be written which
+          understand the graph/tree structure of a namespace and how
+          to correctly build and dissassemble them in full generality.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

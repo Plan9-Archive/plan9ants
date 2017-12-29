@@ -1,0 +1,330 @@
+
+
+
+     PLAN9RC(8)                                             PLAN9RC(8)
+
+
+
+
+
+     NAME
+          plan9rc, ramskel, initskel - rootless boot scripts
+
+     SYNOPSIS
+          plan9rc [file]
+          ramskel
+          initskel
+
+     DESCRIPTION
+          After the kernel boots, it execs /boot (see boot(8)), which
+          in turn execs plan9rc.  plan9rc(8) reads file if given (usu-
+          ally it is not) to set up environment variables. It checks
+          the $service environment variable cpu or terminal, to set
+          defaults, then proceeds as an rc(1) script to bring the sys-
+          tem up. It first uses paqfs(4) to mount /boot/bootpaq behind
+          both /bin and /boot to access additional programs.
+
+          plan9rc makes use of two additional scripts by default,
+          ramskel and initskel. ramskel starts a ramfs(4) and loads in
+          the skel.tar stored in the bootpaq, and optionally loads an
+          additional user-specified .tgz from ramfs(4) also.  A
+          default tools.tgz is provided by the author and recommended
+          as a good default set of additional programs to have avail-
+          able.
+
+          Initskel is comparable to a cpurc(8) script which sets up
+          services for the ramrooted environment. It also has interac-
+          tive and non-interactive modes which follow the same envi-
+          ronment variable. It's default actions are to bind standard
+          devices, begin internet service if it was not already, and
+          start hubfs(4) and rxexec(8) and cpu(1) and exportfs(4) lis-
+          teners with listen1(8). The cpu and exportfs listener are
+          started on non-standard ports to avoid conflicting with the
+          main system's cpurc(8). The initskel also has non-default
+          options for starting its own ndb(8) cs/dns and keyfs(4) and
+          authsrv(6) if desired.
+
+     Startup Procedures
+          The script operates according to the variables found in the
+          environment, usually those provided by plan9.ini(8) It exe-
+          cutes fuctions in the order of
+
+          dofactotum
+                  starts factotum(4) in either cpu or terminal mode
+                  according to the user's choice.
+
+          dotryusb
+                  finds out if the system is booting to a usb volume
+                  and starts partfs(8) if so
+
+
+
+
+
+
+
+
+
+
+
+     PLAN9RC(8)                                             PLAN9RC(8)
+
+
+
+          doramsetup
+                  is done from /boot/skel.tar and may also make use of
+                  /n/9fat/tools.tgz
+
+          dochecksys
+                  is made to verify that a user/hostowner and system
+                  name are in place
+
+          dostartventi
+                  will begin a venti(8) server if specified by the
+                  $venti environment variable.
+
+          dogetrootfs
+                  will either begin a disk fileserver or dial a tcp
+                  root fileserver
+
+          doinistscript
+                  runs the initskel script to create a self-sufficient
+                  environment to cpu(1) into for service and adminis-
+                  trative access to the layer below the root filesys-
+                  tem.
+
+          dorootstart
+                  will begin either the cpurc(8) or termrc(8) from the
+                  rootfs. These scripts are launched using newns(8) to
+                  create a normal user environment independent of the
+                  namespace of plan9rc.
+
+          staylocal
+                  allows the user to retain access if desired to the
+                  programs in the bootpaq and/or tools.tgz, or choose
+                  no to drop down to kernel-device only namespace.
+
+     VARIABLES
+          The plan9rc script makes use of standard variables from
+          plan9.ini(8) and also new variables. Both types of vari-
+          ables, and their default behaviors, are listed.
+
+          interactive
+                  determines the mode of operation for plan9rc. By
+                  default, or if set to "traditional", it will behave
+                  towards the user almost identically to the original
+                  plan9 bootup, but will still set up the rootless
+                  environment. If set to "yes" then the user will be
+                  prompted interactively through the boot process and
+                  given the option to alter any and all plan9.ini(8)
+                  variable settings. If set to "no" the user will not
+                  be prompted at all and the boot process proceeds in
+                  automated fashion according to the environment vari-
+                  ables.
+
+          bootargs
+
+
+
+
+
+
+
+
+
+
+     PLAN9RC(8)                                             PLAN9RC(8)
+
+
+
+                  determines the method for connecting to a root fs.
+                  tcp [internet config parameters] or local![path to
+                  disk root fs] are the standard values here. The new
+                  option srv implies the user will arrange to have a
+                  file in /srv suitable for use as a root file system.
+
+          ipparams
+                  optional parameter arguments to ipconfig(8). This is
+                  another way of setting these values directly rather
+                  than the somewhat convoluted methods (which are
+                  still supported) described in boot(8)
+
+          factotum
+                  type of factotum(4) [cpu terminal debug]
+
+          sysname standard $sysname definition
+
+          fs      standard $fs address from plan9.ini(8) needed for
+                  tcp booting
+
+          auth    standard $auth address for tcp booting
+
+          venti   standard $venti address variable from plan9.ini(8)
+
+          fossil  location of fossil(4) partition on disk
+
+          cfs     location of cfs(4) partition on disk
+
+          ramsetup
+                  program to set up ramfs(4) for bootscripts, defaults
+                  to [ramskel]
+
+          initscript
+                  miniature cpurc(8) equivalent script for the ramroot
+                  namespaces, defaults to [initskel]
+
+          startventi
+                  set to "yes" to start the venti(8) server. This will
+                  be automatically set to yes if a $venti variable is
+                  found beginning with #S which implies venti(8)
+                  should be started from the local disk.
+
+          bootsrv this is usually a derivative variable determined by
+                  the attachment to a root fileserver. If the user
+                  chooses "srv" as their boot method plan9rc will use
+                  an existing file in /srv for the root. This mode is
+                  used mostly if plan9rc is launching a new namespace
+                  subsequent to the initial boot up.
+
+          namespace
+                  namespace for starting initscript, defaults to
+                  [namespace]
+
+
+
+
+
+
+
+
+
+
+     PLAN9RC(8)                                             PLAN9RC(8)
+
+
+
+          rootstart
+                  whether or not to start cpurc(8) or termrc(8)
+                  scripts from mounted root [cpu terminal]
+
+          staylocal
+                  whether to stay within the namespace of the plan9rc
+                  script on the console, set "no" to drop back to only
+                  kernel devices [yes]
+
+          afterfact
+                  command to execute after starting factotum(8) (hap-
+                  pens before everything else), not used by default
+
+          afterroot
+                  command to execute after mounting rootfs but before
+                  initscript or cpurc(8) or termrc(8) not used by
+                  default
+
+        Initskel and ramskel variables
+          Variables for the other two scripts used by rootless bootup
+          are also described here. Their meaning and default values
+          are as follows.
+
+          tgzfs
+               name of optional .tgz to load into the ramdisk. I pro-
+               vide a recommended tools.tgz but this value is not set
+               by default. This value is used by ramskel while the
+               rest are all for initskel.
+
+          binddevs
+               by default initskel will bind(1) the devices ( f t m v
+               L P u U '$' Σ κ ). Set this to no to disable this.
+
+          hostfactotum
+               by default the ramroot namespace makes use of the sys-
+               tem wide factotum(8). Set this to no to enable running
+               a private factotum(8) for this namespace. You will be
+               prompted for the values to set for the key and auth-
+               server address.
+
+          netsvc
+               by default initskel will issue an ipconfig(8) command
+               if internet service has not already been started. Set
+               no to disable this.
+
+          hostcsdns
+               by default the factotum(4) in the ramroot environment
+               will use the host system ndb(8) cs and dns for connec-
+               tion information. Set no to disable this and start a cs
+               and dns server within the service namespace.
+
+          cpusvc
+
+
+
+
+
+
+
+
+
+
+     PLAN9RC(8)                                             PLAN9RC(8)
+
+
+
+               by default initskel will start a cpu(1) listener and an
+               rexexec(8) listener. Set no to disable this.
+
+          cpuport
+               this sets the numeric port used for the cpu(1) lis-
+               tener. It is set to [17060] by default to avoid con-
+               flict with the host system cpu(1) listener.
+
+          hubsvc
+               by default a hubfs(4) server is started and an rc con-
+               nected to it. Set no to disable this.
+
+          unprivileged
+               by default the ramroot environment does not provide
+               auth services. Set no to start a keyfs(4) and
+               authsrv(6) using /n/9fat/adm.
+
+     FILES
+          /boot/plan9rc  bootup and namespace launching control script
+          /boot/ramskel  sets up /boot/skel.tar as a ramfs skeleton
+                         along with an optional tools.tgz from /n/9fat
+          /boot/initskel cpurc(8) analog script for access to the
+                         rootless environment
+
+     SOURCE
+          sources/contrib/mycroftiv/rootlessnext/bootdir.extras
+
+     SEE ALSO
+          srv(4), namespace(6), boot(8), listen(8)
+
+     BUGS
+          The Plan 9 kernel handles variables in #ec and #e differ-
+          ently. This may cause unexpected results if variables set in
+          plan9.ini are manipulated and control passes to subscripts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

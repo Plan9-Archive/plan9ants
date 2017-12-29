@@ -1,0 +1,264 @@
+
+
+
+     HUBFS(1)                                                 HUBFS(1)
+
+
+
+
+
+     NAME
+          hub, hubfs, hubshell  - persistent multiplexed i/o sessions,
+          or 'screen without a screen'
+
+     SYNOPSIS
+          hub [ -b ] [ srvname ] [ hubgroup ]
+
+          hubshell attachstring
+
+          hubfs [ -Dasm ] srvname
+
+     DESCRIPTION
+          Hub invokes hubfs(1) to create a 9p filesystem of pipe-like
+          Hubs available as a /srv and starts an rc(1) shell with its
+          file descriptors redirected to these hubs, then uses
+          hubshell(1) as a client for these connections. The overall
+          usage model is somewhat similar to GNU screen but without
+          the additional complexities of TTY management.
+
+          The base behavior of hub(1) srvname is bimodal, and will
+          function as either a client or server depending on whether
+          /srv/srvname exists. If no name is provided, hub will create
+          or attach to a /srv named /srv/hubfs containing a persistent
+          rc(1) session. Thus, the simplest possible model of use is:
+
+               hub
+
+          to start a backgrounded hubfs hosted persistent rc(1) shell,
+          and then
+
+               hub
+
+          from any window with access to that /srv to connect to it.
+          The -b flag to hub backgrounds the initially created rc(1)
+          instead of attaching to it.
+
+          Hubfs can be used to provide general purpose pipes locally
+          or across a network, with some special features. Most
+          notably, echoing freeze to the ctl file will change the
+          behavior of the hub files from pipe-like with blocking reads
+          to simple static files that can be viewed and edited with
+          normal tools. Writing melt to ctl will restore pipe-like
+          behavior and resume the normal flow of data.
+
+          While connected via a hubshell input beginning with a %sym-
+          bol will be checked for matching command strings. These com-
+          mands are used to create new subshells within the hubfs ses-
+          sion and move between them. A distinctive feature is the
+          ability for remote clients to share a local shell with other
+          clients of the hubfs. The %local NAME command does this. The
+
+
+
+
+
+
+
+
+
+
+     HUBFS(1)                                                 HUBFS(1)
+
+
+
+          more traditional mode of starting new shells on the remote
+          host is done with the %remote NAME command. Note that
+          'remote' is the machine hosting the shell you are connected
+          to currently.  %detach terminates the hubshell and returns
+          control to the user's original shell.
+
+     EXAMPLES
+          hub wrapper script:
+
+          start and connect to a new hubfs and post /srv/aug5
+
+               hub aug5
+
+          connects a new client to the rc shell started by the previ-
+          ous command
+
+               hub aug5
+
+          start and connects to new rc named rctwo within the aug5
+          hubfs
+
+               hub aug5 rctwo
+
+          Making new shells and moving in hubshell:
+
+          -all commands begin with '%' as first character-
+
+               %detach  # disconnect from attached shell
+
+               %remote NAME # start shell on remote machine
+
+               %local NAME # start shell on local machine shared to hubfs
+
+               %attach NAME # move to an existing hubfs shell
+
+               %err TIME, %in TIME, %out TIME # time in ms for delay loop
+
+               %status # basic hubfs connection info
+
+               %list # lc of connected hubfs hubs
+
+               %unecho # turn off echo flush when moving between shells
+
+               %fortun # turn on fortune flush when moving between shells
+
+          Controlling hubfs via the ctl file:
+
+          -reading from ctl file returns status-
+
+               echo freeze >/n/hubfs/ctl #freeze Hubs as static files
+
+               echo melt >/n/hubfs/ctl #resume normal flow of data
+
+
+
+
+
+
+
+
+
+
+     HUBFS(1)                                                 HUBFS(1)
+
+
+
+               echo fear >/n/hubfs/ctl #activate paranoid(safe) mode
+               # - writers wait for readers
+
+               echo calm >/n/hubfs/ctl #resume non-paranoid mode
+
+               echo quit >/n/hubfs/ctl #kill the fs
+
+
+     SOURCE
+          /n/sources/contrib/mycroftiv/hubfs.tgz
+
+     SEE ALSO
+          UNIX pipes, pipe(3) , srv(3) and aux/consolefs(4)
+
+     BUGS
+          In the standard mode of use for interactive rc shells, the
+          synchronization between stdout and stderr is not maintained.
+          The symptom is prompts appearing in seemingly the wrong
+          place. To fix this, enter a command like %err 300 to set 300
+          milliseconds of delay before data from stderr is printed.
+
+          Because hubfs maintains static buffers and always allows
+          clients to write to avoid loss of interactivity, slow read-
+          ers may experience data loss while reading output larger
+          than the size of the static buffer if the output was also
+          transmitted fast enough to "wrap around" the location of the
+          reader in the data buffer. The purpose of "paranoid" mode is
+          to restrict the speed of writers if this is a concern.
+
+          -
+
+          "Doug had for years and years, and he talked to us continu-
+          ally about it, a notion of interconnecting computers in
+          grids, and arrays, very complex, and there were always prob-
+          lems in his proposals. That what you would type would be
+          linear and what he wanted was three-dimensional, n-
+          dimensional...I mean he wanted just topological connection
+          of programs and to build programs with loops and and horrid
+          things. He had such grandiose ideas and we were saying, the
+          complexity you're generating just can't be fathomed. You
+          don't sit down and you don't type these kind of connections
+          together. And he persisted with the grandiose ideas where
+          you get into Kirchoff's law problems...what happens if you
+          have a feedback loop and every program doubles the number of
+          characters, it reads one and writes two? It's got to go
+          somewhere - synchronization - there's just no way to imple-
+          ment his ideas and we kept trying to pare him down and weed
+          him down and get something useful and distill it. What was
+          needed, was real ideas...and there were constant discussions
+          all through this period, and it hit just one night, it just
+          hit, and they went in instantly."
+
+
+
+
+
+
+
+
+
+
+
+     HUBFS(1)                                                 HUBFS(1)
+
+
+
+          ~Ken Thompson on UNIX pipes' origins
+
+          http://www.princeton.edu/~hos/mike/transcripts/thompson.htm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

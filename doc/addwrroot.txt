@@ -1,0 +1,66 @@
+
+
+
+     ADDWRROOT(1)                                         ADDWRROOT(1)
+
+
+
+
+
+     NAME
+          addwrroot, addroroot, importwrroot, importroroot, addsources
+          - mount and bind new fileservers for use
+
+     SYNOPSIS
+          addwrroot targetroot
+          addroroot targetroot
+          importwrroot targetroot
+          importroroot targetroot
+          addsources
+
+     DESCRIPTION
+          These commands dial and mount a given filesystem taking
+          targetroot as a system name or IP to be dialed. The "add"
+          scripts will check first for /srv/targetroot before making
+          use of the network. After attaching to the fs a series of
+          bind(1) commands is performed to make use of the target's
+          binaries, library files, and $home if available.
+
+          The "add" versions of the scripts dial port 564 for standard
+          9p file service after checking /srv. The "import" versions
+          of the scripts dial port 17007 for import(4) from cpu
+          servers.  The "wr" versions of the scripts are for servers
+          which you have write permission.  The "ro" versions assume
+          you are not allowed to write to the target.
+
+          The addsources script takes no arguments, it dials the Bell
+          Labs "sources" server and binds its binaries and library.
+          This is intended as a way to briefly work with binaries or
+          other files from the distribution over the network in a
+          pinch.  Please do not make sources your main fileserver with
+          this method.
+
+     SOURCE
+          sources/contrib/mycroftiv/rootlessnext/scripts
+
+     SEE ALSO
+          rerootwin(1), bind(1), srv(4).
+
+     BUGS
+          No sanity checks are performed to verify that the requested
+          binds make sense. If the scripts are mis-targeted the names-
+          pace of the invoking shell may become unusable.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

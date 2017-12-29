@@ -300,14 +300,17 @@ if(~ $1 9frontinstall){
 	cp tools.tgz /n/9fat/tools.tgz
 	cp 9ants /n/9fat/9ants
 	echo 'home=/usr/$user; cd; . $home/lib/profile' >>/rc/bin/termrc
-	cp doc/man.cpns /sys/man/1/cpns
-	cp doc/man.rerootwin /sys/man/1/rerootwin
-	cp doc/man.addwrroot /sys/man/1/addwrroot
-	cp doc/man.plan9rc /sys/man/8/plan9rc
-	cp doc/man.ventiprog /sys/man/8/ventiprog
+	cp sys/man/1/cpns /sys/man/1/cpns
+	cp sys/man/1/rerootwin /sys/man/1/rerootwin
+	cp sys/man/1/addwrroot /sys/man/1/addwrroot
+	cp sys/man/1/rc /sys/man/1/rc
+	cp sys/man/2/fork /sys/man/2/fork
+	cp sys/man/3/srv /sys/man/3/srv
+	cp sys/man/3/proc /sys/man/3/proc
+	cp sys/man/8/plan9rc /sys/man/8/plan9rc
+	cp sys/man/8/ventiprog /sys/man/8/ventiprog
 	cp doc/antspaper.ms /sys/doc/ants.ms
 	cp doc/ants.ps /sys/doc/ants.ps
-	cp doc/modified.manpages/proc.man /sys/man/3/proc
 	echo 'enter a password for remote access:'
 	setpasswd=`{read}
 	echo 'privpassword='$setpasswd >>/n/9fat/plan9.ini

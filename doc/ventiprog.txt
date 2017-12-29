@@ -1,0 +1,198 @@
+
+
+
+     VENTIPROG(8)                                         VENTIPROG(8)
+
+
+
+
+
+     NAME
+          ventiprog, cpsys, fosreset, fossilize, fossilstart, foshalt
+          - backup between ventis, replicate fossils, and archive
+          rootscores
+
+     SYNOPSIS
+          ventiprog [ ventilist ]
+
+          cpsys source dest
+
+          fosreset rootscore [ partition ] [ ventiaddr ]
+
+          fossilize [ partition ]
+
+          fossilstart [ partition ] [ srvname ]
+
+          foshalt
+
+          /n/9fat/rootscor
+
+          /n/9fat/wrcmd
+
+     DESCRIPTION
+          These commands aid in the maintenance and replication of
+          venti/fossil servers. See fossil(4) and fossilcons(8) for an
+          overview of the fossil system, fossil/last, flfmt -v, and
+          venti(8) and venti-backup(8) for an overview of venti and
+          replication with wrarena.
+
+          Note that these commands make certain assumptions about sys-
+          tem configuration and require some manual setup and addi-
+          tional administrative actions for use as a complete
+          backup/replication workflow.  As with all system administra-
+          tion scripts, please study their interaction with your local
+          environment before use.
+
+        Overview
+          These scripts help perform the workflow of replicating
+          between active ventis, replicating fossils that make use of
+          them, and preserving the fossil rootscores. There is a set
+          sequence of operations to correctly replicate active
+          venti/fossil systems. First, and not automated by these
+          scripts, an active fossil(4) must be taking snapshots. This
+          happens automatically, or can be triggered by sending the
+          comand fsys main snap -a to the fossil console. The workflow
+          of ventiprog and related commands assumes that the desired
+          snapshot operation has been completed.
+
+        Venti replication
+          After the desired snapshot is finished (which may simply be
+
+
+
+
+
+
+
+
+
+
+     VENTIPROG(8)                                         VENTIPROG(8)
+
+
+
+          the automatic daily snapshot) the fossilize of a given
+          partition prints the output of fossil/last , mounts a 9fat
+          partition if necessary, and appends the rootscore to
+          /n/9fat/rootscor which is taken as a conventional storage
+          location for fossil rootscores and venti offset data.
+          Rootscores need to be kept secure so this file should be
+          treated in the same manner as nvram.
+
+          After a snapshot has been completed and the rootscore saved,
+          replicating data from the venti used by that fossil to other
+          ventis will make that rootscore available for use. The task
+          of progressively replicating data between ventis is given to
+          the ventiprog script which takes an optional list of
+          targetventis to direct the data replication. Prior to using
+          ventiprog , the user must create the file /n/9fat/wrcmd
+          which contains a venti/wrarena command with the correct
+          arena offset. As described by venti-backup(8) this command
+          will take a form such as: "wrarena -h
+          tcp!ip.of.venti.server!17034 -o 537665536 /dev/sdC0/arenas
+          0x0" to begin. The first parameter to -o is calculated by
+          subtracting 8192 from the location of venti partition as
+          retrieved from the /index file of the venti http server.
+          Each time ventiprog is run it updates this command with a
+          new final clump offset parameter. It is the user's responsi-
+          bility to note when a venti arenas partition is filled and
+          adjust the -o parameter and reset the final parameter to
+          0x0.
+
+        Fossil replication
+          Resetting running fossils to a different score and replicat-
+          ing fossils between systems is done with fosreset , which
+          uses vacscore to flfmt-v the given partition using the
+          ventiaddr given. If no parameter is provided the environment
+          value of $venti will be used and if a partition is absent
+          /dev/sdC0/fossil will be used as a default. The script first
+          uses the simplified fossil-only foshalt script to sync and
+          halt the fossil, then kills all running fossil processes
+          before issuing the flfmt-v command.
+
+          cpsys automates replicating between the fossil of source
+          system and that of dest system. IMPORTANT: this script
+          assumes that the partition identification is the same on
+          both systems. It also requires the rexexec(8) service to be
+          listening on both source and destination machines. It issues
+          the fossilize command to source and saves the output to cre-
+          ate the parameters for a fosreset command sent to dest.
+
+          Because running fossils are halted by the actions of
+          fosreset and cpsys , the fossilstart script assists in
+          restating the fossil located on a given partition using
+          standard default parameters. If srvname is given, it will be
+          used as a stem for the fossil file and also its
+
+
+
+
+
+
+
+
+
+
+     VENTIPROG(8)                                         VENTIPROG(8)
+
+
+
+          fossilcons(8)
+
+     EXAMPLE
+          These commands are issued from the service namespace of a
+          venti(8) server.
+
+               % rx fileserver echo fsys main snap -a '>>/srv/fscons'
+               # begin a snap and then wait for it to complete
+
+               % rx fileserver fossilize >>/n/9fat/rootscor
+               # saves the rootscore both on the file and venti server
+
+               % ventiprog $ventis
+               # assumes the user has a variable in the environment like
+               # ventis=(ip.addr.one ip.addr.two ip.addr.three)
+
+               % cp /n/9fat/rootscor /n/remote/backup
+               # copy the rootscores to the backup venti hosts
+
+               % cpsys fileserver backupserver
+               # reset the backup fossil to the rootscore of the snapshot
+
+          After this seequence, the backup server can choose to use
+          one of the ventis which also contains the replicated
+          rootscore. Usually this is done by changing the value of the
+          $venti variable in plan9.ini(8)
+
+     SOURCE
+          sources/mycroftiv/rootlessnext/scripts
+
+     SEE ALSO
+          fossil(4), fossilcons(8), venti(8), venti-backup(8)
+
+     BUGS
+          ventiprog should automate the construction of the wrcmd from
+          the venti http/index file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,132 @@
+
+
+
+     REROOTWIN(1)                                         REROOTWIN(1)
+
+
+
+
+
+     NAME
+          rerootwin, savedevs, getdevs - change root and keep devices
+
+     SYNOPSIS
+          rerootwin [ -f -u -n -t nsfile ] newroot [ authagent ]
+
+          savedevs [ srvname ]
+
+          getdevs [ srvname ]
+
+          /lib/namespace.saveterm
+
+     DESCRIPTION
+          rerootwin creates a new namespace using newns(8) but retains
+          connection to the current interactive window by using
+          srvfs(4) to save the devices from /mnt/term and /mnt/wsys
+          and remount them inside the new namespace.
+
+          newroot is expected to exist as /srv/newroot or be a dial-
+          able IP or system name serving 9p on port 564 suitable for a
+          root filesystem. The script attempts to check the current
+          namespace and issue any preparatory binds necessary to make
+          the devices available to /srv.
+
+          The file /lib/namespace.saveterm or /boot/namespace.saveterm
+          must be available, unless the -t nsfile option is given, in
+          which case that file must be a correctly constructed names-
+          pace file. By default the /net.alt directory is used as a
+          pivot point for the remount of the user's devices. The -n
+          and -u flags change this pivot point to /n or /u respec-
+          tively. ( /u will only exist on systems running the Bell
+          Labs rootless kernel.) The -f option changes the namespace
+          file used to /lib/namespace.save9front or the analog in
+          boot. This alternative file follows the 9front namespace
+          conventions and should be used when stepping into a 9front
+          namespace.  authagent is set to "factotum" by default.
+          Another value can be chosen if the user is running a per-
+          sonal factotum in /srv under a different name
+
+          getdevs and savedevs make use of the same device-saving
+          srvfs(4) but do not enter an entirely new namespace.
+          savedevs saves the current console and window system devices
+          under a given srvname or under a pid identity if no name is
+          provided. getdevs srvname issues mount and bind(1) commands
+          to reattach to the saved devices.
+
+     EXAMPLES
+          To enter a fossil-root namespace from within a rootless ser-
+          vice namespace:
+
+
+
+
+
+
+
+
+
+
+
+     REROOTWIN(1)                                         REROOTWIN(1)
+
+
+
+               cpu -h tcp!fileserver!17060 -u bootes
+               rerootwin boot
+               grio
+
+          To let a shell within hubfs(4) correctly track window size
+          and run gui programs:
+
+               savedevs prehub
+               hub hubfs oldshell
+               getdevs prehub
+
+     SOURCE
+          sources/mycroftiv/rootlessnext/scripts
+
+     SEE ALSO
+          bind(1), srvfs(4)
+
+     BUGS
+          It is not always possible to analyze the originating names-
+          pace in detail to determine how the current devices are
+          attached.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
