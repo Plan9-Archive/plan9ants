@@ -76,7 +76,7 @@ case go
 	echo isect $fsisect >>/tmp/venti.conf
 	cat venti.conf >>/tmp/venti.conf
 
-	log Starting $fstype file server for $fs
+	log Starting fossil file server for $fs
 	unmount /n/newfs >[2]/dev/null
 
 	fossil/flfmt $fs
@@ -89,7 +89,7 @@ case go
 	venti/fmtindex /tmp/venti.conf
 	venti/conf -w $fsarenas /tmp/venti.conf
 
-	log Mounting $fstype file server for $fs
+	log Mounting fossil file server for $fs
 	while(! logprog mount -c /srv/$sname /n/newfs)
 		sleep 2
 
