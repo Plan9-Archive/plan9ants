@@ -1,8 +1,6 @@
-The venti configuration stored in the arenas is overridden by plan9rc even if the user did not provide parameters. The venti command should only provide parameters if the user did not. The logic in plan9rc should also be improved to not just key off the # symbol but check for /dev also.
-
 The skel.tar file remains a hassle.
 
-When trying to secure the service namespace against failures of the main environment, the mount of cs in the default /lib/namespace file is problematic. Even when using factotum -x, new processes started by cpu and import will try to mount /srv/cs and freeze. The /lib/namespace file used by the early environment is stored in ramdisk so removing the mount of cs (and dns?) will prevent frozen logins via cpu.
+When trying to secure the service namespace against failures of the main environment, the mount of cs in the default /lib/namespace file is problematic. Even when using factotum -x, new processes started by cpu and import will try to mount /srv/cs and freeze. The /lib/namespace file used by the early environment is stored in ramdisk so removing the mount of cs (and dns?) will prevent frozen logins via cpu. *Some of this is wrong* It seems that this problem only exists when using auth services, if we are just running with a hostowner key/factotum then remote access works even after loss of the root fileserver. Also, the /lib/namespace file is compiled into the paqfs, it is not just on the ramdisk, so editing it isn't as simple as all that.
 
 the install scripts should autodetect partition locations and edit plan9.ini files accordingly
 
@@ -52,4 +50,6 @@ hubshell should probably make %remote shells do rfork n to isolate their namespa
 There are 3 different copies of the lib/namespace file for the ANTS boot environment in the repository. The one that is actually used is at root/lib/namespace. Why do bootdir.extras/namespace and bootdir.extras/root/lib/namespace exist? Fixed in ANTS3.1
 
 The logic for adding a plan9.ini provided privpassword to factotum is placed in the 'doafterfact' function in plan9rc, with a switch statement which only activates it if an 'afterfact' command is not supplied. There is no reason to make these mutually exclusive options, the doafterfact function should be changed to remove this switch logic. Fixed in ANTS3.1
+
+The venti configuration stored in the arenas is overridden by plan9rc even if the user did not provide parameters. The venti command should only provide parameters if the user did not. The logic in plan9rc should also be improved to not just key off the # symbol but check for /dev also. Fixed in ANTS3.1
 

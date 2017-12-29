@@ -75,55 +75,30 @@ fn cleanenv {
 # environment checking functions
 
 fn findpart{
-	if((test -e /boot/sed) || (test -e /bin/sed)){
-		if(~ $bootparse(1) *dev*){
-			echo $bootparse(1) |sed 's/^local!//'
-		}
-		if not{
-			echo $bootparse(1) |sed 's/^local!#./\/dev/'
-		}
-	}
-	if not {
-		if(~ $bootparse(1) *sdC0/$1)
-			echo /dev/sdC0/$1
-		if(~ $bootparse(1) *sdC1/$1)
-			echo /dev/sdC1/$1
-		if(~ $bootparse(1) *sdD0/$1)
-			echo /dev/sdD0/$1
-		if(~ $bootparse(1) *sdD1/$1)
-			echo /dev/sdD1/$1
-		if(~ $bootparse(1) *sdE0/$1)
-			echo /dev/sdE0/$1
-		if(~ $bootparse(1) *sdE1/$1)
-			echo /dev/sdE1/$1
-		if(~ $bootparse(1) *sdF0/$1)
-			echo /dev/sdF0/$1
-		if(~ $bootparse(1) *sdF1/$1)
-			echo /dev/sdF1/$1
-		if(~ $bootparse(1) *sdXX/$1)
-			echo /dev/sdXX/$1
-	}
+	if(~ $bootparse(1) *dev*)
+		echo $bootparse(1) |sed 's/^local!//'
+	if not
+		echo $bootparse(1) |sed 's/^local!#./\/dev/'
 }
 
 fn hostcheck{
 	hosttest=`{cat /dev/hostowner}
-	if(~ $hosttest ''){
-		if(~ $user ''){
-			user=bootes
+	if(~ $#hosttest 0){
+		if(~ $#user 0){
+			user=glenda
 		}
 		echo 'no hostowner found: setting to '$user
 		echo -n $user >'/dev/hostowner'
 	}
-	if(~ $user ''){
+	if(~ $#user 0)
 		user=`{cat /dev/hostowner}
-	}
 }
 
 fn dochecksys{
 	systest=`{cat /dev/sysname}
 	switch($sysname){
 	case ?*
-		if(~ $systest ''){
+		if(~ $#systest 0){
 			echo setting /dev/sysname to $sysname
 			echo -n $sysname >/dev/sysname
 			systest=`{cat /dev/sysname}
@@ -132,16 +107,13 @@ fn dochecksys{
 			echo warning sysname mismatch between dev and env
 		}
 	case ''
-		if(~ $systest ''){
-			if(~ $service cpu){
+		if(~ $#systest 0){
+			if(~ $service cpu)
 				sysname=helix
-			} 
-			if(~ $service terminal){
+			if(~ $service terminal)
 				sysname=gnot
-			}
-			if(~ $sysname ''){
+			if(~ $#sysname 0)
 				sysname=mutant
-			}
 			echo no sysname found in dev or env setting to $sysname
 			echo -n $sysname >/dev/sysname
 		}
@@ -210,9 +182,8 @@ fn dotryusb{
 
 fn ipsetup{
 	if(! test -e /net/ipifc/0/ctl){
-		if(~ $gateway ?*){
+		if(~ $gateway ?*)
 			ipparams=( -g $gateway ether /net/ether0 $ipaddress $ipmask )
-		}
 		echo ipconfig $ipparams
 		ip/ipconfig $ipparams
 		ip/ipconfig loopback /dev/null 127.1
@@ -243,9 +214,8 @@ fn dostartventi{
 	switch($startventi){
 	case yes
 		echo starting venti
-		if(! ~ $ipdone yes){
+		if(! ~ $ipdone yes)
 			ipsetup
-		}
 		if(~ $#ventilisten 0)
 			venti/venti -c $venticonf
 		if not
@@ -272,13 +242,13 @@ fn dogetrootfs{
 			echo 'parsed hjfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
 			getans bootpartition $bootpartition
 		}
-		if not if(~ $bootpartition ''){
+		if not if(~ $#bootpartition 0){
 			echo 'no bootpartition found, trying /dev/sdC0/fs as default'
 			bootpartition=/dev/sdC0/fs
 		}
 		if (! test -e $bootpartition)
 			bootpartition=`{ls /dev/sd*/fs}
-		if (~ $bootpartition '')
+		if (~ $#bootpartition 0)
 			bootpartition=FAIL
 		hjfs=$bootpartition
 		{hjfs -s -f $bootpartition $bootparse(2-) &} <[0=1] | echo 0 >/srv/boot
@@ -289,13 +259,13 @@ fn dogetrootfs{
 			echo 'parsed cwfs bootpartition as ' $bootpartition ' enter new value if this is incorrect'
 			getans bootpartition $bootpartition
 		}
-		if not if(~ $bootpartition ''){
+		if not if(~ $#bootpartition 0){
 			echo 'no bootpartition found, trying /dev/sdC0/fscache as default'
 			bootpartition=/dev/sdC0/fscache
 		}
 		if (! test -e $bootpartition)
 			bootpartition=`{ls /dev/sd*/fscache}
-		if (~ $bootpartition '')
+		if (~ $#bootpartition 0)
 			bootpartition=FAIL
 		cwfs=$bootpartition
 		{cwfs64x -s -f $bootpartition $bootparse(2-) &} <[0=1] | echo 0 >/srv/boot
@@ -307,20 +277,19 @@ fn dogetrootfs{
 				echo 'parsed fossil bootpartition as ' $bootpartition ' enter new value if this is incorrect'
 				getans bootpartition $bootpartition
 			}
-			if not if(~ $bootpartition ''){
+			if not if(~ $#bootpartition 0){
 				echo 'no bootpartition found, trying /dev/sdC0/fossil as default'
 				bootpartition=/dev/sdC0/fossil
 			}
 			if (! test -e $bootpartition)
 				bootpartition=`{ls /dev/sd*/fossil}
-			if (~ $bootpartition '')
+			if (~ $#bootpartition 0)
 				bootpartition=FAIL
 			fossil=$bootpartition
 		}
-		if(! ~ $venti ''){
+		if(! ~ $#venti 0)
 			if(! ~ $ipdone yes){
 				ipsetup
-			}
 			if(! ~ $venti *tcp*)
 				venti=tcp!^$venti^!17034
 		}
@@ -333,11 +302,11 @@ fn dogetrootfs{
 		if(! ~ $ipdone yes){
 			ipsetup
 		}
-		if(~ $fs ''){
+		if(~ $#fs 0){
 			echo 'fs is [ ' $fs ' ]?'
 			getans fs $fs
 		}
-		if(~ $auth '')
+		if(~ $#auth 0)
 			auth=$fs
 ## HACK: on terminals start new factotum that knows where to dial
 		if(~ $factotum terminal)
@@ -349,10 +318,9 @@ fn dogetrootfs{
 			srv tcp!$fs!564 boot
 		bootsrv=/srv/boot
 	case tls
-		if(! ~ $ipdone yes){
+		if(! ~ $ipdone yes)
 			ipsetup
-		}
-		if(~ $fs ''){
+		if(~ $#fs 0){
 			echo 'fs is [ ' $fs ' ]?'
 			getans fs $fs
 		}
@@ -368,14 +336,13 @@ fn dogetrootfs{
 			srvtls tcp!$fs!17020 boot
 		bootsrv=/srv/boot
 	case aan
-		if(! ~ $ipdone yes){
+		if(! ~ $ipdone yes)
 			ipsetup
-		}
-		if(~ $fs ''){
+		if(~ $#fs 0){
 			echo 'fs is [ ' $fs ' ]?'
 			getans fs $fs
 		}
-		if(~ $auth '')
+		if(~ $#auth 0)
 			auth=$fs
 ## HACK: on terminals start new factotum that knows where to dial
 		if(~ $factotum terminal)
@@ -453,7 +420,7 @@ fn dorootstart{
 		service=terminal
 		echo mounting $bootsrv to /root and starting termrc
 		mount $bootsrv /root
-		if(~ $user ''){
+		if(~ $#user 0){
 			user=`{cat /dev/hostowner}
 		}
 		home=/usr/$user
@@ -518,9 +485,9 @@ paqfs -s -S frontpaq -c 128 /boot/bootfs.paq
 bind -a /boot /bin
 
 # Parse plan9.ini options and trying to set sane defaults
-if(! ~ $1 '')
+if(! ~ $#1 0)
 	. $1
-if(~ $bootargs ''){
+if(~ $#bootargs 0){
 	bootargs='local!#S/sdC0/fossil'
 	interactive=yes
 	echo 'no bootargs found using '$bootargs' and setting interactive=yes'
@@ -550,19 +517,19 @@ if(~ $bootparse(1) aan*){
 }
 if(~ $bootparse(1) srv*)
 	getrootfs=srv
-if(~ $ramsetup '')
+if(~ $#ramsetup 0)
 	ramsetup=ramskel
-if(~ $initscript '')
+if(~ $#initscript 0)
 	initscript=initskel
-if(~ $tgzfs '')
+if(~ $#tgzfs 0)
 	tgzfs=tools.tgz
 if(~ $tgzfs no)
 	tgzfs=''
-if(~ $namespace '')
+if(~ $#namespace 0)
 	namespace=namespace
-if(~ $factotum '')
+if(~ $#factotum 0)
 	factotum=`{cat '/env/service'}
-if(~ $rootstart '')
+if(~ $#rootstart 0)
 	rootstart=`{cat '/env/service'}
 ventiparse=`{echo $venti}
 venticonf=$ventiparse(1)
@@ -572,12 +539,12 @@ if(~ $venticonf '#'*)
 	startventi=yes
 if(~ $venticonf '/dev'*)
 	startventi=yes
-if(~ $venticonf '')
+if(~ $#venticonf 0)
 	venticonf=/dev/sdC0/arenas
 if(~ $#ventilisten 1)
 	if(~ $#vhttplisten 0)
 		vhttplisten=tcp!127.1!8000
-if(~ $interactive '')
+if(~ $#interactive 0)
 	interactive=traditional
 
 # interactive startup prompts and actions
@@ -617,7 +584,7 @@ fn startinter{
 	if(~ $getrootfs tcp || ~ $getrootfs tls || ~ $getrootfs aan){
 		echo 'fileserver is [ ' $fs ' ]?'
 		getans fs $fs
-		if (~ $auth '')
+		if (~ $#auth 0)
 			auth=$fs
 		echo 'auth is [ ' $auth ' ]?'
 		getans auth $auth
@@ -627,7 +594,7 @@ fn startinter{
 	if(~ $getrootfs fossil){
 		echo 'Dial a venti server? Enter a dialstring or ip if so.'
 		getans venti $venti
-		if(! ~ $venti ''){
+		if(! ~ $#venti 0){
 			if(! ~ $venti *tcp*)
 				venti=tcp!^$venti^!17034
 			ipsetup
@@ -665,12 +632,10 @@ fn starttrad{
 	if(~ $bootanswer rc){
 		rc -i
 	}
-	if not if(! ~ $bootanswer ''){
+	if not if(! ~ $#bootanswer 0)
 		bootparse=`{echo $bootanswer}
-	}
-	if not{
+	if not
 		bootparse=`{echo $bootargs}
-	}
 	if(~ $bootparse(1) *fossil)
 		getrootfs=fossil
 	if(~ $bootparse(1) *fs)
@@ -695,11 +660,11 @@ fn starttrad{
 	if(~ $bootparse(1) srv*)
 		getrootfs=srv
 	if(~ $getrootfs tcp || ~ $getrootfs tls || ~ $getrootfs aan){
-		if (~ $fs ''){
+		if (~ $#fs 0){
 			echo 'fileserver is [ ' $fs ' ]?'
 			getans fs $fs
 		}
-		if (~ $auth ''){
+		if (~ $#auth 0){
 			auth=$fs
 			echo 'auth is [ ' $auth ' ]?'
 			getans auth $auth
