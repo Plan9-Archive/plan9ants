@@ -208,34 +208,6 @@ if(~ $1 fronthost){
 	exit
 }
 
-if(~ $1 portsinstall){
-	cd hubfs
-	mk install
-	cd ..
-	cd patched
-	$CC -FTVw gridlisten.c
-	$LD -o gridlisten gridlisten.$O
-	cp gridlisten /$objtype/bin
-	cd ..
-	cp frontmods/bootdir/grio /$objtype/bin
-	cp scripts/* /rc/bin
-	cp bootdir.extras/namespace.saveterm /lib/namespace.saveterm
-	cp bootdir.extras/namespace.save9front /lib/namespace.save9front
-	cp doc/man.cpns /sys/man/1/cpns
-	cp doc/man.rerootwin /sys/man/1/rerootwin
-	cp doc/man.addwrroot /sys/man/1/addwrroot
-	cp doc/man.plan9rc /sys/man/8/plan9rc
-	cp doc/man.ventiprog /sys/man/8/ventiprog
-	cp doc/antspaper.ms /sys/doc/ants.ms
-	cp doc/ants.ps /sys/doc/ants.ps
-	cp doc/modified.manpages/proc.man /sys/man/3/procns
-	echo 'add the following to the end of /rc/bin/termrc'
-	echo 'home=/usr/$user; cd; . $home/lib/profile'
-	echo 'copy 9ants kernel to boot partition and edit plan9.ini'
-	echo 'enter bootfile=9ants at bootup for new kernel'
-	exit
-}
-
 if(~ $1 frontuninstall){
 	rm /$objtype/bin/grio
 	rm /$objtype/bin/gridlisten
@@ -345,7 +317,7 @@ if(~ $1 vultr){
 
 if(~ $1 vultrfossil){
 	checkfrontclean
-	build portsinstall
+#	build fronthost
 	cd cfg
 	cat vultdisk |disk/prep /dev/sdF0/plan9
 	cd $builddir
@@ -354,14 +326,20 @@ if(~ $1 vultrfossil){
 	hg clone https://bitbucket.org/mycroftiv/fossiloventi
 	cd fossiloventi
 	INSTALL
+	cd fossil
+	mk clean
+	cd ../liboventi
+	mk clean
+	cd $builddir
+	build 9front
+	build 9frontinstall
+	rm compiletemp/*
 	cd $builddir/cfg
-#	mkdir /tmp/stub
 	mount /srv/boot /n/dist
 	fossil/flfmt /dev/sdF0/fossil
 	fossil/conf -w /dev/sdF0/fossil initfossil.conf
 	fossil/fossil -f /dev/sdF0/fossil
 	mount -c /srv/fossil /n/fossil
-#	bind /tmp/stub /n/dist/mail
 	disk/mkfs -U -z 8192 -s /n/dist -d /n/fossil /sys/lib/sysconfig/proto/allproto
 	echo 'home=/usr/$user; cd; . $home/lib/profile' >>/n/fossil/rc/bin/termrc
 	fossil/conf -w /dev/sdF0/fossil fossil.conf
@@ -370,9 +348,6 @@ if(~ $1 vultrfossil){
 	venti/fmtindex venti.conf
 	venti/conf -w /dev/sdF0/arenas venti.conf
 	cd ..
-	build 9front
-	build 9frontinstall
-	cp /bin/grio /n/fossil/386/bin/grio
 	9fs 9fat
 	cp cfg/vfosvenp9.ini /n/9fat/plan9.ini
 	echo 'venti/wrarena -h /net.alt/tcp!127.1!17034 -o 794624 /dev/sdF0/arenas 0x0' >/n/9fat/wrcmd
