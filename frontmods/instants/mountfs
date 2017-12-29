@@ -4,6 +4,8 @@
 # prereq: configfs
 
 switch($fstype){
+case venti
+	exec ./mountventifossil $*
 case fossil
 	exec ./mountfossil $*
 case cwfs cwfs64 cwfs64x

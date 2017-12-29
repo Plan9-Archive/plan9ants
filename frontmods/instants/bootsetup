@@ -40,8 +40,11 @@ case go
 				echo 'privpassword='^$password
 			if(~ $#nvram 1)
 				echo 'nvram='^$nvram
-			if(~ $fstype fossil)
+			if(~ $fstype ventifossil)
 				echo 'venti='$fsarenas |sed 's/\/dev/#S/'
+			if(~ $fstype fossil)
+				if(! ~ $ventidial none)
+					echo 'venti='$ventidial
 			echo 'mouseport='^$mouseport
 			echo 'monitor='^$monitor
 			echo 'vgasize='^$vgasize

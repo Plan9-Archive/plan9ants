@@ -5,8 +5,10 @@
 
 fn autotype {
 	switch($fstype){
-	case fossil
+	case venti
 		echo -a 9fat -a nvram -a fossil -a arenas -a isect
+	case fossil
+		echo -a 9fat -a nvram -a fossil
 	case cwfs cwfs64 cwfs64x
 		echo -a 9fat -a nvram -a fscache -a fsworm -a other
 	case hjfs
