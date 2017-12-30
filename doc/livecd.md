@@ -1,10 +1,10 @@
 # ANTS/9front Live+Install CD .iso image
 
-### ANTS r569 9front r6277 released Dec 28 2017
+### ANTS r587 9front r6286 released Dec 30 2017
 
-## [http://files.9gridchan.org/9frants569.iso.gz](http://files.9gridchan.org/9frants569.iso.gz)
+## [http://files.9gridchan.org/9ants587.iso.gz](http://files.9gridchan.org/9ants587.iso.gz)
 
-The Advanced Namespace Tools for Plan 9 are now available for testing and installation as a custom spin of the 9front live/install cd image. The cd boots the 9ants custom kernel and includes all userspace tools, and can install the full ANTS system. Installation is the same as standard 9front, the command inst/start beings the process. You can experiment with most of the new features without needing to install.
+The Advanced Namespace Tools for Plan 9 are now available for testing and installation as a custom spin of the 9front live/install cd image. The cd boots the 9ants custom kernel and includes all userspace tools, and can install the full ANTS system. Installation is the same as standard 9front, the command inst/start beings the process. The installer also has new optional abilities to setup a cpu/auth server rather than a terminal, and also provides the option for venti+fossil in addition to standard 9front fileservers. You can experiment with most of the new features without needing to install.
 
 ### New features and applications
 
@@ -66,13 +66,17 @@ You now have an environment that behaves the same as the main environment, altho
 
 ### Installation
 
-* Install process is the same as for standard 9front with addition of fossil+venti option
+* Install process is the same as for standard 9front with addition of fossil+venti option and cpu/auth configuration option
 
 ANTS is compatible with the standard 9front fileservers, but restores the option of installing fossil and venti because fossil rootscores offer a powerful mechanism for efficiently working with multiple root filesystems. Fossil is generally considered less reliable than the other fileservers, so if you do choose to use Fossil, make sure to have a good backup system for your data. ANTS includes some tools for assisting with replicating data between Venti servers and managing rootscore archives. See man ventiprog for usage example.
 
 * Install process lets you add a password to plan9.ini to setup boot/admin namespace access
 
-The only additional step in the installer, pwsetup, just adds a value to plan9.ini to provide a password for access to the independent admin namespace. Note that it does not set up a full authsrv/keyfs system, it just adds the password to factotum for hostowner access on port 17060.
+The only additional step in the installer, pwsetup, either adds a value to plan9.ini to provide a password for access to the independent admin namespace. This option does not set up a full authsrv/keyfs system, it just adds the password to factotum for hostowner access on port 17060. There is also an option to configure the system as a full cpu/auth server which means no gui/rio by default. The cpu option also means that the console shell is running in the boot/admin namespace. You can start rio with the command
+
+	gui
+
+at which point you will still be in the namespace outside the root fileserver. You can use the rerootwin -f boot, service=con, . $home/lib/profile, grio sequence to start a subrio that will be rooted conventionally.
 
 * Install makes plan9rc the default booting command/method
 
@@ -88,5 +92,6 @@ The vast majority of code on the live/install cd is the same as standard 9front,
 
 #### Known issues
 
+* The /sys/src/ants directory's hgrc is owned by sys which means hg will give a trust error. You can either ignore that error and issue hg pull https://bitbucket.org/mycroftiv/antsexperiments to update it, or delete and recreate the file with the permissions of your user so a standard hg pull will work.
 * Updating and rebuilding the system using the 9front sysupdate command may result in the loss of some ANTS features, and require rebuilding/reinstalling some of the ANTS toolkit, because ANTS attempts to mostly contain its modifications and not overwrite the standard distribution, so for instance the customized rc with rfork V available will be overwritten if the system is rebuilt with a standard mk install in /sys/src. 
 * Some documentation is out of date and documentation is spread out between manpages and multiple places on the website.
