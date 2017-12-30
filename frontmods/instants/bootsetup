@@ -38,6 +38,8 @@ case go
 			echo 'bootargs=local!'^$fs' '$"fsflags
 			if(~ $#password 1)
 				echo 'privpassword='^$password
+			if(~ $authservice yes)
+				echo 'service=cpu'
 			if(~ $#nvram 1)
 				echo 'nvram='^$nvram
 			if(~ $fstype venti)

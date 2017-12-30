@@ -1,10 +1,12 @@
 #!/bin/rc
 
-# desc: choose password
+# desc: choose password and cpu server option
 
 switch($1){
 case checkdone
 	if(~ $#password 1)
+		pwsetup=done
+	if(~ $#ndbauthdom 1)
 		pwsetup=done
 	if not
 		pwsetup=ready
@@ -14,8 +16,29 @@ case go
 	echo 'Setup Password'
 	echo
 
-	prompt 'Password: '
-	password=$rd
+	prompt -d no 'Configure as cpu/auth server with no gui?' no yes
+	authservice=$rd
+	export authservice
+
+	if(~ $authservice no){
+		prompt 'Password: '
+		password=$rd
+		export password
+		exit
+	}
+
+	echo 'Enter hostowner password info for glenda nvram machine key.'
+	echo 'You will need to use this same password for the keyfs.'
+	echo 'auth/wrkey'
+
+	auth/factotum -S
 	
-	export password
+	echo 'Enter the same password you just gave for the keyfs database.'
+	echo 'auth/changeuser'
+	auth/keyfs /n/newfs/adm/keys
+	auth/changeuser glenda
+
+	factkey=`{cat /mnt/factotum/ctl |grep dp9ik}
+	ndbauthdom=`{echo $factkey(4) |sed 's/dom/authdom/'}
+	export ndbauthdom
 }

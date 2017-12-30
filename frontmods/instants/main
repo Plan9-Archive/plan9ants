@@ -20,9 +20,9 @@ tasks=(\
 	mountdist\
 	download\
 	copydist\
+	pwsetup\
 	ndbsetup\
 	tzsetup\
-	pwsetup\
 	bootsetup\
 	finish\
 )
